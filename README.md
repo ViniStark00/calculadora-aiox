@@ -1,0 +1,1 @@
+# Calculadora Científica — Synkra AIOX
