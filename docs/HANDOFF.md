@@ -1,7 +1,7 @@
 # Handoff — Calculadora AIOX
 
 **Data:** 2026-05-07
-**Contexto salvo em:** Passo 15 concluído (Story 1.3 Done)
+**Contexto salvo em:** Passo 20 concluído — PROJETO ENTREGUE ✅
 
 ---
 
@@ -24,26 +24,27 @@
 | 13 Validação 1.3 (@po) | ✅ Aprovado | Story 1.3 → Ready |
 | 14 Implementação 1.3 (@dev) | ✅ Concluído | `ScientificFunctions.apply()` completo |
 | 15 QA 1.3 (@qa) | ✅ PASS | Story 1.3 → Done |
-| **16 Story 1.4 (@sm)** | ⏳ **Próximo passo** | — |
-| 17 Validação 1.4 (@po) | ⏳ Pendente | — |
-| 18 Implementação 1.4 (@dev) | ⏳ Pendente | — |
-| 19 QA 1.4 (@qa) | ⏳ Pendente | — |
-| 20 Entrega (@devops) | ⏳ Pendente | — |
+| 16 Story 1.4 (@sm) | ✅ Concluído | `docs/stories/1.4.story.md` |
+| 17 Validação 1.4 (@po) | ✅ Aprovado 10/10 | Story 1.4 → Ready |
+| 18 Implementação 1.4 (@dev) | ✅ Concluído | `calculadora/script.js` — HistoryManager real |
+| 19 QA 1.4 (@qa) | ✅ PASS | Story 1.4 → Done |
+| **20 Entrega (@devops)** | ✅ **ENTREGUE** | commit `3692368` — Epic 1 completo |
 
 ---
 
-## Próximo Passo
+## Estado Final
 
-**Passo 16 — @sm criar Story 1.4 (Histórico de Operações)**
+**Epic 1 — 100% entregue.** Todos os 4 objetos do `script.js` estão completos e aprovados pelo QA gate.
 
-O @sm deve criar `docs/stories/1.4.story.md` cobrindo:
-- Implementar `HistoryManager` com localStorage real (chave `calculadora_historico`, max 50 itens)
-- `add(expression, result)` — prepend + trim + save
-- `load()` — lê localStorage na inicialização
-- `clear()` — esvazia array + remove do localStorage
-- `getAll()` — retorna array ordenado do mais recente
-- `Calculator.renderHistory()` já está implementado — só precisa do HistoryManager funcionando
-- Clicar em item do histórico reutiliza a expressão no display (já implementado em `renderHistory`)
+| Objeto | Estado final |
+|--------|-------------|
+| `MathParser` | ✅ Completo — Shunting-Yard, sem eval() |
+| `ScientificFunctions` | ✅ Completo — 11 funções + DEG/RAD |
+| `HistoryManager` | ✅ Completo — localStorage, max 50, try/catch |
+| `Calculator` | ✅ Completo — UI, teclado, toggles, histórico |
+
+**Commit de entrega:** `3692368`
+**Branch:** `main`
 
 ---
 
