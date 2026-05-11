@@ -1,0 +1,41 @@
+# HISTÓRICO DE EXPERIMENTOS — super-gestor
+# Arquivo persistente. Nunca deletar entradas — apenas atualizar status.
+# Status possíveis: EM_TESTE | VALIDADA | DESCARTADA
+# Kennedy lê este arquivo ANTES de sugerir qualquer nova estrutura.
+
+meta:
+  versao: "1.0"
+  squad: super-gestor
+  criado_em: "2026-05-10"
+  total_experimentos: 0
+  total_validados: 0
+  total_descartados: 0
+  total_em_teste: 0
+
+experimentos: []
+
+# Exemplo de como uma entrada aparece após uso:
+#
+# experimentos:
+#   - id: EXP-001
+#     data: "2026-05-10"
+#     plataforma: Meta Ads
+#     procedimento: rinoplastia
+#     publico:
+#       genero: feminino
+#       idade: 28-48
+#       localizacao: São Paulo capital
+#       segmentacao: interesse rinoplastia, cirurgia plástica, estética
+#       tipo: frio
+#     campanha:
+#       objetivo: Mensagens WhatsApp
+#       orcamento_diario: R$ 50
+#       orcamento_real: R$ 57 (com imposto)
+#     criativo:
+#       formato: Reel 15s
+#       gancho: "O erro que deixa rinoplastia artificial"
+#     status: VALIDADA
+#     resultado: "Taxa de agendamento 12%, CPA R$ 380"
+#     cpa_real: 380
+#     origem: original
+#     notas: "Funcionou bem para público frio. Semana 3 saturou — trocar criativo."

@@ -1,0 +1,105 @@
+# KNOWLEDGE BASE — super-gestor
+# Dados verificados na sessão de deep research de 2026-05-10
+# Fonte: cruzamento entre Gemini Deep Research + buscas independentes
+# Confiança: ALTA = confirmado por múltiplas fontes | MEDIA = 1 fonte | BAIXA = suspeito
+
+meta:
+  versao: "1.0"
+  ultima_atualizacao: "2026-05-10"
+  fonte_primaria: "deep research session — auditado por DR Orchestrator"
+
+plataformas:
+
+  meta_ads:
+    cpc_medio_brasil: "~R$ 0,77 (plataforma) / ~R$ 0,87 (custo real com imposto)"
+    confianca: ALTA
+    imposto_2026:
+      descricao: "Meta repassa PIS/Cofins (9,25%) + ISS (2,9%) ao anunciante desde jan/2026"
+      percentual_total: "12,15%"
+      formula_orcamento_real: "orcamento_desejado / 0.878"
+      exemplo: "R$ 1.000 desejado → depositar R$ 1.139"
+      confianca: ALTA
+      regimes_afetados:
+        simples_nacional: "custo integral — sem crédito tributário"
+        lucro_presumido_real: "pode recuperar como crédito"
+    formatos_eficazes_2026:
+      - formato: Reels
+        duracao: "8 a 15 segundos"
+        motivo: "algoritmo prioriza retenção"
+        confianca: ALTA
+      - formato: Carrossel educativo
+        uso: "nutrição de leads e prova social"
+        confianca: ALTA
+      - formato: Stories
+        uso: "CTA direto para WhatsApp"
+        confianca: ALTA
+
+  google_ads:
+    cpc_cirurgia_plastica:
+      faixa: "R$ 8 a R$ 20"
+      faixa_gemini_citada: "R$ 2 a R$ 20 (teto correto, piso subestimado para plástica)"
+      confianca: ALTA
+    orcamento_minimo_recomendado: "R$ 50/dia para competir em cirurgia plástica"
+    desafio_2026: "Resumos de IA no Google reduzem cliques em anúncios — número exato (68%) não confirmado, mas tendência real"
+    performance_max:
+      status_2026: "Migrou de experimental para campanha core"
+      nome_oficial: "Performance Max (sem versão 2.0 — nomenclatura de agência)"
+      confianca: ALTA
+
+regulatorio:
+  cfm_2336_2023:
+    vigencia: "Desde março/2024"
+    confianca: ALTA
+    permitido:
+      - "Antes/depois COM texto educativo (indicações + fatores + complicações)"
+      - "Divulgar preço de consultas"
+      - "Campanhas promocionais"
+      - "Vídeo do médico explicando procedimento"
+    proibido:
+      - "Antes/depois sem texto explicativo clínico"
+      - "Mostrar só resultados satisfatórios (obrigado a mostrar complicações)"
+      - "Imagens manipuladas digitalmente"
+      - "Linguagem sensacionalista (resultado garantido, o melhor)"
+    obrigatorio_no_perfil:
+      - "Nome completo"
+      - "CRM + estado + palavra MÉDICO"
+      - "Especialidade + número RQE"
+
+  lgpd:
+    dados_saude: "Categoria especial — proteção reforçada"
+    coleta_via_formulario: "Consentimento expresso obrigatório"
+    pixel_meta_google: "Exige política de privacidade no site"
+
+funil_high_ticket:
+  ticket_medio_plastica: "R$ 3.000 a R$ 15.000"
+  etapas: 8
+  reducao_no_show:
+    sem_automacao: "~40%"
+    com_whatsapp_automatizado: "10-15%"
+    confianca: MEDIA
+  tempo_resposta_critico: "< 15 minutos (acima disso perde 3x mais conversões)"
+  confianca: MEDIA
+
+tendencias_2026:
+  geo:
+    descricao: "Generative Engine Optimization — aparecer no ChatGPT, Gemini, Perplexity"
+    fator_citacao_com_geo: "+43% em citações de IA"
+    confianca: ALTA
+    como_implementar:
+      - "FAQ Schema no site"
+      - "Conteúdo em formato pergunta-resposta"
+      - "Respostas de 40-60 palavras por dúvida"
+  humanizacao_tecnica:
+    descricao: "Médico fala com clareza, acolhe, mostra processo real — não vitrine perfeita"
+    tendencia: "Building in Public — bastidores, equipe, dia a dia"
+    confianca: ALTA
+  numeros_suspeitos:
+    - valor: "280% aumento de conversão com remarketing cross-platform"
+      fonte: "benchmark interno de agência (ref 6 do Gemini)"
+      status: REJEITADO
+    - valor: "65% redução de CPA com integração"
+      fonte: "mesma fonte acima"
+      status: REJEITADO
+    - valor: "68% redução de cliques por IA"
+      fonte: "sem fonte primária rastreável"
+      status: USAR_COM_CAUTELA

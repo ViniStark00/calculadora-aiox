@@ -1,0 +1,70 @@
+name: super-gestor
+version: 1.0.0
+description: >
+  Squad de inteligência de tráfego pago para cirurgia plástica.
+  Pipeline completo: diagnóstico → pesquisa (com Gemini bridge) →
+  validação → arquitetura de campanha → compliance → entrega.
+  Sistema de histórico de experimentos embutido — nunca repete estrutura testada.
+author: ViniStark00
+license: MIT
+slashPrefix: super-gestor
+
+aiox:
+  minVersion: "2.1.0"
+  type: squad
+
+domain:
+  primary: cirurgia-plastica
+  secondary: [estetica, saude, high-ticket]
+  cross_niche: true  # pode importar estruturas de outros nichos
+
+components:
+  agents:
+    - traffic-chief.md
+    - kotler.md
+    - gemini-bridge.md
+    - ogilvy.md
+    - kennedy.md
+    - avinash.md
+    - compliance-guard.md
+  tasks:
+    - diagnose-account.md
+    - generate-research-prompts.md
+    - validate-research.md
+    - build-campaign-structure.md
+    - check-compliance.md
+    - save-experiment.md
+    # validate-research.md → ogilvy (audita pesquisa do Gemini)
+    # check-compliance.md  → compliance-guard (CFM + LGPD)
+  workflows:
+    - full-campaign-pipeline.md
+  checklists:
+    - campaign-launch-checklist.md
+  templates:
+    - campaign-structure-template.md
+    - research-report-template.md
+  data:
+    - campaign-history.yaml
+    - knowledge-base.yaml
+    - niches-reference.yaml
+  tools: []
+  scripts: []
+
+config:
+  extends: extend
+  coding-standards: config/coding-standards.md
+  tech-stack: config/tech-stack.md
+
+dependencies:
+  squads:
+    - deep-research  # referência para validação de pesquisa
+    - education      # referência para estruturação de conhecimento
+
+tags:
+  - trafego-pago
+  - meta-ads
+  - google-ads
+  - cirurgia-plastica
+  - high-ticket
+  - experiment-log
+  - gemini-bridge

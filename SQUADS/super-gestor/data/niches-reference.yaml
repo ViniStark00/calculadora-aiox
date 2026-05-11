@@ -1,0 +1,48 @@
+# REFERÊNCIAS CROSS-NICHO — super-gestor
+# Estruturas de campanha de outros nichos que podem ser adaptadas para cirurgia plástica
+# Kennedy consulta este arquivo quando busca variações de estrutura
+
+meta:
+  versao: "1.0"
+  ultima_atualizacao: "2026-05-10"
+  nota: "Sempre marcar estrutura adaptada com [ADAPTADO DE: nicho X]"
+
+referencias:
+
+  - nicho: odontologia_estetica
+    similaridade_plastica: ALTA
+    motivo: "Mesmo ticket médio, mesmo processo decisório longo, mesmo paciente feminino 30-50"
+    estruturas_uteis:
+      - tipo: "Campanha de qualificação via quiz"
+        descricao: "Quiz 4 perguntas no Instagram Stories para separar curioso de paciente real"
+        adaptacao: "Trocar perguntas de odonto por procedimento de plástica"
+      - tipo: "Reel de desmistificação"
+        descricao: "Médico responde mito comum em 15s — alto engajamento"
+        adaptacao: "Direto aplicável — só trocar o procedimento"
+
+  - nicho: imobiliaria_alto_padrao
+    similaridade_plastica: MEDIA
+    motivo: "High-ticket, decisão emocional + racional, funil longo"
+    estruturas_uteis:
+      - tipo: "Remarketing em 3 camadas"
+        descricao: "Camada 1: visitou site. Camada 2: assistiu 50% do vídeo. Camada 3: clicou em CTA"
+        adaptacao: "Aplicar mesma lógica de segmentação para paciente de plástica"
+      - tipo: "Conteúdo de bastidores como autoridade"
+        descricao: "Mostrar o processo de entrega (obra, equipe) como prova de qualidade"
+        adaptacao: "Substituir 'obra' por 'sala cirúrgica, equipe, recuperação'"
+
+  - nicho: clinica_psicologia
+    similaridade_plastica: MEDIA
+    motivo: "Mesmo receio de julgamento, mesma necessidade de conexão emocional com o profissional"
+    estruturas_uteis:
+      - tipo: "Campanha de acolhimento"
+        descricao: "Anúncio que valida a insegurança do paciente antes de apresentar solução"
+        adaptacao: "Começar com 'É normal sentir insegurança sobre...' antes de apresentar o procedimento"
+
+  - nicho: academia_premium
+    similaridade_plastica: BAIXA
+    motivo: "Ticket menor, decisão mais rápida, mas tem dados de público feminino 25-45 úteis"
+    estruturas_uteis:
+      - tipo: "Lookalike de lista de clientes"
+        descricao: "Usar lista de alunas para gerar lookalike 1-2% no Meta"
+        adaptacao: "Usar lista de pacientes da clínica para gerar lookalike de pacientes ideais"

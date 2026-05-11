@@ -15,3 +15,21 @@ desktop.ini
 # Variáveis de ambiente
 .env
 .env.local
+.env*
+
+# AIOX — configuração e memória local (nunca expor)
+.claude/
+.aiox-core/
+.aiox/
+
+
+# Ferramentas de IA (configs locais)
+.cursor/
+.codex/
+.gemini/
+.antigravity/
+
+# Docs e dashboards pessoais
+docs/
+dashboard_viviane_borba.html
+stark_viviane_dashboard.html
