@@ -22,18 +22,18 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : 9 — Republicar 3 eventos restantes do bloco Vinicius + criar APRESENTACAO.md
-Última ação : Sessão 8 (continuação) — Padrão visual HTML documentado como pilar inviolável.
-              Pipeline testado com Event ID 107513 — visual aprovado pelo usuário.
-              PR #3 criado e MERGED para main. Branch feat/relatorio-semanal está em main.
-Próxima ação: 1. Republicar 3 eventos com HTML + padrão visual (período 11/05-17/05/2026):
-                 - Dra Danielle Gondim  (project_id: 839737)
-                 - Dr. Leandro Gontijio (project_id: 627550)
-                 - Dr. Guilherme Mattar (project_id: 1023153)
-                 IMCP já está publicado corretamente (Event ID 107513) — PULAR
-              2. Criar APRESENTACAO.md (Etapa 9 original)
-Bloqueadores: Nenhum — REPORTEI_TOKEN e GOOGLE_SERVICE_ACCOUNT_JSON precisam ser
-              configurados no início da sessão (perdem-se ao fechar o terminal)
+Etapa atual : MELHORIAS EM CURSO — Sessão 12
+Última ação : Melhoria 1 concluída — hooks de determinismo criados e commitados (3b020f9).
+              Branch feat/melhorias-squad-relatorio criada a partir de main.
+              hooks/validate-outputs.py (Stop) + hooks/log-timeline-event.py (PostToolUse) criados.
+              settings.local.json atualizado com os 2 hooks (gitignored — não commitado).
+Próxima ação: Melhoria 2 — Output WhatsApp
+              1. Chamar @dev → criar agents/whatsapp-writer.md + templates/whatsapp-template.md
+                             → atualizar workflows/weekly-report-pipeline.md + squad.yaml
+              2. Chamar @qa → validar template e handoff publicador → whatsapp-writer
+              3. Testar: /relatorio-semanal "Rodar pipeline para IMCP" → verificar mensagem gerada
+              4. Chamar @devops → commit "feat(relatorio-semanal): add whatsapp-writer output"
+Bloqueadores: Nenhum
 ```
 
 ---
@@ -1064,5 +1064,116 @@ handoff:
     - "Bug identificado, corrigido, testado e documentado — ciclo completo de melhoria"
 ```
 
-*Versão: 12 | Última atualização: Sessão 9, 2026-05-20*
-*Etapa atual: CONCLUÍDA — Squad pronto para apresentação ao Anderson*
+*Versão: 13 | Última atualização: Sessão 12, 2026-05-20*
+*Etapa atual: MELHORIAS EM CURSO — Melhoria 1 concluída, Melhoria 2 pendente*
+
+---
+
+### Sessão 12 — 2026-05-20
+
+**Início:** CONTEXT.md lido — implementar as 4 melhorias do handoff da Sessão 12.
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| Lido CONTEXT.md — melhorias identificadas | OK |
+| @devops ativado — criada branch feat/melhorias-squad-relatorio a partir de main | ✅ |
+| git stash + git checkout main + git pull + git checkout -b | ✅ |
+| @dev ativado — Melhoria 1 implementada | OK |
+| Criado squads/relatorio-semanal/hooks/validate-outputs.py (hook Stop) | ✅ |
+| Criado squads/relatorio-semanal/hooks/log-timeline-event.py (hook PostToolUse) | ✅ |
+| .claude/settings.local.json atualizado com seções Stop e PostToolUse | ✅ (gitignored) |
+| @qa ativado — validação dos hooks | ✅ APROVADO — 2 obs. não-bloqueantes |
+| @devops ativado — commit 3b020f9 dos 2 hooks | ✅ |
+| CONTEXT.md atualizado (handoff Sessão 13) | ✅ |
+
+**Observações do @qa (não-bloqueantes):**
+- Aviso Atividade 1 aparece em toda execução (comportamento aceitável)
+- `extract_event_id` usa campo `"id"` — verificar empiricamente na primeira execução real
+
+**Decisões tomadas nesta sessão:**
+- settings.local.json NÃO commitado — contém tokens, está no gitignore — correto
+- Push (envio ao GitHub) adiado para após Melhorias 1-4 estarem prontas
+- Termo técnico entre parênteses em todo texto — padrão aprovado pelo usuário
+
+**Pendências abertas:**
+- Melhoria 2 — Output WhatsApp
+- Melhoria 3 — Histórico acumulado por cliente
+- Melhoria 4 — Thresholds por especialidade médica
+- Push + PR + merge após Melhorias 1-4 concluídas
+- Melhoria Extra (branch separada) — Anotação no ClickUp
+
+---
+
+## HANDOFF — SESSÃO 13
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Melhoria 1 concluída e commitada. Próximo: Melhoria 2 — Output WhatsApp.
+
+```yaml
+handoff:
+  from_session: 12
+  date: 2026-05-20
+  branch: feat/melhorias-squad-relatorio
+  base: main
+
+  estado:
+    melhoria_1: "CONCLUÍDA — commit 3b020f9"
+    melhoria_2: "PENDENTE"
+    melhoria_3: "PENDENTE"
+    melhoria_4: "PENDENTE"
+    push_pr_merge: "PENDENTE — fazer após Melhorias 1-4"
+
+  proxima_acao: |
+    MELHORIA 2 — Output WhatsApp pronto para envio
+
+    Briefing para @dev (/AIOX:agents:dev):
+    "Leia squads/relatorio-semanal/CONTEXT.md. Adicione a geração de mensagem
+    WhatsApp ao pipeline. Crie agents/whatsapp-writer.md com persona de agente
+    que recebe métricas (spend Meta, spend Google, conversas, CPL, link do
+    relatório) e formata mensagem WhatsApp usando templates/whatsapp-template.md.
+    A mensagem deve usar negrito WhatsApp (*texto*) e emojis. Crie o template.
+    Atualize workflows/weekly-report-pipeline.md adicionando etapa whatsapp-writer
+    após o publicador (handoff explícito: publicador passa event_id + link +
+    métricas). Atualize squad.yaml."
+
+    Após @dev:
+    Briefing para @qa (/AIOX:agents:qa):
+    "Leia squads/relatorio-semanal/CONTEXT.md. Valide a Melhoria 2 — Output
+    WhatsApp. Verifique: agents/whatsapp-writer.md tem todos os campos do
+    template? templates/whatsapp-template.md usa negrito WhatsApp (*texto*) e
+    emojis? O handoff publicador → whatsapp-writer está explícito no workflow?
+    squad.yaml foi atualizado? Reporte: APROVADO ou lista de problemas."
+
+    Após @qa aprovar:
+    Briefing para @devops (/AIOX:agents:devops):
+    "Faça commit na branch feat/melhorias-squad-relatorio com os arquivos da
+    Melhoria 2: agents/whatsapp-writer.md, templates/whatsapp-template.md,
+    workflows/weekly-report-pipeline.md, squad.yaml, CONTEXT.md.
+    Mensagem: feat(relatorio-semanal): add whatsapp-writer output.
+    Não fazer push ainda."
+
+  arquivos_melhoria_1:
+    - squads/relatorio-semanal/hooks/validate-outputs.py
+    - squads/relatorio-semanal/hooks/log-timeline-event.py
+    - .claude/settings.local.json (gitignored — não commitado, mas ativo localmente)
+
+  formato_mensagem_whatsapp: |
+    📊 *Relatório Semanal — [Cliente]* | [DD/MM] a [DD/MM]
+
+    💰 Investimento: R$[X] (Meta) + R$[Y] (Google)
+    💬 [N] conversas | CPL: R$[X]
+    📈 [1 linha de highlight ou ponto de atenção]
+
+    🔗 Relatório completo: [link Reportei]
+
+  variaveis_automaticas:
+    status: "AUTOMÁTICAS — configuradas em .claude/settings.local.json"
+    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  cliente_teste: IMCP (project_id 688377)
+  skill_command: "/relatorio-semanal"
+```
