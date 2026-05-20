@@ -26,6 +26,7 @@ components:
     - redator.md
     - publicador.md
     - quality-gate.md
+    - whatsapp-writer.md
   tasks:
     - fetch-metrics.md
     - verify-fill.md
@@ -38,6 +39,7 @@ components:
     - qa-relatorio.md
   templates:
     - relatorio-template.md
+    - whatsapp-template.md
   data: []
   tools: []
   scripts: []
@@ -67,7 +69,7 @@ integrations:
 
 pipeline_flow: >
   relatorio-chief → coletor → quality-gate (verify-fill)
-  → redator → quality-gate (validate-report) → publicador → resumo final
+  → redator → quality-gate (validate-report) → publicador → whatsapp-writer → resumo final
 
 dependencies:
   node: []

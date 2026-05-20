@@ -22,17 +22,22 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : MELHORIAS EM CURSO — Sessão 12
-Última ação : Melhoria 1 concluída — hooks de determinismo criados e commitados (3b020f9).
-              Branch feat/melhorias-squad-relatorio criada a partir de main.
-              hooks/validate-outputs.py (Stop) + hooks/log-timeline-event.py (PostToolUse) criados.
-              settings.local.json atualizado com os 2 hooks (gitignored — não commitado).
-Próxima ação: Melhoria 2 — Output WhatsApp
-              1. Chamar @dev → criar agents/whatsapp-writer.md + templates/whatsapp-template.md
-                             → atualizar workflows/weekly-report-pipeline.md + squad.yaml
-              2. Chamar @qa → validar template e handoff publicador → whatsapp-writer
-              3. Testar: /relatorio-semanal "Rodar pipeline para IMCP" → verificar mensagem gerada
-              4. Chamar @devops → commit "feat(relatorio-semanal): add whatsapp-writer output"
+Etapa atual : MELHORIAS EM CURSO — Sessão 13
+Última ação : Melhoria 2 concluída pelo @dev — whatsapp-writer criado, template criado,
+              workflow e squad.yaml atualizados.
+              Arquivos criados/modificados:
+                - agents/whatsapp-writer.md (NOVO)
+                - templates/whatsapp-template.md (NOVO)
+                - workflows/weekly-report-pipeline.md (ATUALIZADO)
+                - squad.yaml (ATUALIZADO)
+Próxima ação: Melhoria 2 — validação com @qa
+              1. Chamar @qa → validar: whatsapp-writer tem todos os campos do template?
+                              template usa negrito WhatsApp (*texto*) e emojis?
+                              handoff publicador → whatsapp-writer está explícito no workflow?
+                              squad.yaml foi atualizado?
+              2. Após @qa aprovar → chamar @devops → commit "feat(relatorio-semanal): add whatsapp-writer output"
+              3. Melhoria 3 — Histórico acumulado por cliente
+              4. Melhoria 4 — Thresholds por especialidade médica
 Bloqueadores: Nenhum
 ```
 
