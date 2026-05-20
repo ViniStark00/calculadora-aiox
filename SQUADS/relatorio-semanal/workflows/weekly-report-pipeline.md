@@ -1,0 +1,94 @@
+---
+workflow: weekly-report-pipeline
+trigger: manual
+entrypoint: relatorio-chief
+elicit: true
+---
+
+# Workflow: weekly-report-pipeline
+
+Pipeline completo de relatório semanal — da coleta de métricas até a publicação na Timeline do Reportei.
+
+## Trigger
+
+```
+@relatorio-chief
+Rodar pipeline para [NOME DO CLIENTE]
+```
+
+## Fluxo
+
+```
+INÍCIO
+  │
+  ▼
+[relatorio-chief]
+  Recebe cliente, carrega config, calcula período
+  │
+  ▼
+[coletor] — task: fetch-metrics
+  Reportei API v2 → Google Sheets (colunas C/E/H/K/O)
+  │
+  ├─ ERRO (token, aba, etc.) → STOP + mensagem clara
+  │
+  ▼
+[quality-gate] — task: verify-fill
+  Validação do preenchimento
+  │
+  ├─ REPROVADO → STOP + lista de problemas
+  │
+  ▼
+[redator] — task: generate-report
+  Métricas + MCP Reportei → texto narrativo
+  │
+  ▼
+[quality-gate] — task: validate-report
+  Validação do texto (6 checks)
+  │
+  ├─ REPROVADO (1ª vez) → voltar ao redator (regenerar)
+  ├─ REPROVADO (2ª vez) → STOP + erro
+  │
+  ▼
+[publicador] — task: publish-timeline
+  MCP create_timeline_event
+  │
+  ├─ ERRO → STOP + log completo
+  │
+  ▼
+[relatorio-chief]
+  Resumo final ao usuário
+  │
+  ▼
+FIM ✅
+```
+
+## Estados do pipeline
+
+| Estado | Descrição |
+|--------|-----------|
+| `RUNNING` | Pipeline em execução |
+| `WAITING_INPUT` | Aguardando confirmação do usuário |
+| `COMPLETED` | Pipeline concluído com sucesso |
+| `FAILED` | Pipeline interrompido com erro |
+| `PARTIAL` | Algumas etapas ok, outras com aviso |
+
+## Modo de execução
+
+- **Por cliente:** Rodar o pipeline para um cliente específico
+- **Todos os clientes:** Rodar sequencialmente para todos os clientes do bloco Vinicius
+  - Se um cliente falhar → registrar erro e continuar com o próximo
+
+## Saída final esperada
+
+```
+PIPELINE CONCLUÍDO — [DD/MM/AAAA] a [DD/MM/AAAA]
+════════════════════════════════════════════════════
+[NOME DO CLIENTE]
+  ✅ Coleta de métricas
+  ✅ Verificação de coleta
+  ✅ Geração do relatório
+  ✅ Validação do texto
+  ✅ Publicação na Timeline (ID: XXXXX)
+════════════════════════════════════════════════════
+Tempo total: ~X segundos
+```
