@@ -8,6 +8,8 @@ gestor:
 
 planilha:
   # SHEET_ID vem da variável de ambiente SHEET_ID
+  # IMPORTANTE: abas nomeadas pelo DOMINGO da semana (ex: 17/05/2026 = semana 11-17/05)
+  # Nomes curtos na coluna A (ex: 'IMCP', 'DESTRA', 'Dra Danielle Gondim')
   # Colunas por métrica (índice 0 = coluna A)
   colunas:
     meta_spend: C      # Meta Ads — Spend (R$)
@@ -28,6 +30,13 @@ manual_map:
   "imcp": "IMCP - Instituto Mineiro de Cirurgia Plastica"
   "destra": "Destra Desenvolvimentos"
   "destra desenvolvimentos": "Destra Desenvolvimentos"
+
+# Nomes reais na coluna A da planilha (descobertos na Sessão 5)
+# Usar esses valores para localizar a linha correta no Sheets
+nomes_planilha:
+  "IMCP - Instituto Mineiro de Cirurgia Plastica": "IMCP"
+  "Destra Desenvolvimentos": "DESTRA"
+  "Dra Danielle Gondim": "Dra Danielle Gondim"
   "igo implantes/mensagens": "IGO"
   "igo implantes": "IGO"
   "dr. alvaro": "Dr. Alvaro Rodrigues"
