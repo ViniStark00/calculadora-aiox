@@ -10,23 +10,37 @@
 #
 # IMPORTANTE: os termos "saudavel", "atencao", "critico" são internos ao agente.
 # Nunca expor esses termos no relatório — usar apenas a conclusão em linguagem natural.
+#
+# NOTA CPL — distinção importante:
+#   CPL aqui = custo por conversa WhatsApp no gerenciador de anúncios (Meta Ads)
+#              NÃO é CAC (custo de aquisição de cliente/paciente), que é muito maior.
+#   Valores baseados na média real da carteira Vinicius (últimos 6 meses, mai/2026).
+#   Referência: média histórica R$6–8/conversa, alerta acima de R$10.
+#
+#   Exceção: cirurgia_ortognatica usa Google Ads (custo por conversão, não por conversa)
+#   Referência Google: média desejada R$20–28/conversão.
 
 especialidades:
 
+  # ──────────────────────────────────────────────────────────────────────────
+  # ESPECIALIDADES META ADS
+  # CPL = meta_spend / conversas (conversas WhatsApp iniciadas)
+  # Thresholds uniformes entre especialidades — variações reais são pequenas
+  # ──────────────────────────────────────────────────────────────────────────
+
   cirurgia_plastica:
     cpl:
-      # CPL = custo por conversa (lead WhatsApp)
-      # Valores definidos pelo usuário (briefing Sessão 14)
+      # Atualizado em 2026-05-20 com base na média real da carteira (Sessão 17)
       saudavel:
-        max: 150.00
-        descricao: "CPL dentro do esperado para cirurgia plástica"
+        max: 8.00
+        descricao: "CPL dentro da média histórica da carteira"
       atencao:
-        min: 150.00
-        max: 300.00
-        descricao: "CPL acima do ideal — monitorar evolução"
+        min: 8.00
+        max: 15.00
+        descricao: "CPL acima da média — monitorar evolução e volume investido"
       critico:
-        min: 300.00
-        descricao: "CPL elevado para a especialidade — revisar segmentação e criativos"
+        min: 15.00
+        descricao: "CPL consistentemente elevado — revisar segmentação e criativos"
     cpm:
       # CPM = custo por mil impressões (R$)
       saudavel:
@@ -57,17 +71,16 @@ especialidades:
 
   dermatologia:
     cpl:
-      # Valores definidos pelo usuário (briefing Sessão 14)
       saudavel:
-        max: 80.00
-        descricao: "CPL dentro do esperado para dermatologia"
+        max: 8.00
+        descricao: "CPL dentro da média histórica da carteira"
       atencao:
-        min: 80.00
-        max: 160.00
-        descricao: "CPL acima do ideal — monitorar evolução"
+        min: 8.00
+        max: 15.00
+        descricao: "CPL acima da média — monitorar evolução e volume investido"
       critico:
-        min: 160.00
-        descricao: "CPL elevado para a especialidade — revisar segmentação e criativos"
+        min: 15.00
+        descricao: "CPL consistentemente elevado — revisar segmentação e criativos"
     cpm:
       saudavel:
         max: 22.00
@@ -95,17 +108,16 @@ especialidades:
 
   medicina_estetica:
     cpl:
-      # Valores definidos pelo usuário (briefing Sessão 14)
       saudavel:
-        max: 60.00
-        descricao: "CPL dentro do esperado para medicina estética"
+        max: 8.00
+        descricao: "CPL dentro da média histórica da carteira"
       atencao:
-        min: 60.00
-        max: 120.00
-        descricao: "CPL acima do ideal — monitorar evolução"
+        min: 8.00
+        max: 15.00
+        descricao: "CPL acima da média — monitorar evolução e volume investido"
       critico:
-        min: 120.00
-        descricao: "CPL elevado para a especialidade — revisar segmentação e criativos"
+        min: 15.00
+        descricao: "CPL consistentemente elevado — revisar segmentação e criativos"
     cpm:
       saudavel:
         max: 18.00
@@ -130,3 +142,215 @@ especialidades:
         max: 6.0
       critico:
         min: 6.0
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # NOVAS ESPECIALIDADES — adicionadas em 2026-05-20 (Plano V2, Etapa 2/3)
+  # CPL corrigido com base na média real da carteira (Sessão 17)
+  # ──────────────────────────────────────────────────────────────────────────
+
+  cirurgia_facial:
+    # Rinoplastia, blefaroplastia, lifting facial
+    cpl:
+      saudavel:
+        max: 8.00
+        descricao: "CPL dentro da média histórica da carteira"
+      atencao:
+        min: 8.00
+        max: 15.00
+        descricao: "CPL acima da média — monitorar evolução e volume investido"
+      critico:
+        min: 15.00
+        descricao: "CPL consistentemente elevado — revisar segmentação e criativos"
+    cpm:
+      saudavel:
+        max: 32.00
+      atencao:
+        min: 32.00
+        max: 65.00
+      critico:
+        min: 65.00
+    ctr:
+      saudavel:
+        min: 1.5
+      atencao:
+        min: 0.8
+        max: 1.5
+      critico:
+        max: 0.8
+    frequencia:
+      saudavel:
+        max: 3.0
+      atencao:
+        min: 3.0
+        max: 5.0
+      critico:
+        min: 5.0
+
+  cirurgia_corporal:
+    # Lipoaspiração, silicone, contorno corporal
+    cpl:
+      saudavel:
+        max: 8.00
+        descricao: "CPL dentro da média histórica da carteira"
+      atencao:
+        min: 8.00
+        max: 15.00
+        descricao: "CPL acima da média — monitorar evolução e volume investido"
+      critico:
+        min: 15.00
+        descricao: "CPL consistentemente elevado — revisar segmentação e criativos"
+    cpm:
+      saudavel:
+        max: 28.00
+      atencao:
+        min: 28.00
+        max: 55.00
+      critico:
+        min: 55.00
+    ctr:
+      saudavel:
+        min: 1.5
+      atencao:
+        min: 0.8
+        max: 1.5
+      critico:
+        max: 0.8
+    frequencia:
+      saudavel:
+        max: 3.0
+      atencao:
+        min: 3.0
+        max: 5.0
+      critico:
+        min: 5.0
+
+  mommy_makeover:
+    # Procedimentos combinados pós-gestação (abdominoplastia + mamoplastia + lipo)
+    # Público mais nichado — volume menor, frequência tolerada ligeiramente maior
+    cpl:
+      saudavel:
+        max: 8.00
+        descricao: "CPL dentro da média histórica da carteira"
+      atencao:
+        min: 8.00
+        max: 15.00
+        descricao: "CPL acima da média — monitorar evolução e volume investido"
+      critico:
+        min: 15.00
+        descricao: "CPL consistentemente elevado — revisar segmentação e criativos"
+    cpm:
+      saudavel:
+        max: 35.00
+      atencao:
+        min: 35.00
+        max: 70.00
+      critico:
+        min: 70.00
+    ctr:
+      # Público mais seletivo → CTR naturalmente menor que procedimentos isolados
+      saudavel:
+        min: 1.2
+      atencao:
+        min: 0.6
+        max: 1.2
+      critico:
+        max: 0.6
+    frequencia:
+      # Público nichado → tolerância ligeiramente maior antes de saturar
+      saudavel:
+        max: 3.5
+      atencao:
+        min: 3.5
+        max: 6.0
+      critico:
+        min: 6.0
+
+  cirurgia_trans:
+    # Mastectomia afirmativa (trans masculino)
+    # Nicho específico, menor concorrência no leilão → CPM mais baixo
+    cpl:
+      saudavel:
+        max: 8.00
+        descricao: "CPL dentro da média histórica da carteira"
+      atencao:
+        min: 8.00
+        max: 15.00
+        descricao: "CPL acima da média — monitorar evolução e volume investido"
+      critico:
+        min: 15.00
+        descricao: "CPL consistentemente elevado — revisar segmentação e criativos"
+    cpm:
+      # Menor concorrência no leilão por nicho específico
+      saudavel:
+        max: 22.00
+      atencao:
+        min: 22.00
+        max: 45.00
+      critico:
+        min: 45.00
+    ctr:
+      saudavel:
+        min: 1.5
+      atencao:
+        min: 0.8
+        max: 1.5
+      critico:
+        max: 0.8
+    frequencia:
+      saudavel:
+        max: 3.0
+      atencao:
+        min: 3.0
+        max: 5.0
+      critico:
+        min: 5.0
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # ESPECIALIDADE GOOGLE ADS
+  # CPL aqui = custo por conversão (não por conversa WhatsApp)
+  # Métrica diferente: google_spend / conversoes
+  # Referência informada pelo usuário: média desejada R$20–28/conversão
+  # ──────────────────────────────────────────────────────────────────────────
+
+  cirurgia_ortognatica:
+    # Cirurgia de mandíbula/maxila (Dr. Laureano Filho — só Google Ads)
+    # CPL aqui = custo por conversão Google Ads (não custo por conversa WhatsApp)
+    # CTR benchmark diferente: Google Search médico = 3–8% (vs 1–2% no Meta)
+    cpl:
+      saudavel:
+        max: 23.00
+        descricao: "Custo por conversão dentro do alvo (Google Ads) — referência R$20–23"
+      atencao:
+        min: 23.00
+        max: 30.00
+        descricao: "Custo por conversão acima do alvo — monitorar palavras-chave e correspondência"
+      critico:
+        min: 30.00
+        descricao: "Custo por conversão elevado — revisar termos de pesquisa, lances e landing page"
+    cpm:
+      # Referência Google Display (quando usado); Google Search é CPC-based
+      saudavel:
+        max: 12.00
+      atencao:
+        min: 12.00
+        max: 25.00
+      critico:
+        min: 25.00
+    ctr:
+      # Google Search: CTR saudável é muito maior que Meta Ads
+      saudavel:
+        min: 4.0
+      atencao:
+        min: 2.0
+        max: 4.0
+      critico:
+        max: 2.0
+    frequencia:
+      # Search tem menor necessidade de retargeting intenso
+      saudavel:
+        max: 2.0
+      atencao:
+        min: 2.0
+        max: 3.5
+      critico:
+        min: 3.5

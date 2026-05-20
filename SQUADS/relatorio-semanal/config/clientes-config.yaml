@@ -73,22 +73,33 @@ slugs:
   google_cost_unit: "direct"             # custo Google = valor direto, SEM ÷ 1.000.000
 
 # Especialidade médica por cliente
-# Valores permitidos: cirurgia_plastica | dermatologia | medicina_estetica | null
-# null = não confirmado — redator ignora thresholds silenciosamente
+# Valores permitidos (slugs exatos das chaves em thresholds-especialidade.yaml):
+#   cirurgia_plastica | cirurgia_facial | cirurgia_corporal | mommy_makeover |
+#   cirurgia_trans | cirurgia_ortognatica | dermatologia | medicina_estetica | null
+# null = sem threshold — redator usa apenas os dados brutos, sem classificação
 # Usado pelo redator para classificar métricas via data/thresholds-especialidade.yaml
 especialidade_por_cliente:
-  "IMCP - Instituto Mineiro de Cirurgia Plastica": cirurgia_plastica
-  "Dra Danielle Gondim":                           null   # especialidade não confirmada
-  "Dr. Leandro Gontijio":                          null   # especialidade não confirmada
-  "Dr. Guilherme Mattar":                          null   # especialidade não confirmada
+  # --- Bloco Vinicius — clientes ativos (confirmados em 2026-05-20) ---
+  "IMCP - Instituto Mineiro de Cirurgia Plastica": cirurgia_plastica   # geral
+  "Dra Danielle Gondim":                           cirurgia_facial      # rinoplastia, blefaroplastia, face
+  "Dr. Leandro Gontijio":                          cirurgia_corporal    # silicone, lipo, contorno corporal
+  "Dr. Guilherme Mattar":                          cirurgia_trans       # mastectomia afirmativa (trans masc)
+  "Dr. Luiz Borba":                                mommy_makeover       # corporal pós-gestação
+  "Dr. Lucas Consentino":                          cirurgia_corporal    # corporal geral
+  "Dr. Humberto":                                  mommy_makeover       # pós-gestação
+  "Dr. Laureano Filho":                            cirurgia_ortognatica # só Google Ads
+  "Dr. Diego Gonzalez Salvador":                   mommy_makeover       # pós-gestação
+  "Dr. Joel Abdala":                               cirurgia_facial      # facial
+  "Dr. Matheus Ocampo":                            cirurgia_corporal    # corporal
+  # --- Clientes sem threshold (não são clínicas médicas ou especialidade fora do escopo) ---
   "Destra Desenvolvimentos":                        null   # não é clínica médica
   "Dr. Alvaro Rodrigues":                           null   # especialidade não confirmada
   "Dr. Enzo Carvalho":                              null   # especialidade não confirmada
   "Dr Javier Cucchiaro":                            null   # especialidade não confirmada
-  "MaxiOral":                                       null   # cirurgia buco-maxilofacial — fora das 3 especialidades
+  "MaxiOral":                                       null   # cirurgia buco-maxilofacial
   "Zenicare":                                       null   # especialidade não confirmada
   "Dra Nicolli":                                    null   # especialidade não confirmada
-  "IGO":                                            null   # implantes dentários — fora das 3 especialidades
+  "IGO":                                            null   # implantes dentários
 
 # Lógica de plataformas (coletor + redator):
 # O coletor tenta coletar TODAS as métricas para todos os clientes.

@@ -32,6 +32,11 @@ INÍCIO
   ├─ ERRO (token, aba, etc.) → STOP + mensagem clara
   │
   ▼
+[coletor] — task: save-history  ⚠️ NÃO-BLOQUEANTE
+  Salva métricas da semana em data/historico-clientes.yaml
+  ├─ ERRO → aviso no log + pipeline continua normalmente
+  │
+  ▼
 [quality-gate] — task: verify-fill
   Validação do preenchimento
   │
@@ -92,6 +97,7 @@ PIPELINE CONCLUÍDO — [DD/MM/AAAA] a [DD/MM/AAAA]
 ════════════════════════════════════════════════════
 [NOME DO CLIENTE]
   ✅ Coleta de métricas
+  ✅ Histórico salvo  (ou ⚠️ Histórico: aviso — pipeline não interrompido)
   ✅ Verificação de coleta
   ✅ Geração do relatório
   ✅ Validação do texto
