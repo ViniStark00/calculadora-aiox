@@ -1,0 +1,199 @@
+squad:
+  name: relatorio-semanal
+  description: "Automatiza 3 atividades semanais do gestor de tráfego: coleta de métricas, geração de relatório narrativo e publicação na Timeline do Reportei."
+  domain: weekly-report-automation
+  mvp_cliente: Destra Desenvolvimentos
+  scope: multi-cliente (bloco Vinicius na planilha)
+
+analysis:
+  entities:
+    - Cliente
+    - Métricas (Meta Ads Spend, Google Ads Spend, Seguidores, Conversas, Conversões)
+    - Relatório (narrativa textual por cliente)
+    - Planilha (Google Sheets — abas por semana)
+    - Timeline (Linha do Tempo do Reportei por cliente)
+    - GestorBloco (linha "Vinicius" delimita os clientes do gestor)
+  workflows:
+    - fetch-metrics
+    - verify-fill
+    - generate-report
+    - validate-report
+    - publish-timeline
+  integrations:
+    - Reportei API v2 (HTTP REST — Bearer Token)
+    - Google Sheets API (Service Account JSON)
+    - MCP Reportei (mcp__30ebe978-db99-4dee-927c-b72f6abac9d8)
+  stakeholders:
+    - Gestor de tráfego (Vinicius)
+    - Clientes gerenciados (Destra, Dr. Leandro, Dra. Danielle, IMCP, etc.)
+
+recommendations:
+  agents:
+    - id: relatorio-chief
+      tier: 0
+      role: "Orquestra o pipeline completo — recebe o comando do usuário, carrega config do cliente e controla o fluxo coletor → quality-gate → redator → quality-gate → publicador"
+      commands:
+        - rodar-pipeline
+      confidence: 0.95
+      user_added: false
+      user_modified: false
+
+    - id: coletor
+      tier: 1
+      role: "Chama API Reportei v2 com paginação completa, usa MANUAL_MAP para casar nomes divergentes, identifica bloco Vinicius na planilha e preenche colunas C/E/H/K/O na aba da semana correta"
+      commands:
+        - fetch-metrics
+      confidence: 0.97
+      user_added: false
+      user_modified: false
+      technical_notes:
+        - "Aba deve existir — erro claro se não encontrada (criação automática: versão futura)"
+        - "Formato aba: strftime('%d/%m/%Y') — com barras"
+        - "Período: last_sunday-6 até last_sunday (semana anterior)"
+        - "Slug Google: 'google_adwords' (não 'google_ads')"
+        - "Custo Google: valor direto, SEM dividir por 1.000.000"
+        - "Seguidores: match exato ref == 'ig:new_followers_count'"
+        - "Conversas: match exato para 'messaging_conversation_started_7d'"
+        - "Rate limit: sleep 0.6s entre chamadas + retry 60s mínimo no 429"
+        - "Paginação: GET /v2/projects?per_page=100&page=N"
+        - "Implementar _to_float() para tratar values como float/string/lista/dict"
+
+    - id: redator
+      tier: 1
+      role: "Recebe métricas coletadas + dados extras via MCP Reportei (CPL, CPC, cliques), gera narrativa do relatório usando template e regras de voz"
+      commands:
+        - generate-report
+      confidence: 0.90
+      user_added: false
+      user_modified: false
+      voice_rules:
+        tom: "neutro e informativo — sem elogios exagerados, sem críticas pesadas"
+        palavras_proibidas:
+          elogios: ["incrível", "surpreendente", "excelente", "extraordinário", "impressionante", "fantástico", "brilhante", "notável"]
+          criticas: ["preocupante", "alarmante", "crítico", "péssimo", "desastroso", "infelizmente"]
+          ia_generica: ["alavancar", "potencializar", "maximizar", "robusto", "sinergia", "ecossistema", "transformador", "impactante"]
+          frases_ia:
+            - "é importante ressaltar"
+            - "cabe destacar"
+            - "vale salientar"
+            - "nesse sentido"
+            - "isso posto"
+            - "outrossim"
+            - "observa-se que"
+            - "depreende-se"
+            - "no âmbito de"
+            - "faz-se necessário"
+        exemplo_correto: "O investimento em Meta Ads totalizou R$ 1.716,26, abaixo do orçamento de R$ 8.785,00."
+        exemplo_errado: "Infelizmente o resultado ficou muito abaixo do esperado."
+
+    - id: publicador
+      tier: 1
+      role: "Publica o texto aprovado como marco na Timeline do cliente no Reportei via MCP create_timeline_event"
+      commands:
+        - publish-timeline
+      confidence: 0.92
+      user_added: false
+      user_modified: false
+
+    - id: quality-gate
+      tier: 3
+      role: "Valida em dois momentos: (1) pós-coleta — verifica se todos os clientes do bloco Vinicius foram preenchidos e se os valores são válidos; (2) pós-redação — verifica se o texto tem datas, valores em R$ e análise"
+      commands:
+        - verify-fill
+        - validate-report
+      confidence: 0.93
+      user_added: false
+      user_modified: false
+      verify_fill_rules:
+        - "Todos os clientes do bloco Vinicius foram processados?"
+        - "Alguma célula ficou vazia sem justificativa?"
+        - "Algum valor está zerado sem motivo? (exceção: Dr. Javier — Meta spend bloqueado em ARS)"
+        - "Reportar: nome do cliente + coluna + motivo do problema"
+
+  tasks:
+    - name: fetch-metrics.md
+      agent: coletor
+      entrada:
+        - período calculado automaticamente (último domingo)
+        - GESTOR = "Vinicius" (filtro de bloco)
+      saida:
+        - colunas C/E/H/K/O preenchidas na aba da semana
+        - lista de status por cliente (processado / pulado / erro)
+      confidence: 0.97
+
+    - name: verify-fill.md
+      agent: quality-gate
+      entrada:
+        - aba da semana
+        - lista de clientes do bloco Vinicius
+      saida:
+        - relatório ✅/⚠️/❌ por cliente e por coluna
+      confidence: 0.93
+      note: "Task nova — adicionada por solicitação do usuário (verificação pós-preenchimento)"
+
+    - name: generate-report.md
+      agent: redator
+      entrada:
+        - métricas da task fetch-metrics
+        - dados extras via MCP Reportei (CPL, CPC, cliques, impressões)
+      saida:
+        - texto narrativo do relatório por cliente
+      confidence: 0.90
+
+    - name: validate-report.md
+      agent: quality-gate
+      entrada:
+        - texto gerado pelo redator
+      saida:
+        - aprovado ✅ ou reprovado ❌ com motivo específico
+      confidence: 0.88
+
+    - name: publish-timeline.md
+      agent: publicador
+      entrada:
+        - texto aprovado
+        - project_id do cliente no Reportei
+        - data do período (início e fim da semana)
+      saida:
+        - marco publicado na Timeline ✅
+      confidence: 0.92
+
+  template: custom
+  config_mode: extend
+
+client_config:
+  manual_map:
+    "imcp": "IMCP - Instituto Mineiro de Cirurgia Plastica"
+    "destra": "Destra Desenvolvimentos"
+    "igo implantes/mensagens": "IGO"
+    "dr. alvaro": "Dr. Alvaro Rodrigues"
+    "dr. enzo": "Dr. Enzo Carvalho"
+    "dr javier": "Dr Javier Cucchiaro"
+    "dr. daniel renno (maxioral)": "MaxiOral"
+    "zanicare  / mensagens": "Zenicare"
+    "dra nicolle andrade": "Dra Nicolli"
+    "dr juan lopez": null
+    "stark marketing": null
+    "dr, matheus ocampo": null
+    "l348": null
+  skip_meta_spend:
+    - "Dr Javier Cucchiaro"
+  fuzzy_threshold: 0.60
+  gestor_block: "Vinicius"
+
+pipeline_flow: "relatorio-chief → coletor → quality-gate (verify-fill) → redator → quality-gate (validate-report) → publicador → resumo final"
+
+metadata:
+  created_at: "2026-05-20"
+  source_docs:
+    - "docs/prd/relatorio-semanal.md"
+    - "squads/relatorio-semanal/CONTEXT.md"
+    - "C:/Users/Usuario/Downloads/Automacao de Preenchimento de Metricas.md"
+  user_adjustments: 4
+  overall_confidence: 0.92
+  decisions:
+    - "Atividade 1 construída do zero no Claude Code (sem Colab)"
+    - "Aba do Sheets NÃO criada automaticamente — erro claro se não existir (criação automática: versão futura)"
+    - "Squad multi-cliente — bloco Vinicius na planilha (não só Destra)"
+    - "MANUAL_MAP herdado do Colab + 12 bugs já documentados e corrigidos"
+    - "Tom do redator: neutro e informativo — lista de palavras proibidas definida"
