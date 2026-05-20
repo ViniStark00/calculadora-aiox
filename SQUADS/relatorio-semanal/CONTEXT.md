@@ -22,11 +22,12 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : PLANO V2 EM CURSO — Sessão 17 encerrada
-Última ação : Etapas 0-4 concluídas e commitadas (c169faf) na branch feat/melhorias-v2.
-              Thresholds corrigidos com CPL real da carteira (R$6-8/conversa WhatsApp).
-              save-history tornado explícito no diagrama do workflow.
-Próxima ação: Etapa 5A — Chamar /AIOX:agents:architect com o briefing da Etapa 5A
+Etapa atual : PLANO V2 EM CURSO — Sessão 18 encerrada
+Última ação : Etapas 5A e 5B concluídas e commitadas (f488ee7 + a8fc34c) na branch feat/melhorias-v2.
+              @architect desenhou o design dos contextos dinâmicos no Drive.
+              @dev implementou o agente contexto-cliente + template + edições no redator,
+              workflow e squad.yaml. @devops fez push da branch para o remote.
+Próxima ação: Etapa 6 — @dev criar agente monitor-diario
               (seção BRIEFINGS COMPLETOS POR ETAPA neste CONTEXT.md)
 Bloqueadores: Etapa 8 aguarda usuário descrever estrutura do status report no ClickUp
 ```
@@ -1632,6 +1633,41 @@ handoff:
 
 ---
 
+### Sessão 18 — 2026-05-20
+
+**Início:** CONTEXT.md lido — Etapas 0–4 confirmadas. Sessão dedicada às Etapas 5A e 5B.
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| @architect ativado — design dos contextos dinâmicos no Drive (Etapa 5A) | ✅ |
+| Design entregue: estrutura do doc, agente `contexto-cliente`, handoff YAML, fluxo, fallbacks | ✅ |
+| @dev ativado — implementação da Etapa 5B | OK |
+| `agents/contexto-cliente.md` criado — leitura + atualização, tratamento de erros completo | ✅ |
+| `templates/contexto-cliente-template.md` criado — estrutura padrão para primeira execução | ✅ |
+| `agents/redator.md` editado — seção de contexto dinâmico pré-geração adicionada | ✅ |
+| `workflows/weekly-report-pipeline.md` editado — contexto-cliente no início e no fim do fluxo | ✅ |
+| `squad.yaml` editado — agente + MCP Drive registrados, pipeline_flow atualizado | ✅ |
+| @devops ativado — commit + push da Etapa 5B | ✅ |
+| Commits f488ee7 e a8fc34c pushados para feat/melhorias-v2 | ✅ |
+| CONTEXT.md atualizado (handoff Sessão 19) | ✅ |
+
+**Decisões tomadas nesta sessão:**
+- Agente único `contexto-cliente` (não dois) — evita duplicação da lógica de fallback
+- Limite de 8 semanas de aprendizados retidos no Drive — evita doc crescer indefinidamente
+- Contexto carregado ANTES do coletor (não após) — redator já tem contexto ao gerar texto
+- Atualização do contexto APÓS whatsapp-writer — usa resultado completo do pipeline
+
+**Arquivos criados/editados (commits f488ee7 + a8fc34c):**
+- `SQUADS/relatorio-semanal/agents/contexto-cliente.md` — novo
+- `SQUADS/relatorio-semanal/templates/contexto-cliente-template.md` — novo
+- `SQUADS/relatorio-semanal/agents/redator.md` — editado
+- `SQUADS/relatorio-semanal/workflows/weekly-report-pipeline.md` — editado
+- `SQUADS/relatorio-semanal/squad.yaml` — editado
+
+---
+
 ### Sessão 17 — 2026-05-20
 
 **Início:** CONTEXT.md lido — Etapa 0 confirmada. Sessão dedicada às Etapas 0–4 do Plano V2.
@@ -1669,6 +1705,63 @@ handoff:
 
 > **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
 > Sessão 16 encerrada. Etapa 1 concluída. Próxima ação: Etapa 0 — criar branch via @devops.
+
+---
+
+## HANDOFF — SESSÃO 19
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Sessão 18 encerrada. Etapas 5A e 5B concluídas e commitadas. Próxima ação: Etapa 6 — @dev criar agente monitor-diario.
+
+```yaml
+handoff:
+  from_session: 18
+  date: 2026-05-20
+  branch: feat/melhorias-v2
+  base: main
+  ultimo_commit: a8fc34c
+
+  estado_plano_v2:
+    etapas_concluidas: [0, 1, 2, 3, 4, "5A", "5B"]
+    proxima_etapa: "6 — Criar agente monitor-diario (@dev)"
+    etapa_8_status: "AGUARDANDO — usuário ainda não descreveu estrutura do status report no ClickUp"
+
+  proxima_acao: |
+    ETAPA 6 — Criar agente monitor-diario
+
+    Chamar @dev (/AIOX:agents:dev) com o briefing da Etapa 6
+    que está na seção "BRIEFINGS COMPLETOS POR ETAPA" deste CONTEXT.md.
+
+    Resumo do briefing:
+    - Cria: squads/relatorio-semanal/agents/monitor-diario.md
+    - Lê clientes de config/clientes-config.yaml
+    - Busca métricas via MCP Reportei (get_metrics, get_project)
+    - Compara com thresholds-especialidade.yaml
+    - Classifica: CRITICO / ATENCAO / INFO / SEM_DADOS
+    - Entrega painel consolidado com emojis de nível
+    - NÃO criar workflow ainda. NÃO modificar arquivos existentes. NÃO commitar.
+
+  o_que_foi_feito_sessao_18:
+    etapa_5A: "design dos contextos dinâmicos no Drive (@architect)"
+    etapa_5B: "agente contexto-cliente implementado (@dev) + push (@devops)"
+    novos_arquivos:
+      - "SQUADS/relatorio-semanal/agents/contexto-cliente.md"
+      - "SQUADS/relatorio-semanal/templates/contexto-cliente-template.md"
+    arquivos_editados:
+      - "SQUADS/relatorio-semanal/agents/redator.md"
+      - "SQUADS/relatorio-semanal/workflows/weekly-report-pipeline.md"
+      - "SQUADS/relatorio-semanal/squad.yaml"
+
+  variaveis_ambiente:
+    status: "AUTOMATICAS via .claude/settings.local.json — NUNCA pedir ao usuario para definir no terminal"
+    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  cliente_teste: "IMCP (project_id 688377)"
+  skill_command: "/relatorio-semanal"
+  plano_v2_referencia: "seção PLANO V2 deste CONTEXT.md — briefings completos de todas as 13 etapas"
+```
 
 ---
 
