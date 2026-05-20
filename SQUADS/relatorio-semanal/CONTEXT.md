@@ -1520,3 +1520,81 @@ handoff:
   cliente_teste: "IMCP (project_id 688377)"
   skill_command: "/relatorio-semanal"
 ```
+
+---
+
+### Sessao 15 - 2026-05-20
+
+**Inicio:** CONTEXT.md lido -- Melhoria 4 pendente de commit + push + PR + merge.
+
+**Atividades desta sessao:**
+
+| Acao | Resultado |
+|------|-----------|
+| Lido CONTEXT.md -- Melhoria 4 e push/PR/merge identificados | OK |
+| @devops ativado | OK |
+| git commit 75ca54b -- feat: add specialty thresholds for CPL classification | OK |
+| git push + PR #6 + merge para main | OK MERGED |
+| Variaveis de ambiente verificadas -- TODAS DEFINIDAS automaticamente via settings.local.json | OK |
+| Regra salva na memoria permanente (feedback_env_vars.md) | OK |
+
+**Estado final das melhorias:**
+
+| Melhoria | Status | Commit |
+|----------|--------|--------|
+| 1 -- Hooks de determinismo | CONCLUIDA | 3b020f9 |
+| 2 -- Output WhatsApp | CONCLUIDA | 52725a8 |
+| 3 -- Historico acumulado por cliente | CONCLUIDA | 8bca570 |
+| 4 -- Thresholds por especialidade medica | CONCLUIDA | 75ca54b |
+| Push + PR #6 + Merge para main | CONCLUIDO | -- |
+
+**Pendencias abertas:**
+- Melhoria Extra -- Anotacao no ClickUp (feat/extra-anotacao-clickup) -- opcional
+- Rodar pipeline: /relatorio-semanal Rodar pipeline para IMCP
+
+---
+
+## HANDOFF -- SESSAO 16
+
+> **LEIA ESTE BLOCO PRIMEIRO na proxima sessao.**
+> Melhorias 1-4 concluidas e mergeadas em main. Squad pronto para uso.
+
+
+
+```yaml
+handoff:
+  from_session: 15
+  date: 2026-05-20
+  branch: main
+  base: main
+
+  estado:
+    melhorias_1_a_4: "TODAS CONCLUIDAS -- PR #6 mergeado em main"
+    extra_clickup: "PENDENTE -- feat/extra-anotacao-clickup (opcional)"
+    pipeline: "PRONTO -- /relatorio-semanal Rodar pipeline para IMCP"
+
+  variaveis_ambiente:
+    status: "AUTOMATICAS via .claude/settings.local.json -- NUNCA pedir ao usuario para definir no terminal"
+    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  proxima_acao: |
+    Opcao A -- Rodar pipeline agora:
+      /relatorio-semanal Rodar pipeline para IMCP
+
+    Opcao B -- Melhoria Extra ClickUp (nao urgente):
+      Criar branch feat/extra-anotacao-clickup
+      Chamar @dev com briefing da secao EXTRA deste CONTEXT.md
+      Depois @qa e @devops
+
+  commits_main:
+    - "3b020f9 -- Melhoria 1 (hooks de determinismo)"
+    - "52725a8 -- Melhoria 2 (whatsapp-writer)"
+    - "8bca570 -- Melhoria 3 (historico acumulado)"
+    - "75ca54b -- Melhoria 4 (thresholds por especialidade)"
+
+  cliente_teste: "IMCP (project_id 688377)"
+  skill_command: "/relatorio-semanal"
+  pr_merged: "PR #6 -- feat/melhorias-squad-relatorio para main"
+```
