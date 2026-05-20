@@ -22,6 +22,7 @@ domain:
 components:
   agents:
     - relatorio-chief.md
+    - contexto-cliente.md
     - coletor.md
     - redator.md
     - publicador.md
@@ -66,10 +67,18 @@ integrations:
       - get_project
       - get_report
       - list_projects
+  - name: Google Drive MCP
+    id: "mcp__92a31705-b51e-422b-abc2-e6cb82a79330"
+    tools:
+      - search_files
+      - read_file_content
+      - create_file
+      - download_file_content
 
 pipeline_flow: >
-  relatorio-chief → coletor → quality-gate (verify-fill)
-  → redator → quality-gate (validate-report) → publicador → whatsapp-writer → resumo final
+  relatorio-chief → contexto-cliente (leitura) → coletor → quality-gate (verify-fill)
+  → redator → quality-gate (validate-report) → publicador → whatsapp-writer
+  → contexto-cliente (atualização) → resumo final
 
 dependencies:
   node: []

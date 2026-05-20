@@ -22,6 +22,39 @@ Recebe as métricas coletadas pelo `coletor` + dados extras via MCP Reportei (CP
 - Aplicar as regras de voz definidas em `CLAUDE.md`
 - Entregar texto para validação pelo `quality-gate`
 
+## Contexto dinâmico do cliente — pré-geração
+
+> ⚠️ **Executar ANTES de qualquer outro bloco pré-geração.** Se `contexto_cliente` ausente no handoff ou `disponivel: false`: pular silenciosamente, sem erro.
+
+### 1. Verificar contexto disponível
+
+Ao receber o handoff do `relatorio-chief`, verificar se o objeto `contexto_cliente` está presente e com `disponivel: true`.
+
+**Fallback silencioso** em qualquer uma das situações abaixo:
+- Campo `contexto_cliente` ausente no handoff
+- `contexto_cliente.disponivel = false`
+- `contexto_cliente.fonte = "indisponivel"`
+
+### 2. Usar o contexto na narrativa
+
+Se `disponivel: true`, incorporar as informações de forma fluida no `PARAGRAFO_NARRATIVO`:
+
+| Campo | Como usar |
+|-------|-----------|
+| `momento_comercial_atual` | Mencionar se relevante para contextualizar os resultados (ex: "Com o lançamento previsto para julho...") — ignorar se vazio ou com texto padrão |
+| `pontos_de_atencao` | Se um padrão recorrente aparecer nos dados desta semana, referenciar de forma natural |
+| `aprendizados_recentes` | Usar apenas como referência interna — não expor literalmente no texto |
+| `perfil.especialidade` | Já utilizado pelo sistema de thresholds — não duplicar |
+
+### 3. Regras de uso
+
+- **Nunca citar** o documento de contexto ou o sistema de memória no texto do relatório
+- **Nunca inventar** contexto que não esteja no handoff
+- Se `momento_comercial_atual` contiver `[Sem informações` ou estiver vazio: ignorar completamente
+- A incorporação é **opcional** — se não houver contexto útil, a narrativa segue normalmente sem menção
+
+---
+
 ## Contexto histórico — pré-geração
 
 > ⚠️ **Executar ANTES de gerar o texto.** Se o histórico estiver vazio ou tiver menos de 2 entradas: pular silenciosamente, sem erro.

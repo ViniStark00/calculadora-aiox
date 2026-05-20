@@ -26,6 +26,13 @@ INÍCIO
   Recebe cliente, carrega config, calcula período
   │
   ▼
+[contexto-cliente] — LEITURA  ⚠️ NÃO-BLOQUEANTE
+  Busca doc "Contexto — [CLIENTE]" no Google Drive
+  Se não existe: cria com template padrão, continua com contexto vazio
+  Se Drive falha: aviso + disponivel=false, pipeline continua normalmente
+  Entrega objeto contexto_cliente no handoff
+  │
+  ▼
 [coletor] — task: fetch-metrics
   Reportei API v2 → Google Sheets (colunas C/E/H/K/O)
   │
@@ -44,7 +51,7 @@ INÍCIO
   │
   ▼
 [redator] — task: generate-report
-  Métricas + MCP Reportei → texto narrativo
+  Métricas + MCP Reportei + contexto_cliente (handoff) → texto narrativo
   │
   ▼
 [quality-gate] — task: validate-report
@@ -65,6 +72,13 @@ INÍCIO
   Seleciona template (META-only / META+Google / Google-only)
   Gera linha de highlight (1 frase objetiva)
   Exibe mensagem pronta para copiar
+  │
+  ▼
+[contexto-cliente] — ATUALIZAÇÃO  ⚠️ NÃO-BLOQUEANTE
+  Gera aprendizados da semana com base nas métricas
+  Appenda no topo da seção aprendizados (mais recentes primeiro)
+  Mantém apenas últimas 8 semanas
+  Se Drive falha: aviso, nunca bloqueia
   │
   ▼
 [relatorio-chief]
@@ -96,6 +110,7 @@ FIM ✅
 PIPELINE CONCLUÍDO — [DD/MM/AAAA] a [DD/MM/AAAA]
 ════════════════════════════════════════════════════
 [NOME DO CLIENTE]
+  ✅ Contexto carregado  (ou ⚠️ Contexto: Drive indisponível — pipeline não interrompido)
   ✅ Coleta de métricas
   ✅ Histórico salvo  (ou ⚠️ Histórico: aviso — pipeline não interrompido)
   ✅ Verificação de coleta
@@ -103,6 +118,7 @@ PIPELINE CONCLUÍDO — [DD/MM/AAAA] a [DD/MM/AAAA]
   ✅ Validação do texto
   ✅ Publicação na Timeline (ID: XXXXX)
   ✅ Mensagem WhatsApp gerada
+  ✅ Contexto atualizado  (ou ⚠️ Contexto não atualizado esta semana)
 ════════════════════════════════════════════════════
 Tempo total: ~X segundos
 ```
