@@ -1,0 +1,72 @@
+name: gestor-trafego-ia
+version: 1.0.0
+description: >
+  Squad de automação operacional das 3 rotinas recorrentes do gestor de tráfego médico:
+  (1) preencher status report no ClickUp com métricas do Meta Ads,
+  (2) gerar relatório semanal no Reportei AI com marco de timeline HTML,
+  (3) monitorar métricas de todas as contas e emitir alertas por severidade por especialidade médica.
+author: Stark Marketing
+license: UNLICENSED
+slashPrefix: gestor-trafego
+
+aiox:
+  minVersion: "2.1.0"
+  type: squad
+
+agents:
+  tier0:
+    - gestor-chief.md
+  tier1:
+    - clickup-writer.md
+    - reportei-writer.md
+    - alerta-monitor.md
+    - task-monitor.md
+  tier2:
+    - validator.md
+
+components:
+  tasks:
+    - preencher-clickup.md
+    - gerar-relatorio-reportei.md
+    - monitorar-contas.md
+  checklists:
+    - clickup-gate.md
+    - relatorio-gate.md
+    - alertas-gate.md
+  workflows: []
+  templates: []
+  tools: []
+  scripts: []
+
+config:
+  extends: none
+
+mcps:
+  - meta-ads
+  - reportei
+  - clickup
+  - google-drive
+
+data:
+  clientes: data/clientes.md
+  thresholds: data/thresholds-por-especialidade.md
+
+heuristics:
+  absolute_vetos:
+    - Nunca executar ação no Meta Ads — apenas leitura de métricas
+    - Nunca escrever no ClickUp sem dados confirmados do Meta Ads
+    - Nunca criar relatório no Reportei sem marco de timeline adicionado
+    - Nunca recomendar pausas ou ações de campanha — apenas emitir alertas para o gestor
+
+scope_v1:
+  functional: [preencher-clickup, gerar-relatorio-reportei, monitorar-contas]
+  validation_target: "score >= 7.0 no *validate-squad"
+
+tags:
+  - trafego-pago
+  - meta-ads
+  - automacao
+  - saude
+  - clickup
+  - reportei
+  - stark-marketing
