@@ -22,15 +22,18 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : 9 — Correções validadas → commit @dev → push @devops → republicar 4 eventos → criar APRESENTACAO.md
-Última ação : Sessão 8 — Pipeline rodado para IMCP com formato corrigido. 19/19 checks passaram.
-              Event ID 107510 publicado com título "Relatório de Tráfego" (fixo).
-              Output salvo em examples/imcp-2026-05-17-v2.md.
-Próxima ação: 1. @dev  — git commit (3 arquivos corrigidos + examples/imcp-2026-05-17-v2.md + CONTEXT.md)
-              2. @devops — git push + PR + merge para main
-              3. Republicar 4 eventos bloco Vinicius (Danielle, Leandro, IMCP, Mattar) — período 11/05-17/05/2026
-              4. Criar APRESENTACAO.md (Etapa 9 original)
-Bloqueadores: Nenhum
+Etapa atual : 9 — Republicar 3 eventos restantes do bloco Vinicius + criar APRESENTACAO.md
+Última ação : Sessão 8 (continuação) — Padrão visual HTML documentado como pilar inviolável.
+              Pipeline testado com Event ID 107513 — visual aprovado pelo usuário.
+              PR #3 criado e MERGED para main. Branch feat/relatorio-semanal está em main.
+Próxima ação: 1. Republicar 3 eventos com HTML + padrão visual (período 11/05-17/05/2026):
+                 - Dra Danielle Gondim  (project_id: 839737)
+                 - Dr. Leandro Gontijio (project_id: 627550)
+                 - Dr. Guilherme Mattar (project_id: 1023153)
+                 IMCP já está publicado corretamente (Event ID 107513) — PULAR
+              2. Criar APRESENTACAO.md (Etapa 9 original)
+Bloqueadores: Nenhum — REPORTEI_TOKEN e GOOGLE_SERVICE_ACCOUNT_JSON precisam ser
+              configurados no início da sessão (perdem-se ao fechar o terminal)
 ```
 
 ---
@@ -809,40 +812,121 @@ Mostrar a **ferramenta** (Elemento 3): MCP Reportei instalado e Google Sheets AP
 - Republicar 4 eventos do bloco Vinicius (107488–107491 deletados — linha do tempo vazia)
 - Criar APRESENTACAO.md (Etapa 9 original)
 
+**Sessão 8 — continuação (mesma data):**
+
+| Ação | Resultado |
+|------|-----------|
+| Identificado: Event ID 107510 aparecia como bloco de texto corrido | ✅ diagnosticado — Reportei não renderiza markdown |
+| @dev ativado — corrigido redator.md, publicador.md, publish-timeline.md para HTML | ✅ commit f06d237 |
+| Teste com HTML puro (Event ID 107511) — ainda sem `<br>`, parágrafos colados | ✅ publicado, parcialmente melhor |
+| Usuário solicitou mais respiro visual e documentação como pilar permanente | ✅ aceito |
+| @dev adicionou seção "PADRÃO VISUAL — PILAR INVIOLÁVEL" em redator.md | ✅ commit 1ae2c73 |
+| @dev reescreveu relatorio-template.md com 3 templates HTML com `<br>` | ✅ commit 7343bb7 |
+| Pipeline testado novamente (Event ID 107513) com `<br>` entre todos os blocos | ✅ visual aprovado pelo usuário |
+| @devops ativado — push + PR #3 + merge para main | ✅ MERGED |
+
+**Commits desta sessão (completo):**
+```
+7343bb7  style: reescrever templates em HTML com espaçamento correto
+1ae2c73  style: documentar padrão visual HTML como pilar do squad
+f06d237  fix: corrigir formatação HTML na publicação da Timeline
+aaa4ecb  chore: checkpoint pré-correção (pré-sessão 8)
+```
+
+**Eventos da Timeline — estado final:**
+| Event ID | Cliente | Status |
+|----------|---------|--------|
+| 107487 | IMCP (Sessão 5) | status desconhecido |
+| 107488 | Dra Danielle Gondim | DELETADO — precisa republicar |
+| 107489 | Dr. Leandro Gontijio | DELETADO — precisa republicar |
+| 107490 | IMCP (Sessão 6) | DELETADO |
+| 107491 | Dr. Guilherme Mattar | DELETADO — precisa republicar |
+| 107510 | IMCP (Sessão 8 — HTML sem `<br>`) | ATIVO mas visual inferior |
+| 107511 | IMCP (Sessão 8 — HTML com `<br>`) | ATIVO mas visual inferior |
+| **107513** | **IMCP (Sessão 8 — padrão visual final)** | **✅ ATIVO — formato correto** |
+
 ---
 
 ## HANDOFF — SESSÃO 9
 
 > Basta abrir este CONTEXT.md no início da próxima sessão.
 
+### Sessão 9 — 2026-05-20
+
+**Início:** CONTEXT.md lido — Etapa 9 confirmada. 3 eventos pendentes de republicação + APRESENTACAO.md a criar.
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| Lido CONTEXT.md — estado conferido | OK |
+| git fetch — confirmado PR #3 mergeado em origin/main | ✅ |
+| YAML do CONTEXT.md corrigido (107510 → 107513 como evento final correto) | ✅ |
+| get_project_metrics em paralelo: Danielle (839737), Leandro (627550), Mattar (1023153) | ✅ 3 projetos com dados |
+| quality-gate Bloco B — narrativas validadas para os 3 clientes | ✅ HTML + padrão visual + sem palavras proibidas |
+| create_timeline_event — Dra. Danielle Gondim | ✅ Event ID 107525 |
+| create_timeline_event — Dr. Leandro Gontijio | ✅ Event ID 107526 |
+| create_timeline_event — Dr. Guilherme Mattar | ✅ Event ID 107527 |
+| APRESENTACAO.md criado em squads/relatorio-semanal/ | ✅ 4 blocos completos + checklist pré-apresentação |
+| CONTEXT.md atualizado (Sessão 9) | ✅ |
+
+**Métricas usadas nos relatórios republicados (11/05 a 17/05/2026):**
+
+| Cliente | Template | Reach | Conversas | CPL | Google | Event ID |
+|---------|----------|-------|-----------|-----|--------|----------|
+| Dra. Danielle Gondim | META-only | 204.081 | 93 | R$ 69,75 | — | 107525 |
+| Dr. Leandro Gontijio | META+Google | 982.247 | 1.212 | R$ 9,69 | 148 conv, R$ 2,76 | 107526 |
+| Dr. Guilherme Mattar | META+Google | 94.242 | 11 | R$ 91,97 | 143 conv, R$ 3,94 | 107527 |
+
+**Checks Anderson — status final:**
+- P1 ✅ — Pipeline rodou (eventos publicados com padrão visual correto)
+- P2 ✅ — HTML + `<br>` + títulos fixos + rodapé em todos os 3 eventos
+- P3 ✅ — Evidência em examples/ + eventos publicados na Timeline
+
+**Arquivos criados/modificados nesta sessão:**
+- `squads/relatorio-semanal/APRESENTACAO.md` — roteiro completo dos 4 blocos
+- `SQUADS/relatorio-semanal/CONTEXT.md` — este log
+
+**Estado final do bloco Vinicius — Timeline do Reportei:**
+
+| Event ID | Cliente | Status |
+|----------|---------|--------|
+| 107513 | IMCP (Sessão 8 — padrão visual final) | ✅ ATIVO — correto |
+| 107525 | Dra. Danielle Gondim (Sessão 9) | ✅ ATIVO — correto |
+| 107526 | Dr. Leandro Gontijio (Sessão 9) | ✅ ATIVO — correto |
+| 107527 | Dr. Guilherme Mattar (Sessão 9) | ✅ ATIVO — correto |
+
+**Etapa 9 — CONCLUÍDA ✅**
+
+---
+
+## HANDOFF — SESSÃO 10 (se necessário)
+
+> Squad relatorio-semanal está completo e pronto para apresentação.
+
 ```yaml
 handoff:
-  from_session: 8
+  from_session: 9
+  from_session_original: 8
   date: 2026-05-20
   branch: feat/relatorio-semanal
   story_context:
     squad: relatorio-semanal
-    etapa_atual: 9
-    status: Correcoes validadas — aguardando commit, push e republicacao dos 4 eventos
+    etapa_atual: CONCLUIDA
+    status: Squad completo — eventos publicados — APRESENTACAO.md criado — pronto para demo
     ultima_acao: >
-      Sessao 8 — Pipeline testado para IMCP com formato corrigido. 19/19 checks passaram.
-      Event ID 107510 publicado com titulo "Relatorio de Trafego" (fixo).
-      Output salvo em examples/imcp-2026-05-17-v2.md.
-      Correcoes da Sessao 7 confirmadas como funcionando corretamente.
+      Sessao 9 — Republicados 3 eventos do bloco Vinicius (IDs 107525, 107526, 107527).
+      APRESENTACAO.md criado com roteiro completo dos 4 blocos.
+      Todos os checks do Anderson passando. Squad pronto para apresentacao.
   proxima_acao: >
-    PASSO 1 — @dev: git commit (arquivos corrigidos)
-      - squads/relatorio-semanal/agents/publicador.md
-      - squads/relatorio-semanal/tasks/publish-timeline.md
-      - squads/relatorio-semanal/agents/redator.md
-      - squads/relatorio-semanal/examples/imcp-2026-05-17-v2.md
+    PASSO 1 — @devops: git commit + push + PR + merge para main
       - SQUADS/relatorio-semanal/CONTEXT.md
-    PASSO 2 — @devops: git push + PR + merge para main
-    PASSO 3 — Republicar 4 eventos bloco Vinicius (periodo 11/05-17/05/2026):
-        - Dra Danielle Gondim  (project_id: 839737)
-        - Dr. Leandro Gontijio (project_id: 627550)
-        - IMCP                 (project_id: 688377) — já publicado (107510), pular
-        - Dr. Guilherme Mattar (project_id: 1023153)
-    PASSO 4 — Criar APRESENTACAO.md com roteiro dos 4 blocos (briefing completo no CONTEXT.md)
+      - squads/relatorio-semanal/APRESENTACAO.md
+    PASSO 2 — Preparar apresentacao ao vivo:
+        - Configurar variaveis de ambiente no terminal
+        - Testar /relatorio-semanal uma vez antes
+        - Ter examples/imcp-2026-05-17-v2.md como fallback
+        - Abrir Reportei no browser antes de iniciar
 
   skill_command: "/relatorio-semanal"
   skill_path: ".claude/skills/relatorio-semanal/SKILL.md"
@@ -956,8 +1040,13 @@ handoff:
     107489: "DELETADO (Dr. Leandro Gontijio — Sessao 6)"
     107490: "DELETADO (IMCP — Sessao 6)"
     107491: "DELETADO (Dr. Guilherme Mattar — Sessao 6)"
-    107510: "IMCP (Sessao 8) — ATIVO com formato correto"
-    nota: "Republicar 107488, 107489, 107491 (Danielle, Leandro, Mattar) na Sessao 9"
+    107510: "IMCP (Sessao 8 — HTML sem br) — ATIVO mas visual inferior"
+    107511: "IMCP (Sessao 8 — HTML com br parcial) — ATIVO mas visual inferior"
+    107513: "IMCP (Sessao 8 continuacao — padrao visual final) — ATIVO formato correto"
+    107525: "Dra. Danielle Gondim (Sessao 9) — ATIVO formato correto"
+    107526: "Dr. Leandro Gontijio (Sessao 9) — ATIVO formato correto"
+    107527: "Dr. Guilherme Mattar (Sessao 9) — ATIVO formato correto"
+    nota: "Bloco Vinicius completo — 4 clientes com eventos ativos no formato correto"
 
   pontos_fortes_para_apresentacao:
     - "Pipeline rodou 3/3 atividades × 4 clientes ao vivo sem intervencao humana (Sessao 6)"
@@ -971,5 +1060,5 @@ handoff:
     - "Bug identificado, corrigido, testado e documentado — ciclo completo de melhoria"
 ```
 
-*Versão: 11 | Última atualização: Sessão 8 (encerramento), 2026-05-20*
-*Etapa atual: 9 — Commit + push + republicar 3 eventos + APRESENTACAO.md*
+*Versão: 12 | Última atualização: Sessão 9, 2026-05-20*
+*Etapa atual: CONCLUÍDA — Squad pronto para apresentação ao Anderson*
