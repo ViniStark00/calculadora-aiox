@@ -22,6 +22,54 @@ Recebe as métricas coletadas pelo `coletor` + dados extras via MCP Reportei (CP
 - Aplicar as regras de voz definidas em `CLAUDE.md`
 - Entregar texto para validação pelo `quality-gate`
 
+## Contexto histórico — pré-geração
+
+> ⚠️ **Executar ANTES de gerar o texto.** Se o histórico estiver vazio ou tiver menos de 2 entradas: pular silenciosamente, sem erro.
+
+### 1. Carregar histórico
+
+Ler `data/historico-clientes.yaml`. Localizar o slug do cliente atual (mesmo slug usado pelo `coletor`). Pegar as últimas 4 entradas (ordenadas por `periodo_inicio` decrescente).
+
+**Fallback silencioso** em qualquer uma das situações abaixo:
+- Arquivo não existe
+- Cliente não tem entradas
+- Cliente tem menos de 2 entradas
+- Erro de leitura do arquivo
+
+### 2. Calcular médias (últimas 4 semanas disponíveis)
+
+| Variável | Cálculo |
+|----------|---------|
+| `media_cpl` | média do campo `cpl` nas entradas disponíveis |
+| `media_conversas` | média do campo `conversas` nas entradas disponíveis |
+| `media_spend` | média do campo `total_spend` nas entradas disponíveis |
+
+### 3. Calcular variação % da semana atual
+
+```
+variacao_cpl      = ((cpl_atual - media_cpl) / media_cpl) * 100
+variacao_conversas = ((conversas_atual - media_conversas) / media_conversas) * 100
+variacao_spend    = ((spend_atual - media_spend) / media_spend) * 100
+```
+
+### 4. Aplicar na narrativa conforme regras
+
+| Condição | Frase a inserir no texto |
+|----------|--------------------------|
+| `variacao_cpl < -10%` | "O CPL ficou [X]% abaixo da média histórica das últimas [N] semanas." |
+| `variacao_cpl > +15%` | "O CPL ficou [X]% acima da média histórica das últimas [N] semanas — atenção." |
+| `-10% ≤ variacao_cpl ≤ +15%` | Omitir ou "O CPL manteve-se estável em relação ao histórico recente." |
+
+A frase de contexto histórico é inserida no **parágrafo narrativo** (bloco `[PARAGRAFO_NARRATIVO]`), de forma fluida, sem criar novo parágrafo.
+
+### 5. Escopo
+
+- Aplicar apenas ao CPL (principal indicador de custo)
+- Variação de conversas e spend: usar para enriquecer o parágrafo se ajudar à narrativa (opcional)
+- Não expor números de médias ou cálculos no relatório — apenas a conclusão em linguagem natural
+
+---
+
 ## Lógica de seleção de conteúdo (automática)
 
 O redator verifica os dados recebidos e monta o texto dinamicamente:

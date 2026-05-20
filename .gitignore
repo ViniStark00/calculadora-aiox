@@ -33,3 +33,7 @@ desktop.ini
 docs/
 dashboard_viviane_borba.html
 stark_viviane_dashboard.html
+
+# Squad relatorio-semanal — dados de produção (nunca commitar)
+squads/relatorio-semanal/data/historico-clientes.yaml
+squads/relatorio-semanal/service_account.json

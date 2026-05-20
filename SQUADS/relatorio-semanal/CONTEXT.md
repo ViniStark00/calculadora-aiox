@@ -1355,3 +1355,97 @@ handoff:
   cliente_teste: "IMCP (project_id 688377)"
   skill_command: "/relatorio-semanal"
 ```
+
+---
+
+### Sessão 14 — 2026-05-20
+
+**Início:** CONTEXT.md lido — Melhoria 3 (Histórico Acumulado por Cliente) confirmada como próxima ação.
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| Lido CONTEXT.md — Melhoria 3 identificada | OK |
+| Lidos agents/coletor.md e agents/redator.md | OK — estado atual absorvido |
+| CRIADO data/historico-clientes.yaml (clientes: {} vazio) | ✅ |
+| .gitignore atualizado — historico-clientes.yaml e service_account.json adicionados | ✅ |
+| CRIADO tasks/save-history.md (idempotente, max 52, falha não bloqueia) | ✅ |
+| MODIFICADO agents/coletor.md — seção "Persistência de histórico (pós-coleta)" adicionada | ✅ |
+| MODIFICADO agents/redator.md — seção "Contexto histórico — pré-geração" adicionada antes da lógica de seleção | ✅ |
+| CONTEXT.md atualizado (handoff Sessão 15) | ✅ |
+
+**Arquivos criados/modificados nesta sessão:**
+- `squads/relatorio-semanal/data/historico-clientes.yaml` — CRIADO (clientes: {})
+- `.gitignore` — MODIFICADO (2 entradas do squad adicionadas)
+- `squads/relatorio-semanal/tasks/save-history.md` — CRIADO
+- `squads/relatorio-semanal/agents/coletor.md` — MODIFICADO
+- `squads/relatorio-semanal/agents/redator.md` — MODIFICADO
+
+**Pendências abertas:**
+- @qa — validar Melhoria 3
+- @devops — commit com arquivos da Melhoria 3 (após @qa aprovar)
+- Melhoria 4 — Thresholds por Especialidade Médica
+- Push + PR + merge após Melhorias 3 e 4 concluídas
+
+---
+
+## HANDOFF — SESSÃO 15
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Melhoria 3 implementada pelo @dev. Próximo: @qa valida, @devops commita, depois Melhoria 4.
+
+```yaml
+handoff:
+  from_session: 14
+  date: 2026-05-20
+  branch: feat/melhorias-squad-relatorio
+  base: main
+
+  estado:
+    melhoria_1: "CONCLUÍDA — commit 3b020f9"
+    melhoria_2: "CONCLUÍDA — commit 52725a8"
+    melhoria_3: "IMPLEMENTADA — aguardando @qa + @devops commit"
+    melhoria_4: "PENDENTE — briefing salvo na seção BRIEFINGS deste CONTEXT.md"
+    push_pr_merge: "PENDENTE — após Melhorias 3 e 4"
+
+  proxima_acao: |
+    QA — Melhoria 3: Histórico Acumulado
+
+    Briefing para @qa (/AIOX:agents:qa):
+    "QA — Melhoria 3. Verificar:
+    1. data/historico-clientes.yaml existe e está no .gitignore
+    2. tasks/save-history.md: idempotência documentada, limite 52, falha não bloqueia
+    3. agents/coletor.md: instrução save-history após fetch-metrics, slug documentado
+    4. agents/redator.md: seção histórico antes da geração, 3 casos de variação, fallback
+    5. Smoke test mental: mesma semana não duplica; histórico vazio = sem erro no pipeline"
+
+    Após @qa aprovar:
+    Briefing para @devops (/AIOX:agents:devops):
+    "Commit na branch feat/melhorias-squad-relatorio com arquivos da Melhoria 3:
+    squads/relatorio-semanal/data/historico-clientes.yaml,
+    squads/relatorio-semanal/tasks/save-history.md,
+    squads/relatorio-semanal/agents/coletor.md,
+    squads/relatorio-semanal/agents/redator.md,
+    squads/relatorio-semanal/CONTEXT.md,
+    .gitignore.
+    Mensagem: feat(relatorio-semanal): add historical metrics per client.
+    Não fazer push ainda."
+
+    Em seguida: Melhoria 4 (briefing completo na seção BRIEFINGS deste CONTEXT.md).
+
+  arquivos_melhoria_3:
+    - squads/relatorio-semanal/data/historico-clientes.yaml
+    - squads/relatorio-semanal/tasks/save-history.md
+    - squads/relatorio-semanal/agents/coletor.md
+    - squads/relatorio-semanal/agents/redator.md
+    - .gitignore
+
+  variaveis_ambiente:
+    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  cliente_teste: "IMCP (project_id 688377)"
+  skill_command: "/relatorio-semanal"
+```
