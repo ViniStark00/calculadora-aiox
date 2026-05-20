@@ -72,6 +72,24 @@ slugs:
   conversas: "messaging_conversation_started_7d"  # match exato
   google_cost_unit: "direct"             # custo Google = valor direto, SEM ÷ 1.000.000
 
+# Especialidade médica por cliente
+# Valores permitidos: cirurgia_plastica | dermatologia | medicina_estetica | null
+# null = não confirmado — redator ignora thresholds silenciosamente
+# Usado pelo redator para classificar métricas via data/thresholds-especialidade.yaml
+especialidade_por_cliente:
+  "IMCP - Instituto Mineiro de Cirurgia Plastica": cirurgia_plastica
+  "Dra Danielle Gondim":                           null   # especialidade não confirmada
+  "Dr. Leandro Gontijio":                          null   # especialidade não confirmada
+  "Dr. Guilherme Mattar":                          null   # especialidade não confirmada
+  "Destra Desenvolvimentos":                        null   # não é clínica médica
+  "Dr. Alvaro Rodrigues":                           null   # especialidade não confirmada
+  "Dr. Enzo Carvalho":                              null   # especialidade não confirmada
+  "Dr Javier Cucchiaro":                            null   # especialidade não confirmada
+  "MaxiOral":                                       null   # cirurgia buco-maxilofacial — fora das 3 especialidades
+  "Zenicare":                                       null   # especialidade não confirmada
+  "Dra Nicolli":                                    null   # especialidade não confirmada
+  "IGO":                                            null   # implantes dentários — fora das 3 especialidades
+
 # Lógica de plataformas (coletor + redator):
 # O coletor tenta coletar TODAS as métricas para todos os clientes.
 # Se uma plataforma não existir no projeto, o valor volta zerado ou ausente — sem erro.

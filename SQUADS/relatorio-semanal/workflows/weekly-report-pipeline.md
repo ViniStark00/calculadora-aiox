@@ -54,6 +54,13 @@ INÍCIO
   │
   ├─ ERRO → STOP + log completo
   │
+  ▼ handoff: event_id + project_id + link + métricas (meta_spend, google_spend, conversas, cpl) + período
+[whatsapp-writer]
+  Formata mensagem WhatsApp com resumo das métricas
+  Seleciona template (META-only / META+Google / Google-only)
+  Gera linha de highlight (1 frase objetiva)
+  Exibe mensagem pronta para copiar
+  │
   ▼
 [relatorio-chief]
   Resumo final ao usuário
@@ -89,6 +96,7 @@ PIPELINE CONCLUÍDO — [DD/MM/AAAA] a [DD/MM/AAAA]
   ✅ Geração do relatório
   ✅ Validação do texto
   ✅ Publicação na Timeline (ID: XXXXX)
+  ✅ Mensagem WhatsApp gerada
 ════════════════════════════════════════════════════
 Tempo total: ~X segundos
 ```

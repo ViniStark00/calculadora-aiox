@@ -22,6 +22,96 @@ Recebe as métricas coletadas pelo `coletor` + dados extras via MCP Reportei (CP
 - Aplicar as regras de voz definidas em `CLAUDE.md`
 - Entregar texto para validação pelo `quality-gate`
 
+## Contexto histórico — pré-geração
+
+> ⚠️ **Executar ANTES de gerar o texto.** Se o histórico estiver vazio ou tiver menos de 2 entradas: pular silenciosamente, sem erro.
+
+### 1. Carregar histórico
+
+Ler `data/historico-clientes.yaml`. Localizar o slug do cliente atual (mesmo slug usado pelo `coletor`). Pegar as últimas 4 entradas (ordenadas por `periodo_inicio` decrescente).
+
+**Fallback silencioso** em qualquer uma das situações abaixo:
+- Arquivo não existe
+- Cliente não tem entradas
+- Cliente tem menos de 2 entradas
+- Erro de leitura do arquivo
+
+### 2. Calcular médias (últimas 4 semanas disponíveis)
+
+| Variável | Cálculo |
+|----------|---------|
+| `media_cpl` | média do campo `cpl` nas entradas disponíveis |
+| `media_conversas` | média do campo `conversas` nas entradas disponíveis |
+| `media_spend` | média do campo `total_spend` nas entradas disponíveis |
+
+### 3. Calcular variação % da semana atual
+
+```
+variacao_cpl      = ((cpl_atual - media_cpl) / media_cpl) * 100
+variacao_conversas = ((conversas_atual - media_conversas) / media_conversas) * 100
+variacao_spend    = ((spend_atual - media_spend) / media_spend) * 100
+```
+
+### 4. Aplicar na narrativa conforme regras
+
+| Condição | Frase a inserir no texto |
+|----------|--------------------------|
+| `variacao_cpl < -10%` | "O CPL ficou [X]% abaixo da média histórica das últimas [N] semanas." |
+| `variacao_cpl > +15%` | "O CPL ficou [X]% acima da média histórica das últimas [N] semanas — atenção." |
+| `-10% ≤ variacao_cpl ≤ +15%` | Omitir ou "O CPL manteve-se estável em relação ao histórico recente." |
+
+A frase de contexto histórico é inserida no **parágrafo narrativo** (bloco `[PARAGRAFO_NARRATIVO]`), de forma fluida, sem criar novo parágrafo.
+
+### 5. Escopo
+
+- Aplicar apenas ao CPL (principal indicador de custo)
+- Variação de conversas e spend: usar para enriquecer o parágrafo se ajudar à narrativa (opcional)
+- Não expor números de médias ou cálculos no relatório — apenas a conclusão em linguagem natural
+
+---
+
+## Classificação por thresholds — pré-geração
+
+> ⚠️ **Executar APÓS o contexto histórico e ANTES de gerar o texto.** Se a especialidade do cliente for `null` ou não encontrada: pular silenciosamente, sem erro.
+
+### 1. Verificar especialidade do cliente
+
+Ler `config/clientes-config.yaml` → seção `especialidade_por_cliente` → chave = nome do cliente (mesmo nome da planilha).
+
+**Fallback silencioso** se:
+- Especialidade for `null`
+- Cliente não encontrado na seção
+- Arquivo de thresholds ausente ou corrompido
+
+### 2. Carregar thresholds
+
+Ler `data/thresholds-especialidade.yaml` → bloco da especialidade identificada.
+
+### 3. Classificar CPL da semana atual
+
+Comparar `cpl_atual` com os ranges do nível `cpl` da especialidade:
+
+| Comparação | Nível interno | Instrução para narrativa |
+|------------|--------------|--------------------------|
+| `cpl_atual < saudavel.max` | `saudavel` | Tom neutro — não mencionar thresholds no texto |
+| `saudavel.max ≤ cpl_atual ≤ atencao.max` | `atencao` | Inserir observação neutra: "O CPL de R$[X] ficou acima da referência para a especialidade." |
+| `cpl_atual > atencao.max` | `critico` | Inserir alerta neutro: "O CPL de R$[X] ficou acima de R$[threshold] — recomenda-se revisar segmentação e criativos." |
+
+### 4. Regras de tom
+
+- **Nunca expor** os termos internos `saudavel`, `atencao`, `critico` no relatório
+- **Nunca usar** palavras proibidas do `CLAUDE.md` (alarmante, preocupante, crítico, etc.)
+- A frase de threshold é inserida no **parágrafo narrativo**, de forma fluida
+- Nível `saudavel`: nenhuma frase adicional sobre threshold — narrativa segue normalmente
+
+### 5. Escopo
+
+- Aplicar classificação apenas ao CPL (métrica principal definida nos thresholds)
+- CPM, CTR, frequência: disponíveis nos thresholds para versões futuras — ignorar por ora
+- Não mencionar outros benchmarks no relatório atual
+
+---
+
 ## Lógica de seleção de conteúdo (automática)
 
 O redator verifica os dados recebidos e monta o texto dinamicamente:

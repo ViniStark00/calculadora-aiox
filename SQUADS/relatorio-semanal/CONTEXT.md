@@ -22,18 +22,17 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : 9 — Republicar 3 eventos restantes do bloco Vinicius + criar APRESENTACAO.md
-Última ação : Sessão 8 (continuação) — Padrão visual HTML documentado como pilar inviolável.
-              Pipeline testado com Event ID 107513 — visual aprovado pelo usuário.
-              PR #3 criado e MERGED para main. Branch feat/relatorio-semanal está em main.
-Próxima ação: 1. Republicar 3 eventos com HTML + padrão visual (período 11/05-17/05/2026):
-                 - Dra Danielle Gondim  (project_id: 839737)
-                 - Dr. Leandro Gontijio (project_id: 627550)
-                 - Dr. Guilherme Mattar (project_id: 1023153)
-                 IMCP já está publicado corretamente (Event ID 107513) — PULAR
-              2. Criar APRESENTACAO.md (Etapa 9 original)
-Bloqueadores: Nenhum — REPORTEI_TOKEN e GOOGLE_SERVICE_ACCOUNT_JSON precisam ser
-              configurados no início da sessão (perdem-se ao fechar o terminal)
+Etapa atual : MELHORIAS EM CURSO — Sessão 13 encerrada
+Última ação : Melhoria 2 concluída, aprovada pelo @qa e commitada (52725a8).
+              Briefings das Melhorias 3, 4 e Extra salvos no CONTEXT.md.
+Próxima ação: Melhoria 3 — Histórico Acumulado por Cliente
+              1. Chamar /AIOX:agents:dev com o briefing da Melhoria 3 (ver seção BRIEFINGS abaixo)
+              2. Chamar /AIOX:agents:qa para validar
+              3. Chamar /AIOX:agents:devops para commit
+              4. Repetir fluxo para Melhoria 4
+              5. Após Melhorias 1-4: @devops faz push + PR + merge de feat/melhorias-squad-relatorio
+              6. Extra (ClickUp): branch separada feat/extra-anotacao-clickup
+Bloqueadores: Nenhum
 ```
 
 ---
@@ -1064,5 +1063,460 @@ handoff:
     - "Bug identificado, corrigido, testado e documentado — ciclo completo de melhoria"
 ```
 
-*Versão: 12 | Última atualização: Sessão 9, 2026-05-20*
-*Etapa atual: CONCLUÍDA — Squad pronto para apresentação ao Anderson*
+*Versão: 13 | Última atualização: Sessão 12, 2026-05-20*
+*Etapa atual: MELHORIAS EM CURSO — Melhoria 1 concluída, Melhoria 2 pendente*
+
+---
+
+### Sessão 12 — 2026-05-20
+
+**Início:** CONTEXT.md lido — implementar as 4 melhorias do handoff da Sessão 12.
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| Lido CONTEXT.md — melhorias identificadas | OK |
+| @devops ativado — criada branch feat/melhorias-squad-relatorio a partir de main | ✅ |
+| git stash + git checkout main + git pull + git checkout -b | ✅ |
+| @dev ativado — Melhoria 1 implementada | OK |
+| Criado squads/relatorio-semanal/hooks/validate-outputs.py (hook Stop) | ✅ |
+| Criado squads/relatorio-semanal/hooks/log-timeline-event.py (hook PostToolUse) | ✅ |
+| .claude/settings.local.json atualizado com seções Stop e PostToolUse | ✅ (gitignored) |
+| @qa ativado — validação dos hooks | ✅ APROVADO — 2 obs. não-bloqueantes |
+| @devops ativado — commit 3b020f9 dos 2 hooks | ✅ |
+| CONTEXT.md atualizado (handoff Sessão 13) | ✅ |
+
+**Observações do @qa (não-bloqueantes):**
+- Aviso Atividade 1 aparece em toda execução (comportamento aceitável)
+- `extract_event_id` usa campo `"id"` — verificar empiricamente na primeira execução real
+
+**Decisões tomadas nesta sessão:**
+- settings.local.json NÃO commitado — contém tokens, está no gitignore — correto
+- Push (envio ao GitHub) adiado para após Melhorias 1-4 estarem prontas
+- Termo técnico entre parênteses em todo texto — padrão aprovado pelo usuário
+
+**Pendências abertas:**
+- Melhoria 2 — Output WhatsApp
+- Melhoria 3 — Histórico acumulado por cliente
+- Melhoria 4 — Thresholds por especialidade médica
+- Push + PR + merge após Melhorias 1-4 concluídas
+- Melhoria Extra (branch separada) — Anotação no ClickUp
+
+---
+
+## HANDOFF — SESSÃO 13
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Melhoria 1 concluída e commitada. Próximo: Melhoria 2 — Output WhatsApp.
+
+```yaml
+handoff:
+  from_session: 12
+  date: 2026-05-20
+  branch: feat/melhorias-squad-relatorio
+  base: main
+
+  estado:
+    melhoria_1: "CONCLUÍDA — commit 3b020f9"
+    melhoria_2: "PENDENTE"
+    melhoria_3: "PENDENTE"
+    melhoria_4: "PENDENTE"
+    push_pr_merge: "PENDENTE — fazer após Melhorias 1-4"
+
+  proxima_acao: |
+    MELHORIA 2 — Output WhatsApp pronto para envio
+
+    Briefing para @dev (/AIOX:agents:dev):
+    "Leia squads/relatorio-semanal/CONTEXT.md. Adicione a geração de mensagem
+    WhatsApp ao pipeline. Crie agents/whatsapp-writer.md com persona de agente
+    que recebe métricas (spend Meta, spend Google, conversas, CPL, link do
+    relatório) e formata mensagem WhatsApp usando templates/whatsapp-template.md.
+    A mensagem deve usar negrito WhatsApp (*texto*) e emojis. Crie o template.
+    Atualize workflows/weekly-report-pipeline.md adicionando etapa whatsapp-writer
+    após o publicador (handoff explícito: publicador passa event_id + link +
+    métricas). Atualize squad.yaml."
+
+    Após @dev:
+    Briefing para @qa (/AIOX:agents:qa):
+    "Leia squads/relatorio-semanal/CONTEXT.md. Valide a Melhoria 2 — Output
+    WhatsApp. Verifique: agents/whatsapp-writer.md tem todos os campos do
+    template? templates/whatsapp-template.md usa negrito WhatsApp (*texto*) e
+    emojis? O handoff publicador → whatsapp-writer está explícito no workflow?
+    squad.yaml foi atualizado? Reporte: APROVADO ou lista de problemas."
+
+    Após @qa aprovar:
+    Briefing para @devops (/AIOX:agents:devops):
+    "Faça commit na branch feat/melhorias-squad-relatorio com os arquivos da
+    Melhoria 2: agents/whatsapp-writer.md, templates/whatsapp-template.md,
+    workflows/weekly-report-pipeline.md, squad.yaml, CONTEXT.md.
+    Mensagem: feat(relatorio-semanal): add whatsapp-writer output.
+    Não fazer push ainda."
+
+  arquivos_melhoria_1:
+    - squads/relatorio-semanal/hooks/validate-outputs.py
+    - squads/relatorio-semanal/hooks/log-timeline-event.py
+    - .claude/settings.local.json (gitignored — não commitado, mas ativo localmente)
+
+  formato_mensagem_whatsapp: |
+    📊 *Relatório Semanal — [Cliente]* | [DD/MM] a [DD/MM]
+
+    💰 Investimento: R$[X] (Meta) + R$[Y] (Google)
+    💬 [N] conversas | CPL: R$[X]
+    📈 [1 linha de highlight ou ponto de atenção]
+
+    🔗 Relatório completo: [link Reportei]
+
+  variaveis_automaticas:
+    status: "AUTOMÁTICAS — configuradas em .claude/settings.local.json"
+    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  cliente_teste: IMCP (project_id 688377)
+  skill_command: "/relatorio-semanal"
+```
+
+---
+
+## BRIEFINGS — MELHORIAS 3, 4 E EXTRA
+
+> Fornecidos pelo usuário na Sessão 13. Salvos aqui para não se perderem entre sessões.
+
+### MELHORIA 3 — Histórico Acumulado por Cliente
+**Branch:** `feat/melhorias-squad-relatorio`
+
+**Arquivos a criar/modificar:**
+- CRIAR: `data/historico-clientes.yaml` — histórico semanal por cliente (iniciar com `clientes: {}`). Adicionar ao `.gitignore`.
+- CRIAR: `tasks/save-history.md` — task chamada pelo coletor após fetch-metrics. Idempotente (mesma semana = skip). Máximo 52 entradas. Falha NÃO bloqueia pipeline.
+- MODIFICAR: `agents/coletor.md` — após coleta bem-sucedida, chamar save-history com: cliente_slug (gerado do nome em lowercase-hífens), periodo_inicio/fim, métricas.
+- MODIFICAR: `agents/redator.md` — adicionar seção "Contexto histórico — pré-geração" ANTES do bloco de geração. Ler últimas 4 semanas, calcular média CPL/conversas/spend, calcular variação %, aplicar na narrativa. Fallback silencioso se < 2 entradas.
+
+**Regras de variação para o redator:**
+- `variacao_cpl` < -10% → "CPL X% abaixo da média histórica"
+- `variacao_cpl` > +15% → "CPL X% acima da média histórica — atenção"
+- Entre -10% e +15% → omitir ou "CPL estável"
+
+**Briefing @dev:**
+```
+Implementar Melhoria 3 — Histórico Acumulado por Cliente.
+Branch: feat/melhorias-squad-relatorio (já existente).
+CRIAR data/historico-clientes.yaml com clientes: {} vazio. Adicionar ao .gitignore.
+CRIAR tasks/save-history.md: idempotente, max 52 entradas, falha = warning não bloqueia.
+MODIFICAR agents/coletor.md: chamar save-history após fetch-metrics.
+MODIFICAR agents/redator.md: seção "Contexto histórico — pré-geração" antes da geração.
+Ler últimas 4 semanas, calcular médias, calcular variação %, aplicar na narrativa.
+Fallback silencioso se histórico vazio ou menos de 2 entradas.
+```
+
+**Briefing @qa:**
+```
+QA — Melhoria 3. Verificar:
+1. data/historico-clientes.yaml existe e está no .gitignore
+2. tasks/save-history.md: idempotência, limite 52, falha não bloqueia
+3. coletor.md: instrução save-history presente após fetch-metrics, slug documentado
+4. redator.md: seção histórico presente antes da geração, 3 casos de variação, fallback
+5. Smoke test mental: segunda execução mesma semana não duplica; histórico vazio = sem erro
+```
+
+---
+
+### MELHORIA 4 — Thresholds por Especialidade Médica
+**Branch:** `feat/melhorias-squad-relatorio`
+
+**Arquivos a criar/modificar:**
+- CRIAR: `data/thresholds-especialidade.yaml` — 3 especialidades (cirurgia_plastica, dermatologia, medicina_estetica), 4 métricas cada (cpl, cpm, ctr, frequencia), 3 níveis cada (saudavel, atencao, critico). Este arquivo PODE ser commitado.
+- MODIFICAR: `config/clientes-config.yaml` — adicionar campo `especialidade` em cada cliente. Valores permitidos: `cirurgia_plastica | dermatologia | medicina_estetica | null`. Deixar `null` para não confirmados.
+- MODIFICAR: `agents/redator.md` — adicionar seção "Classificação por thresholds" APÓS o contexto histórico e ANTES da geração. Ler especialidade do cliente, ler thresholds, classificar métricas, aplicar tom. Não expor termos técnicos (saudavel/atencao/critico) no relatório.
+
+**Thresholds (valores):**
+
+| Especialidade | CPL saudável | CPL atenção | CPL crítico |
+|---------------|-------------|-------------|-------------|
+| cirurgia_plastica | < R$150 | R$150–300 | > R$300 |
+| dermatologia | < R$80 | R$80–160 | > R$160 |
+| medicina_estetica | < R$60 | R$60–120 | > R$120 |
+
+**Briefing @dev:**
+```
+Implementar Melhoria 4 — Thresholds por Especialidade Médica.
+Branch: feat/melhorias-squad-relatorio (já existente).
+CRIAR data/thresholds-especialidade.yaml com 3 especialidades, 4 métricas, 3 níveis.
+MODIFICAR config/clientes-config.yaml: campo especialidade em cada cliente (null se não confirmado).
+MODIFICAR agents/redator.md: seção "Classificação por thresholds" após histórico, antes da geração.
+Fallback silencioso se especialidade null. Não expor termos técnicos no relatório.
+```
+
+**Briefing @qa:**
+```
+QA — Melhoria 4. Verificar:
+1. thresholds-especialidade.yaml: 3 especialidades, 4 métricas, 3 níveis, ranges sem sobreposição
+2. clientes-config.yaml: especialidade em todos os clientes, apenas slugs permitidos ou null
+3. redator.md: seção thresholds após histórico, fallback null silencioso, tom por status com exemplos
+4. Slugs em config batem exatamente com chaves em thresholds (case-sensitive)
+5. Smoke test: CPL R$200 cirurgia_plastica → atencao → tom neutro; especialidade null → sem erro
+```
+
+---
+
+### EXTRA — Anotação no ClickUp
+**Branch:** `feat/extra-anotacao-clickup` ⚠️ BRANCH SEPARADA
+
+**Arquivos a criar/modificar:**
+- CRIAR: `agents/anotador-clickup.md` — tier 2, não-crítico. MCP: `mcp__2d24fa11-1001-4c98-bf3c-7dcc3b7bdfaf`, tool: `clickup_create_task_comment`. Falha = aviso, não bloqueia.
+- CRIAR: `tasks/annotate-clickup.md` — task não-crítica. Se clickup_task_id null → warning + retornar.
+- MODIFICAR: `config/clientes-config.yaml` — adicionar `clickup_task_id: null` em cada cliente.
+- MODIFICAR: `workflows/weekly-report-pipeline.md` — inserir anotador-clickup APÓS publicador e ANTES de whatsapp-writer.
+- MODIFICAR: `squad.yaml` — adicionar anotador-clickup na lista de agentes.
+
+**Formato do comentário:**
+```
+✅ Relatório enviado | DD/MM–DD/MM | Meta: R$X.XXX | Conversas: XX | CPL: R$XX,XX
+✅ Relatório enviado | DD/MM–DD/MM | Meta: R$X.XXX | Google: R$X.XXX | Conversas: XX | CPL: R$XX,XX
+```
+
+---
+
+## HANDOFF — SESSÃO 14
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Melhorias 1 e 2 concluídas. Próximo: Melhoria 3 — Histórico Acumulado por Cliente.
+
+```yaml
+handoff:
+  from_session: 13
+  date: 2026-05-20
+  branch: feat/melhorias-squad-relatorio
+  base: main
+
+  estado:
+    melhoria_1: "CONCLUÍDA — commit 3b020f9 (hooks validate-outputs.py + log-timeline-event.py)"
+    melhoria_2: "CONCLUÍDA — commit 52725a8 (whatsapp-writer + template + workflow + squad.yaml)"
+    melhoria_3: "PENDENTE — briefing salvo na seção BRIEFINGS deste CONTEXT.md"
+    melhoria_4: "PENDENTE — briefing salvo na seção BRIEFINGS deste CONTEXT.md"
+    extra_clickup: "PENDENTE — branch separada feat/extra-anotacao-clickup"
+    push_pr_merge: "PENDENTE — fazer após Melhorias 1-4 concluídas"
+
+  proxima_acao: |
+    MELHORIA 3 — Histórico Acumulado por Cliente
+
+    Briefing para @dev (/AIOX:agents:dev):
+    "Implementar Melhoria 3 — Histórico Acumulado por Cliente.
+    Branch: feat/melhorias-squad-relatorio (já existente).
+    CRIAR data/historico-clientes.yaml com clientes: {} vazio. Adicionar ao .gitignore.
+    CRIAR tasks/save-history.md: idempotente, max 52 entradas, falha = warning não bloqueia.
+    MODIFICAR agents/coletor.md: chamar save-history após fetch-metrics bem-sucedido.
+    MODIFICAR agents/redator.md: seção Contexto histórico — pré-geração antes da geração.
+    Ler últimas 4 semanas, calcular médias CPL/conversas/spend, calcular variação %,
+    aplicar na narrativa conforme regras. Fallback silencioso se histórico vazio ou < 2 entradas."
+
+    Após @dev:
+    Briefing para @qa (/AIOX:agents:qa):
+    "QA — Melhoria 3: Histórico Acumulado. Verificar:
+    1. data/historico-clientes.yaml existe e está no .gitignore
+    2. tasks/save-history.md: idempotência documentada, limite 52, falha não bloqueia
+    3. agents/coletor.md: instrução save-history após fetch-metrics, slug documentado
+    4. agents/redator.md: seção histórico antes da geração, 3 casos de variação, fallback
+    5. Smoke test mental: mesma semana não duplica; histórico vazio = sem erro no pipeline"
+
+    Após @qa aprovar:
+    Briefing para @devops (/AIOX:agents:devops):
+    "Commit na branch feat/melhorias-squad-relatorio com arquivos da Melhoria 3:
+    data/historico-clientes.yaml, tasks/save-history.md, agents/coletor.md,
+    agents/redator.md, CONTEXT.md.
+    Mensagem: feat(relatorio-semanal): add historical metrics per client.
+    Não fazer push ainda."
+
+    Em seguida: repetir o mesmo fluxo para a Melhoria 4.
+    Briefing completo da Melhoria 4 está na seção BRIEFINGS deste CONTEXT.md.
+
+    Após Melhorias 3 e 4 concluídas:
+    Briefing para @devops:
+    "Fazer push da branch feat/melhorias-squad-relatorio, abrir PR e mergear para main."
+
+  commits_branch:
+    - "3b020f9 — feat(relatorio-semanal): add determinism hooks (Melhoria 1)"
+    - "52725a8 — feat(relatorio-semanal): add whatsapp-writer output (Melhoria 2)"
+
+  arquivos_novos_criados:
+    melhoria_1:
+      - squads/relatorio-semanal/hooks/validate-outputs.py
+      - squads/relatorio-semanal/hooks/log-timeline-event.py
+    melhoria_2:
+      - squads/relatorio-semanal/agents/whatsapp-writer.md
+      - squads/relatorio-semanal/templates/whatsapp-template.md
+
+  variaveis_ambiente:
+    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+    nota: "Configurar no PowerShell antes de rodar o pipeline"
+
+  cliente_teste: "IMCP (project_id 688377)"
+  skill_command: "/relatorio-semanal"
+```
+
+---
+
+### Sessão 14 — 2026-05-20
+
+**Início:** CONTEXT.md lido — Melhoria 3 (Histórico Acumulado por Cliente) confirmada como próxima ação.
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| Lido CONTEXT.md — Melhoria 3 identificada | OK |
+| Lidos agents/coletor.md e agents/redator.md | OK — estado atual absorvido |
+| CRIADO data/historico-clientes.yaml (clientes: {} vazio) | ✅ |
+| .gitignore atualizado — historico-clientes.yaml e service_account.json adicionados | ✅ |
+| CRIADO tasks/save-history.md (idempotente, max 52, falha não bloqueia) | ✅ |
+| MODIFICADO agents/coletor.md — seção "Persistência de histórico (pós-coleta)" adicionada | ✅ |
+| MODIFICADO agents/redator.md — seção "Contexto histórico — pré-geração" adicionada antes da lógica de seleção | ✅ |
+| CONTEXT.md atualizado (handoff Sessão 15) | ✅ |
+
+**Arquivos criados/modificados nesta sessão:**
+- `squads/relatorio-semanal/data/historico-clientes.yaml` — CRIADO (clientes: {})
+- `.gitignore` — MODIFICADO (2 entradas do squad adicionadas)
+- `squads/relatorio-semanal/tasks/save-history.md` — CRIADO
+- `squads/relatorio-semanal/agents/coletor.md` — MODIFICADO
+- `squads/relatorio-semanal/agents/redator.md` — MODIFICADO
+
+**Pendências abertas:**
+- @qa — validar Melhoria 3
+- @devops — commit com arquivos da Melhoria 3 (após @qa aprovar)
+- Melhoria 4 — Thresholds por Especialidade Médica
+- Push + PR + merge após Melhorias 3 e 4 concluídas
+
+---
+
+## HANDOFF — SESSÃO 15
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Melhoria 3 implementada pelo @dev. Próximo: @qa valida, @devops commita, depois Melhoria 4.
+
+```yaml
+handoff:
+  from_session: 14
+  date: 2026-05-20
+  branch: feat/melhorias-squad-relatorio
+  base: main
+
+  estado:
+    melhoria_1: "CONCLUÍDA — commit 3b020f9"
+    melhoria_2: "CONCLUÍDA — commit 52725a8"
+    melhoria_3: "IMPLEMENTADA — aguardando @qa + @devops commit"
+    melhoria_4: "PENDENTE — briefing salvo na seção BRIEFINGS deste CONTEXT.md"
+    push_pr_merge: "PENDENTE — após Melhorias 3 e 4"
+
+  proxima_acao: |
+    QA — Melhoria 3: Histórico Acumulado
+
+    Briefing para @qa (/AIOX:agents:qa):
+    "QA — Melhoria 3. Verificar:
+    1. data/historico-clientes.yaml existe e está no .gitignore
+    2. tasks/save-history.md: idempotência documentada, limite 52, falha não bloqueia
+    3. agents/coletor.md: instrução save-history após fetch-metrics, slug documentado
+    4. agents/redator.md: seção histórico antes da geração, 3 casos de variação, fallback
+    5. Smoke test mental: mesma semana não duplica; histórico vazio = sem erro no pipeline"
+
+    Após @qa aprovar:
+    Briefing para @devops (/AIOX:agents:devops):
+    "Commit na branch feat/melhorias-squad-relatorio com arquivos da Melhoria 3:
+    squads/relatorio-semanal/data/historico-clientes.yaml,
+    squads/relatorio-semanal/tasks/save-history.md,
+    squads/relatorio-semanal/agents/coletor.md,
+    squads/relatorio-semanal/agents/redator.md,
+    squads/relatorio-semanal/CONTEXT.md,
+    .gitignore.
+    Mensagem: feat(relatorio-semanal): add historical metrics per client.
+    Não fazer push ainda."
+
+    Em seguida: Melhoria 4 (briefing completo na seção BRIEFINGS deste CONTEXT.md).
+
+  arquivos_melhoria_3:
+    - squads/relatorio-semanal/data/historico-clientes.yaml
+    - squads/relatorio-semanal/tasks/save-history.md
+    - squads/relatorio-semanal/agents/coletor.md
+    - squads/relatorio-semanal/agents/redator.md
+    - .gitignore
+
+  variaveis_ambiente:
+    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  cliente_teste: "IMCP (project_id 688377)"
+  skill_command: "/relatorio-semanal"
+```
+
+---
+
+### Sessão 14 — continuação (Melhoria 4)
+
+| Ação | Resultado |
+|------|-----------|
+| @dev ativado — Melhoria 4 implementada | OK |
+| CRIADO data/thresholds-especialidade.yaml (3 especialidades × 4 métricas × 3 níveis) | ✅ |
+| MODIFICADO config/clientes-config.yaml — seção especialidade_por_cliente adicionada | ✅ |
+| MODIFICADO agents/redator.md — seção "Classificação por thresholds" inserida após histórico | ✅ |
+| @qa ativado — Melhoria 4 validada | ✅ APROVADO — 5/5 checks, 0 bloqueantes |
+| CONTEXT.md atualizado (handoff Sessão 15) | ✅ |
+
+**Pendências abertas:**
+- @devops — commit Melhoria 4 + CONTEXT.md
+- @devops — push + PR + merge da branch feat/melhorias-squad-relatorio para main
+- Melhoria Extra (branch separada feat/extra-anotacao-clickup) — opcional, após merge
+
+---
+
+## HANDOFF — SESSÃO 15
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Melhorias 1–4 implementadas e aprovadas. Próximo: @devops commita Melhoria 4, push + PR + merge.
+
+```yaml
+handoff:
+  from_session: 14_continuacao
+  date: 2026-05-20
+  branch: feat/melhorias-squad-relatorio
+  base: main
+
+  estado:
+    melhoria_1: "CONCLUÍDA — commit 3b020f9"
+    melhoria_2: "CONCLUÍDA — commit 52725a8"
+    melhoria_3: "CONCLUÍDA — commit 8bca570"
+    melhoria_4: "IMPLEMENTADA — aguardando commit @devops"
+    push_pr_merge: "PENDENTE — fazer logo após commit da Melhoria 4"
+    extra_clickup: "PENDENTE — branch separada feat/extra-anotacao-clickup (opcional)"
+
+  proxima_acao: |
+    Briefing para @devops (/AIOX:agents:devops):
+    "Commit na branch feat/melhorias-squad-relatorio com os arquivos da Melhoria 4:
+    squads/relatorio-semanal/data/thresholds-especialidade.yaml,
+    squads/relatorio-semanal/config/clientes-config.yaml,
+    squads/relatorio-semanal/agents/redator.md,
+    squads/relatorio-semanal/CONTEXT.md.
+    Mensagem: feat(relatorio-semanal): add specialty thresholds for CPL classification.
+    Em seguida: push da branch feat/melhorias-squad-relatorio, abrir PR e mergear para main."
+
+  arquivos_melhoria_4:
+    - squads/relatorio-semanal/data/thresholds-especialidade.yaml
+    - squads/relatorio-semanal/config/clientes-config.yaml
+    - squads/relatorio-semanal/agents/redator.md
+    - squads/relatorio-semanal/CONTEXT.md
+
+  commits_branch_completos:
+    - "3b020f9 — feat: add determinism hooks (Melhoria 1)"
+    - "52725a8 — feat: add whatsapp-writer output (Melhoria 2)"
+    - "8bca570 — feat: add historical metrics per client (Melhoria 3)"
+    - "(pendente) — feat: add specialty thresholds for CPL classification (Melhoria 4)"
+
+  variaveis_ambiente:
+    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  cliente_teste: "IMCP (project_id 688377)"
+  skill_command: "/relatorio-semanal"
+```

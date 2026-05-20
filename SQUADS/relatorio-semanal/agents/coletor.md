@@ -63,6 +63,25 @@ Converte valores do Reportei para float:
 - `dict` → tentar chave `'value'` ou `'total'`
 - `None` → retornar `0.0`
 
+## Persistência de histórico (pós-coleta)
+
+Após coleta **bem-sucedida** de um cliente (✅), chamar a task `save-history` com os dados daquele cliente:
+
+| Parâmetro | Valor |
+|-----------|-------|
+| `cliente_slug` | nome do cliente convertido: lowercase, espaços/pontos → hífen |
+| `periodo_inicio` | data de início da semana (`YYYY-MM-DD`) |
+| `periodo_fim` | data de fim da semana (`YYYY-MM-DD`) |
+| `meta_spend` | valor coletado (0.0 se null) |
+| `google_spend` | valor coletado (0.0 se null) |
+| `seguidores` | valor coletado |
+| `conversas` | valor coletado |
+| `conversoes` | valor coletado |
+
+**Regra:** `save-history` não é bloqueante. Se falhar, emite aviso e o pipeline continua. Não verificar retorno.
+
+Clientes com erro na coleta (❌) **não** chamam `save-history`.
+
 ## Saída esperada
 
 ```
