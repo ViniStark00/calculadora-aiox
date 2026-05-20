@@ -22,13 +22,15 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : 9 — Criar APRESENTACAO.md
-Última ação : Sessão 6 — Pipeline completo rodou para TODOS os 4 clientes do bloco Vinicius.
-              Planilha preenchida (20 células), 4 narrativas geradas e aprovadas no quality-gate,
-              4 eventos publicados na Timeline (Event IDs 107488-107491).
-              Output salvo em examples/bloco-vinicius-2026-05-17.md
-Próxima ação: Criar APRESENTACAO.md (Etapa 9) — roteiro dos 4 blocos para apresentação ao Anderson
-Bloqueadores: nenhum
+Etapa atual : 9 — Correções validadas → commit @dev → push @devops → republicar 4 eventos → criar APRESENTACAO.md
+Última ação : Sessão 8 — Pipeline rodado para IMCP com formato corrigido. 19/19 checks passaram.
+              Event ID 107510 publicado com título "Relatório de Tráfego" (fixo).
+              Output salvo em examples/imcp-2026-05-17-v2.md.
+Próxima ação: 1. @dev  — git commit (3 arquivos corrigidos + examples/imcp-2026-05-17-v2.md + CONTEXT.md)
+              2. @devops — git push + PR + merge para main
+              3. Republicar 4 eventos bloco Vinicius (Danielle, Leandro, IMCP, Mattar) — período 11/05-17/05/2026
+              4. Criar APRESENTACAO.md (Etapa 9 original)
+Bloqueadores: Nenhum
 ```
 
 ---
@@ -554,6 +556,9 @@ Mostrar a **ferramenta** (Elemento 3): MCP Reportei instalado e Google Sheets AP
 | Data | Erro | Correção | Status |
 |------|------|----------|--------|
 | 2026-05-20 | `Automacao de Preenchimento de Metricas.md` referenciado no handoff mas não existe localmente | Contexto técnico reconstruído a partir da transcrição do Encontro 08 e do handoff | ✅ CONTORNADO |
+| 2026-05-20 | Título do evento na Timeline publicado como "Relatório Semanal — DD/MM a DD/MM" em vez de "Relatório de Tráfego" | Corrigido em `agents/publicador.md` e `tasks/publish-timeline.md` — título agora é fixo: "Relatório de Tráfego" | ✅ CORRIGIDO |
+| 2026-05-20 | Seção "Desempenho de Anúncios em Destaque" e linha "👇 Confira os dados..." omitidas do texto gerado | `agents/redator.md` — "Estrutura do texto gerado" estava incompleta; adicionados `[SECAO_DESTAQUE]` e rodapé obrigatórios | ✅ CORRIGIDO |
+| 2026-05-20 | Evento publicado na Timeline do Reportei aparece como bloco de texto corrido, sem formatação | `agents/redator.md`, `agents/publicador.md`, `tasks/publish-timeline.md` — content enviado em markdown; Reportei exige HTML. Corrigido para `<p>`, `<strong>`, `<hr>` | ✅ CORRIGIDO (Sessão 8) |
 
 ---
 
@@ -575,8 +580,8 @@ Mostrar a **ferramenta** (Elemento 3): MCP Reportei instalado e Google Sheets AP
 
 ---
 
-*Versão: 9 | Última atualização: Sessão 5 (encerramento), 2026-05-20*
-*Etapa atual: 9 — Criar APRESENTACAO.md*
+*Versão: 10 | Última atualização: Sessão 7 (encerramento), 2026-05-20*
+*Etapa atual: 9 — Testar correções → republicar eventos → criar APRESENTACAO.md*
 
 ---
 
@@ -710,33 +715,134 @@ Mostrar a **ferramenta** (Elemento 3): MCP Reportei instalado e Google Sheets AP
 - P2 ✅ — 15/15 checks passaram (Bloco A+B+C)
 - P3 ✅ — Output real salvo em examples/bloco-vinicius-2026-05-17.md
 
-**Próxima ação:** Etapa 9 — criar APRESENTACAO.md
+**Próxima ação:** Testar correções → republicar eventos → criar APRESENTACAO.md
 
 ---
 
-## HANDOFF — SESSÃO 7
+### Sessão 7 — 2026-05-20
+
+**Início:** CONTEXT.md lido — Etapa 9 confirmada. Usuário trouxe print mostrando bugs nos eventos publicados na Sessão 6.
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| Lido CONTEXT.md | OK — Etapa 9 confirmada |
+| Usuário apresentou 2 bugs nos relatórios publicados | Título errado + seção "Desempenho" e rodapé faltando |
+| Diagnóstico: lidos publicador.md, publish-timeline.md, redator.md, relatorio-template.md | Causa raiz identificada em 3 arquivos — template estava correto |
+| Explicação do conceito de commit ao usuário | OK — usuário entendeu checkpoint vs push |
+| Commit checkpoint do estado atual (aaa4ecb) — antes das correções | ✅ 5 arquivos: CONTEXT.md, clientes-config.yaml, fill_sheets.py, 2 examples |
+| Ativado @dev (Dex) para aplicar as correções | OK |
+| Fix 1: `agents/publicador.md` — título corrigido para "Relatório de Tráfego" (2 ocorrências) | ✅ |
+| Fix 2: `tasks/publish-timeline.md` — título corrigido para "Relatório de Tráfego" (2 ocorrências) | ✅ |
+| Fix 3: `agents/redator.md` — estrutura do texto completada: métricas em negrito + [SECAO_DESTAQUE] obrigatória + rodapé `👇 Confira...` | ✅ |
+| CONTEXT.md — 2 bugs registrados em "ERROS E CORREÇÕES" | ✅ |
+| Saída do modo @dev (*exit) | OK |
+| Ativado /relatorio-semanal para teste das correções | ⚠️ BLOQUEADO — REPORTEI_TOKEN e GOOGLE_SERVICE_ACCOUNT_JSON não definidos |
+| Usuário solicitou handoff da sessão | Em andamento |
+
+**Bugs identificados e corrigidos:**
+
+| Bug | Causa | Arquivos corrigidos |
+|-----|-------|---------------------|
+| Título "Relatório Semanal — DD/MM a DD/MM" | `publicador.md` e `publish-timeline.md` tinham título dinâmico com datas | `agents/publicador.md`, `tasks/publish-timeline.md` |
+| Seção "Desempenho de Anúncios em Destaque" e `👇 Confira...` ausentes | `redator.md` — "Estrutura do texto gerado" estava incompleta | `agents/redator.md` |
+
+**Situação dos eventos na Timeline:**
+- Event IDs 107488-107491 (bloco Vinicius, Sessão 6) foram **EXCLUÍDOS** em sessão anterior que tentou corrigir
+- Republication falhou por rate limit (`You've hit your limit · resets 4:10am`)
+- Linha do tempo dos 4 clientes está **VAZIA** para o período 11/05-17/05/2026
+- Evento 107487 (IMCP, Sessão 5) — status desconhecido (pode ainda existir)
+
+**Decisões tomadas nesta sessão:**
+- Testar pipeline para 1 cliente (IMCP) antes de commitar as correções
+- Republicar todos os 4 eventos após teste aprovado
+- `create_timeline_event` sempre CRIA — nunca substitui (sem risco de duplicata pois eventos foram deletados)
+
+**Pendências abertas:**
+- Configurar variáveis de ambiente e testar pipeline (REPORTEI_TOKEN + GOOGLE_SERVICE_ACCOUNT_JSON)
+- Commit das correções via @dev após teste aprovado
+- Push + PR + merge via @devops
+- Republicar 4 eventos do bloco Vinicius com formato correto
+- Criar APRESENTACAO.md (Etapa 9 original)
+
+---
+
+### Sessão 8 — 2026-05-20
+
+**Início:** CONTEXT.md lido — variáveis de ambiente não configuradas. Pipeline bloqueado.
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| Lido CONTEXT.md | OK — bloqueadores identificados |
+| Configuradas variáveis: REPORTEI_TOKEN + GOOGLE_SERVICE_ACCOUNT_JSON via PowerShell | ✅ |
+| service_account.json verificado — existe localmente | ✅ |
+| /relatorio-semanal ativado → "Rodar pipeline para IMCP" | OK |
+| get_project_metrics IMCP (688377) — 11/05 a 17/05/2026 | ✅ dados reais obtidos |
+| fill_sheets.py executado — 4 clientes × 5 colunas | ✅ 20 células preenchidas |
+| quality-gate Bloco A (verify-fill) — IMCP | ✅ 8/8 |
+| Narrativa gerada pelo redator (META-only) | ✅ com [SECAO_DESTAQUE] + rodapé presentes |
+| quality-gate Bloco B (validate-report) — IMCP | ✅ 8/8 |
+| create_timeline_event publicado | ✅ Event ID 107510, título "Relatório de Tráfego" |
+| quality-gate Bloco C | ✅ 3/3 |
+| Output salvo em examples/imcp-2026-05-17-v2.md | ✅ |
+| CONTEXT.md atualizado (handoff Sessão 9) | ✅ |
+
+**Correções validadas nesta sessão:**
+
+| Correção | Arquivo | Validação |
+|----------|---------|-----------|
+| Título fixo "Relatório de Tráfego" | agents/publicador.md | ✅ Event ID 107510 com título correto |
+| Título fixo "Relatório de Tráfego" | tasks/publish-timeline.md | ✅ |
+| [SECAO_DESTAQUE] obrigatória + rodapé "👇 Confira..." | agents/redator.md | ✅ presente no texto gerado |
+
+**Checks Anderson — status:**
+- P1 ✅ — Pipeline rodou do zero, ponta a ponta, sem intervenção humana
+- P2 ✅ — 19/19 checks passaram (Bloco A + B + C)
+- P3 ✅ — Output real salvo em examples/imcp-2026-05-17-v2.md (formato correto)
+
+**Pendências abertas:**
+- @dev — commit das correções (publicador.md, publish-timeline.md, redator.md, examples/imcp-2026-05-17-v2.md, CONTEXT.md)
+- @devops — push + PR + merge para main
+- Republicar 4 eventos do bloco Vinicius (107488–107491 deletados — linha do tempo vazia)
+- Criar APRESENTACAO.md (Etapa 9 original)
+
+---
+
+## HANDOFF — SESSÃO 9
 
 > Basta abrir este CONTEXT.md no início da próxima sessão.
 
 ```yaml
 handoff:
-  from_session: 6
+  from_session: 8
   date: 2026-05-20
-  branch: main (squad mergeado na Sessão 4)
+  branch: feat/relatorio-semanal
   story_context:
     squad: relatorio-semanal
     etapa_atual: 9
-    status: Pronto para iniciar
+    status: Correcoes validadas — aguardando commit, push e republicacao dos 4 eventos
     ultima_acao: >
-      Etapa 8b concluída. Pipeline rodou do zero para os 4 clientes do bloco Vinicius.
-      Planilha preenchida (20 células, aba 17/05/2026).
-      4 eventos publicados na Timeline — Event IDs 107488, 107489, 107490, 107491.
-      15/15 checks Anderson passando.
-      Output salvo em examples/bloco-vinicius-2026-05-17.md.
+      Sessao 8 — Pipeline testado para IMCP com formato corrigido. 19/19 checks passaram.
+      Event ID 107510 publicado com titulo "Relatorio de Trafego" (fixo).
+      Output salvo em examples/imcp-2026-05-17-v2.md.
+      Correcoes da Sessao 7 confirmadas como funcionando corretamente.
   proxima_acao: >
-    Criar APRESENTACAO.md (Etapa 9) com roteiro dos 4 blocos (5+8+10+7 min).
-    Briefing completo esta na secao "GUIA DE APRESENTACAO" do CONTEXT.md.
-    Nao precisa rodar o pipeline — squad esta 100% testado e documentado.
+    PASSO 1 — @dev: git commit (arquivos corrigidos)
+      - squads/relatorio-semanal/agents/publicador.md
+      - squads/relatorio-semanal/tasks/publish-timeline.md
+      - squads/relatorio-semanal/agents/redator.md
+      - squads/relatorio-semanal/examples/imcp-2026-05-17-v2.md
+      - SQUADS/relatorio-semanal/CONTEXT.md
+    PASSO 2 — @devops: git push + PR + merge para main
+    PASSO 3 — Republicar 4 eventos bloco Vinicius (periodo 11/05-17/05/2026):
+        - Dra Danielle Gondim  (project_id: 839737)
+        - Dr. Leandro Gontijio (project_id: 627550)
+        - IMCP                 (project_id: 688377) — já publicado (107510), pular
+        - Dr. Guilherme Mattar (project_id: 1023153)
+    PASSO 4 — Criar APRESENTACAO.md com roteiro dos 4 blocos (briefing completo no CONTEXT.md)
 
   skill_command: "/relatorio-semanal"
   skill_path: ".claude/skills/relatorio-semanal/SKILL.md"
@@ -818,18 +924,52 @@ handoff:
     total: 15
     nota: "15/15 na Sessao 6 — pipeline completo com 4 clientes reais"
 
+  correcoes_sessao7:
+    arquivos_corrigidos:
+      - arquivo: "squads/relatorio-semanal/agents/publicador.md"
+        bug: "Titulo dinamico com datas em vez de titulo fixo"
+        fix: "title = 'Relatorio de Trafego' (fixo)"
+      - arquivo: "squads/relatorio-semanal/tasks/publish-timeline.md"
+        bug: "Mesmo bug de titulo no payload do create_timeline_event"
+        fix: "title = 'Relatorio de Trafego' (fixo)"
+      - arquivo: "squads/relatorio-semanal/agents/redator.md"
+        bug: "Estrutura do texto gerado incompleta — sem metricas em negrito, sem [SECAO_DESTAQUE], sem rodape"
+        fix: "Estrutura completada com metricas, secao obrigatoria e rodape '👇 Confira...'"
+    checkpoint_pre_correcao: "aaa4ecb"
+    status_eventos_timeline:
+      107488: "DELETADO (Dra Danielle Gondim)"
+      107489: "DELETADO (Dr. Leandro Gontijio)"
+      107490: "DELETADO (IMCP)"
+      107491: "DELETADO (Dr. Guilherme Mattar)"
+      107487: "STATUS DESCONHECIDO (IMCP, Sessao 5)"
+      nota: "Todos foram deletados em tentativa de republicacao que falhou por rate limit"
+
   evidencias_para_apresentacao:
-    - "examples/imcp-2026-05-17.md — output individual IMCP (Sessao 5)"
-    - "examples/bloco-vinicius-2026-05-17.md — output bloco completo (Sessao 6)"
-    - "Event IDs verificaveis no Reportei: 107487 (IMCP), 107488-107491 (bloco Vinicius)"
-    - "Planilha preenchida: aba 17/05/2026, linhas 74-77"
+    - "examples/imcp-2026-05-17-v2.md — output IMCP (Sessao 8) — formato CORRETO, com correcoes validadas"
+    - "examples/imcp-2026-05-17.md — output IMCP (Sessao 5) — formato ANTIGO (referencia)"
+    - "examples/bloco-vinicius-2026-05-17.md — output bloco completo (Sessao 6) — formato ANTIGO (referencia)"
+    - "Planilha preenchida: aba 17/05/2026, linhas 74-77 — OK"
+
+  eventos_timeline:
+    107487: "IMCP (Sessao 5) — status desconhecido"
+    107488: "DELETADO (Dra Danielle Gondim — Sessao 6)"
+    107489: "DELETADO (Dr. Leandro Gontijio — Sessao 6)"
+    107490: "DELETADO (IMCP — Sessao 6)"
+    107491: "DELETADO (Dr. Guilherme Mattar — Sessao 6)"
+    107510: "IMCP (Sessao 8) — ATIVO com formato correto"
+    nota: "Republicar 107488, 107489, 107491 (Danielle, Leandro, Mattar) na Sessao 9"
 
   pontos_fortes_para_apresentacao:
-    - "Pipeline rodou 3/3 atividades × 4 clientes ao vivo sem intervencao humana"
+    - "Pipeline rodou 3/3 atividades × 4 clientes ao vivo sem intervencao humana (Sessao 6)"
+    - "Pipeline testado novamente com correcoes aplicadas — 19/19 checks (Sessao 8)"
     - "fill_sheets.py multi-cliente — um comando preenche todos"
     - "quality-gate em 2 momentos (Bloco A pos-coleta + Bloco B pos-texto)"
     - "3 variacoes de template com logica automatica (META-only, Google-only, META+Google)"
-    - "CONTEXT.md com diario de 6 sessoes — rastreabilidade total do projeto"
+    - "CONTEXT.md com diario de 8 sessoes — rastreabilidade total do projeto"
     - "Skill /relatorio-semanal no menu / do Claude Code"
     - "Metricas de ganho: 1 cliente = ~80 min/semana, 4 clientes = ~5h/semana"
+    - "Bug identificado, corrigido, testado e documentado — ciclo completo de melhoria"
 ```
+
+*Versão: 11 | Última atualização: Sessão 8 (encerramento), 2026-05-20*
+*Etapa atual: 9 — Commit + push + republicar 3 eventos + APRESENTACAO.md*

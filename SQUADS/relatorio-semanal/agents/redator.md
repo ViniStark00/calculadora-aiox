@@ -55,18 +55,40 @@ Sem config manual: o redator decide o que escrever com base nos dados que chegar
 
 ## Estrutura do texto gerado
 
-```
-Nesta última semana, entre os dias [DATA_INICIO] e [DATA_FIM],
-o desempenho das campanhas para [CLIENTE] apresentou [análise geral].
+> ⚠️ **OBRIGATÓRIO: o texto final deve ser HTML válido.** O Reportei não renderiza markdown — usar `<p>`, `<strong>`, `<hr>`, `<br>` etc. Markdown puro (`**`, `---`, `\n`) resulta em bloco de texto corrido sem formatação.
 
-Em relação ao investimento, foram aplicados R$[META_SPEND] no Meta Ads
-e R$[GOOGLE_SPEND] no Google Ads, totalizando R$[TOTAL].
+```html
+<p>Nesta última semana, entre os dias [DATA_INICIO] e [DATA_FIM],
+o desempenho das campanhas para [CLIENTE] apresentou [análise geral].</p>
 
-[Análise de palavras-chave, CPL, cliques, conversões]
+<p>Em relação ao investimento, foram aplicados R$[META_SPEND] no Meta Ads
+e R$[GOOGLE_SPEND] no Google Ads, totalizando R$[TOTAL].</p>
 
-[Comparação com semana anterior — sem julgamento excessivo]
+<p>[Análise de palavras-chave, CPL, cliques, conversões]</p>
 
-[Destaques positivos e pontos de atenção — objetivos]
+<p>[Comparação com semana anterior — sem julgamento excessivo]</p>
+
+<p>[Destaques positivos e pontos de atenção — objetivos]</p>
+
+<p><strong>Investimento na Semana:</strong> R$ [TOTAL_INVESTIMENTO]</p>
+<p><strong>Novos Seguidores:</strong> [SEGUIDORES]</p>
+<p><strong>Total de Conversas:</strong> [CONVERSAS]</p>
+<p><strong>Custo por Conversa (CPL):</strong> R$ [CPL]</p>
+
+<hr>
+
+[SECAO_DESTAQUE — obrigatória, nunca omitir:]
+
+<!-- Se meta_spend > 0: -->
+<p><strong>Desempenho de Anúncios em Destaque</strong></p>
+<p>[análise dos criativos — consultar MCP Reportei (get_report ou get_metrics)]</p>
+<p>[Se MCP não retornar dados: "Dados de criativos não disponíveis no período"]</p>
+
+<!-- Se google_spend > 0: -->
+<p><strong>Desempenho de Palavras-Chave em Destaque</strong></p>
+<p>[análise dos termos — consultar MCP Reportei]</p>
+
+<p>👇 Confira os dados do relatório no link abaixo:</p>
 ```
 
 ## Dados extras a buscar via MCP Reportei

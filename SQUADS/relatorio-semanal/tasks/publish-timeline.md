@@ -31,10 +31,13 @@ outputs:
 4. Sugerir ao usuário: "Adicionar ao clientes-config.yaml para próximas execuções?"
 
 ### Passo 2 — Montar payload do evento
+
+> ⚠️ O campo `content` deve ser **HTML válido**. O Reportei não renderiza markdown — texto puro com `**`, `---` ou quebras de linha resulta em bloco corrido sem formatação.
+
 ```yaml
 project_id: {project_id}
-title: "Relatório Semanal — {periodo.inicio} a {periodo.fim}"
-content: {texto_relatorio}
+title: "Relatório de Tráfego"
+content: {texto_relatorio_em_html}  # HTML: <p>, <strong>, <hr> — nunca markdown puro
 date: {periodo.fim}  # data do domingo
 ```
 
@@ -64,7 +67,7 @@ Payload: (ver passo 2)
 ✅ PUBLICAÇÃO CONCLUÍDA
 ════════════════════════════════════════════════════
 Cliente:    [NOME DO CLIENTE]
-Marco:      "Relatório Semanal — [DD/MM] a [DD/MM/AAAA]"
+Marco:      "Relatório de Tráfego"
 Event ID:   [timeline_event_id]
 Publicado:  [timestamp]
 

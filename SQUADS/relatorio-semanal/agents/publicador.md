@@ -34,10 +34,11 @@ Tools auxiliares: list_projects, get_project
 | Parâmetro | Valor |
 |-----------|-------|
 | `project_id` | ID do projeto no Reportei |
-| `title` | "Relatório Semanal — [DD/MM/AAAA] a [DD/MM/AAAA]" |
-| `content` | Texto aprovado pelo redator |
+| `title` | "Relatório de Tráfego" |
+| `content` | Texto aprovado pelo redator — **obrigatoriamente em HTML** (o Reportei não renderiza markdown) |
 | `date` | Data do domingo da semana (fim do período) |
-| `type` | `"milestone"` ou conforme schema do MCP |
+
+> ⚠️ O `content` deve estar em HTML (`<p>`, `<strong>`, `<hr>`, etc.). Texto em markdown enviado como `content` aparece como bloco corrido sem formatação no Reportei.
 
 ## Como obter o project_id
 
@@ -50,7 +51,7 @@ Tools auxiliares: list_projects, get_project
 PUBLICAÇÃO CONCLUÍDA
 ════════════════════════════════════════════════════
 ✅ Cliente: [NOME DO CLIENTE]
-   Marco: "Relatório Semanal — [DD/MM] a [DD/MM/AAAA]"
+   Marco: "Relatório de Tráfego"
    ID do evento: [timeline_event_id]
    Visualizar: Reportei → Timeline do projeto
 ════════════════════════════════════════════════════
