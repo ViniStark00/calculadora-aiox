@@ -22,17 +22,13 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : MELHORIAS EM CURSO — Sessão 13 encerrada
-Última ação : Melhoria 2 concluída, aprovada pelo @qa e commitada (52725a8).
-              Briefings das Melhorias 3, 4 e Extra salvos no CONTEXT.md.
-Próxima ação: Melhoria 3 — Histórico Acumulado por Cliente
-              1. Chamar /AIOX:agents:dev com o briefing da Melhoria 3 (ver seção BRIEFINGS abaixo)
-              2. Chamar /AIOX:agents:qa para validar
-              3. Chamar /AIOX:agents:devops para commit
-              4. Repetir fluxo para Melhoria 4
-              5. Após Melhorias 1-4: @devops faz push + PR + merge de feat/melhorias-squad-relatorio
-              6. Extra (ClickUp): branch separada feat/extra-anotacao-clickup
-Bloqueadores: Nenhum
+Etapa atual : PLANO V2 EM CURSO — Sessão 17 encerrada
+Última ação : Etapas 0-4 concluídas e commitadas (c169faf) na branch feat/melhorias-v2.
+              Thresholds corrigidos com CPL real da carteira (R$6-8/conversa WhatsApp).
+              save-history tornado explícito no diagrama do workflow.
+Próxima ação: Etapa 5A — Chamar /AIOX:agents:architect com o briefing da Etapa 5A
+              (seção BRIEFINGS COMPLETOS POR ETAPA neste CONTEXT.md)
+Bloqueadores: Etapa 8 aguarda usuário descrever estrutura do status report no ClickUp
 ```
 
 ---
@@ -1629,10 +1625,43 @@ handoff:
 - `squads/relatorio-semanal/CONTEXT.md` — Plano V2 adicionado + tabela de especialidades
 - `squads/relatorio-semanal/config/clientes-config.yaml` — especialidades confirmadas + novos clientes
 
-**Pendências abertas:**
+**Pendências abertas (Sessão 16):**
 - Etapa 0: criar branch feat/melhorias-v2 via @devops (PRÓXIMA AÇÃO)
 - Etapa 2: @analyst pesquisar thresholds para 5 novas especialidades
 - Etapa 8: usuário ainda não descreveu estrutura do status report no ClickUp
+
+---
+
+### Sessão 17 — 2026-05-20
+
+**Início:** CONTEXT.md lido — Etapa 0 confirmada. Sessão dedicada às Etapas 0–4 do Plano V2.
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| @devops ativado — branch feat/melhorias-v2 criada a partir de main | ✅ |
+| @dev ativado — contexto carregado, aguardou @analyst para Etapa 2 | OK |
+| @analyst ativado — pesquisa de benchmarks CPL/CPM/CTR/Frequência | OK |
+| Etapa 2: benchmarks pesquisados para 5 novas especialidades (Meta Ads BR 2025-2026) | ✅ |
+| Etapa 3: thresholds-especialidade.yaml atualizado com 5 novas especialidades | ✅ |
+| Usuário corrigiu CPL: benchmark genérico substituído por média real da carteira (R$6-8/conversa) | ✅ CORRIGIDO |
+| CPL uniforme aplicado: saudavel <R$8, atencao R$8-15, critico >R$15 em todas as especialidades Meta | ✅ |
+| CPL cirurgia_ortognatica (Google): saudavel <R$23, atencao R$23-30, critico >R$30 | ✅ |
+| @dev ativado — Etapa 4: save-history verificado e adicionado ao diagrama do workflow | ✅ |
+| Commit c169faf — Etapas 1-4 salvas na branch feat/melhorias-v2 | ✅ |
+| CONTEXT.md atualizado (handoff Sessão 18) | ✅ |
+
+**Decisões tomadas nesta sessão:**
+- CPL do gerenciador (custo por conversa WhatsApp) é ~R$6-8 — muito diferente do CAC (R$80-300+)
+- Thresholds uniformes entre especialidades Meta Ads — variações reais entre especialidades são pequenas
+- cirurgia_ortognatica usa Google Ads: CPL = custo por conversão, thresholds diferentes
+
+**Arquivos modificados (commitados em c169faf):**
+- `SQUADS/relatorio-semanal/CONTEXT.md`
+- `SQUADS/relatorio-semanal/config/clientes-config.yaml`
+- `SQUADS/relatorio-semanal/data/thresholds-especialidade.yaml`
+- `SQUADS/relatorio-semanal/workflows/weekly-report-pipeline.md`
 
 ---
 
@@ -1640,6 +1669,68 @@ handoff:
 
 > **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
 > Sessão 16 encerrada. Etapa 1 concluída. Próxima ação: Etapa 0 — criar branch via @devops.
+
+---
+
+## HANDOFF — SESSÃO 18
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Sessão 17 encerrada. Etapas 0–4 concluídas e commitadas. Próxima ação: Etapa 5A — @architect.
+
+```yaml
+handoff:
+  from_session: 17
+  date: 2026-05-20
+  branch: feat/melhorias-v2
+  base: main
+  ultimo_commit: c169faf
+
+  estado_plano_v2:
+    etapas_concluidas: [0, 1, 2, 3, 4]
+    proxima_etapa: "5A — Desenhar arquitetura contextos dinâmicos no Drive (@architect)"
+    etapa_8_status: "AGUARDANDO — usuário ainda não descreveu estrutura do status report no ClickUp"
+
+  proxima_acao: |
+    ETAPA 5A — Desenhar arquitetura dos contextos dinâmicos no Drive
+
+    Chamar @architect (/AIOX:agents:architect) com o briefing da Etapa 5A
+    que está na seção "BRIEFINGS COMPLETOS POR ETAPA" deste CONTEXT.md.
+
+    Resumo do briefing:
+    - Problema: redator começa do zero toda semana — sem memória do cliente
+    - Solução: doc no Google Drive por cliente (perfil, momento comercial, aprendizados)
+    - MCP Drive: mcp__92a31705-b51e-422b-abc2-e6cb82a79330
+    - Restrição: Drive indisponível → pipeline continua sem contexto (nunca bloqueia)
+    - Entrega do @architect: design (sem código) — estrutura, fluxo, nome do agente
+
+    Após @architect aprovar design:
+    Chamar @dev (/AIOX:agents:dev) para Etapa 5B — implementação.
+
+  o_que_foi_feito_sessao_17:
+    etapa_0: "branch feat/melhorias-v2 criada a partir de main (@devops)"
+    etapa_2: "benchmarks pesquisados para 5 especialidades (@analyst — Meta Ads BR 2025-2026)"
+    etapa_3: "thresholds-especialidade.yaml atualizado (8 especialidades, CPL real da carteira)"
+    etapa_4: "save-history adicionado ao diagrama do weekly-report-pipeline.md (@dev)"
+    cpl_correcao: |
+      CPL corrigido em todas as especialidades Meta Ads:
+        saudavel: < R$8 (custo por conversa WhatsApp no gerenciador)
+        atencao:  R$8 – R$15
+        critico:  > R$15
+      cirurgia_ortognatica (Google Ads — custo por conversão):
+        saudavel: < R$23  |  atencao: R$23–30  |  critico: > R$30
+
+  variaveis_ambiente:
+    status: "AUTOMATICAS via .claude/settings.local.json — NUNCA pedir ao usuario para definir no terminal"
+    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  cliente_teste: "IMCP (project_id 688377)"
+  skill_command: "/relatorio-semanal"
+  plano_v2_referencia: "seção PLANO V2 deste CONTEXT.md — briefings completos de todas as 13 etapas"
+```
+
+---
 
 ```yaml
 handoff:
@@ -1753,13 +1844,13 @@ handoff:
 
 | Etapa | O que fazer | Status | Branch |
 |-------|-------------|--------|--------|
-| 0 | Criar branch feat/melhorias-v2 | ⬜ PENDENTE | — |
-| 1 | Confirmar especialidades da lista de clientes do print | ⬜ AGUARDANDO RESPOSTA DO USUÁRIO | — |
-| 2 | Pesquisar thresholds de mercado para novas especialidades | ⬜ PENDENTE | feat/melhorias-v2 |
-| 3 | Atualizar thresholds + especialidades nos arquivos | ⬜ PENDENTE | feat/melhorias-v2 |
-| 4 | Verificar se save-history está explícito no workflow | ⬜ PENDENTE | feat/melhorias-v2 |
-| 5A | Desenhar arquitetura dos contextos dinâmicos no Drive | ⬜ PENDENTE | feat/melhorias-v2 |
-| 5B | Implementar contextos dinâmicos no Drive | ⬜ PENDENTE | feat/melhorias-v2 |
+| 0 | Criar branch feat/melhorias-v2 | ✅ CONCLUÍDA — Sessão 17 | feat/melhorias-v2 |
+| 1 | Confirmar especialidades da lista de clientes do print | ✅ CONCLUÍDA — Sessão 16 | — |
+| 2 | Pesquisar thresholds de mercado para novas especialidades | ✅ CONCLUÍDA — Sessão 17 (@analyst) | feat/melhorias-v2 |
+| 3 | Atualizar thresholds + especialidades nos arquivos | ✅ CONCLUÍDA — Sessão 17 (commit c169faf) | feat/melhorias-v2 |
+| 4 | Verificar se save-history está explícito no workflow | ✅ CONCLUÍDA — Sessão 17 (commit c169faf) | feat/melhorias-v2 |
+| 5A | Desenhar arquitetura dos contextos dinâmicos no Drive | ⬜ PRÓXIMA AÇÃO — @architect | feat/melhorias-v2 |
+| 5B | Implementar contextos dinâmicos no Drive | ⬜ PENDENTE — @dev (após 5A) | feat/melhorias-v2 |
 | 6 | Criar agente monitor-diario | ⬜ PENDENTE | feat/melhorias-v2 |
 | 7 | Criar workflow daily-monitor-pipeline | ⬜ PENDENTE | feat/melhorias-v2 |
 | 8 | Criar agente status-report-clickup | ⬜ AGUARDANDO INFO DO USUÁRIO (estrutura do status report) | feat/melhorias-v2 |
