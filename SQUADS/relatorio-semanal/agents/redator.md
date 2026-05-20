@@ -70,6 +70,48 @@ A frase de contexto histórico é inserida no **parágrafo narrativo** (bloco `[
 
 ---
 
+## Classificação por thresholds — pré-geração
+
+> ⚠️ **Executar APÓS o contexto histórico e ANTES de gerar o texto.** Se a especialidade do cliente for `null` ou não encontrada: pular silenciosamente, sem erro.
+
+### 1. Verificar especialidade do cliente
+
+Ler `config/clientes-config.yaml` → seção `especialidade_por_cliente` → chave = nome do cliente (mesmo nome da planilha).
+
+**Fallback silencioso** se:
+- Especialidade for `null`
+- Cliente não encontrado na seção
+- Arquivo de thresholds ausente ou corrompido
+
+### 2. Carregar thresholds
+
+Ler `data/thresholds-especialidade.yaml` → bloco da especialidade identificada.
+
+### 3. Classificar CPL da semana atual
+
+Comparar `cpl_atual` com os ranges do nível `cpl` da especialidade:
+
+| Comparação | Nível interno | Instrução para narrativa |
+|------------|--------------|--------------------------|
+| `cpl_atual < saudavel.max` | `saudavel` | Tom neutro — não mencionar thresholds no texto |
+| `saudavel.max ≤ cpl_atual ≤ atencao.max` | `atencao` | Inserir observação neutra: "O CPL de R$[X] ficou acima da referência para a especialidade." |
+| `cpl_atual > atencao.max` | `critico` | Inserir alerta neutro: "O CPL de R$[X] ficou acima de R$[threshold] — recomenda-se revisar segmentação e criativos." |
+
+### 4. Regras de tom
+
+- **Nunca expor** os termos internos `saudavel`, `atencao`, `critico` no relatório
+- **Nunca usar** palavras proibidas do `CLAUDE.md` (alarmante, preocupante, crítico, etc.)
+- A frase de threshold é inserida no **parágrafo narrativo**, de forma fluida
+- Nível `saudavel`: nenhuma frase adicional sobre threshold — narrativa segue normalmente
+
+### 5. Escopo
+
+- Aplicar classificação apenas ao CPL (métrica principal definida nos thresholds)
+- CPM, CTR, frequência: disponíveis nos thresholds para versões futuras — ignorar por ora
+- Não mencionar outros benchmarks no relatório atual
+
+---
+
 ## Lógica de seleção de conteúdo (automática)
 
 O redator verifica os dados recebidos e monta o texto dinamicamente:

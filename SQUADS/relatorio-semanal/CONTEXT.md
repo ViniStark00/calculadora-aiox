@@ -1449,3 +1449,74 @@ handoff:
   cliente_teste: "IMCP (project_id 688377)"
   skill_command: "/relatorio-semanal"
 ```
+
+---
+
+### Sessão 14 — continuação (Melhoria 4)
+
+| Ação | Resultado |
+|------|-----------|
+| @dev ativado — Melhoria 4 implementada | OK |
+| CRIADO data/thresholds-especialidade.yaml (3 especialidades × 4 métricas × 3 níveis) | ✅ |
+| MODIFICADO config/clientes-config.yaml — seção especialidade_por_cliente adicionada | ✅ |
+| MODIFICADO agents/redator.md — seção "Classificação por thresholds" inserida após histórico | ✅ |
+| @qa ativado — Melhoria 4 validada | ✅ APROVADO — 5/5 checks, 0 bloqueantes |
+| CONTEXT.md atualizado (handoff Sessão 15) | ✅ |
+
+**Pendências abertas:**
+- @devops — commit Melhoria 4 + CONTEXT.md
+- @devops — push + PR + merge da branch feat/melhorias-squad-relatorio para main
+- Melhoria Extra (branch separada feat/extra-anotacao-clickup) — opcional, após merge
+
+---
+
+## HANDOFF — SESSÃO 15
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Melhorias 1–4 implementadas e aprovadas. Próximo: @devops commita Melhoria 4, push + PR + merge.
+
+```yaml
+handoff:
+  from_session: 14_continuacao
+  date: 2026-05-20
+  branch: feat/melhorias-squad-relatorio
+  base: main
+
+  estado:
+    melhoria_1: "CONCLUÍDA — commit 3b020f9"
+    melhoria_2: "CONCLUÍDA — commit 52725a8"
+    melhoria_3: "CONCLUÍDA — commit 8bca570"
+    melhoria_4: "IMPLEMENTADA — aguardando commit @devops"
+    push_pr_merge: "PENDENTE — fazer logo após commit da Melhoria 4"
+    extra_clickup: "PENDENTE — branch separada feat/extra-anotacao-clickup (opcional)"
+
+  proxima_acao: |
+    Briefing para @devops (/AIOX:agents:devops):
+    "Commit na branch feat/melhorias-squad-relatorio com os arquivos da Melhoria 4:
+    squads/relatorio-semanal/data/thresholds-especialidade.yaml,
+    squads/relatorio-semanal/config/clientes-config.yaml,
+    squads/relatorio-semanal/agents/redator.md,
+    squads/relatorio-semanal/CONTEXT.md.
+    Mensagem: feat(relatorio-semanal): add specialty thresholds for CPL classification.
+    Em seguida: push da branch feat/melhorias-squad-relatorio, abrir PR e mergear para main."
+
+  arquivos_melhoria_4:
+    - squads/relatorio-semanal/data/thresholds-especialidade.yaml
+    - squads/relatorio-semanal/config/clientes-config.yaml
+    - squads/relatorio-semanal/agents/redator.md
+    - squads/relatorio-semanal/CONTEXT.md
+
+  commits_branch_completos:
+    - "3b020f9 — feat: add determinism hooks (Melhoria 1)"
+    - "52725a8 — feat: add whatsapp-writer output (Melhoria 2)"
+    - "8bca570 — feat: add historical metrics per client (Melhoria 3)"
+    - "(pendente) — feat: add specialty thresholds for CPL classification (Melhoria 4)"
+
+  variaveis_ambiente:
+    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  cliente_teste: "IMCP (project_id 688377)"
+  skill_command: "/relatorio-semanal"
+```
