@@ -919,14 +919,18 @@ handoff:
       APRESENTACAO.md criado com roteiro completo dos 4 blocos.
       Todos os checks do Anderson passando. Squad pronto para apresentacao.
   proxima_acao: >
-    PASSO 1 — @devops: git commit + push + PR + merge para main
-      - SQUADS/relatorio-semanal/CONTEXT.md
-      - squads/relatorio-semanal/APRESENTACAO.md
-    PASSO 2 — Preparar apresentacao ao vivo:
-        - Configurar variaveis de ambiente no terminal
-        - Testar /relatorio-semanal uma vez antes
-        - Ter examples/imcp-2026-05-17-v2.md como fallback
-        - Abrir Reportei no browser antes de iniciar
+    Squad 100% pronto — nenhuma pendencia de desenvolvimento.
+    PR #4 MERGED em 2026-05-20T13:31:12Z.
+
+    PREPARAR APRESENTACAO (unica pendencia):
+      1. Configurar vars de ambiente no terminal (PowerShell):
+           $env:REPORTEI_TOKEN = "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+           $env:GOOGLE_SERVICE_ACCOUNT_JSON = "C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json"
+           $env:SHEET_ID = "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+      2. Criar aba da semana atual no Google Sheets (formato DD/MM/AAAA, domingo da semana)
+      3. Abrir Reportei no browser antes de iniciar
+      4. Testar /relatorio-semanal + "Rodar pipeline para IMCP" uma vez antes da demo
+      5. Ter examples/imcp-2026-05-17-v2.md como fallback se algo travar
 
   skill_command: "/relatorio-semanal"
   skill_path: ".claude/skills/relatorio-semanal/SKILL.md"
