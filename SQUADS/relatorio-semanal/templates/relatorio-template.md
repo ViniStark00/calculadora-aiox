@@ -1,94 +1,121 @@
 # Template de Relatório Semanal
 > Baseado em exemplos reais: Dra. Danielle Gondim (META) e Destra Desenvolvimentos (Google).
-> Exemplos originais preservados ao final deste arquivo.
+> ⚠️ TODOS OS TEMPLATES ABAIXO SÃO EM HTML — o Reportei não renderiza markdown.
+> Padrão visual documentado em `agents/redator.md` → seção "PADRÃO VISUAL — PILAR INVIOLÁVEL".
 
 ---
 
-## TEMPLATE GERAL (META + Google — cliente com ambas as plataformas)
+## TEMPLATE META-ONLY — HTML (clientes apenas com Meta Ads)
 
-Nesta última semana, entre os dias [DATA_INICIO] e [DATA_FIM], o desempenho das campanhas para [CLIENTE] [ANALISE_GERAL_1_FRASE].
+```html
+<p>Nesta última semana ([DATA_INICIO] a [DATA_FIM]), [CONTEXTO_OU_NOVIDADE — ex: as campanhas mantiveram desempenho estável / houve variação de seguidores]. Em termos de alcance, atingimos um total de [ALCANCE] contas e geramos [IMPRESSOES] impressões totais. No que diz respeito à conversão direta, registramos [CONVERSAS] conversas iniciadas por mensagem. O custo por conversa iniciada (CPL) ficou em R$ [CPL]. O investimento total no período analisado foi de R$ [META_SPEND].</p>
 
-[PARAGRAFO_METRICAS_META — incluir apenas se cliente tem META]
-Em relação ao Meta Ads, atingimos um total de [ALCANCE_META] contas alcançadas e geramos [IMPRESSOES_META] impressões totais. Registramos [CONVERSAS_META] conversas iniciadas por mensagem, com CPL de R$ [CPL_META].
+<br>
 
-[PARAGRAFO_METRICAS_GOOGLE — incluir apenas se cliente tem Google]
-No Google Ads, alcançamos um total de [CLIQUES_GOOGLE] cliques, resultando em [CONVERSOES_GOOGLE] conversões diretas. O custo por conversão ficou em R$ [CPC_CONVERSAO_GOOGLE]. O investimento total no período foi de R$ [GOOGLE_SPEND].
+<p><strong>Investimento na Semana:</strong> R$ [META_SPEND]</p>
+<p><strong>Novos Seguidores:</strong> [SEGUIDORES]</p>
+<p><strong>Total de Conversas:</strong> [CONVERSAS]</p>
+<p><strong>Custo por Conversa (CPL):</strong> R$ [CPL]</p>
 
-O investimento total no período analisado foi de R$ [TOTAL_INVESTIMENTO].
+<br>
 
+<p><strong>Desempenho de Anúncios em Destaque</strong></p>
+<p>A análise individual dos criativos mostra variações importantes na eficiência de custo e engajamento:</p>
 
-**Investimento na Semana:** R$ [TOTAL_INVESTIMENTO]
+<br>
 
-**Novos Seguidores:** [SEGUIDORES] [NOTA_SEGUIDORES_SE_NEGATIVO]
+<p><strong>[TITULO_SUBSECAO_1] ([FORMATO — ex: Performance de Vídeo (Feed/Reels)]):</strong> [DESCRICAO_RESULTADO]</p>
 
-**Total de Conversas/Conversões:** [CONVERSAS_OU_CONVERSOES]
+<br>
 
-**Custo por Conversa (CPL):** R$ [CPL]
+<p><strong>[TITULO_SUBSECAO_2] ([FORMATO — ex: Volume de Atração (Stories)]):</strong> [DESCRICAO_RESULTADO]</p>
 
-[CAMPO_EXTRA_SE_APLICAVEL — ex: Total de Cliques: X]
+<br>
 
-
-[SECAO_DESTAQUE — ver variações abaixo]
-
-👇 Confira os dados do relatório no link abaixo:
-
----
-
-## TEMPLATE META-ONLY (clientes apenas com Meta Ads)
-
-Nesta última semana ([DATA_INICIO] a [DATA_FIM]), [CONTEXTO_OU_NOVIDADE_DA_SEMANA — ex: variação de seguidores, destaque de campanha, etc.]. Em termos de alcance, atingimos um total de [ALCANCE] contas e geramos [IMPRESSOES] impressões totais.
-
-No que diz respeito à conversão direta, registramos [CONVERSAS] conversas iniciadas por mensagem. O custo por conversa iniciada (CPL) ficou em R$ [CPL_META]. O investimento total no período analisado foi de R$ [META_SPEND].
-
-
-**Investimento na Semana:** R$ [META_SPEND]
-
-**Novos Seguidores:** [SEGUIDORES]
-
-**Total de Conversas:** [CONVERSAS]
-
-**Custo por Conversa (CPL):** R$ [CPL_META]
-
-
-### Desempenho de Anúncios em Destaque
-A análise individual dos criativos mostra variações importantes na eficiência de custo e engajamento:
-
-**[NOME_CRIATIVO_1] ([FORMATO — ex: Performance de Vídeo (Feed)]):** [DESCRICAO_RESULTADO — ex: "O vídeo sobre X gerou Y visitas ao perfil, destacando-se como o criativo de maior engajamento."]
-
-**[NOME_CRIATIVO_2]:** [DESCRICAO_RESULTADO]
-
-👇 Confira os dados do relatório no link abaixo:
+<p>👇 Confira os dados do relatório no link abaixo:</p>
+```
 
 ---
 
-## TEMPLATE GOOGLE-ONLY (clientes apenas com Google Ads)
+## TEMPLATE META + GOOGLE — HTML (clientes com ambas as plataformas)
 
-Nesta última semana, entre os dias [DATA_INICIO] e [DATA_FIM], o desempenho das campanhas para [CLIENTE] [ANALISE_GERAL — ex: "manteve um fluxo constante de interesse qualificado" / "apresentou crescimento nas conversões"]. Alcançamos um total de [CLIQUES] cliques, que resultaram em [CONVERSOES] conversões diretas.
+```html
+<p>Nesta última semana, entre os dias [DATA_INICIO] e [DATA_FIM], [ANALISE_GERAL_1_FRASE]. Em relação ao investimento, foram aplicados R$ [META_SPEND] no Meta Ads e R$ [GOOGLE_SPEND] no Google Ads, totalizando R$ [TOTAL]. No Meta, atingimos [ALCANCE] contas e [CONVERSAS] conversas iniciadas, com CPL de R$ [CPL]. No Google, registramos [CLIQUES] cliques e [CONVERSOES] conversões, com custo por conversão de R$ [CPC_CONVERSAO].</p>
 
-O investimento total no período analisado foi de R$ [GOOGLE_SPEND]. Com base nesses dados, o custo por conversão ficou estabelecido em R$ [CUSTO_POR_CONVERSAO]. [FRASE_MONITORAMENTO — ex: "Seguimos em monitoramento para otimizar a distribuição do orçamento entre os termos de maior valor."]
+<br>
 
+<p><strong>Investimento na Semana:</strong> R$ [TOTAL] (Meta: R$ [META_SPEND] + Google: R$ [GOOGLE_SPEND])</p>
+<p><strong>Novos Seguidores:</strong> [SEGUIDORES]</p>
+<p><strong>Total de Conversas:</strong> [CONVERSAS]</p>
+<p><strong>Total de Conversões:</strong> [CONVERSOES]</p>
+<p><strong>Custo por Conversa (CPL):</strong> R$ [CPL]</p>
 
-**Investimento na Semana:** R$ [GOOGLE_SPEND]
+<br>
 
-**Total de Conversas/Conversões:** [CONVERSOES]
+<p><strong>Desempenho de Anúncios em Destaque</strong></p>
+<p>A análise individual dos criativos mostra variações importantes na eficiência de custo e engajamento:</p>
 
-**Custo por Conversa (CPL):** R$ [CUSTO_POR_CONVERSAO]
+<br>
 
-**Total de Cliques:** [CLIQUES]
+<p><strong>[TITULO_SUBSECAO_1]:</strong> [DESCRICAO_RESULTADO]</p>
 
+<br>
 
-### Desempenho de Palavras-Chave em Destaque
-A análise individual dos termos de pesquisa mostra variações importantes na eficiência de custo e volume de conversão:
+<p><strong>Desempenho de Palavras-Chave em Destaque</strong></p>
+<p>A análise individual dos termos de pesquisa mostra variações importantes na eficiência de custo e volume de conversão:</p>
 
-**[PALAVRA_CHAVE_1]:** [DESCRICAO — ex: "Este foi o termo de maior destaque, gerando X conversões com taxa de conversão de Y%. O custo por conversão para este serviço foi de R$ Z."]
+<br>
 
-**[PALAVRA_CHAVE_2]:** [DESCRICAO — ex: "Demonstrou boa eficiência com X conversões e custo por conversão de R$ Y."]
+<p><strong>[PALAVRA_CHAVE_1]:</strong> [DESCRICAO_RESULTADO]</p>
 
-**[PALAVRA_CHAVE_3]:** [DESCRICAO — ex: "Apesar de X impressões, não registrou conversões no período, com CPC de R$ Y."]
+<br>
 
-[PARAGRAFO_MONITORAMENTO — ex: "Estamos monitorando de perto o desempenho de termos como '[TERMO_A]' e '[TERMO_B]', que embora tenham atraído cliques, ainda não converteram na última semana. O objetivo é refinar os anúncios para garantir que o tráfego se converta em diálogos diretos e novas oportunidades de negócio."]
+<p><strong>[PALAVRA_CHAVE_2]:</strong> [DESCRICAO_RESULTADO]</p>
 
-👇 Confira os dados do relatório no link abaixo:
+<br>
+
+<p>👇 Confira os dados do relatório no link abaixo:</p>
+```
+
+---
+
+## TEMPLATE GOOGLE-ONLY — HTML (clientes apenas com Google Ads)
+
+```html
+<p>Nesta última semana, entre os dias [DATA_INICIO] e [DATA_FIM], [ANALISE_GERAL — ex: as campanhas mantiveram fluxo constante de interesse qualificado]. Alcançamos um total de [CLIQUES] cliques, que resultaram em [CONVERSOES] conversões diretas. O investimento total no período analisado foi de R$ [GOOGLE_SPEND]. Com base nesses dados, o custo por conversão ficou em R$ [CUSTO_POR_CONVERSAO].</p>
+
+<br>
+
+<p><strong>Investimento na Semana:</strong> R$ [GOOGLE_SPEND]</p>
+<p><strong>Total de Conversões:</strong> [CONVERSOES]</p>
+<p><strong>Custo por Conversão:</strong> R$ [CUSTO_POR_CONVERSAO]</p>
+<p><strong>Total de Cliques:</strong> [CLIQUES]</p>
+
+<br>
+
+<p><strong>Desempenho de Palavras-Chave em Destaque</strong></p>
+<p>A análise individual dos termos de pesquisa mostra variações importantes na eficiência de custo e volume de conversão:</p>
+
+<br>
+
+<p><strong>[PALAVRA_CHAVE_1]:</strong> [DESCRICAO — ex: "Este foi o termo de maior destaque, gerando X conversões com taxa de conversão de Y%. O custo por conversão para este serviço foi de R$ Z."]</p>
+
+<br>
+
+<p><strong>[PALAVRA_CHAVE_2]:</strong> [DESCRICAO — ex: "Demonstrou boa eficiência com X conversões e custo por conversão de R$ Y."]</p>
+
+<br>
+
+<p><strong>[PALAVRA_CHAVE_3]:</strong> [DESCRICAO — ex: "Apesar de X impressões, não registrou conversões no período, com CPC de R$ Y."]</p>
+
+<br>
+
+<p>[PARAGRAFO_MONITORAMENTO_OPCIONAL — ex: "Seguimos monitorando termos como '[TERMO_A]' e '[TERMO_B]', que atraíram cliques mas ainda não converteram."]</p>
+
+<br>
+
+<p>👇 Confira os dados do relatório no link abaixo:</p>
+```
 
 ---
 

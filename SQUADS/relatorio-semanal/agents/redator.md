@@ -55,19 +55,120 @@ Sem config manual: o redator decide o que escrever com base nos dados que chegar
 
 ## Estrutura do texto gerado
 
+> ⚠️ **OBRIGATÓRIO: o texto final deve ser HTML válido.** O Reportei não renderiza markdown — usar `<p>`, `<strong>`, `<br>` etc. Markdown puro (`**`, `---`, `\n`) resulta em bloco de texto corrido sem formatação.
+
+---
+
+### ═══ PADRÃO VISUAL — PILAR INVIOLÁVEL ═══
+
+**Regra de espaçamento:** cada bloco do relatório é separado por `<br>` para criar respiro visual. Sem `<br>` entre blocos, o texto aparece colado no Reportei.
+
+| Separador | Onde usar |
+|-----------|-----------|
+| `<br>` | Entre o parágrafo narrativo e o bloco de métricas |
+| `<br>` | Entre o bloco de métricas e a seção de destaque |
+| `<br>` | Entre cada sub-seção dentro do "Desempenho em Destaque" |
+| `<br>` | Entre a última sub-seção e o rodapé |
+
+**Estrutura obrigatória (META-only):**
+
+```html
+<p>[PARAGRAFO_NARRATIVO — 1 parágrafo único, fluido, com datas, alcance, CPL e investimento]</p>
+
+<br>
+
+<p><strong>Investimento na Semana:</strong> R$ [META_SPEND]</p>
+<p><strong>Novos Seguidores:</strong> [SEGUIDORES]</p>
+<p><strong>Total de Conversas:</strong> [CONVERSAS]</p>
+<p><strong>Custo por Conversa (CPL):</strong> R$ [CPL]</p>
+
+<br>
+
+<p><strong>Desempenho de Anúncios em Destaque</strong></p>
+<p>A análise individual dos criativos mostra variações importantes na eficiência de custo e engajamento:</p>
+
+<br>
+
+<p><strong>[TITULO_SUBSECAO_1] ([FORMATO — ex: Feed/Reels, Stories]):</strong> [DESCRICAO_RESULTADO]</p>
+
+<br>
+
+<p><strong>[TITULO_SUBSECAO_2]:</strong> [DESCRICAO_RESULTADO]</p>
+
+<br>
+
+<p>👇 Confira os dados do relatório no link abaixo:</p>
 ```
-Nesta última semana, entre os dias [DATA_INICIO] e [DATA_FIM],
-o desempenho das campanhas para [CLIENTE] apresentou [análise geral].
 
-Em relação ao investimento, foram aplicados R$[META_SPEND] no Meta Ads
-e R$[GOOGLE_SPEND] no Google Ads, totalizando R$[TOTAL].
+**Estrutura obrigatória (META + Google):**
 
-[Análise de palavras-chave, CPL, cliques, conversões]
+```html
+<p>[PARAGRAFO_NARRATIVO — mencionar ambas as plataformas, alcance, conversas/conversões, CPL/CPC e total investido]</p>
 
-[Comparação com semana anterior — sem julgamento excessivo]
+<br>
 
-[Destaques positivos e pontos de atenção — objetivos]
+<p><strong>Investimento na Semana:</strong> R$ [TOTAL] (Meta: R$ [META_SPEND] + Google: R$ [GOOGLE_SPEND])</p>
+<p><strong>Novos Seguidores:</strong> [SEGUIDORES]</p>
+<p><strong>Total de Conversas:</strong> [CONVERSAS]</p>
+<p><strong>Total de Conversões:</strong> [CONVERSOES]</p>
+<p><strong>Custo por Conversa (CPL):</strong> R$ [CPL]</p>
+
+<br>
+
+<p><strong>Desempenho de Anúncios em Destaque</strong></p>
+<p>A análise individual dos criativos mostra variações importantes na eficiência de custo e engajamento:</p>
+
+<br>
+
+<p><strong>[TITULO_SUBSECAO_1]:</strong> [DESCRICAO_RESULTADO]</p>
+
+<br>
+
+<p><strong>Desempenho de Palavras-Chave em Destaque</strong></p>
+<p>A análise individual dos termos de pesquisa mostra variações importantes na eficiência de custo e volume de conversão:</p>
+
+<br>
+
+<p><strong>[PALAVRA_CHAVE_1]:</strong> [DESCRICAO_RESULTADO]</p>
+
+<br>
+
+<p>👇 Confira os dados do relatório no link abaixo:</p>
 ```
+
+**Estrutura obrigatória (Google-only):**
+
+```html
+<p>[PARAGRAFO_NARRATIVO — cliques, conversões, CPC, investimento]</p>
+
+<br>
+
+<p><strong>Investimento na Semana:</strong> R$ [GOOGLE_SPEND]</p>
+<p><strong>Total de Conversões:</strong> [CONVERSOES]</p>
+<p><strong>Custo por Conversão:</strong> R$ [CPC_CONVERSAO]</p>
+<p><strong>Total de Cliques:</strong> [CLIQUES]</p>
+
+<br>
+
+<p><strong>Desempenho de Palavras-Chave em Destaque</strong></p>
+<p>A análise individual dos termos de pesquisa mostra variações importantes na eficiência de custo e volume de conversão:</p>
+
+<br>
+
+<p><strong>[PALAVRA_CHAVE_1]:</strong> [DESCRICAO_RESULTADO]</p>
+
+<br>
+
+<p><strong>[PALAVRA_CHAVE_2]:</strong> [DESCRICAO_RESULTADO]</p>
+
+<br>
+
+<p>👇 Confira os dados do relatório no link abaixo:</p>
+```
+
+### ═══ FIM DO PADRÃO VISUAL ═══
+
+---
 
 ## Dados extras a buscar via MCP Reportei
 

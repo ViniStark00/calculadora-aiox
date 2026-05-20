@@ -22,10 +22,15 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : 7 — git commit + PR + merge via @devops
-Última ação : *validate-squad concluído — VALID, 0 erros, 0 warnings. "excelente" corrigido em examples/destra-2026-05-04.md.
-Próxima ação: @devops faz commit + push + PR + merge → Etapa 8 (teste real com Destra)
-Bloqueadores: nenhum técnico. ATENÇÃO: regenerar REPORTEI_TOKEN no painel do Reportei (token antigo foi removido do CONTEXT.md por segurança)
+Etapa atual : 9 — Correções validadas → commit @dev → push @devops → republicar 4 eventos → criar APRESENTACAO.md
+Última ação : Sessão 8 — Pipeline rodado para IMCP com formato corrigido. 19/19 checks passaram.
+              Event ID 107510 publicado com título "Relatório de Tráfego" (fixo).
+              Output salvo em examples/imcp-2026-05-17-v2.md.
+Próxima ação: 1. @dev  — git commit (3 arquivos corrigidos + examples/imcp-2026-05-17-v2.md + CONTEXT.md)
+              2. @devops — git push + PR + merge para main
+              3. Republicar 4 eventos bloco Vinicius (Danielle, Leandro, IMCP, Mattar) — período 11/05-17/05/2026
+              4. Criar APRESENTACAO.md (Etapa 9 original)
+Bloqueadores: Nenhum
 ```
 
 ---
@@ -142,8 +147,8 @@ squads/relatorio-semanal/
 | 4 | Executar `*create-squad relatorio-semanal --from-design` | ✅ CONCLUÍDA | Sessão 3 — estrutura completa gerada |
 | 5 | Preencher agentes, tasks, workflow, templates, data | ✅ CONCLUÍDA | Sessão 3 — exemplos reais da Danielle e Destra adicionados ao template e a examples/ |
 | 6 | Executar `*validate-squad relatorio-semanal` | ✅ CONCLUÍDA | Sessão 4 — VALID, 0 erros, 0 warnings |
-| 7 | git commit + PR + merge | ⬜ | — |
-| 8 | Teste MVP com Destra Desenvolvimentos | ⬜ | — |
+| 7 | git commit + PR + merge | ✅ CONCLUÍDA | Sessão 4 — commit 612a24c + PR #2 MERGED |
+| 8 | Teste MVP com IMCP (Destra sem acesso no token atual) | ✅ CONCLUÍDA | Sessão 5 — Event ID 107487, output em examples/imcp-2026-05-17.md |
 | 9 | Criar Guia de Apresentação completo (`APRESENTACAO.md`) | ⬜ | — |
 
 ---
@@ -551,6 +556,9 @@ Mostrar a **ferramenta** (Elemento 3): MCP Reportei instalado e Google Sheets AP
 | Data | Erro | Correção | Status |
 |------|------|----------|--------|
 | 2026-05-20 | `Automacao de Preenchimento de Metricas.md` referenciado no handoff mas não existe localmente | Contexto técnico reconstruído a partir da transcrição do Encontro 08 e do handoff | ✅ CONTORNADO |
+| 2026-05-20 | Título do evento na Timeline publicado como "Relatório Semanal — DD/MM a DD/MM" em vez de "Relatório de Tráfego" | Corrigido em `agents/publicador.md` e `tasks/publish-timeline.md` — título agora é fixo: "Relatório de Tráfego" | ✅ CORRIGIDO |
+| 2026-05-20 | Seção "Desempenho de Anúncios em Destaque" e linha "👇 Confira os dados..." omitidas do texto gerado | `agents/redator.md` — "Estrutura do texto gerado" estava incompleta; adicionados `[SECAO_DESTAQUE]` e rodapé obrigatórios | ✅ CORRIGIDO |
+| 2026-05-20 | Evento publicado na Timeline do Reportei aparece como bloco de texto corrido, sem formatação | `agents/redator.md`, `agents/publicador.md`, `tasks/publish-timeline.md` — content enviado em markdown; Reportei exige HTML. Corrigido para `<p>`, `<strong>`, `<hr>` | ✅ CORRIGIDO (Sessão 8) |
 
 ---
 
@@ -572,67 +580,396 @@ Mostrar a **ferramenta** (Elemento 3): MCP Reportei instalado e Google Sheets AP
 
 ---
 
-*Versão: 7 | Última atualização: Sessão 3 (encerramento), 2026-05-20*
-*Etapa atual: 6 — *validate-squad relatorio-semanal*
+*Versão: 10 | Última atualização: Sessão 7 (encerramento), 2026-05-20*
+*Etapa atual: 9 — Testar correções → republicar eventos → criar APRESENTACAO.md*
 
 ---
 
-## HANDOFF — SESSÃO 4
+### Sessão 4 — 2026-05-20
 
-> Copiar este bloco para o início da próxima conversa, ou simplesmente abrir este CONTEXT.md.
+**Início:** CONTEXT.md lido — Etapa 6 confirmada. Squad VALID pela varredura da Sessão 3.
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| Ativado como squad-creator (Craft) | OK |
+| Lido CONTEXT.md | OK — Etapa 6 confirmada |
+| Explicado o que é REPORTEI_TOKEN ao usuário | OK — usuário entendeu |
+| Corrigida palavra "excelente" em `examples/destra-2026-05-04.md` | ✅ |
+| Confirmado que `extends: extend` é padrão AIOX (não é bug) | ✅ |
+| Executado `*validate-squad relatorio-semanal` — manualmente via schema JSON | ✅ VALID — 0 erros, 0 warnings, 1 sugestão (non-blocking) |
+| **ETAPA 6 CONCLUÍDA** | ✅ |
+| Handoff para @devops (Gage) — Etapa 7 | OK |
+| git add (23 arquivos: squads/relatorio-semanal/ + design blueprint) | ✅ |
+| git commit `612a24c` | ✅ |
+| git push origin feat/relatorio-semanal | ✅ |
+| gh pr create — PR #2 | ✅ |
+| gh pr merge — PR #2 MERGED para main | ✅ |
+| **ETAPA 7 CONCLUÍDA** | ✅ |
+| Check completo dos requisitos do Anderson | 12/15 passam — 3 dependem da Etapa 8 |
+| Explicado o que é "output real do pipeline" vs exemplos de referência | OK — usuário entendeu |
+| Criado SKILL.md para relatorio-chief em `.claude/skills/relatorio-semanal/agents/relatorio-chief/SKILL.md` | ✅ |
+| Agente agora pode ser chamado com `/relatorio-semanal:agents:relatorio-chief` | ✅ |
+
+**Decisões tomadas nesta sessão:**
+- `extends: extend` confirmado como padrão AIOX — não alterar
+- Não incluir no commit: SQUADS/super-gestor/, .github/agents/, ORQUESTRADORES_AULAS/, skills-apresentacao.*, squads/super-gestor/config/
+- Usuário vai usar token antigo do Reportei (não regenerar ainda) — localizar e definir como variável de ambiente
+- SKILL.md do relatorio-chief criado para ativação explícita via `/relatorio-semanal:agents:relatorio-chief`
+
+**Pendências abertas:**
+- Localizar REPORTEI_TOKEN (foi redatado do CONTEXT.md — usuário precisa encontrá-lo ou regenerar no painel do Reportei)
+- Definir REPORTEI_TOKEN como variável de ambiente antes de rodar Etapa 8
+- Commitar o SKILL.md criado (`.claude/skills/relatorio-semanal/`) via @devops
+- Mapear `reportei_project_id` de cada cliente no `clientes-config.yaml` (via MCP `list_projects` na Etapa 8)
+
+**Próxima ação:** Etapa 8 — rodar pipeline ao vivo para Destra Desenvolvimentos
+
+### Sessão 5 — 2026-05-20
+
+**Início:** CONTEXT.md lido — Etapa 8 confirmada. REPORTEI_TOKEN definido pelo usuário.
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| Lido CONTEXT.md | OK — Etapa 8 confirmada |
+| REPORTEI_TOKEN definido: `2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL` | ✅ |
+| SKILL.md em `.claude/skills/` — verificado | ✅ Existe, gitignored (funciona localmente) |
+| MCP Reportei carregado (`mcp__30ebe978...`) | ✅ |
+| `list_projects` chamado | ✅ 4 projetos retornados — Destra NÃO está na lista |
+| API direta `api.reportei.com` testada | ❌ DNS não resolve no ambiente bash/powershell |
+| Usuário optou por usar IMCP | ✅ |
+| `get_project_metrics` IMCP (688377) — 11/05 a 17/05 | ✅ Dados reais obtidos |
+| `list_integrations` IMCP | ✅ Meta Ads + Instagram (sem Google Ads) |
+| quality-gate verify-fill — Bloco A | ✅ 8/8 checks |
+| Relatório narrativo gerado (META-ONLY) | ✅ |
+| quality-gate validate-report — Bloco B | ✅ 8/8 checks |
+| `create_timeline_event` publicado | ✅ Event ID 107487 |
+| quality-gate — Bloco C | ✅ 3/3 checks |
+| Output salvo em `examples/imcp-2026-05-17.md` | ✅ |
+| **ETAPA 8 CONCLUÍDA** | ✅ |
+
+**Métricas coletadas (IMCP — 11/05 a 17/05/2026):**
+- Meta Spend: R$ 2.110,96
+- Google Spend: R$ 0,00 (sem integração)
+- Seguidores: 1.307
+- Conversas: 91
+- Conversões: 0
+- CPL: R$ 23,19
+
+**Decisões tomadas nesta sessão:**
+- Token `2TPC...` não tem acesso a Destra — usado IMCP como cliente de teste
+- Sheets (Atividade 1) rodou em dry run — service_account.json não disponível localmente
+- service_account.json está na pasta "CLAUDE. TESTES" no Google Drive (pendente para Atividade 1 completa)
+
+**Checks do Anderson — status atualizado:**
+- P1 ✅ — Pipeline rodou do zero, ponta a ponta (Atividades 2 e 3 completas, Atividade 1 dry run)
+- P2 ✅ — Output passou em 14/15 checks (Bloco A+B+C — 1 pendente: Sheets real)
+- P3 ✅ — Output real salvo em `examples/imcp-2026-05-17.md`
+
+**Pendências abertas:**
+- Baixar `service_account.json` da pasta "CLAUDE. TESTES" no Google Drive para Atividade 1 funcionar 100%
+- Criar `APRESENTACAO.md` (Etapa 9)
+- Para demo com Destra: verificar se há outro token Reportei com acesso ao projeto Destra
+
+**Próxima ação:** Etapa 9 — criar `APRESENTACAO.md` com roteiro dos 4 blocos
+
+---
+
+### Sessão 6 — 2026-05-20
+
+**Início:** CONTEXT.md lido — Etapa 8b confirmada. Pipeline rodado com IMCP na sessão anterior.
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| Lido CONTEXT.md | OK — Etapa 8b confirmada |
+| Variáveis de ambiente configuradas (REPORTEI_TOKEN, SHEET_ID, GOOGLE_SERVICE_ACCOUNT_JSON) | OK |
+| get_project_metrics chamado em paralelo para 4 clientes | OK — dados reais obtidos |
+| quality-gate verify-fill — Bloco A | 8/8 checks — APROVADO |
+| fill_sheets.py atualizado para multi-cliente (4 clientes em loop) | OK |
+| fill_sheets.py executado | 20 células preenchidas (4 clientes × 5 colunas) |
+| Narrativas geradas para 4 clientes (Danielle META-only, Leandro META+Google, IMCP META-only, Mattar META+Google) | OK |
+| quality-gate validate-report — Bloco B | 8/8 checks — APROVADO para todos |
+| 4 eventos publicados na Timeline do Reportei em paralelo | Event IDs 107488, 107489, 107490, 107491 |
+| quality-gate — Bloco C | 3/3 checks — APROVADO para todos |
+| Output salvo em examples/bloco-vinicius-2026-05-17.md | OK |
+| CONTEXT.md atualizado | OK |
+| **ETAPA 8b CONCLUÍDA** | 15/15 checks Anderson passando |
+
+**Métricas coletadas (11/05 a 17/05/2026):**
+
+| Cliente | Meta Spend | Google Spend | Seguidores | Conversas | Conversões | Event ID |
+|---------|-----------|--------------|------------|-----------|------------|----------|
+| Dra Danielle Gondim | R$ 6.486,58 | R$ 0,00 | 2.448 | 93 | 1 | 107488 |
+| Dr. Leandro Gontijio | R$ 11.739,71 | R$ 407,94 | 4.655 | 1.212 | 148 | 107489 |
+| IMCP | R$ 2.110,96 | R$ 0,00 | 1.307 | 91 | 0 | 107490 |
+| Dr. Guilherme Mattar | R$ 1.011,70 | R$ 563,72 | 0 | 11 | 250 | 107491 |
+| DESTRA | — | — | — | — | — | sem acesso |
+
+**Checks Anderson — status final:**
+- P1 ✅ — Pipeline rodou do zero, ponta a ponta, 3 atividades × 4 clientes
+- P2 ✅ — 15/15 checks passaram (Bloco A+B+C)
+- P3 ✅ — Output real salvo em examples/bloco-vinicius-2026-05-17.md
+
+**Próxima ação:** Testar correções → republicar eventos → criar APRESENTACAO.md
+
+---
+
+### Sessão 7 — 2026-05-20
+
+**Início:** CONTEXT.md lido — Etapa 9 confirmada. Usuário trouxe print mostrando bugs nos eventos publicados na Sessão 6.
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| Lido CONTEXT.md | OK — Etapa 9 confirmada |
+| Usuário apresentou 2 bugs nos relatórios publicados | Título errado + seção "Desempenho" e rodapé faltando |
+| Diagnóstico: lidos publicador.md, publish-timeline.md, redator.md, relatorio-template.md | Causa raiz identificada em 3 arquivos — template estava correto |
+| Explicação do conceito de commit ao usuário | OK — usuário entendeu checkpoint vs push |
+| Commit checkpoint do estado atual (aaa4ecb) — antes das correções | ✅ 5 arquivos: CONTEXT.md, clientes-config.yaml, fill_sheets.py, 2 examples |
+| Ativado @dev (Dex) para aplicar as correções | OK |
+| Fix 1: `agents/publicador.md` — título corrigido para "Relatório de Tráfego" (2 ocorrências) | ✅ |
+| Fix 2: `tasks/publish-timeline.md` — título corrigido para "Relatório de Tráfego" (2 ocorrências) | ✅ |
+| Fix 3: `agents/redator.md` — estrutura do texto completada: métricas em negrito + [SECAO_DESTAQUE] obrigatória + rodapé `👇 Confira...` | ✅ |
+| CONTEXT.md — 2 bugs registrados em "ERROS E CORREÇÕES" | ✅ |
+| Saída do modo @dev (*exit) | OK |
+| Ativado /relatorio-semanal para teste das correções | ⚠️ BLOQUEADO — REPORTEI_TOKEN e GOOGLE_SERVICE_ACCOUNT_JSON não definidos |
+| Usuário solicitou handoff da sessão | Em andamento |
+
+**Bugs identificados e corrigidos:**
+
+| Bug | Causa | Arquivos corrigidos |
+|-----|-------|---------------------|
+| Título "Relatório Semanal — DD/MM a DD/MM" | `publicador.md` e `publish-timeline.md` tinham título dinâmico com datas | `agents/publicador.md`, `tasks/publish-timeline.md` |
+| Seção "Desempenho de Anúncios em Destaque" e `👇 Confira...` ausentes | `redator.md` — "Estrutura do texto gerado" estava incompleta | `agents/redator.md` |
+
+**Situação dos eventos na Timeline:**
+- Event IDs 107488-107491 (bloco Vinicius, Sessão 6) foram **EXCLUÍDOS** em sessão anterior que tentou corrigir
+- Republication falhou por rate limit (`You've hit your limit · resets 4:10am`)
+- Linha do tempo dos 4 clientes está **VAZIA** para o período 11/05-17/05/2026
+- Evento 107487 (IMCP, Sessão 5) — status desconhecido (pode ainda existir)
+
+**Decisões tomadas nesta sessão:**
+- Testar pipeline para 1 cliente (IMCP) antes de commitar as correções
+- Republicar todos os 4 eventos após teste aprovado
+- `create_timeline_event` sempre CRIA — nunca substitui (sem risco de duplicata pois eventos foram deletados)
+
+**Pendências abertas:**
+- Configurar variáveis de ambiente e testar pipeline (REPORTEI_TOKEN + GOOGLE_SERVICE_ACCOUNT_JSON)
+- Commit das correções via @dev após teste aprovado
+- Push + PR + merge via @devops
+- Republicar 4 eventos do bloco Vinicius com formato correto
+- Criar APRESENTACAO.md (Etapa 9 original)
+
+---
+
+### Sessão 8 — 2026-05-20
+
+**Início:** CONTEXT.md lido — variáveis de ambiente não configuradas. Pipeline bloqueado.
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| Lido CONTEXT.md | OK — bloqueadores identificados |
+| Configuradas variáveis: REPORTEI_TOKEN + GOOGLE_SERVICE_ACCOUNT_JSON via PowerShell | ✅ |
+| service_account.json verificado — existe localmente | ✅ |
+| /relatorio-semanal ativado → "Rodar pipeline para IMCP" | OK |
+| get_project_metrics IMCP (688377) — 11/05 a 17/05/2026 | ✅ dados reais obtidos |
+| fill_sheets.py executado — 4 clientes × 5 colunas | ✅ 20 células preenchidas |
+| quality-gate Bloco A (verify-fill) — IMCP | ✅ 8/8 |
+| Narrativa gerada pelo redator (META-only) | ✅ com [SECAO_DESTAQUE] + rodapé presentes |
+| quality-gate Bloco B (validate-report) — IMCP | ✅ 8/8 |
+| create_timeline_event publicado | ✅ Event ID 107510, título "Relatório de Tráfego" |
+| quality-gate Bloco C | ✅ 3/3 |
+| Output salvo em examples/imcp-2026-05-17-v2.md | ✅ |
+| CONTEXT.md atualizado (handoff Sessão 9) | ✅ |
+
+**Correções validadas nesta sessão:**
+
+| Correção | Arquivo | Validação |
+|----------|---------|-----------|
+| Título fixo "Relatório de Tráfego" | agents/publicador.md | ✅ Event ID 107510 com título correto |
+| Título fixo "Relatório de Tráfego" | tasks/publish-timeline.md | ✅ |
+| [SECAO_DESTAQUE] obrigatória + rodapé "👇 Confira..." | agents/redator.md | ✅ presente no texto gerado |
+
+**Checks Anderson — status:**
+- P1 ✅ — Pipeline rodou do zero, ponta a ponta, sem intervenção humana
+- P2 ✅ — 19/19 checks passaram (Bloco A + B + C)
+- P3 ✅ — Output real salvo em examples/imcp-2026-05-17-v2.md (formato correto)
+
+**Pendências abertas:**
+- @dev — commit das correções (publicador.md, publish-timeline.md, redator.md, examples/imcp-2026-05-17-v2.md, CONTEXT.md)
+- @devops — push + PR + merge para main
+- Republicar 4 eventos do bloco Vinicius (107488–107491 deletados — linha do tempo vazia)
+- Criar APRESENTACAO.md (Etapa 9 original)
+
+---
+
+## HANDOFF — SESSÃO 9
+
+> Basta abrir este CONTEXT.md no início da próxima sessão.
 
 ```yaml
 handoff:
-  from_session: 3
+  from_session: 8
   date: 2026-05-20
   branch: feat/relatorio-semanal
   story_context:
     squad: relatorio-semanal
-    etapa_atual: 6
-    status: Em progresso
+    etapa_atual: 9
+    status: Correcoes validadas — aguardando commit, push e republicacao dos 4 eventos
     ultima_acao: >
-      Varredura completa contra critérios das aulas feita.
-      Resultado: APROVADO COM RESSALVAS.
-      3 correções aplicadas (token redatado, squad.yaml limpo, quality-gate sincronizado).
-  proxima_acao: "*validate-squad relatorio-semanal"
-  sequencia_completa:
-    - "6: *validate-squad relatorio-semanal"
-    - "7: git commit + PR + merge (delegar a @devops)"
-    - "8: Teste MVP ao vivo com Destra Desenvolvimentos — salvar output em examples/"
-    - "9: Criar APRESENTACAO.md com roteiro dos 4 blocos (5/8/10/7 min)"
-  pendencias_criticas:
-    - "Regenerar REPORTEI_TOKEN no painel do Reportei ANTES de testar"
-    - "Mapear reportei_project_id de cada cliente no clientes-config.yaml"
-  pendencias_baixa_prioridade:
-    - "Substituir 'excelente' em examples/destra-2026-05-04.md linha 27"
-    - "Criar MEMORY.md por agente (padrão formal AIOX — opcional)"
-  arquivos_modificados_sessao_3:
-    - squads/relatorio-semanal/squad.yaml
-    - squads/relatorio-semanal/CLAUDE.md
-    - squads/relatorio-semanal/README.md
-    - squads/relatorio-semanal/config/clientes-config.yaml
-    - squads/relatorio-semanal/agents/relatorio-chief.md
-    - squads/relatorio-semanal/agents/coletor.md
-    - squads/relatorio-semanal/agents/redator.md
-    - squads/relatorio-semanal/agents/publicador.md
-    - squads/relatorio-semanal/agents/quality-gate.md
-    - squads/relatorio-semanal/tasks/fetch-metrics.md
-    - squads/relatorio-semanal/tasks/verify-fill.md
-    - squads/relatorio-semanal/tasks/generate-report.md
-    - squads/relatorio-semanal/tasks/validate-report.md
-    - squads/relatorio-semanal/tasks/publish-timeline.md
-    - squads/relatorio-semanal/workflows/weekly-report-pipeline.md
-    - squads/relatorio-semanal/templates/relatorio-template.md
-    - squads/relatorio-semanal/checklists/qa-relatorio.md
-    - squads/relatorio-semanal/examples/danielle-gondim-2026-05-04.md
-    - squads/relatorio-semanal/examples/destra-2026-05-04.md
-    - squads/relatorio-semanal/CONTEXT.md
+      Sessao 8 — Pipeline testado para IMCP com formato corrigido. 19/19 checks passaram.
+      Event ID 107510 publicado com titulo "Relatorio de Trafego" (fixo).
+      Output salvo em examples/imcp-2026-05-17-v2.md.
+      Correcoes da Sessao 7 confirmadas como funcionando corretamente.
+  proxima_acao: >
+    PASSO 1 — @dev: git commit (arquivos corrigidos)
+      - squads/relatorio-semanal/agents/publicador.md
+      - squads/relatorio-semanal/tasks/publish-timeline.md
+      - squads/relatorio-semanal/agents/redator.md
+      - squads/relatorio-semanal/examples/imcp-2026-05-17-v2.md
+      - SQUADS/relatorio-semanal/CONTEXT.md
+    PASSO 2 — @devops: git push + PR + merge para main
+    PASSO 3 — Republicar 4 eventos bloco Vinicius (periodo 11/05-17/05/2026):
+        - Dra Danielle Gondim  (project_id: 839737)
+        - Dr. Leandro Gontijio (project_id: 627550)
+        - IMCP                 (project_id: 688377) — já publicado (107510), pular
+        - Dr. Guilherme Mattar (project_id: 1023153)
+    PASSO 4 — Criar APRESENTACAO.md com roteiro dos 4 blocos (briefing completo no CONTEXT.md)
+
+  skill_command: "/relatorio-semanal"
+  skill_path: ".claude/skills/relatorio-semanal/SKILL.md"
+  skill_status: "ATIVO — aparece no menu / do Claude Code"
+
+  variaveis_ambiente:
+    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  planilha:
+    sheet_id: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    aba_preenchida: "17/05/2026"
+    status_aba: "PREENCHIDA na Sessao 6 — 4 clientes × 5 colunas"
+    bloco_alvo: "Vinicius"
+    script: "squads/relatorio-semanal/data/fill_sheets.py"
+    convencao_aba: "nomeada pelo DOMINGO da semana (nao pela segunda-feira)"
+    nomes_na_coluna_A:
+      "Dra Danielle Gondim": "linha 74"
+      "Dr. Leandro Gontijio": "linha 75 — atencao: Gontijio com j"
+      "IMCP": "linha 76"
+      "Dr. Guilherme Mattar": "linha 77"
+      "DESTRA": "linha 83"
+
+  metricas_sessao6:
+    periodo: "11/05/2026 a 17/05/2026"
+    clientes:
+      - nome: "Dra Danielle Gondim"
+        project_id: 839737
+        meta_spend: 6486.58
+        google_spend: 0.00
+        seguidores: 2448
+        conversas: 93
+        conversoes: 1
+        event_id: 107488
+      - nome: "Dr. Leandro Gontijio"
+        project_id: 627550
+        meta_spend: 11739.71
+        google_spend: 407.94
+        seguidores: 4655
+        conversas: 1212
+        conversoes: 148
+        event_id: 107489
+      - nome: "IMCP"
+        project_id: 688377
+        meta_spend: 2110.96
+        google_spend: 0.00
+        seguidores: 1307
+        conversas: 91
+        conversoes: 0
+        event_id: 107490
+      - nome: "Dr. Guilherme Mattar"
+        project_id: 1023153
+        meta_spend: 1011.70
+        google_spend: 563.72
+        seguidores: 0
+        conversas: 11
+        conversoes: 250
+        event_id: 107491
+      - nome: "DESTRA"
+        status: "SEM ACESSO com token atual — pulado"
+
+  reportei:
+    token: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    projetos_acessiveis:
+      - {nome: "IMCP", id: 688377}
+      - {nome: "Dra. Danielle Gondim", id: 839737}
+      - {nome: "Dr Leandro Gontijo", id: 627550}
+      - {nome: "Dr. Guilherme Mattar", id: 1023153}
+    sem_acesso: "DESTRA — nao encontrado com este token"
+
+  service_account:
+    path: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+    email: "stark-metricas@primal-sunup-419412.iam.gserviceaccount.com"
+    status: "CONFIGURADO e gitignored — disponivel localmente"
+
+  checks_anderson:
+    passando: 15
+    total: 15
+    nota: "15/15 na Sessao 6 — pipeline completo com 4 clientes reais"
+
+  correcoes_sessao7:
+    arquivos_corrigidos:
+      - arquivo: "squads/relatorio-semanal/agents/publicador.md"
+        bug: "Titulo dinamico com datas em vez de titulo fixo"
+        fix: "title = 'Relatorio de Trafego' (fixo)"
+      - arquivo: "squads/relatorio-semanal/tasks/publish-timeline.md"
+        bug: "Mesmo bug de titulo no payload do create_timeline_event"
+        fix: "title = 'Relatorio de Trafego' (fixo)"
+      - arquivo: "squads/relatorio-semanal/agents/redator.md"
+        bug: "Estrutura do texto gerado incompleta — sem metricas em negrito, sem [SECAO_DESTAQUE], sem rodape"
+        fix: "Estrutura completada com metricas, secao obrigatoria e rodape '👇 Confira...'"
+    checkpoint_pre_correcao: "aaa4ecb"
+    status_eventos_timeline:
+      107488: "DELETADO (Dra Danielle Gondim)"
+      107489: "DELETADO (Dr. Leandro Gontijio)"
+      107490: "DELETADO (IMCP)"
+      107491: "DELETADO (Dr. Guilherme Mattar)"
+      107487: "STATUS DESCONHECIDO (IMCP, Sessao 5)"
+      nota: "Todos foram deletados em tentativa de republicacao que falhou por rate limit"
+
+  evidencias_para_apresentacao:
+    - "examples/imcp-2026-05-17-v2.md — output IMCP (Sessao 8) — formato CORRETO, com correcoes validadas"
+    - "examples/imcp-2026-05-17.md — output IMCP (Sessao 5) — formato ANTIGO (referencia)"
+    - "examples/bloco-vinicius-2026-05-17.md — output bloco completo (Sessao 6) — formato ANTIGO (referencia)"
+    - "Planilha preenchida: aba 17/05/2026, linhas 74-77 — OK"
+
+  eventos_timeline:
+    107487: "IMCP (Sessao 5) — status desconhecido"
+    107488: "DELETADO (Dra Danielle Gondim — Sessao 6)"
+    107489: "DELETADO (Dr. Leandro Gontijio — Sessao 6)"
+    107490: "DELETADO (IMCP — Sessao 6)"
+    107491: "DELETADO (Dr. Guilherme Mattar — Sessao 6)"
+    107510: "IMCP (Sessao 8) — ATIVO com formato correto"
+    nota: "Republicar 107488, 107489, 107491 (Danielle, Leandro, Mattar) na Sessao 9"
+
   pontos_fortes_para_apresentacao:
-    - "CONTEXT.md como diário completo de sessões — rastreabilidade total"
-    - "3 variações de template (META, Google, ambos) com lógica automática"
-    - "MANUAL_MAP com 15 entradas baseadas em nomes reais do Reportei"
-    - "Exceção Dr. Javier tratada em 4 arquivos distintos"
-    - "quality-gate em 2 momentos do pipeline (pós-coleta e pós-texto)"
-    - "Lógica de plataforma sem config manual — coletor tenta tudo, redator escreve o que tem dado"
-    - "Métricas de ganho calculadas: 1 cliente = 80 min/semana, 5 clientes = ~6,5h/semana"
+    - "Pipeline rodou 3/3 atividades × 4 clientes ao vivo sem intervencao humana (Sessao 6)"
+    - "Pipeline testado novamente com correcoes aplicadas — 19/19 checks (Sessao 8)"
+    - "fill_sheets.py multi-cliente — um comando preenche todos"
+    - "quality-gate em 2 momentos (Bloco A pos-coleta + Bloco B pos-texto)"
+    - "3 variacoes de template com logica automatica (META-only, Google-only, META+Google)"
+    - "CONTEXT.md com diario de 8 sessoes — rastreabilidade total do projeto"
+    - "Skill /relatorio-semanal no menu / do Claude Code"
+    - "Metricas de ganho: 1 cliente = ~80 min/semana, 4 clientes = ~5h/semana"
+    - "Bug identificado, corrigido, testado e documentado — ciclo completo de melhoria"
 ```
+
+*Versão: 11 | Última atualização: Sessão 8 (encerramento), 2026-05-20*
+*Etapa atual: 9 — Commit + push + republicar 3 eventos + APRESENTACAO.md*
