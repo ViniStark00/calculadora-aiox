@@ -27,9 +27,36 @@ reportei:
 # MANUAL_MAP: chave = nome do projeto no Reportei (lowercase), valor = nome na planilha
 # null = ignorar (não é cliente ativo do bloco Vinicius)
 manual_map:
+  # IMCP
   "imcp": "IMCP - Instituto Mineiro de Cirurgia Plastica"
+  "imcp - instituto mineiro de cirurgia plastica": "IMCP - Instituto Mineiro de Cirurgia Plastica"
+  "imcp - instituto mineiro de cirurgia plástica": "IMCP - Instituto Mineiro de Cirurgia Plastica"
+  # Destra
   "destra": "Destra Desenvolvimentos"
   "destra desenvolvimentos": "Destra Desenvolvimentos"
+  # Dra. Danielle Gondim
+  "dra. danielle gondim": "Dra Danielle Gondim"
+  "dra danielle gondim": "Dra Danielle Gondim"
+  # Dr. Leandro Gontijo (Reportei) → Gontijio (planilha) — grafias diferentes!
+  "dr leandro gontijo": "Dr. Leandro Gontijio"
+  "dr. leandro gontijo": "Dr. Leandro Gontijio"
+  # Dr. Lucas Consentino
+  "dr lucas consentino": "Dr. Lucas Consentino"
+  "dr. lucas consentino": "Dr. Lucas Consentino"
+  # Dr. Luiz Borba
+  "dr. luiz borba": "Dr Luiz Borba"
+  "dr luiz borba": "Dr Luiz Borba"
+  # Dr. Guilherme Mattar
+  "dr. guilherme mattar": "Dr. Guilherme Mattar"
+  # Dr. Laureano Filho
+  "dr. laureano filho": "Dr. Laureano Filho"
+  # Diego Gonzalez (Reportei) → Diego Gonzalez Salvador (planilha) — sobrenome a mais!
+  "diego gonzalez": "Diego Gonzalez Salvador"
+  "diego gonzalez salvador": "Diego Gonzalez Salvador"
+  # Dr. Joel Abdala
+  "dr. joel abdala": "Dr. Joel Abdala"
+  # Dr. Humberto
+  "dr. humberto": "Dr. Humberto"
 
 # Nomes reais na coluna A da planilha (descobertos na Sessão 5)
 # Usar esses valores para localizar a linha correta no Sheets
@@ -53,6 +80,25 @@ nomes_planilha:
   "dra nicolli": "Dra Nicolli"
   "dra danielle gondim": "Dra Danielle Gondim"
   "danielle gondim": "Dra Danielle Gondim"
+  # Novos clientes adicionados em 2026-05-21
+  "Dr. Leandro Gontijio": "Dr. Leandro Gontijio"
+  "dr. leandro gontijio": "Dr. Leandro Gontijio"
+  "dr leandro gontijo": "Dr. Leandro Gontijio"
+  "Dr. Lucas Consentino": "Dr. Lucas Consentino"
+  "dr. lucas consentino": "Dr. Lucas Consentino"
+  "Dr Luiz Borba": "Dr Luiz Borba"
+  "dr luiz borba": "Dr Luiz Borba"
+  "Dr. Guilherme Mattar": "Dr. Guilherme Mattar"
+  "dr. guilherme mattar": "Dr. Guilherme Mattar"
+  "Dr. Humberto": "Dr. Humberto"
+  "dr. humberto": "Dr. Humberto"
+  "Dr. Laureano Filho": "Dr. Laureano Filho"
+  "dr. laureano filho": "Dr. Laureano Filho"
+  "Diego Gonzalez Salvador": "Diego Gonzalez Salvador"
+  "diego gonzalez salvador": "Diego Gonzalez Salvador"
+  "diego gonzalez": "Diego Gonzalez Salvador"
+  "Dr. Joel Abdala": "Dr. Joel Abdala"
+  "dr. joel abdala": "Dr. Joel Abdala"
   "dr juan lopez": null       # não é cliente ativo
   "stark marketing": null     # não é cliente ativo
   "dr, matheus ocampo": null  # não é cliente ativo
