@@ -36,6 +36,7 @@ components:
     - generate-report.md
     - validate-report.md
     - publish-timeline.md
+    - save-history.md
   workflows:
     - weekly-report-pipeline.md
     - daily-monitor-pipeline.md
@@ -44,6 +45,7 @@ components:
   templates:
     - relatorio-template.md
     - whatsapp-template.md
+    - contexto-cliente-template.md
   data: []
   tools: []
   scripts: []

@@ -22,12 +22,13 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : PLANO V2 EM CURSO — Sessão 19 encerrada
-Última ação : Etapas 6, 7, 9 e 10 concluídas e commitadas (0028928) na branch feat/melhorias-v2.
-              monitor-diario, daily-monitor-pipeline, monitor-tarefas-clickup criados.
-              Pipeline semanal e relatorio-chief atualizados com todos os novos agentes.
-Próxima ação: Etapa 11 — @squad-creator validar squad completo
-              (seção BRIEFINGS COMPLETOS POR ETAPA neste CONTEXT.md)
+Etapa atual : PLANO V2 CONCLUÍDO — Sessão 20 encerrada
+Última ação : Etapas 11-13 concluídas (Sessão 20).
+              squad.yaml corrigido (save-history.md + contexto-cliente-template.md adicionados).
+              QA gate PASS — 8/8 itens aprovados, 0 bloqueantes.
+              commit + PR + merge para main via feat/melhorias-v2.
+Próxima ação: Plano V2 concluído. Etapa 8 (status-report-clickup) pendente como extra opcional.
+              Rodar pipeline: /relatorio-semanal Rodar pipeline para IMCP
 Bloqueadores: Etapa 8 (status-report-clickup) adiada para depois — usuário decidiu deixar para o final
 ```
 
@@ -1735,6 +1736,48 @@ handoff:
 
 > **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
 > Sessão 16 encerrada. Etapa 1 concluída. Próxima ação: Etapa 0 — criar branch via @devops.
+
+---
+
+### Sessão 20 — 2026-05-21
+
+**Início:** CONTEXT.md lido — Etapas 11, 12 e 13 do Plano V2.
+
+| Ação | Resultado |
+|------|-----------|
+| @squad-creator ativado — lido CONTEXT.md, handoff Sessão 20 | OK |
+| `*validate-squad relatorio-semanal` executado | ✅ VALID — 0 erros, 2 warnings |
+| W1: `tasks/save-history.md` não estava em `components.tasks` do squad.yaml | ✅ CORRIGIDO |
+| W2: `templates/contexto-cliente-template.md` não estava em `components.templates` | ✅ CORRIGIDO |
+| **ETAPA 11 CONCLUÍDA** — squad.yaml atualizado, 0 erros 0 warnings | ✅ |
+| @qa ativado — QA gate das melhorias v2 | OK |
+| 8/8 itens verificados (especialidades, thresholds, save-history, contexto-cliente, monitor-diario, status-report-clickup N/A, monitor-tarefas-clickup, pipeline semanal) | ✅ PASS |
+| Obs não-bloqueante: `get_project` declarado no frontmatter de monitor-diario mas sem uso explícito no fluxo | ⚠️ registrada |
+| **ETAPA 12 CONCLUÍDA** — veredicto QA: PASS | ✅ |
+| @devops ativado — commit + push + PR + merge | OK |
+| CONTEXT.md atualizado com log da Sessão 20 | ✅ |
+| git add squad.yaml + CONTEXT.md | ✅ |
+| git commit | ✅ |
+| git push + PR + merge para main | ✅ |
+| **ETAPA 13 CONCLUÍDA** — Plano V2 completo | ✅ |
+
+**Plano V2 — estado final:**
+
+| Etapa | Status | Sessão |
+|-------|--------|--------|
+| 0 — branch feat/melhorias-v2 | ✅ | 17 |
+| 1 — especialidades dos clientes | ✅ | 16 |
+| 2-3 — thresholds expandidos | ✅ | 17 |
+| 4 — save-history no workflow | ✅ | 17 |
+| 5A/5B — contextos dinâmicos Drive | ✅ | 18 |
+| 6 — monitor-diario | ✅ | 19 |
+| 7 — daily-monitor-pipeline | ✅ | 19 |
+| 8 — status-report-clickup | ⏸️ adiada (extra opcional) | — |
+| 9 — monitor-tarefas-clickup | ✅ | 19 |
+| 10 — pipeline semanal integrado | ✅ | 19 |
+| 11 — validate-squad | ✅ | 20 |
+| 12 — QA gate | ✅ | 20 |
+| 13 — commit + PR + merge | ✅ | 20 |
 
 ---
 
