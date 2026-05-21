@@ -26,10 +26,22 @@ INÍCIO
   Recebe cliente, carrega config, calcula período
   │
   ▼
+[contexto-cliente] — LEITURA  ⚠️ NÃO-BLOQUEANTE
+  Busca doc "Contexto — [CLIENTE]" no Google Drive
+  Se não existe: cria com template padrão, continua com contexto vazio
+  Se Drive falha: aviso + disponivel=false, pipeline continua normalmente
+  Entrega objeto contexto_cliente no handoff
+  │
+  ▼
 [coletor] — task: fetch-metrics
   Reportei API v2 → Google Sheets (colunas C/E/H/K/O)
   │
   ├─ ERRO (token, aba, etc.) → STOP + mensagem clara
+  │
+  ▼
+[coletor] — task: save-history  ⚠️ NÃO-BLOQUEANTE
+  Salva métricas da semana em data/historico-clientes.yaml
+  ├─ ERRO → aviso no log + pipeline continua normalmente
   │
   ▼
 [quality-gate] — task: verify-fill
@@ -39,7 +51,7 @@ INÍCIO
   │
   ▼
 [redator] — task: generate-report
-  Métricas + MCP Reportei → texto narrativo
+  Métricas + MCP Reportei + contexto_cliente (handoff) → texto narrativo
   │
   ▼
 [quality-gate] — task: validate-report
@@ -60,6 +72,20 @@ INÍCIO
   Seleciona template (META-only / META+Google / Google-only)
   Gera linha de highlight (1 frase objetiva)
   Exibe mensagem pronta para copiar
+  │
+  ▼
+[monitor-tarefas-clickup]  ⚠️ NÃO-BLOQUEANTE
+  Recebe lista de atividades concluídas do relatorio-chief
+  Localiza tarefas do cliente no ClickUp e marca como concluídas
+  Tarefa não encontrada → aviso, continua
+  ClickUp indisponível → aviso, continua
+  │
+  ▼
+[contexto-cliente] — ATUALIZAÇÃO  ⚠️ NÃO-BLOQUEANTE
+  Gera aprendizados da semana com base nas métricas
+  Appenda no topo da seção aprendizados (mais recentes primeiro)
+  Mantém apenas últimas 8 semanas
+  Se Drive falha: aviso, nunca bloqueia
   │
   ▼
 [relatorio-chief]
@@ -91,12 +117,16 @@ FIM ✅
 PIPELINE CONCLUÍDO — [DD/MM/AAAA] a [DD/MM/AAAA]
 ════════════════════════════════════════════════════
 [NOME DO CLIENTE]
+  ✅ Contexto carregado  (ou ⚠️ Contexto: Drive indisponível — pipeline não interrompido)
   ✅ Coleta de métricas
+  ✅ Histórico salvo  (ou ⚠️ Histórico: aviso — pipeline não interrompido)
   ✅ Verificação de coleta
   ✅ Geração do relatório
   ✅ Validação do texto
   ✅ Publicação na Timeline (ID: XXXXX)
   ✅ Mensagem WhatsApp gerada
+  ✅ Tarefas ClickUp marcadas  (ou ⚠️ ClickUp: aviso — pipeline não interrompido)
+  ✅ Contexto atualizado  (ou ⚠️ Contexto não atualizado esta semana)
 ════════════════════════════════════════════════════
 Tempo total: ~X segundos
 ```

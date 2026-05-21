@@ -25,17 +25,25 @@ Exemplos válidos:
 ## Fluxo de execução
 
 ```
-1. Receber cliente
-2. Resolver nome → config/clientes-config.yaml
-3. Calcular período (segunda a domingo da semana anterior)
-4. CHAMAR coletor (task: fetch-metrics)
-5. CHAMAR quality-gate (task: verify-fill)
-   └─ Se reprovado → interromper e informar
-6. CHAMAR redator (task: generate-report)
-7. CHAMAR quality-gate (task: validate-report)
-   └─ Se reprovado → interromper e informar
-8. CHAMAR publicador (task: publish-timeline)
-9. Exibir resumo final
+1.  Receber cliente
+2.  Resolver nome → config/clientes-config.yaml
+3.  Calcular período (segunda a domingo da semana anterior)
+4.  CHAMAR contexto-cliente (LEITURA) — NÃO-BLOQUEANTE
+    └─ Carrega contexto do Drive; falha → continua sem contexto
+5.  CHAMAR coletor (task: fetch-metrics)
+6.  CHAMAR coletor (task: save-history) — NÃO-BLOQUEANTE
+7.  CHAMAR quality-gate (task: verify-fill)
+    └─ Se reprovado → interromper e informar
+8.  CHAMAR redator (task: generate-report)
+9.  CHAMAR quality-gate (task: validate-report)
+    └─ Se reprovado → interromper e informar
+10. CHAMAR publicador (task: publish-timeline)
+11. CHAMAR whatsapp-writer
+12. CHAMAR monitor-tarefas-clickup — NÃO-BLOQUEANTE
+    └─ Marca tarefas concluídas no ClickUp; falha → aviso, continua
+13. CHAMAR contexto-cliente (ATUALIZAÇÃO) — NÃO-BLOQUEANTE
+    └─ Atualiza aprendizados no Drive; falha → aviso, continua
+14. Exibir resumo final
 ```
 
 ## Resolução de cliente
@@ -61,11 +69,16 @@ PIPELINE CONCLUÍDO — [NOME DO CLIENTE]
 ════════════════════════════════════════════════════
 Período: [DD/MM/AAAA] a [DD/MM/AAAA]
 
+✅ Contexto carregado        — Drive OK  (ou ⚠️ Drive indisponível)
 ✅ Coleta de métricas        — Planilha preenchida
+✅ Histórico salvo           — (ou ⚠️ aviso)
 ✅ Verificação de coleta     — Todos os campos válidos
 ✅ Geração do relatório      — Texto gerado
 ✅ Validação do texto        — Aprovado
 ✅ Publicação na Timeline    — Marco criado (ID: [timeline_event_id])
+✅ Mensagem WhatsApp         — Pronta para copiar
+✅ Tarefas ClickUp           — [N] marcadas  (ou ⚠️ ClickUp indisponível)
+✅ Contexto atualizado       — Drive OK  (ou ⚠️ não atualizado esta semana)
 ════════════════════════════════════════════════════
 Tempo total: ~[X] segundos
 ```

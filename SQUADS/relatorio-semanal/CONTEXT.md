@@ -22,17 +22,14 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : MELHORIAS EM CURSO — Sessão 13 encerrada
-Última ação : Melhoria 2 concluída, aprovada pelo @qa e commitada (52725a8).
-              Briefings das Melhorias 3, 4 e Extra salvos no CONTEXT.md.
-Próxima ação: Melhoria 3 — Histórico Acumulado por Cliente
-              1. Chamar /AIOX:agents:dev com o briefing da Melhoria 3 (ver seção BRIEFINGS abaixo)
-              2. Chamar /AIOX:agents:qa para validar
-              3. Chamar /AIOX:agents:devops para commit
-              4. Repetir fluxo para Melhoria 4
-              5. Após Melhorias 1-4: @devops faz push + PR + merge de feat/melhorias-squad-relatorio
-              6. Extra (ClickUp): branch separada feat/extra-anotacao-clickup
-Bloqueadores: Nenhum
+Etapa atual : PLANO V2 CONCLUÍDO — Sessão 20 encerrada
+Última ação : Etapas 11-13 concluídas (Sessão 20).
+              squad.yaml corrigido (save-history.md + contexto-cliente-template.md adicionados).
+              QA gate PASS — 8/8 itens aprovados, 0 bloqueantes.
+              commit + PR + merge para main via feat/melhorias-v2.
+Próxima ação: Plano V2 concluído. Etapa 8 (status-report-clickup) pendente como extra opcional.
+              Rodar pipeline: /relatorio-semanal Rodar pipeline para IMCP
+Bloqueadores: Etapa 8 (status-report-clickup) adiada para depois — usuário decidiu deixar para o final
 ```
 
 ---
@@ -1597,4 +1594,1012 @@ handoff:
   cliente_teste: "IMCP (project_id 688377)"
   skill_command: "/relatorio-semanal"
   pr_merged: "PR #6 -- feat/melhorias-squad-relatorio para main"
+```
+
+---
+
+### Sessão 16 — 2026-05-20
+
+**Início:** Comparação entre squad relatorio-semanal e squad do Gustavo (apresentação treinamento).
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| Lida transcrição da apresentação do Gustavo (Apresentação de Squads dia 20_05.docx.md) | OK |
+| Lido CONTEXT.md + estrutura atual do squad | OK |
+| Análise comparativa entre os dois squads realizada | OK |
+| Plano V2 com 13 etapas criado e salvo neste CONTEXT.md | ✅ |
+| Etapa 1 concluída — especialidades confirmadas pelo usuário via chat | ✅ |
+| CONTEXT.md atualizado com tabela de especialidades | ✅ |
+| clientes-config.yaml atualizado com novos slugs de especialidade e novos clientes | ✅ |
+| Regra confirmada: mostrar apenas a etapa atual, nunca antecipar as próximas | ✅ |
+
+**Novos slugs de especialidade criados (não existiam antes):**
+- `cirurgia_facial` — rinoplastia, blefaroplastia, face
+- `cirurgia_corporal` — lipo, silicone, contorno corporal
+- `mommy_makeover` — procedimentos pós-gestação combinados
+- `cirurgia_trans` — mastectomia afirmativa
+- `cirurgia_ortognatica` — cirurgia de mandíbula/maxila (Dr. Laureano — só Google Ads)
+
+**Arquivos modificados nesta sessão:**
+- `squads/relatorio-semanal/CONTEXT.md` — Plano V2 adicionado + tabela de especialidades
+- `squads/relatorio-semanal/config/clientes-config.yaml` — especialidades confirmadas + novos clientes
+
+**Pendências abertas (Sessão 16):**
+- Etapa 0: criar branch feat/melhorias-v2 via @devops (PRÓXIMA AÇÃO)
+- Etapa 2: @analyst pesquisar thresholds para 5 novas especialidades
+- Etapa 8: usuário ainda não descreveu estrutura do status report no ClickUp
+
+---
+
+### Sessão 19 — 2026-05-20
+
+**Início:** CONTEXT.md lido — Etapas 5A/5B confirmadas. Sessão dedicada às Etapas 6, 7, 9 e 10 (Etapa 8 adiada pelo usuário).
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| Etapa 6: `agents/monitor-diario.md` criado (@dev) | ✅ |
+| Etapa 7: `workflows/daily-monitor-pipeline.md` criado (@dev) | ✅ |
+| Etapa 8: adiada — usuário decidiu deixar como "extra, última a ser feita" | ⏸️ |
+| Etapa 9: `agents/monitor-tarefas-clickup.md` criado (@dev) | ✅ |
+| Etapa 10: pipeline semanal, squad.yaml e relatorio-chief integrados (@dev) | ✅ |
+| Commit 0028928 — Etapas 6-7-9-10 na branch feat/melhorias-v2 | ✅ |
+| CONTEXT.md atualizado (handoff Sessão 20) | ✅ |
+
+**Decisões tomadas nesta sessão:**
+- Etapa 8 (`status-report-clickup`) deixada para o final — usuário preferiu avançar para validação primeiro
+- `monitor-tarefas-clickup` posicionado após `whatsapp-writer` e antes da atualização de contexto
+- `monitor-diario` usa `list_projects` para mapear clientes, sem necessidade de project_id no config
+
+**Arquivos criados/editados (commit 0028928):**
+- `SQUADS/relatorio-semanal/agents/monitor-diario.md` — novo
+- `SQUADS/relatorio-semanal/agents/monitor-tarefas-clickup.md` — novo
+- `SQUADS/relatorio-semanal/workflows/daily-monitor-pipeline.md` — novo
+- `SQUADS/relatorio-semanal/workflows/weekly-report-pipeline.md` — editado
+- `SQUADS/relatorio-semanal/squad.yaml` — editado
+- `SQUADS/relatorio-semanal/agents/relatorio-chief.md` — editado
+
+---
+
+### Sessão 18 — 2026-05-20
+
+**Início:** CONTEXT.md lido — Etapas 0–4 confirmadas. Sessão dedicada às Etapas 5A e 5B.
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| @architect ativado — design dos contextos dinâmicos no Drive (Etapa 5A) | ✅ |
+| Design entregue: estrutura do doc, agente `contexto-cliente`, handoff YAML, fluxo, fallbacks | ✅ |
+| @dev ativado — implementação da Etapa 5B | OK |
+| `agents/contexto-cliente.md` criado — leitura + atualização, tratamento de erros completo | ✅ |
+| `templates/contexto-cliente-template.md` criado — estrutura padrão para primeira execução | ✅ |
+| `agents/redator.md` editado — seção de contexto dinâmico pré-geração adicionada | ✅ |
+| `workflows/weekly-report-pipeline.md` editado — contexto-cliente no início e no fim do fluxo | ✅ |
+| `squad.yaml` editado — agente + MCP Drive registrados, pipeline_flow atualizado | ✅ |
+| @devops ativado — commit + push da Etapa 5B | ✅ |
+| Commits f488ee7 e a8fc34c pushados para feat/melhorias-v2 | ✅ |
+| CONTEXT.md atualizado (handoff Sessão 19) | ✅ |
+
+**Decisões tomadas nesta sessão:**
+- Agente único `contexto-cliente` (não dois) — evita duplicação da lógica de fallback
+- Limite de 8 semanas de aprendizados retidos no Drive — evita doc crescer indefinidamente
+- Contexto carregado ANTES do coletor (não após) — redator já tem contexto ao gerar texto
+- Atualização do contexto APÓS whatsapp-writer — usa resultado completo do pipeline
+
+**Arquivos criados/editados (commits f488ee7 + a8fc34c):**
+- `SQUADS/relatorio-semanal/agents/contexto-cliente.md` — novo
+- `SQUADS/relatorio-semanal/templates/contexto-cliente-template.md` — novo
+- `SQUADS/relatorio-semanal/agents/redator.md` — editado
+- `SQUADS/relatorio-semanal/workflows/weekly-report-pipeline.md` — editado
+- `SQUADS/relatorio-semanal/squad.yaml` — editado
+
+---
+
+### Sessão 17 — 2026-05-20
+
+**Início:** CONTEXT.md lido — Etapa 0 confirmada. Sessão dedicada às Etapas 0–4 do Plano V2.
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| @devops ativado — branch feat/melhorias-v2 criada a partir de main | ✅ |
+| @dev ativado — contexto carregado, aguardou @analyst para Etapa 2 | OK |
+| @analyst ativado — pesquisa de benchmarks CPL/CPM/CTR/Frequência | OK |
+| Etapa 2: benchmarks pesquisados para 5 novas especialidades (Meta Ads BR 2025-2026) | ✅ |
+| Etapa 3: thresholds-especialidade.yaml atualizado com 5 novas especialidades | ✅ |
+| Usuário corrigiu CPL: benchmark genérico substituído por média real da carteira (R$6-8/conversa) | ✅ CORRIGIDO |
+| CPL uniforme aplicado: saudavel <R$8, atencao R$8-15, critico >R$15 em todas as especialidades Meta | ✅ |
+| CPL cirurgia_ortognatica (Google): saudavel <R$23, atencao R$23-30, critico >R$30 | ✅ |
+| @dev ativado — Etapa 4: save-history verificado e adicionado ao diagrama do workflow | ✅ |
+| Commit c169faf — Etapas 1-4 salvas na branch feat/melhorias-v2 | ✅ |
+| CONTEXT.md atualizado (handoff Sessão 18) | ✅ |
+
+**Decisões tomadas nesta sessão:**
+- CPL do gerenciador (custo por conversa WhatsApp) é ~R$6-8 — muito diferente do CAC (R$80-300+)
+- Thresholds uniformes entre especialidades Meta Ads — variações reais entre especialidades são pequenas
+- cirurgia_ortognatica usa Google Ads: CPL = custo por conversão, thresholds diferentes
+
+**Arquivos modificados (commitados em c169faf):**
+- `SQUADS/relatorio-semanal/CONTEXT.md`
+- `SQUADS/relatorio-semanal/config/clientes-config.yaml`
+- `SQUADS/relatorio-semanal/data/thresholds-especialidade.yaml`
+- `SQUADS/relatorio-semanal/workflows/weekly-report-pipeline.md`
+
+---
+
+## HANDOFF — SESSÃO 17
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Sessão 16 encerrada. Etapa 1 concluída. Próxima ação: Etapa 0 — criar branch via @devops.
+
+---
+
+### Sessão 20 — 2026-05-21
+
+**Início:** CONTEXT.md lido — Etapas 11, 12 e 13 do Plano V2.
+
+| Ação | Resultado |
+|------|-----------|
+| @squad-creator ativado — lido CONTEXT.md, handoff Sessão 20 | OK |
+| `*validate-squad relatorio-semanal` executado | ✅ VALID — 0 erros, 2 warnings |
+| W1: `tasks/save-history.md` não estava em `components.tasks` do squad.yaml | ✅ CORRIGIDO |
+| W2: `templates/contexto-cliente-template.md` não estava em `components.templates` | ✅ CORRIGIDO |
+| **ETAPA 11 CONCLUÍDA** — squad.yaml atualizado, 0 erros 0 warnings | ✅ |
+| @qa ativado — QA gate das melhorias v2 | OK |
+| 8/8 itens verificados (especialidades, thresholds, save-history, contexto-cliente, monitor-diario, status-report-clickup N/A, monitor-tarefas-clickup, pipeline semanal) | ✅ PASS |
+| Obs não-bloqueante: `get_project` declarado no frontmatter de monitor-diario mas sem uso explícito no fluxo | ⚠️ registrada |
+| **ETAPA 12 CONCLUÍDA** — veredicto QA: PASS | ✅ |
+| @devops ativado — commit + push + PR + merge | OK |
+| CONTEXT.md atualizado com log da Sessão 20 | ✅ |
+| git add squad.yaml + CONTEXT.md | ✅ |
+| git commit | ✅ |
+| git push + PR + merge para main | ✅ |
+| **ETAPA 13 CONCLUÍDA** — Plano V2 completo | ✅ |
+
+**Plano V2 — estado final:**
+
+| Etapa | Status | Sessão |
+|-------|--------|--------|
+| 0 — branch feat/melhorias-v2 | ✅ | 17 |
+| 1 — especialidades dos clientes | ✅ | 16 |
+| 2-3 — thresholds expandidos | ✅ | 17 |
+| 4 — save-history no workflow | ✅ | 17 |
+| 5A/5B — contextos dinâmicos Drive | ✅ | 18 |
+| 6 — monitor-diario | ✅ | 19 |
+| 7 — daily-monitor-pipeline | ✅ | 19 |
+| 8 — status-report-clickup | ⏸️ adiada (extra opcional) | — |
+| 9 — monitor-tarefas-clickup | ✅ | 19 |
+| 10 — pipeline semanal integrado | ✅ | 19 |
+| 11 — validate-squad | ✅ | 20 |
+| 12 — QA gate | ✅ | 20 |
+| 13 — commit + PR + merge | ✅ | 20 |
+
+---
+
+## HANDOFF — SESSÃO 20
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Sessão 19 encerrada. Etapas 6, 7, 9 e 10 concluídas e commitadas. Próxima ação: Etapa 11 — @squad-creator validar o squad completo.
+
+```yaml
+handoff:
+  from_session: 19
+  date: 2026-05-20
+  branch: feat/melhorias-v2
+  base: main
+  ultimo_commit: "ver git log — após commit do CONTEXT.md"
+
+  estado_plano_v2:
+    etapas_concluidas: [0, 1, 2, 3, 4, "5A", "5B", 6, 7, 9, 10]
+    etapa_8_status: "ADIADA — usuário decidiu deixar para o final (extra)"
+    proxima_etapa: "11 — Validar squad completo (@squad-creator)"
+
+  proxima_acao: |
+    ETAPA 11 — Validar squad completo
+
+    Chamar @squad-creator (/AIOX:agents:squad-creator) com o briefing da Etapa 11
+    que está na seção "BRIEFINGS COMPLETOS POR ETAPA" deste CONTEXT.md.
+
+    Resumo do briefing:
+    - Comando: *validate-squad relatorio-semanal
+    - Verificar: todos os agentes do squad.yaml existem como arquivos
+    - Verificar: workflows referenciam agentes existentes
+    - Verificar: frontmatter dos novos agentes no padrão AIOX
+    - Verificar: sem referências quebradas entre arquivos
+    - Entrega: lista VALID/ERRORS com veredicto final
+
+    Após validação:
+    - Se PASS → Etapa 12 (QA gate com @qa)
+    - Se FAIL → corrigir com @dev e revalidar
+
+  o_que_foi_feito_sessao_19:
+    etapa_6: "agents/monitor-diario.md criado — painel diário CRITICO/ATENCAO/INFO/SEM_DADOS"
+    etapa_7: "workflows/daily-monitor-pipeline.md criado — rotina diária de monitoramento"
+    etapa_8: "ADIADA — deixada para depois da Etapa 13"
+    etapa_9: "agents/monitor-tarefas-clickup.md criado — marca tarefas no ClickUp (não-bloqueante)"
+    etapa_10: "pipeline semanal, squad.yaml e relatorio-chief atualizados com novos agentes"
+
+  agentes_novos_na_branch:
+    - "agents/contexto-cliente.md (Etapa 5B)"
+    - "agents/monitor-diario.md (Etapa 6)"
+    - "agents/monitor-tarefas-clickup.md (Etapa 9)"
+  workflows_novos_na_branch:
+    - "workflows/daily-monitor-pipeline.md (Etapa 7)"
+
+  variaveis_ambiente:
+    status: "AUTOMATICAS via .claude/settings.local.json — NUNCA pedir ao usuario para definir no terminal"
+    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  cliente_teste: "IMCP (project_id 688377)"
+  skill_command: "/relatorio-semanal"
+  plano_v2_referencia: "seção PLANO V2 deste CONTEXT.md — briefings completos de todas as 13 etapas"
+```
+
+---
+
+## HANDOFF — SESSÃO 19
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Sessão 18 encerrada. Etapas 5A e 5B concluídas e commitadas. Próxima ação: Etapa 6 — @dev criar agente monitor-diario.
+
+```yaml
+handoff:
+  from_session: 18
+  date: 2026-05-20
+  branch: feat/melhorias-v2
+  base: main
+  ultimo_commit: a8fc34c
+
+  estado_plano_v2:
+    etapas_concluidas: [0, 1, 2, 3, 4, "5A", "5B"]
+    proxima_etapa: "6 — Criar agente monitor-diario (@dev)"
+    etapa_8_status: "AGUARDANDO — usuário ainda não descreveu estrutura do status report no ClickUp"
+
+  proxima_acao: |
+    ETAPA 6 — Criar agente monitor-diario
+
+    Chamar @dev (/AIOX:agents:dev) com o briefing da Etapa 6
+    que está na seção "BRIEFINGS COMPLETOS POR ETAPA" deste CONTEXT.md.
+
+    Resumo do briefing:
+    - Cria: squads/relatorio-semanal/agents/monitor-diario.md
+    - Lê clientes de config/clientes-config.yaml
+    - Busca métricas via MCP Reportei (get_metrics, get_project)
+    - Compara com thresholds-especialidade.yaml
+    - Classifica: CRITICO / ATENCAO / INFO / SEM_DADOS
+    - Entrega painel consolidado com emojis de nível
+    - NÃO criar workflow ainda. NÃO modificar arquivos existentes. NÃO commitar.
+
+  o_que_foi_feito_sessao_18:
+    etapa_5A: "design dos contextos dinâmicos no Drive (@architect)"
+    etapa_5B: "agente contexto-cliente implementado (@dev) + push (@devops)"
+    novos_arquivos:
+      - "SQUADS/relatorio-semanal/agents/contexto-cliente.md"
+      - "SQUADS/relatorio-semanal/templates/contexto-cliente-template.md"
+    arquivos_editados:
+      - "SQUADS/relatorio-semanal/agents/redator.md"
+      - "SQUADS/relatorio-semanal/workflows/weekly-report-pipeline.md"
+      - "SQUADS/relatorio-semanal/squad.yaml"
+
+  variaveis_ambiente:
+    status: "AUTOMATICAS via .claude/settings.local.json — NUNCA pedir ao usuario para definir no terminal"
+    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  cliente_teste: "IMCP (project_id 688377)"
+  skill_command: "/relatorio-semanal"
+  plano_v2_referencia: "seção PLANO V2 deste CONTEXT.md — briefings completos de todas as 13 etapas"
+```
+
+---
+
+## HANDOFF — SESSÃO 18
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Sessão 17 encerrada. Etapas 0–4 concluídas e commitadas. Próxima ação: Etapa 5A — @architect.
+
+```yaml
+handoff:
+  from_session: 17
+  date: 2026-05-20
+  branch: feat/melhorias-v2
+  base: main
+  ultimo_commit: c169faf
+
+  estado_plano_v2:
+    etapas_concluidas: [0, 1, 2, 3, 4]
+    proxima_etapa: "5A — Desenhar arquitetura contextos dinâmicos no Drive (@architect)"
+    etapa_8_status: "AGUARDANDO — usuário ainda não descreveu estrutura do status report no ClickUp"
+
+  proxima_acao: |
+    ETAPA 5A — Desenhar arquitetura dos contextos dinâmicos no Drive
+
+    Chamar @architect (/AIOX:agents:architect) com o briefing da Etapa 5A
+    que está na seção "BRIEFINGS COMPLETOS POR ETAPA" deste CONTEXT.md.
+
+    Resumo do briefing:
+    - Problema: redator começa do zero toda semana — sem memória do cliente
+    - Solução: doc no Google Drive por cliente (perfil, momento comercial, aprendizados)
+    - MCP Drive: mcp__92a31705-b51e-422b-abc2-e6cb82a79330
+    - Restrição: Drive indisponível → pipeline continua sem contexto (nunca bloqueia)
+    - Entrega do @architect: design (sem código) — estrutura, fluxo, nome do agente
+
+    Após @architect aprovar design:
+    Chamar @dev (/AIOX:agents:dev) para Etapa 5B — implementação.
+
+  o_que_foi_feito_sessao_17:
+    etapa_0: "branch feat/melhorias-v2 criada a partir de main (@devops)"
+    etapa_2: "benchmarks pesquisados para 5 especialidades (@analyst — Meta Ads BR 2025-2026)"
+    etapa_3: "thresholds-especialidade.yaml atualizado (8 especialidades, CPL real da carteira)"
+    etapa_4: "save-history adicionado ao diagrama do weekly-report-pipeline.md (@dev)"
+    cpl_correcao: |
+      CPL corrigido em todas as especialidades Meta Ads:
+        saudavel: < R$8 (custo por conversa WhatsApp no gerenciador)
+        atencao:  R$8 – R$15
+        critico:  > R$15
+      cirurgia_ortognatica (Google Ads — custo por conversão):
+        saudavel: < R$23  |  atencao: R$23–30  |  critico: > R$30
+
+  variaveis_ambiente:
+    status: "AUTOMATICAS via .claude/settings.local.json — NUNCA pedir ao usuario para definir no terminal"
+    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  cliente_teste: "IMCP (project_id 688377)"
+  skill_command: "/relatorio-semanal"
+  plano_v2_referencia: "seção PLANO V2 deste CONTEXT.md — briefings completos de todas as 13 etapas"
+```
+
+---
+
+```yaml
+handoff:
+  from_session: 16
+  date: 2026-05-20
+  branch: main
+  proxima_branch: feat/melhorias-v2
+
+  contexto: |
+    Comparação realizada entre o squad relatorio-semanal e o squad gestor-trafego do Gustavo
+    (apresentado no treinamento de 20/05/2026). Plano V2 com 13 etapas foi criado e salvo
+    na seção "PLANO V2" deste CONTEXT.md. Etapa 1 (especialidades dos clientes) foi concluída.
+
+  estado_plano_v2:
+    etapa_0_branch: "PENDENTE — criar feat/melhorias-v2 via @devops"
+    etapa_1_especialidades: "CONCLUÍDA — clientes-config.yaml atualizado"
+    etapa_2_thresholds: "PENDENTE — chamar @analyst após branch criada"
+    etapa_3_atualizar_arquivos: "PENDENTE"
+    etapa_4_save_history: "PENDENTE"
+    etapa_5A_arquitetura_drive: "PENDENTE"
+    etapa_5B_implementar_drive: "PENDENTE"
+    etapa_6_monitor_diario: "PENDENTE"
+    etapa_7_workflow_diario: "PENDENTE"
+    etapa_8_status_report_clickup: "AGUARDANDO INFO USUÁRIO (estrutura do status report)"
+    etapa_9_monitor_tarefas: "PENDENTE"
+    etapa_10_integrar_pipeline: "PENDENTE"
+    etapa_11_validar: "PENDENTE"
+    etapa_12_qa: "PENDENTE"
+    etapa_13_commit_pr_merge: "PENDENTE"
+
+  proxima_acao: |
+    ETAPA 0 — Criar branch de trabalho
+
+    Chamar @devops (/AIOX:agents:devops) e colar:
+
+    *task git-branch
+
+    Crie uma nova branch (ramificação do código) para as melhorias v2 do squad relatorio-semanal.
+    - Nome da branch: feat/melhorias-v2
+    - Base: main (branch principal — código estável)
+    - Confirme com git status após criar.
+    Não faça commit nem push ainda.
+
+    Após @devops confirmar a branch criada:
+    ETAPA 2 — Chamar @analyst para pesquisar thresholds
+
+    Chamar @analyst (/AIOX:agents:analyst) com o briefing da Etapa 2
+    que está na seção "BRIEFINGS COMPLETOS POR ETAPA" deste CONTEXT.md.
+
+    Especialidades a pesquisar (novas — ainda sem thresholds):
+    - cirurgia_facial
+    - cirurgia_corporal
+    - mommy_makeover
+    - cirurgia_trans
+    - cirurgia_ortognatica
+
+    Também confirmar/refinar as já existentes:
+    - cirurgia_plastica, dermatologia, medicina_estetica
+
+  regras_desta_fase: |
+    - Mostrar apenas a etapa atual — nunca antecipar as próximas
+    - Sempre explicar termos técnicos entre parênteses
+    - Sempre indicar qual agente AIOX chamar e o que pedir a ele
+    - Atualizar este CONTEXT.md ao final de cada etapa concluída
+
+  especialidades_confirmadas:
+    "Dra Danielle Gondim": cirurgia_facial
+    "Dr. Leandro Gontijio": cirurgia_corporal
+    "IMCP": cirurgia_plastica
+    "Dr. Guilherme Mattar": cirurgia_trans
+    "Dr. Luiz Borba": mommy_makeover
+    "Dr. Lucas Consentino": cirurgia_corporal
+    "Dr. Humberto": mommy_makeover
+    "Dr. Laureano Filho": "cirurgia_ortognatica (só Google Ads)"
+    "Dr. Diego Gonzalez Salvador": mommy_makeover
+    "DESTRA": null (não é clínica médica)
+    "Dr. Joel Abdala": cirurgia_facial
+    "Dr. Matheus Ocampo": cirurgia_corporal
+
+  novos_slugs_criados:
+    - cirurgia_facial
+    - cirurgia_corporal
+    - mommy_makeover
+    - cirurgia_trans
+    - cirurgia_ortognatica
+
+  arquivos_modificados_sessao_16:
+    - squads/relatorio-semanal/CONTEXT.md
+    - squads/relatorio-semanal/config/clientes-config.yaml
+
+  variaveis_ambiente:
+    status: "AUTOMATICAS via .claude/settings.local.json — NUNCA pedir ao usuario para definir no terminal"
+    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  cliente_teste: "IMCP (project_id 688377)"
+  skill_command: "/relatorio-semanal"
+  plano_v2_referencia: "seção PLANO V2 deste CONTEXT.md — contém briefings completos de todas as 13 etapas"
+```
+
+---
+
+## PLANO V2 — MELHORIAS INSPIRADAS NO SQUAD DO GUSTAVO (Sessão 16+)
+
+> Comparação realizada em 2026-05-20 entre o squad relatorio-semanal e o squad gestor-trafego
+> do Gustavo (apresentação do treinamento). Este plano detalha o que implementar e como.
+> **Regra desta sessão em diante:** mostrar apenas a etapa atual — nunca antecipar as próximas.
+
+### ESTADO DO PLANO V2
+
+| Etapa | O que fazer | Status | Branch |
+|-------|-------------|--------|--------|
+| 0 | Criar branch feat/melhorias-v2 | ✅ CONCLUÍDA — Sessão 17 | feat/melhorias-v2 |
+| 1 | Confirmar especialidades da lista de clientes do print | ✅ CONCLUÍDA — Sessão 16 | — |
+| 2 | Pesquisar thresholds de mercado para novas especialidades | ✅ CONCLUÍDA — Sessão 17 (@analyst) | feat/melhorias-v2 |
+| 3 | Atualizar thresholds + especialidades nos arquivos | ✅ CONCLUÍDA — Sessão 17 (commit c169faf) | feat/melhorias-v2 |
+| 4 | Verificar se save-history está explícito no workflow | ✅ CONCLUÍDA — Sessão 17 (commit c169faf) | feat/melhorias-v2 |
+| 5A | Desenhar arquitetura dos contextos dinâmicos no Drive | ⬜ PRÓXIMA AÇÃO — @architect | feat/melhorias-v2 |
+| 5B | Implementar contextos dinâmicos no Drive | ⬜ PENDENTE — @dev (após 5A) | feat/melhorias-v2 |
+| 6 | Criar agente monitor-diario | ⬜ PENDENTE | feat/melhorias-v2 |
+| 7 | Criar workflow daily-monitor-pipeline | ⬜ PENDENTE | feat/melhorias-v2 |
+| 8 | Criar agente status-report-clickup | ⬜ AGUARDANDO INFO DO USUÁRIO (estrutura do status report) | feat/melhorias-v2 |
+| 9 | Criar agente monitor-tarefas-clickup | ⬜ PENDENTE | feat/melhorias-v2 |
+| 10 | Integrar tudo no pipeline semanal | ⬜ PENDENTE | feat/melhorias-v2 |
+| 11 | Validar squad completo (@squad-creator) | ⬜ PENDENTE | feat/melhorias-v2 |
+| 12 | QA gate (@qa) | ⬜ PENDENTE | feat/melhorias-v2 |
+| 13 | Commit + PR + merge (@devops) | ⬜ PENDENTE | feat/melhorias-v2 |
+
+### LISTA DE CLIENTES DO PRINT (2026-05-20)
+
+> Usuário apresentou print com lista de clientes. Especialidades a confirmar:
+
+| Cliente | Especialidade | Status |
+|---------|---------------|--------|
+| Dra Danielle Gondim | cirurgia_facial | ✅ CONFIRMADO |
+| Dr. Leandro Gontijio | cirurgia_corporal | ✅ CONFIRMADO |
+| IMCP | cirurgia_plastica | ✅ CONFIRMADO |
+| Dr. Guilherme Mattar | cirurgia_trans | ✅ CONFIRMADO |
+| Dr. Luiz Borba | mommy_makeover | ✅ CONFIRMADO |
+| Dr. Lucas Consentino | cirurgia_corporal | ✅ CONFIRMADO |
+| Dr. Humberto | mommy_makeover | ✅ CONFIRMADO |
+| Dr. Laureano Filho | cirurgia_ortognatica (só Google Ads) | ✅ CONFIRMADO |
+| Dr. Diego Gonzalez Salvador | mommy_makeover | ✅ CONFIRMADO |
+| DESTRA | não é clínica médica | ✅ CONFIRMADO |
+| Dr. Joel Abdala | cirurgia_facial | ✅ CONFIRMADO |
+| Dr. Matheus Ocampo | cirurgia_corporal | ✅ CONFIRMADO |
+
+### INFORMAÇÕES PENDENTES DO USUÁRIO
+
+- [x] **Etapa 1:** Especialidade de cada cliente — CONCLUÍDA (2026-05-20, Sessão 16)
+- [ ] **Etapa 8:** Como é o status report no ClickUp (onde fica, estrutura do texto, campos fixos ou livre)
+
+### BRIEFINGS COMPLETOS POR ETAPA
+
+#### ETAPA 0 — Criar branch de trabalho
+
+**Agente:** @devops
+**Comando:** `/AIOX:agents:devops`
+
+**Briefing:**
+```
+*task git-branch
+Crie uma nova branch (ramificação do código) para as melhorias v2 do squad relatorio-semanal.
+- Nome da branch: feat/melhorias-v2
+- Base: main (branch principal — código estável)
+- Confirme com git status após criar.
+Não faça commit nem push ainda.
+```
+
+---
+
+#### ETAPA 1 — Confirmar especialidades dos clientes
+
+**Agente:** Nenhum — usuário responde diretamente no chat.
+**Ação após resposta:** Claude Code atualiza clientes-config.yaml e a tabela acima neste CONTEXT.md.
+
+---
+
+#### ETAPA 2 — Pesquisar thresholds de mercado para novas especialidades
+
+**Agente:** @analyst (Alex — agente de pesquisa e análise)
+**Comando:** `/AIOX:agents:analyst`
+**Pré-requisito:** Etapa 1 concluída.
+
+**Briefing (adaptar com as especialidades confirmadas na Etapa 1):**
+```
+Preciso de benchmarks (referências de mercado) de métricas de tráfego pago para
+especialidades médicas no Brasil. As métricas serão usadas para classificar desempenho
+em três níveis: saudavel, atencao e critico.
+
+Especialidades para pesquisar: [PREENCHER COM AS ESPECIALIDADES DA ETAPA 1]
+Também confirme/refine as já existentes: cirurgia_plastica, dermatologia, medicina_estetica.
+
+Métricas por especialidade:
+- CPL (custo por lead = custo por conversa WhatsApp) em R$
+- CPM (custo por mil impressões = custo para mostrar o anúncio 1.000 vezes) em R$
+- CTR (taxa de cliques = % de quem viu e clicou) — valor mínimo desejável
+- Frequência (número de vezes que a mesma pessoa viu o anúncio) — máximo aceitável
+
+Contexto: Meta Ads e Google Ads, Brasil, clínicas de pequeno/médio porte,
+campanha de leads via WhatsApp.
+
+Entregue em formato YAML (linguagem de configuração) pronto para colar em arquivo,
+seguindo a estrutura:
+especialidades:
+  nome_especialidade:
+    cpl:
+      saudavel: {max: valor, descricao: "..."}
+      atencao: {min: valor, max: valor, descricao: "..."}
+      critico: {min: valor, descricao: "..."}
+    cpm: {saudavel: {max:}, atencao: {min:, max:}, critico: {min:}}
+    ctr: {saudavel: {min:}, atencao: {min:, max:}, critico: {max:}}
+    frequencia: {saudavel: {max:}, atencao: {min:, max:}, critico: {min:}}
+
+Se não encontrar dado específico para uma especialidade, derive de uma similar.
+```
+
+---
+
+#### ETAPA 3 — Atualizar arquivos com thresholds e especialidades
+
+**Agente:** Nenhum — Claude Code atualiza os arquivos diretamente.
+**Arquivos:** `data/thresholds-especialidade.yaml` e `config/clientes-config.yaml`
+**Pré-requisito:** Etapas 1 e 2 concluídas.
+
+---
+
+#### ETAPA 4 — Verificar e tornar explícito o save-history no workflow
+
+**Agente:** @dev (Dex — agente de implementação)
+**Comando:** `/AIOX:agents:dev`
+
+**Briefing:**
+```
+Verifique se a task save-history (que salva histórico acumulado de métricas) está
+explícita no diagrama do workflow (fluxo de execução) semanal.
+
+Leia: workflows/weekly-report-pipeline.md e agents/coletor.md
+
+Se o diagrama do workflow NÃO mostrar save-history como passo após o coletor,
+atualize o diagrama para deixá-lo explícito (não-bloqueante = se falhar, aviso e segue).
+
+Se o coletor.md NÃO mencionar que chama save-history, adicione a instrução.
+
+Arquivos a editar se necessário:
+- workflows/weekly-report-pipeline.md
+- agents/coletor.md
+
+Não altere a lógica interna de tasks/save-history.md.
+Não commite nada.
+Mostre o antes e o depois de cada arquivo editado.
+```
+
+---
+
+#### ETAPA 5A — Desenhar arquitetura dos contextos dinâmicos no Drive
+
+**Agente:** @architect (Aria — agente de arquitetura; decide COMO o sistema vai funcionar, sem escrever código)
+**Comando:** `/AIOX:agents:architect`
+
+**Briefing:**
+```
+Preciso de um design (plano de funcionamento) para o sistema de contextos dinâmicos
+por cliente no squad relatorio-semanal.
+
+PROBLEMA: o agente redator começa do zero toda semana — não sabe o que aconteceu
+nas semanas anteriores, qual é o perfil do cliente, nem quais padrões são recorrentes.
+
+SOLUÇÃO DESEJADA: um documento no Google Drive por cliente, com estas seções:
+- perfil: dados fixos (especialidade, tamanho, público-alvo)
+- momento_comercial_atual: o que está acontecendo agora na clínica
+- pontos_de_atencao: padrões recorrentes já identificados
+- aprendizados: observações acumuladas semana a semana
+
+O documento deve ser:
+- Carregado ANTES do redator gerar o texto
+- Atualizado APÓS o pipeline terminar (aprendizados da semana)
+- Compartilhável com outros squads no futuro
+- Criado automaticamente na primeira execução (se não existir)
+
+MCPs disponíveis:
+- Google Drive MCP: mcp__92a31705-b51e-422b-abc2-e6cb82a79330
+  Tools: read_file_content, create_file, search_files, download_file_content
+
+Restrições:
+- Se Drive indisponível → pipeline continua sem contexto, emite aviso (nunca bloqueia)
+- Não usar banco de dados — docs ficam no Google Drive
+- Não exigir aprovação humana no meio do pipeline
+
+Entregue um documento de design descrevendo:
+1. Estrutura do documento de contexto por cliente (seções e formato)
+2. Qual agente lê o contexto (início do pipeline) e qual atualiza (fim)
+3. Como o contexto é passado via handoff (passagem de dados entre agentes)
+4. O que acontece se o doc não existe (primeira vez) ou se o Drive falhar
+5. Nome sugerido para o novo agente responsável por isso
+
+NÃO escreva código — apenas o design.
+```
+
+---
+
+#### ETAPA 5B — Implementar contextos dinâmicos no Drive
+
+**Agente:** @dev (Dex — agente de implementação)
+**Pré-requisito:** Etapa 5A aprovada.
+
+**Briefing:**
+```
+Implementar o sistema de contextos dinâmicos por cliente no squad relatorio-semanal,
+conforme o design aprovado pelo @architect.
+
+[COLE AQUI O DESIGN DA ETAPA 5A]
+
+Arquivos a criar:
+1. agents/contexto-cliente.md — agente que lê e atualiza docs de contexto no Drive
+   MCP Drive: mcp__92a31705-b51e-422b-abc2-e6cb82a79330
+   Tools: read_file_content, create_file, search_files
+2. templates/contexto-cliente-template.md — estrutura padrão criada na primeira vez
+
+Arquivos a editar:
+3. agents/redator.md — ao receber handoff, verificar se há contexto e incorporar
+4. workflows/weekly-report-pipeline.md — adicionar contexto-cliente no início (antes do coletor)
+   e no final (atualização, após whatsapp-writer)
+5. squad.yaml — adicionar contexto-cliente na lista de agentes
+
+Regras:
+- Drive indisponível → aviso + pipeline continua sem contexto (nunca bloqueia)
+- Doc não existe → criar com template padrão, continuar
+- Atualização de contexto → não-bloqueante
+- Nome do doc no Drive: "Contexto — [NOME DO CLIENTE]"
+
+NÃO commite nada. Liste todos os arquivos criados/editados ao finalizar.
+```
+
+---
+
+#### ETAPA 6 — Criar agente monitor-diario
+
+**Agente:** @dev (Dex — agente de implementação)
+**Pré-requisito:** Etapa 3 concluída (thresholds e especialidades atualizados).
+
+**Briefing:**
+```
+Crie o agente monitor-diario para o squad relatorio-semanal.
+Ele varre todas as contas da carteira e entrega um painel de alertas classificados.
+
+Criar: squads/relatorio-semanal/agents/monitor-diario.md
+
+Frontmatter (cabeçalho do arquivo):
+  agent: monitor-diario
+  tier: 0
+  role: Monitora métricas de todos os clientes e classifica alertas por nível
+  commands: [monitor-diario]
+
+O que o agente faz:
+1. Lê clientes de config/clientes-config.yaml
+2. Para cada cliente: busca métricas via MCP Reportei (mcp__30ebe978-db99-4dee-927c-b72f6abac9d8)
+   Tools: get_metrics, get_project
+3. Compara com data/thresholds-especialidade.yaml usando especialidade_por_cliente do config
+4. Classifica: CRITICO / ATENCAO / INFO / SEM_DADOS
+5. Entrega painel consolidado:
+
+MONITOR DIÁRIO — [DATA]
+════════════════════════════════════════════════════
+🔴 CRÍTICO (agir hoje)
+  • [CLIENTE]: [métrica] em [valor] — acima de [limite crítico]
+🟡 ATENÇÃO (monitorar)
+  • [CLIENTE]: [métrica] em [valor]
+🟢 INFORMAÇÃO (tudo ok)
+  • [CLIENTE], [CLIENTE]
+⚪ SEM DADOS
+  • [CLIENTE]: [motivo]
+════════════════════════════════════════════════════
+RESUMO: X críticos | Y atenção | Z ok | W sem dados
+
+Regras:
+- especialidade null → apenas informa dados brutos (sem classificar)
+- MCP não responde → SEM_DADOS com motivo
+- NUNCA recomenda pausar ou escalar campanhas — apenas notifica
+- Usar apenas thresholds do arquivo YAML, nunca inventar limites
+
+Referências: agents/relatorio-chief.md (padrão de formato),
+data/thresholds-especialidade.yaml, config/clientes-config.yaml
+
+NÃO criar workflow ainda. NÃO modificar arquivos existentes. NÃO commitar.
+Mostre o arquivo criado completo.
+```
+
+---
+
+#### ETAPA 7 — Criar workflow daily-monitor-pipeline
+
+**Agente:** @dev (Dex — agente de implementação)
+**Pré-requisito:** Etapa 6 concluída.
+
+**Briefing:**
+```
+Crie o workflow de rotina diária para o squad relatorio-semanal.
+
+Criar: squads/relatorio-semanal/workflows/daily-monitor-pipeline.md
+
+Frontmatter:
+  workflow: daily-monitor-pipeline
+  trigger: manual
+  entrypoint: monitor-diario
+  elicit: false
+
+Trigger (como ativar):
+- Todos os clientes: "Rodar monitor diário"
+- Um cliente só: "Rodar monitor diário para [NOME DO CLIENTE]"
+
+Fluxo:
+1. monitor-diario lê lista de clientes do config
+2. Para cada cliente: busca métricas e classifica alerta
+3. Cliente falha → SEM_DADOS e continua com o próximo
+4. Final: entrega painel consolidado
+
+Frequência ideal: toda manhã antes de começar o dia.
+NUNCA interrompe no meio — se um cliente falha, segue.
+NÃO gera relatório, NÃO publica nada, NÃO manda WhatsApp.
+
+Referência de formato: workflows/weekly-report-pipeline.md
+
+NÃO modificar o weekly-report-pipeline. NÃO commitar.
+```
+
+---
+
+#### ETAPA 8 — Criar agente status-report-clickup
+
+**Agente:** @dev (Dex — agente de implementação)
+**AGUARDANDO:** Usuário descrever estrutura do status report no ClickUp (onde fica, campos, formato).
+
+**Briefing (completar com info do usuário):**
+```
+Crie o agente status-report-clickup para o squad relatorio-semanal.
+Ele preenche o status report semanal na subpágina do cliente no ClickUp.
+
+Criar: squads/relatorio-semanal/agents/status-report-clickup.md
+
+Handoff recebido do redator:
+- métricas da semana (spend Meta, spend Google, conversas, CPL, seguidores)
+- texto do relatório gerado
+- nome do cliente + período
+
+MCP ClickUp: mcp__2d24fa11-1001-4c98-bf3c-7dcc3b7bdfaf
+Tools: clickup_get_task, clickup_update_task, clickup_create_task_comment,
+       clickup_get_document_pages, clickup_update_document_page
+
+Estrutura do status report: [PREENCHER COM INFO DO USUÁRIO]
+
+Config necessário em clientes-config.yaml:
+  clickup_task_id: "TODO — informar ID da tarefa"  (comentado como placeholder)
+
+Regras:
+- clickup_task_id null → pular com aviso (sem erro)
+- Subpágina não encontrada → criar nova tarefa com aviso
+- Nunca duplicar tarefa existente
+- NÃO bloqueante: ClickUp falhou → aviso e pipeline segue
+
+Referências: agents/publicador.md, agents/redator.md
+NÃO integrar no pipeline ainda. NÃO commitar.
+```
+
+---
+
+#### ETAPA 9 — Criar agente monitor-tarefas-clickup
+
+**Agente:** @dev (Dex — agente de implementação)
+
+**Briefing:**
+```
+Crie o agente monitor-tarefas-clickup para o squad relatorio-semanal.
+Ele marca tarefas como concluídas no ClickUp quando o pipeline semanal termina.
+
+Criar: squads/relatorio-semanal/agents/monitor-tarefas-clickup.md
+
+Handoff recebido do relatorio-chief no final do pipeline:
+- nome do cliente
+- data da semana
+- quais atividades foram concluídas (planilha, relatório, timeline, status report)
+
+MCP ClickUp: mcp__2d24fa11-1001-4c98-bf3c-7dcc3b7bdfaf
+Tools: clickup_filter_tasks, clickup_update_task, clickup_get_task
+
+O que o agente faz:
+1. Localiza tarefas do cliente no ClickUp correspondentes às atividades concluídas
+   (ex: "Relatório semanal", "Status Report", "Preencher planilha de métricas")
+2. Marca as tarefas como concluídas
+3. Reporta quais foram marcadas e quais não foram encontradas
+
+Regras:
+- Tarefa não encontrada → aviso, continua
+- ClickUp não responde → aviso, continua
+- NUNCA marcar tarefa como concluída se a atividade não foi feita pelo pipeline
+- Registrar no log quais tarefas foram marcadas
+
+NÃO integrar no pipeline ainda. NÃO commitar.
+```
+
+---
+
+#### ETAPA 10 — Integrar tudo no pipeline semanal
+
+**Agente:** @dev (Dex — agente de implementação)
+**Pré-requisito:** Etapas 5B, 8 e 9 concluídas.
+
+**Briefing:**
+```
+Atualize o pipeline semanal do squad relatorio-semanal para incluir os novos agentes.
+
+Novo fluxo esperado:
+INÍCIO
+  │
+[relatorio-chief] — recebe cliente, carrega config
+  │
+[contexto-cliente] — carrega doc de contexto do Drive (NÃO bloqueante)
+  │
+[coletor] — busca métricas no Reportei, preenche planilha
+  │  └─ (NÃO bloqueante) [save-history] — salva histórico
+  │
+[quality-gate] — valida coleta (BLOQUEANTE)
+  │
+[redator] — gera texto usando métricas + contexto histórico + thresholds + contexto Drive
+  │
+[quality-gate] — valida texto (BLOQUEANTE)
+  │
+[publicador] — publica na Timeline do Reportei
+  │
+[status-report-clickup] — preenche status report no ClickUp (NÃO bloqueante)
+  │
+[whatsapp-writer] — gera mensagem WhatsApp
+  │
+[monitor-tarefas-clickup] — marca tarefas como concluídas no ClickUp (NÃO bloqueante)
+  │
+[contexto-cliente] — atualiza doc no Drive com aprendizados (NÃO bloqueante)
+  │
+[relatorio-chief] — resumo final
+  │
+FIM ✅
+
+Arquivos a editar:
+- workflows/weekly-report-pipeline.md — atualizar diagrama e descrição
+- agents/relatorio-chief.md — adicionar referências aos novos agentes
+- squad.yaml — adicionar novos agentes na lista
+
+Referências: todos os agentes em agents/, squad.yaml atual.
+NÃO commitar. Liste arquivos editados e o que mudou.
+```
+
+---
+
+#### ETAPA 11 — Validar squad completo
+
+**Agente:** @squad-creator (Craft — valida estrutura, arquivos e conexões do squad)
+**Comando:** `/AIOX:agents:squad-creator`
+
+**Briefing:**
+```
+*validate-squad relatorio-semanal
+
+Valide o squad relatorio-semanal completo após as melhorias v2.
+Verifique:
+1. Todos os agentes do squad.yaml existem como arquivos em agents/
+2. Os workflows (fluxos) referenciam agentes existentes
+3. weekly-report-pipeline.md tem fluxo completo e coerente
+4. daily-monitor-pipeline.md existe e está correto
+5. Novos agentes têm frontmatter no padrão AIOX
+6. Sem referências quebradas entre arquivos
+
+Se houver problemas: listar com arquivo afetado + o que corrigir.
+Se ok: confirmar VALID com zero erros e zero warnings.
+```
+
+---
+
+#### ETAPA 12 — QA gate de qualidade
+
+**Agente:** @qa (Quinn — verifica qualidade e consistência do que foi implementado)
+**Comando:** `/AIOX:agents:qa`
+
+**Briefing:**
+```
+QA gate (verificação de qualidade) das melhorias v2 do squad relatorio-semanal.
+
+O que foi implementado:
+1. Especialidades dos clientes preenchidas (config/clientes-config.yaml)
+2. Thresholds expandidos para novas especialidades (data/thresholds-especialidade.yaml)
+3. save-history explícito no workflow semanal
+4. Sistema de contextos dinâmicos no Drive (agents/contexto-cliente.md)
+5. Monitor diário (agents/monitor-diario.md + workflows/daily-monitor-pipeline.md)
+6. Status report ClickUp (agents/status-report-clickup.md)
+7. Monitor de tarefas ClickUp (agents/monitor-tarefas-clickup.md)
+8. Pipeline semanal atualizado (workflows/weekly-report-pipeline.md)
+
+Para cada item, verificar:
+- Arquivo existe no caminho correto
+- Frontmatter segue padrão dos outros agentes do squad
+- Responsabilidades do agente descritas claramente
+- Handoffs de entrada e saída definidos
+- Regras de erro e comportamento não-bloqueante claras
+- Sem referência a arquivo inexistente
+- Sem contradição com CLAUDE.md do squad
+
+Entregue: lista de itens aprovados ✅, problemas ❌ com o que corrigir,
+e veredicto final: PASS, CONCERNS ou FAIL.
+```
+
+---
+
+#### ETAPA 13 — Commit + PR + merge
+
+**Agente:** @devops (Gage — único com autoridade para push, PR e merge)
+**Comando:** `/AIOX:agents:devops`
+
+**Briefing:**
+```
+*push
+
+Branch: feat/melhorias-v2. Faça commit, push e PR para main.
+
+O que foi implementado (para o commit):
+- Especialidades médicas dos clientes preenchidas no config
+- Thresholds expandidos para todas as especialidades da carteira
+- save-history explícito no workflow semanal
+- Sistema de contextos dinâmicos por cliente no Drive
+- Novo agente: monitor-diario (painel diário de alertas)
+- Novo workflow: daily-monitor-pipeline (rotina diária)
+- Novo agente: status-report-clickup (status report no ClickUp)
+- Novo agente: monitor-tarefas-clickup (marca tarefas como concluídas)
+- Pipeline semanal atualizado com todos os novos agentes
+
+Mensagem do commit:
+feat(relatorio-semanal): melhorias v2 -- monitor diario, contextos Drive, ClickUp integrado
+
+PR:
+- Título: feat(relatorio-semanal): melhorias v2 — monitor diário, contextos, ClickUp
+- Base: main
+- Body: bullets com as melhorias acima
+
+Após criar PR: fazer merge e confirmar que main está atualizada.
 ```

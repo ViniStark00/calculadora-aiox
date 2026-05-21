@@ -22,24 +22,30 @@ domain:
 components:
   agents:
     - relatorio-chief.md
+    - contexto-cliente.md
     - coletor.md
     - redator.md
     - publicador.md
     - quality-gate.md
     - whatsapp-writer.md
+    - monitor-tarefas-clickup.md
+    - monitor-diario.md
   tasks:
     - fetch-metrics.md
     - verify-fill.md
     - generate-report.md
     - validate-report.md
     - publish-timeline.md
+    - save-history.md
   workflows:
     - weekly-report-pipeline.md
+    - daily-monitor-pipeline.md
   checklists:
     - qa-relatorio.md
   templates:
     - relatorio-template.md
     - whatsapp-template.md
+    - contexto-cliente-template.md
   data: []
   tools: []
   scripts: []
@@ -66,10 +72,24 @@ integrations:
       - get_project
       - get_report
       - list_projects
+  - name: Google Drive MCP
+    id: "mcp__92a31705-b51e-422b-abc2-e6cb82a79330"
+    tools:
+      - search_files
+      - read_file_content
+      - create_file
+      - download_file_content
+  - name: ClickUp MCP
+    id: "mcp__2d24fa11-1001-4c98-bf3c-7dcc3b7bdfaf"
+    tools:
+      - clickup_filter_tasks
+      - clickup_get_task
+      - clickup_update_task
 
 pipeline_flow: >
-  relatorio-chief → coletor → quality-gate (verify-fill)
-  → redator → quality-gate (validate-report) → publicador → whatsapp-writer → resumo final
+  relatorio-chief → contexto-cliente (leitura) → coletor → quality-gate (verify-fill)
+  → redator → quality-gate (validate-report) → publicador → whatsapp-writer
+  → monitor-tarefas-clickup → contexto-cliente (atualização) → resumo final
 
 dependencies:
   node: []
