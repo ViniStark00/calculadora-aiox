@@ -74,6 +74,13 @@ INÍCIO
   Exibe mensagem pronta para copiar
   │
   ▼
+[monitor-tarefas-clickup]  ⚠️ NÃO-BLOQUEANTE
+  Recebe lista de atividades concluídas do relatorio-chief
+  Localiza tarefas do cliente no ClickUp e marca como concluídas
+  Tarefa não encontrada → aviso, continua
+  ClickUp indisponível → aviso, continua
+  │
+  ▼
 [contexto-cliente] — ATUALIZAÇÃO  ⚠️ NÃO-BLOQUEANTE
   Gera aprendizados da semana com base nas métricas
   Appenda no topo da seção aprendizados (mais recentes primeiro)
@@ -118,6 +125,7 @@ PIPELINE CONCLUÍDO — [DD/MM/AAAA] a [DD/MM/AAAA]
   ✅ Validação do texto
   ✅ Publicação na Timeline (ID: XXXXX)
   ✅ Mensagem WhatsApp gerada
+  ✅ Tarefas ClickUp marcadas  (ou ⚠️ ClickUp: aviso — pipeline não interrompido)
   ✅ Contexto atualizado  (ou ⚠️ Contexto não atualizado esta semana)
 ════════════════════════════════════════════════════
 Tempo total: ~X segundos

@@ -28,6 +28,8 @@ components:
     - publicador.md
     - quality-gate.md
     - whatsapp-writer.md
+    - monitor-tarefas-clickup.md
+    - monitor-diario.md
   tasks:
     - fetch-metrics.md
     - verify-fill.md
@@ -36,6 +38,7 @@ components:
     - publish-timeline.md
   workflows:
     - weekly-report-pipeline.md
+    - daily-monitor-pipeline.md
   checklists:
     - qa-relatorio.md
   templates:
@@ -74,11 +77,17 @@ integrations:
       - read_file_content
       - create_file
       - download_file_content
+  - name: ClickUp MCP
+    id: "mcp__2d24fa11-1001-4c98-bf3c-7dcc3b7bdfaf"
+    tools:
+      - clickup_filter_tasks
+      - clickup_get_task
+      - clickup_update_task
 
 pipeline_flow: >
   relatorio-chief → contexto-cliente (leitura) → coletor → quality-gate (verify-fill)
   → redator → quality-gate (validate-report) → publicador → whatsapp-writer
-  → contexto-cliente (atualização) → resumo final
+  → monitor-tarefas-clickup → contexto-cliente (atualização) → resumo final
 
 dependencies:
   node: []
