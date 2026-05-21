@@ -22,14 +22,13 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : PLANO V2 EM CURSO — Sessão 18 encerrada
-Última ação : Etapas 5A e 5B concluídas e commitadas (f488ee7 + a8fc34c) na branch feat/melhorias-v2.
-              @architect desenhou o design dos contextos dinâmicos no Drive.
-              @dev implementou o agente contexto-cliente + template + edições no redator,
-              workflow e squad.yaml. @devops fez push da branch para o remote.
-Próxima ação: Etapa 6 — @dev criar agente monitor-diario
+Etapa atual : PLANO V2 EM CURSO — Sessão 19 encerrada
+Última ação : Etapas 6, 7, 9 e 10 concluídas e commitadas (0028928) na branch feat/melhorias-v2.
+              monitor-diario, daily-monitor-pipeline, monitor-tarefas-clickup criados.
+              Pipeline semanal e relatorio-chief atualizados com todos os novos agentes.
+Próxima ação: Etapa 11 — @squad-creator validar squad completo
               (seção BRIEFINGS COMPLETOS POR ETAPA neste CONTEXT.md)
-Bloqueadores: Etapa 8 aguarda usuário descrever estrutura do status report no ClickUp
+Bloqueadores: Etapa 8 (status-report-clickup) adiada para depois — usuário decidiu deixar para o final
 ```
 
 ---
@@ -1633,6 +1632,37 @@ handoff:
 
 ---
 
+### Sessão 19 — 2026-05-20
+
+**Início:** CONTEXT.md lido — Etapas 5A/5B confirmadas. Sessão dedicada às Etapas 6, 7, 9 e 10 (Etapa 8 adiada pelo usuário).
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| Etapa 6: `agents/monitor-diario.md` criado (@dev) | ✅ |
+| Etapa 7: `workflows/daily-monitor-pipeline.md` criado (@dev) | ✅ |
+| Etapa 8: adiada — usuário decidiu deixar como "extra, última a ser feita" | ⏸️ |
+| Etapa 9: `agents/monitor-tarefas-clickup.md` criado (@dev) | ✅ |
+| Etapa 10: pipeline semanal, squad.yaml e relatorio-chief integrados (@dev) | ✅ |
+| Commit 0028928 — Etapas 6-7-9-10 na branch feat/melhorias-v2 | ✅ |
+| CONTEXT.md atualizado (handoff Sessão 20) | ✅ |
+
+**Decisões tomadas nesta sessão:**
+- Etapa 8 (`status-report-clickup`) deixada para o final — usuário preferiu avançar para validação primeiro
+- `monitor-tarefas-clickup` posicionado após `whatsapp-writer` e antes da atualização de contexto
+- `monitor-diario` usa `list_projects` para mapear clientes, sem necessidade de project_id no config
+
+**Arquivos criados/editados (commit 0028928):**
+- `SQUADS/relatorio-semanal/agents/monitor-diario.md` — novo
+- `SQUADS/relatorio-semanal/agents/monitor-tarefas-clickup.md` — novo
+- `SQUADS/relatorio-semanal/workflows/daily-monitor-pipeline.md` — novo
+- `SQUADS/relatorio-semanal/workflows/weekly-report-pipeline.md` — editado
+- `SQUADS/relatorio-semanal/squad.yaml` — editado
+- `SQUADS/relatorio-semanal/agents/relatorio-chief.md` — editado
+
+---
+
 ### Sessão 18 — 2026-05-20
 
 **Início:** CONTEXT.md lido — Etapas 0–4 confirmadas. Sessão dedicada às Etapas 5A e 5B.
@@ -1705,6 +1735,69 @@ handoff:
 
 > **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
 > Sessão 16 encerrada. Etapa 1 concluída. Próxima ação: Etapa 0 — criar branch via @devops.
+
+---
+
+## HANDOFF — SESSÃO 20
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Sessão 19 encerrada. Etapas 6, 7, 9 e 10 concluídas e commitadas. Próxima ação: Etapa 11 — @squad-creator validar o squad completo.
+
+```yaml
+handoff:
+  from_session: 19
+  date: 2026-05-20
+  branch: feat/melhorias-v2
+  base: main
+  ultimo_commit: "ver git log — após commit do CONTEXT.md"
+
+  estado_plano_v2:
+    etapas_concluidas: [0, 1, 2, 3, 4, "5A", "5B", 6, 7, 9, 10]
+    etapa_8_status: "ADIADA — usuário decidiu deixar para o final (extra)"
+    proxima_etapa: "11 — Validar squad completo (@squad-creator)"
+
+  proxima_acao: |
+    ETAPA 11 — Validar squad completo
+
+    Chamar @squad-creator (/AIOX:agents:squad-creator) com o briefing da Etapa 11
+    que está na seção "BRIEFINGS COMPLETOS POR ETAPA" deste CONTEXT.md.
+
+    Resumo do briefing:
+    - Comando: *validate-squad relatorio-semanal
+    - Verificar: todos os agentes do squad.yaml existem como arquivos
+    - Verificar: workflows referenciam agentes existentes
+    - Verificar: frontmatter dos novos agentes no padrão AIOX
+    - Verificar: sem referências quebradas entre arquivos
+    - Entrega: lista VALID/ERRORS com veredicto final
+
+    Após validação:
+    - Se PASS → Etapa 12 (QA gate com @qa)
+    - Se FAIL → corrigir com @dev e revalidar
+
+  o_que_foi_feito_sessao_19:
+    etapa_6: "agents/monitor-diario.md criado — painel diário CRITICO/ATENCAO/INFO/SEM_DADOS"
+    etapa_7: "workflows/daily-monitor-pipeline.md criado — rotina diária de monitoramento"
+    etapa_8: "ADIADA — deixada para depois da Etapa 13"
+    etapa_9: "agents/monitor-tarefas-clickup.md criado — marca tarefas no ClickUp (não-bloqueante)"
+    etapa_10: "pipeline semanal, squad.yaml e relatorio-chief atualizados com novos agentes"
+
+  agentes_novos_na_branch:
+    - "agents/contexto-cliente.md (Etapa 5B)"
+    - "agents/monitor-diario.md (Etapa 6)"
+    - "agents/monitor-tarefas-clickup.md (Etapa 9)"
+  workflows_novos_na_branch:
+    - "workflows/daily-monitor-pipeline.md (Etapa 7)"
+
+  variaveis_ambiente:
+    status: "AUTOMATICAS via .claude/settings.local.json — NUNCA pedir ao usuario para definir no terminal"
+    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  cliente_teste: "IMCP (project_id 688377)"
+  skill_command: "/relatorio-semanal"
+  plano_v2_referencia: "seção PLANO V2 deste CONTEXT.md — briefings completos de todas as 13 etapas"
+```
 
 ---
 
