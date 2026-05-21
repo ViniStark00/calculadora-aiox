@@ -1781,6 +1781,66 @@ handoff:
 
 ---
 
+## HANDOFF — SESSÃO 21
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Sessão 20 encerrada. Plano V2 completo — PR #7 mergeado em main. Squad pronto para uso.
+
+```yaml
+handoff:
+  from_session: 20
+  date: 2026-05-21
+  branch: main
+  base: main
+  ultimo_commit: "b9a42d5 (squash merge PR #7 feat/melhorias-v2)"
+
+  estado_plano_v2:
+    etapas_concluidas: [0, 1, 2, 3, 4, "5A", "5B", 6, 7, 9, 10, 11, 12, 13]
+    etapa_8_status: "ADIADA — extra opcional, fazer quando o usuário quiser"
+    plano_v2: "CONCLUÍDO"
+
+  o_que_foi_feito_sessao_20:
+    etapa_11: "*validate-squad relatorio-semanal — VALID, 0 erros, 0 warnings após 2 correções no squad.yaml"
+    etapa_12: "QA gate @qa — PASS 8/8 itens, 1 obs não-bloqueante (get_project no monitor-diario)"
+    etapa_13: "commit 33f7a24 + push + PR #7 + merge squash para main — branch deletada"
+
+  correcoes_sessao_20:
+    - "squad.yaml: save-history.md adicionado em components.tasks"
+    - "squad.yaml: contexto-cliente-template.md adicionado em components.templates"
+
+  proxima_acao: |
+    OPÇÃO A — Rodar pipeline (recomendado):
+      Ativar /relatorio-semanal e rodar:
+      "Rodar pipeline para IMCP"
+      Validar que os novos agentes (contexto-cliente, monitor-tarefas-clickup) funcionam na prática.
+
+    OPÇÃO B — Monitor diário:
+      "Rodar monitor diário"
+      Testa o daily-monitor-pipeline com todos os clientes.
+
+    OPÇÃO C — Etapa 8 extra (status-report-clickup):
+      Criar branch feat/extra-status-report-clickup
+      Briefing completo na seção ETAPA 8 deste CONTEXT.md.
+
+  variaveis_ambiente:
+    status: "AUTOMÁTICAS via .claude/settings.local.json — NUNCA pedir ao usuário para definir no terminal"
+    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  cliente_teste: "IMCP (project_id 688377)"
+  skill_command: "/relatorio-semanal"
+  pr_merged: "PR #7 — feat/melhorias-v2 para main"
+
+  qa_obs_pendente:
+    item: "monitor-diario.md declara get_project no frontmatter MCP tools"
+    observacao: "tool não aparece explicitamente no fluxo de execução — pode gerar confusão"
+    severidade: "não-bloqueante"
+    acao_sugerida: "documentar quando get_project é usado, ou remover do frontmatter"
+```
+
+---
+
 ## HANDOFF — SESSÃO 20
 
 > **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
