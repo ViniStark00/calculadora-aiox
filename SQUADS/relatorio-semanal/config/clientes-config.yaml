@@ -72,6 +72,31 @@ slugs:
   conversas: "messaging_conversation_started_7d"  # match exato
   google_cost_unit: "direct"             # custo Google = valor direto, SEM ÷ 1.000.000
 
+# Nome personalizado para saudação no WhatsApp
+# Usado pelo whatsapp-writer para montar: "[SAUDACAO], [NOME_WHATSAPP]!"
+# Para clínicas/empresas sem médico responsável: usar "pessoal"
+nome_whatsapp_por_cliente:
+  # --- Bloco Vinicius — clientes ativos ---
+  "IMCP - Instituto Mineiro de Cirurgia Plastica": "pessoal"
+  "Dra Danielle Gondim":                           "Dra. Danielle"
+  "Dr. Leandro Gontijio":                          "Dr. Leandro"
+  "Dr. Guilherme Mattar":                          "Dr. Guilherme"
+  "Dr. Luiz Borba":                                "Dr. Luiz"
+  "Dr. Lucas Consentino":                          "Dr. Lucas"
+  "Dr. Humberto":                                  "Dr. Humberto"
+  "Dr. Laureano Filho":                            "Dr. Laureano"
+  "Dr. Diego Gonzalez Salvador":                   "Dr. Diego"
+  "Dr. Joel Abdala":                               "Dr. Joel"
+  "Dr. Matheus Ocampo":                            "Dr. Matheus"
+  "Destra Desenvolvimentos":                        "pessoal"
+  "Dr. Alvaro Rodrigues":                           "Dr. Alvaro"
+  "Dr. Enzo Carvalho":                              "Dr. Enzo"
+  "Dr Javier Cucchiaro":                            "Dr. Javier"
+  "MaxiOral":                                       "pessoal"
+  "Zenicare":                                       "pessoal"
+  "Dra Nicolli":                                    "Dra. Nicolli"
+  "IGO":                                            "pessoal"
+
 # Especialidade médica por cliente
 # Valores permitidos (slugs exatos das chaves em thresholds-especialidade.yaml):
 #   cirurgia_plastica | cirurgia_facial | cirurgia_corporal | mommy_makeover |

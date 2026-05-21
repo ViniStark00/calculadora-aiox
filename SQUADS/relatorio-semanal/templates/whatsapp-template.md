@@ -1,48 +1,19 @@
 # Template de Mensagem WhatsApp
-> Mensagens de texto simples com negrito WhatsApp (*texto*) e emojis.
+> Mensagem de convite amigável com link para o relatório completo.
 > ⚠️ NÃO usar HTML aqui — WhatsApp renderiza negrito como *asterisco* ao redor do texto.
 > Campos entre colchetes são substituídos pelo `whatsapp-writer`.
 
 ---
 
-## TEMPLATE META-ONLY (apenas Meta Ads)
+## TEMPLATE ÚNICO (todos os clientes)
 
 ```
-📊 *Relatório Semanal — [CLIENTE]* | [DD/MM] a [DD/MM]
+[SAUDACAO], [NOME_WHATSAPP]!
 
-💰 Investimento: R$ [META_SPEND] (Meta)
-💬 [CONVERSAS] conversas | CPL: R$ [CPL]
-📈 [HIGHLIGHT]
+Segue o relatório de tráfego da semana *[DD/MM] a [DD/MM]*.
 
-🔗 Relatório completo: [LINK]
-```
-
----
-
-## TEMPLATE META+GOOGLE (Meta Ads + Google Ads)
-
-```
-📊 *Relatório Semanal — [CLIENTE]* | [DD/MM] a [DD/MM]
-
-💰 Investimento: R$ [META_SPEND] (Meta) + R$ [GOOGLE_SPEND] (Google)
-💬 [CONVERSAS] conversas | CPL: R$ [CPL]
-📈 [HIGHLIGHT]
-
-🔗 Relatório completo: [LINK]
-```
-
----
-
-## TEMPLATE GOOGLE-ONLY (apenas Google Ads)
-
-```
-📊 *Relatório Semanal — [CLIENTE]* | [DD/MM] a [DD/MM]
-
-💰 Investimento: R$ [GOOGLE_SPEND] (Google)
-💬 [CONVERSAS] conversas | CPL: R$ [CPL]
-📈 [HIGHLIGHT]
-
-🔗 Relatório completo: [LINK]
+Para acessar, clique no link abaixo:
+🔗 [LINK]
 ```
 
 ---
@@ -51,19 +22,27 @@
 
 | Campo | Formato | Exemplo |
 |-------|---------|---------|
-| `[CLIENTE]` | Nome exato do cliente | `IMCP` |
+| `[SAUDACAO]` | Determinado pelo horário local | `Boa tarde` |
+| `[NOME_WHATSAPP]` | Campo `nome_whatsapp` do cliente em `clientes-config.yaml` | `Dra. Danielle` |
 | `[DD/MM]` início | Data da segunda-feira do período | `11/05` |
 | `[DD/MM]` fim | Data do domingo do período | `17/05` |
-| `[META_SPEND]` | Valor em R$ com 2 casas decimais | `2.110,96` |
-| `[GOOGLE_SPEND]` | Valor em R$ com 2 casas decimais | `407,94` |
-| `[CONVERSAS]` | Número inteiro | `91` |
-| `[CPL]` | Valor em R$ com 2 casas decimais | `23,19` |
-| `[HIGHLIGHT]` | 1 frase objetiva, sem elogios | `CPL de R$ 23,19 — custo por conversa dentro da meta.` |
-| `[LINK]` | URL do Reportei | `https://app.reportei.com/projects/688377` |
+| `[LINK]` | URL do Reportei | `https://app.reportei.com/projects/839737` |
 
-## Regras de Tom
+## Regra de Saudação por Horário
 
-- Tom neutro e informativo — sem elogios exagerados, sem críticas pesadas
-- Frases curtas e diretas — a mensagem deve caber em 5-6 linhas no WhatsApp
-- O `[HIGHLIGHT]` deve ser o dado mais relevante da semana (ver regras no `whatsapp-writer.md`)
-- Usar vírgula como separador decimal (padrão brasileiro): R$ 2.110,96 (não R$ 2110.96)
+| Horário local | Saudação |
+|--------------|---------|
+| 00h – 11h59 | `Bom dia` |
+| 12h – 17h59 | `Boa tarde` |
+| 18h – 23h59 | `Boa noite` |
+
+## Exemplo de Saída
+
+```
+Boa tarde, Dra. Danielle!
+
+Segue o relatório de tráfego da semana *11/05 a 17/05*.
+
+Para acessar, clique no link abaixo:
+🔗 https://app.reportei.com/projects/839737
+```

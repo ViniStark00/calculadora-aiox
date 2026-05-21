@@ -38,7 +38,7 @@ Exemplos válidos:
 9.  CHAMAR quality-gate (task: validate-report)
     └─ Se reprovado → interromper e informar
 10. CHAMAR publicador (task: publish-timeline)
-11. CHAMAR whatsapp-writer
+11. CHAMAR whatsapp-writer — OBRIGATÓRIO, executa automaticamente sem aguardar solicitação
 12. CHAMAR monitor-tarefas-clickup — NÃO-BLOQUEANTE
     └─ Marca tarefas concluídas no ClickUp; falha → aviso, continua
 13. CHAMAR contexto-cliente (ATUALIZAÇÃO) — NÃO-BLOQUEANTE
@@ -51,6 +51,7 @@ Exemplos válidos:
 1. Buscar em `config/clientes-config.yaml` → `manual_map`
 2. Se não encontrar exato → tentar fuzzy match (threshold: 0.60)
 3. Se não encontrar → listar clientes disponíveis e aguardar confirmação
+4. Ao resolver o cliente, carregar também `nome_whatsapp_por_cliente[cliente]` → repassar ao publicador como `nome_whatsapp` para uso no whatsapp-writer
 
 ## Tratamento de erros
 
