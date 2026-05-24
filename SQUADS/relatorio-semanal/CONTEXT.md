@@ -941,7 +941,7 @@ handoff:
     aba_preenchida: "17/05/2026"
     status_aba: "PREENCHIDA na Sessao 6 — 4 clientes × 5 colunas"
     bloco_alvo: "Vinicius"
-    script: "squads/relatorio-semanal/data/fill_sheets.py"
+    script: "squads/relatorio-semanal/scripts/fill_sheets.py"
     convencao_aba: "nomeada pelo DOMINGO da semana (nao pela segunda-feira)"
     nomes_na_coluna_A:
       "Dra Danielle Gondim": "linha 74"

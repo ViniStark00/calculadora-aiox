@@ -55,7 +55,7 @@ INÍCIO
   │
   ▼
 [quality-gate] — task: validate-report
-  Validação do texto (6 checks)
+  Validação do texto (8 checks)
   │
   ├─ REPROVADO (1ª vez) → voltar ao redator (regenerar)
   ├─ REPROVADO (2ª vez) → STOP + erro

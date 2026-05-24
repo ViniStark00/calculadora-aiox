@@ -15,7 +15,9 @@ Chama a API Reportei v2 com paginação completa, usa MANUAL_MAP para casar nome
 ## Responsabilidades
 
 - Calcular período: segunda a domingo da semana anterior
-- Chamar `GET /v2/projects?per_page=100&page=N` com paginação até esgotar
+- **Buscar projetos em duas camadas (ver Passo 3 em fetch-metrics.md):**
+  1. Camada 1: `GET /v2/projects/{id}` direto para clientes com ID em `project_ids` do config
+  2. Camada 2: `GET /v2/projects?per_page=100&page=N` paginado como fallback
 - Usar MANUAL_MAP de `config/clientes-config.yaml` para casar nomes
 - Identificar bloco "Vinicius" na planilha (linhas entre headers de gestor)
 - Tentar coletar **todas as métricas** para todos os clientes:
@@ -94,3 +96,13 @@ COLETA CONCLUÍDA — Semana [DD/MM/AAAA] a [DD/MM/AAAA]
 ════════════════════════════════════════════════════
 Processados: X/Y | Pulados: Z | Erros: W
 ```
+
+## Tratamento de erros
+
+| Erro | Mensagem ao usuário |
+|------|---------------------|
+| 401 — Token inválido/expirado | "Token Reportei inválido ou expirado. Atualizar variável REPORTEI_TOKEN." |
+| 403 — Sem acesso ao projeto | "Sem acesso ao projeto [ID] no Reportei. Verificar permissões do token ou usar outro token com acesso ao cliente." |
+| 429 — Rate limit | Aguardar mínimo 60s, retentar automaticamente |
+| Projeto não encontrado | Registrar como ❌ no resumo, continuar com próximo cliente |
+| Aba não encontrada no Sheets | "Aba '[DD/MM/AAAA]' não encontrada na planilha. Criar manualmente e rodar novamente." — STOP |

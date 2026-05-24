@@ -21,6 +21,19 @@ Publica o relatório aprovado como evento (marco) na Linha do Tempo do cliente n
 - Chamar MCP `create_timeline_event` com os dados corretos
 - Confirmar publicação e retornar o ID do evento criado
 
+## Verificação de deduplicação
+
+**Antes de chamar `create_timeline_event`**, verificar se já existe publicação para este cliente na semana atual:
+
+1. Ler `data/timeline-log.jsonl` (se existir — arquivo ausente = sem histórico, prosseguir normalmente)
+2. Procurar entrada com `cliente == nome_do_cliente_atual` **e** `periodo_fim == domingo_da_semana_atual`
+3. Se encontrar entrada existente:
+   - Exibir: `⚠️ Evento já publicado para [CLIENTE] na semana [PERIODO] (ID: [event_id]). Republicar mesmo assim? (s/n)`
+   - Aguardar confirmação do usuário antes de prosseguir
+4. Se não encontrar: prosseguir normalmente com `create_timeline_event`
+
+> O registro em `timeline-log.jsonl` é feito automaticamente pelo hook `hooks/log-timeline-event.py` após publicação bem-sucedida — não duplicar essa lógica aqui.
+
 ## MCP utilizado
 
 ```

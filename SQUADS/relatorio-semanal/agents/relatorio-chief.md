@@ -59,7 +59,8 @@ Exemplos válidos:
 | Erro | Mensagem ao usuário |
 |------|---------------------|
 | Cliente não encontrado | "Cliente '[nome]' não encontrado. Clientes disponíveis: [lista]" |
-| Token expirado (401) | "Token Reportei expirado. Atualizar a variável REPORTEI_TOKEN." |
+| 401 — Token inválido/expirado | "Token Reportei inválido ou expirado. Atualizar variável REPORTEI_TOKEN." |
+| 403 — Sem acesso ao projeto | "Sem acesso ao projeto [ID] no Reportei. Verificar permissões do token ou usar outro token com acesso ao cliente." |
 | Aba não encontrada | "Aba '[DD/MM/AAAA]' não encontrada na planilha. Criar manualmente e rodar novamente." |
 | Quality-gate verify-fill reprovado | "Coleta incompleta. [lista de problemas do quality-gate]. Corrigir antes de gerar o texto." |
 | Quality-gate validate-report reprovado | "Texto reprovado. [motivo do quality-gate]. Regenerar?" |

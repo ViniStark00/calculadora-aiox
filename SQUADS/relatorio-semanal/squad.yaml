@@ -46,9 +46,12 @@ components:
     - relatorio-template.md
     - whatsapp-template.md
     - contexto-cliente-template.md
-  data: []
+  data:
+    - thresholds-especialidade.yaml   # Benchmarks CPL/CPM/CTR/frequencia por especialidade médica
+    - historico-clientes.yaml         # Histórico semanal por cliente (gitignored — gerado em runtime)
   tools: []
-  scripts: []
+  scripts:
+    - fill_sheets.py                  # Script Python: coleta Reportei → preenche Google Sheets
 
 config:
   extends: extend

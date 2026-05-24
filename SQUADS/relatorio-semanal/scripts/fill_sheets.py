@@ -1,7 +1,7 @@
 """
 fill_sheets.py — Atividade 1: preenche métricas na planilha Google Sheets
 Squad: relatorio-semanal | Agente: coletor
-Uso: python fill_sheets.py
+Uso: python scripts/fill_sheets.py
 """
 
 import os
