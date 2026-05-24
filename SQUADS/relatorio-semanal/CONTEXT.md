@@ -22,11 +22,11 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : BUG MCP REPORTEI — Sessão 21 encerrada
-Última ação : Diagnóstico do problema 4/11 clientes — MCP Reportei usa token cloud limitado.
-              Plano B implementado: project_ids no config, busca por ID direto.
-              HANDOFF-mcp-fix.md criado com instruções para o usuário.
-Próxima ação: Usuário testa tokens no PowerShell → reconecta MCP no claude.ai.
+Etapa atual : MELHORIAS ARQUITETURAIS — Sessão 22 encerrada
+Última ação : Fixes críticos e high concluídos (Melhorias 1, 2, 3 de HANDOFF-melhorias-aria.md).
+              qa-relatorio C2 corrigido · quality-gate 6→8 checks · token removido do CONTEXT.md.
+              Commit f53ff8e em main. Bug MCP Reportei ainda pendente (Plano B ativo).
+Próxima ação: Sessão de ajustes médios — Melhorias 4, 5 e 6 do HANDOFF-melhorias-aria.md.
               Após reconexão: mapear 6 IDs desconhecidos + rodar pipeline 11/11 clientes.
 Bloqueadores: MCP Reportei com token limitado a 4 projetos — ação requerida FORA do Claude Code.
 ```
@@ -1842,52 +1842,69 @@ O MCP Reportei (`mcp__30ebe978-db99-4dee-927c-b72f6abac9d8`) é um conector do m
 
 ---
 
-## HANDOFF — SESSÃO 22
+### Sessão 22 — 2026-05-23
+
+**Início:** Avaliação arquitetural (Aria) havia identificado 10 melhorias no squad. Esta sessão executou os fixes críticos e high (Melhorias 1, 2 e 3) do arquivo `HANDOFF-melhorias-aria.md`.
+
+**Atividades desta sessão:**
+
+| Ação | Agente | Resultado |
+|------|--------|-----------|
+| Leitura do HANDOFF-melhorias-aria.md | — | OK |
+| Correção C2 em `checklists/qa-relatorio.md` (título fixo) | @dev | ✅ |
+| Correção "6→8 checks" em `agents/quality-gate.md` | @dev | ✅ |
+| Remoção de 14 ocorrências do REPORTEI_TOKEN em `CONTEXT.md` | @dev | ✅ |
+| Validação das 3 correções | @qa | ✅ APROVADO |
+| Commit `f53ff8e` + push para main | @devops | ✅ |
+
+**Arquivos modificados nesta sessão:**
+- `SQUADS/relatorio-semanal/checklists/qa-relatorio.md` — C2 corrigido
+- `SQUADS/relatorio-semanal/agents/quality-gate.md` — contagem de 6→8 checks
+- `SQUADS/relatorio-semanal/CONTEXT.md` — tokens removidos
+
+---
+
+## HANDOFF — SESSÃO 23
 
 > **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
-> Sessão 21 encerrada. Bug do MCP Reportei diagnosticado. Aguardando reconexão do MCP pelo usuário.
+> Sessão 22 encerrada. Fixes críticos e high concluídos (Melhorias 1, 2, 3). Próxima: Sessão de ajustes médios (Melhorias 4, 5, 6).
 
 ```yaml
 handoff:
-  from_session: 21
-  date: 2026-05-21
+  from_session: 22
+  date: 2026-05-23
   branch: main
   base: main
 
-  problema_ativo:
-    descricao: "MCP Reportei tem token cloud que só acessa 4 de 11 projetos"
-    causa_raiz: "Token do MCP é armazenado nos servidores da Anthropic — não é o REPORTEI_TOKEN local"
+  o_que_foi_feito_sessao_22:
+    - "qa-relatorio.md: C2 corrigido — título fixo 'Relatório de Tráfego'"
+    - "quality-gate.md: mensagem de aprovação atualizada de 6 para 8 checks"
+    - "CONTEXT.md: 14 ocorrências do REPORTEI_TOKEN real removidas"
+    - "Commit f53ff8e mergeado em main"
+
+  proxima_sessao_recomendada: "Sessão de ajustes médios — Melhorias 4, 5 e 6 do HANDOFF-melhorias-aria.md"
+
+  melhorias_pendentes:
+    sessao_2_medios:
+      - "Melhoria 4: chave duplicada Dr. Lucas Consentino em clientes-config.yaml"
+      - "Melhoria 5: sincronizar retry logic (relatorio-chief vs workflow) — confirmar Opção A ou B"
+      - "Melhoria 6: corrigir tier do agente contexto-cliente (tier 0 → tier 2)"
+    sessao_3_baixos_e_funcionais:
+      - "Melhorias 8-13 conforme HANDOFF-melhorias-aria.md"
+
+  problema_mcp_reportei:
     status: "BLOQUEADO — aguardando reconexão do MCP pelo usuário no claude.ai"
-
-  primeira_acao_ao_iniciar_sessao: |
-    Perguntar ao usuário: "Você já reconectou o MCP do Reportei no claude.ai?"
-    Se SIM: chamar list_projects e verificar se retorna > 4 projetos.
-    Se NÃO: mostrar HANDOFF-mcp-fix.md e aguardar.
-
-  apos_reconexao_mcp:
-    passo_1: "list_projects → confirmar que retorna 11 projetos"
-    passo_2: "get_project para cada ID desconhecido (749199, 982754, 1218018, 1157908, 1028218, 1233641)"
-    passo_3: "adicionar nome → ID em project_ids do clientes-config.yaml"
-    passo_4: "atualizar CONTEXT.md e rodar pipeline completo 11/11 clientes"
-
-  tokens_para_testar_fora_do_claude:
-    - "WJZ9hyjYcXXUtGNaYVDaotilmdGSX1dWW6VWBbTB"
-    - "GLypiNuM7FGyjTTqMW2JRE15z2XesxuOQEzJAWLE"
-    - "nH6Z9Ng0LhvOE4ODAlps15U58jOPkBN8K7o9bGzf"
-    - "YQa5onreKrZlrKdlD7UeZvWjCzFa9frgPs4x2RGL"
-
-  plano_b_status:
-    ids_no_config: [627550, 688377, 839737, 1023153, 564106]
-    ids_pendentes: [749199, 982754, 1218018, 1157908, 1028218, 1233641]
+    referencia: "squads/relatorio-semanal/HANDOFF-mcp-fix.md"
+    plano_b_ids_no_config: [627550, 688377, 839737, 1023153, 564106]
+    plano_b_ids_pendentes: [749199, 982754, 1218018, 1157908, 1028218, 1233641]
 
   variaveis_ambiente:
     status: "AUTOMÁTICAS via .claude/settings.local.json — NUNCA pedir ao usuário para definir no terminal"
-    REPORTEI_TOKEN: "Yy0VbWK96z8XqHu1s0xiCI5kmxdDX8nLJoXXfcoz"
+    REPORTEI_TOKEN: "[REDACTED — definir via variável de ambiente]"
     SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
     GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
 
-  referencia_bug: "squads/relatorio-semanal/DEBUG-indexacao-reportei.md"
-  referencia_handoff_usuario: "squads/relatorio-semanal/HANDOFF-mcp-fix.md"
+  referencia_melhorias: "squads/relatorio-semanal/HANDOFF-melhorias-aria.md"
   skill_command: "/relatorio-semanal"
 ```
 
