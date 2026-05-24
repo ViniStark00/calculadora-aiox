@@ -1,6 +1,6 @@
 ---
 agent: contexto-cliente
-tier: 0
+tier: 2
 role: Gerencia documento de contexto por cliente no Google Drive — leitura no início do pipeline e atualização no final
 commands:
   - carregar-contexto

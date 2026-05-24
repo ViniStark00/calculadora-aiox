@@ -24,6 +24,26 @@ reportei:
   rate_limit_sleep: 0.6    # segundos entre chamadas
   rate_limit_retry: 60     # segundos para aguardar após erro 429
 
+# project_ids: mapeamento direto nome_planilha → ID do projeto no Reportei
+# PLANO B: a API GET /v2/projects retorna só 4 projetos com o token do Vinicius (Admin).
+# Solução: chamar GET /v2/projects/{ID} diretamente, bypassing a listagem.
+# Para adicionar ID de um novo cliente: abrir Reportei → clicar no cliente → ver número na URL.
+project_ids:
+  "Dr. Leandro Gontijio":                          627550
+  "IMCP - Instituto Mineiro de Cirurgia Plastica":  688377
+  "Dra Danielle Gondim":                            839737
+  "Dr. Guilherme Mattar":                           1023153
+  "Dr. Lucas Consentino":                           564106
+  # IDs abaixo: confirmados via URL do Reportei — inacessíveis via MCP atual
+  # Ficam prontos para quando o MCP for reconectado com token correto
+  # Ordem dos URLs fornecidos pelo usuário (cliente exato a confirmar ao reconectar):
+  # app.reportei.com/client/749199   → cliente a identificar
+  # app.reportei.com/client/982754   → cliente a identificar
+  # app.reportei.com/client/1218018  → cliente a identificar
+  # app.reportei.com/client/1157908  → cliente a identificar
+  # app.reportei.com/client/1028218  → cliente a identificar
+  # app.reportei.com/client/1233641  → cliente a identificar
+
 # MANUAL_MAP: chave = nome do projeto no Reportei (lowercase), valor = nome na planilha
 # null = ignorar (não é cliente ativo do bloco Vinicius)
 manual_map:

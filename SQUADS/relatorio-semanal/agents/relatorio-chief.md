@@ -36,7 +36,8 @@ Exemplos válidos:
     └─ Se reprovado → interromper e informar
 8.  CHAMAR redator (task: generate-report)
 9.  CHAMAR quality-gate (task: validate-report)
-    └─ Se reprovado → interromper e informar
+    └─ Se reprovado (1ª vez) → retornar ao redator para regenerar
+    └─ Se reprovado (2ª vez) → interromper e informar
 10. CHAMAR publicador (task: publish-timeline)
 11. CHAMAR whatsapp-writer — OBRIGATÓRIO, executa automaticamente sem aguardar solicitação
 12. CHAMAR monitor-tarefas-clickup — NÃO-BLOQUEANTE
