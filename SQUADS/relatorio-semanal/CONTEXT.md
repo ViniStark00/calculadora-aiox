@@ -22,12 +22,14 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : MELHORIAS ARQUITETURAIS — Sessão 23 encerrada
-Última ação : Ajustes médios concluídos (Melhorias 4, 5, 6 de HANDOFF-melhorias-aria.md).
-              Config duplicata removida · retry logic adicionado · tier contexto-cliente corrigido.
-              Commit 1230c75 em main. Bug MCP Reportei ainda pendente (Plano B ativo).
-Próxima ação: Sessão 3 — dívida técnica e funcionais (Melhorias 8-13 do HANDOFF-melhorias-aria.md).
-              Após reconexão: mapear 6 IDs desconhecidos + rodar pipeline 11/11 clientes.
+Etapa atual : MELHORIAS ARQUITETURAIS — Sessão 24 encerrada
+Última ação : Dívida técnica e funcionais concluídos (Melhorias 8-13 de HANDOFF-melhorias-aria.md).
+              squad.yaml atualizado · fill_sheets.py movido para scripts/ · dedup no publicador
+              · métricas no WhatsApp · 401 vs 403 no coletor · 8 checks corrigidos no pipeline.
+              Commit 7758604 em main. Bug MCP Reportei ainda pendente (Plano B ativo).
+Próxima ação: Melhoria 13 — design paralelo multi-cliente (@architect — apenas design).
+              Correção residual: publicador.md linha 79 (401 genérico) — baixa prioridade.
+              Após reconexão MCP: mapear 6 IDs desconhecidos + rodar pipeline 11/11 clientes.
 Bloqueadores: MCP Reportei com token limitado a 4 projetos — ação requerida FORA do Claude Code.
 ```
 
@@ -1887,36 +1889,88 @@ O MCP Reportei (`mcp__30ebe978-db99-4dee-927c-b72f6abac9d8`) é um conector do m
 
 ---
 
-## HANDOFF — SESSÃO 24
+### Sessão 24 — 2026-05-24
+
+**Início:** Dívida técnica e funcionais — Melhorias 8-13 do HANDOFF-melhorias-aria.md + limpeza residual da Sessão 23.
+
+**Atividades desta sessão:**
+
+| Ação | Agente | Resultado |
+|------|--------|-----------|
+| Limpeza residual: `weekly-report-pipeline.md` "6 checks" → "8 checks" | @dev | ✅ |
+| Melhoria 8: `squad.yaml` — registrar `fill_sheets.py`, `thresholds-especialidade.yaml`, `historico-clientes.yaml` | @dev | ✅ |
+| Melhoria 9: mover `fill_sheets.py` de `data/` → `scripts/`; atualizar referência em `CONTEXT.md` | @dev | ✅ |
+| Melhoria 10: seção de deduplicação adicionada ao `publicador.md` (consulta `timeline-log.jsonl` antes de publicar) | @dev | ✅ |
+| Melhoria 11: `whatsapp-template.md` e `whatsapp-writer.md` — incluir spend/conversas/CPL na mensagem | @dev | ✅ |
+| Melhoria 12: diferenciar 401 vs 403 em `coletor.md` e `relatorio-chief.md` | @dev | ✅ |
+| Validação de todos os 6 itens | @qa | ✅ APROVADO (2 obs. não-bloqueantes) |
+| Commit `7758604` + push para main | @devops | ✅ |
+
+**Observações do @qa (não-bloqueantes, para sessão futura):**
+- `publicador.md` linha 79: ainda tem mensagem 401 genérica (`"Token Reportei expirado. Atualizar REPORTEI_TOKEN."`) — ficou fora do escopo da M12
+- `whatsapp-writer.md` "Saída esperada": comentário `← omitida se conversas = 0` aparece inline no bloco de código — pode confundir
+
+**Arquivos modificados nesta sessão:**
+- `SQUADS/relatorio-semanal/workflows/weekly-report-pipeline.md` — 8 checks
+- `SQUADS/relatorio-semanal/squad.yaml` — scripts + data registrados
+- `SQUADS/relatorio-semanal/scripts/fill_sheets.py` — CRIADO (movido de data/)
+- ~~`SQUADS/relatorio-semanal/data/fill_sheets.py`~~ — REMOVIDO
+- `SQUADS/relatorio-semanal/agents/publicador.md` — seção deduplicação
+- `SQUADS/relatorio-semanal/templates/whatsapp-template.md` — novo formato com métricas
+- `SQUADS/relatorio-semanal/agents/whatsapp-writer.md` — handoff expandido + regras
+- `SQUADS/relatorio-semanal/agents/relatorio-chief.md` — 401 vs 403
+- `SQUADS/relatorio-semanal/agents/coletor.md` — tabela de erros adicionada
+
+---
+
+## HANDOFF — SESSÃO 25
 
 > **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
-> Sessão 23 encerrada. Ajustes médios concluídos (Melhorias 4, 5, 6). Próxima: Sessão 3 — dívida técnica e funcionais (Melhorias 8-13).
+> Sessão 24 encerrada. Melhorias 8-13 concluídas (dívida técnica + funcionais). Commit 7758604 em main.
+> Única pendência do plano de melhorias: Melhoria 13 — design paralelo (@architect, apenas design).
 
 ```yaml
 handoff:
-  from_session: 23
-  date: 2026-05-23
+  from_session: 24
+  date: 2026-05-24
   branch: main
   base: main
+  ultimo_commit: "7758604"
 
-  o_que_foi_feito_sessao_23:
-    - "clientes-config.yaml: duplicata Dr. Lucas Consentino removida da section project_ids"
-    - "relatorio-chief.md: retry logic adicionado — 1ª reprovação regenera, 2ª interrompe"
-    - "contexto-cliente.md: tier 0 → tier 2"
-    - "Commit 1230c75 mergeado em main"
+  o_que_foi_feito_sessao_24:
+    - "weekly-report-pipeline.md: '6 checks' → '8 checks' (limpeza residual)"
+    - "squad.yaml: scripts e data registrados no manifest"
+    - "fill_sheets.py movido de data/ para scripts/ — git detectou como rename (99%)"
+    - "publicador.md: seção de deduplicação via timeline-log.jsonl"
+    - "whatsapp-template.md + whatsapp-writer.md: métricas (spend, conversas, CPL) na mensagem"
+    - "coletor.md + relatorio-chief.md: 401 vs 403 com mensagens distintas"
+    - "Commit 7758604 mergeado em main"
 
-  proxima_sessao_recomendada: "Sessão 3 — dívida técnica e funcionais (Melhorias 8-13 do HANDOFF-melhorias-aria.md)"
+  melhorias_plano_aria:
+    concluidas: [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12]
+    pendentes:
+      - "Melhoria 7: sync calculadora-aiox (já é o repositório ativo — verificar se ainda relevante)"
+      - "Melhoria 13: design paralelo multi-cliente (@architect — apenas design, não implementar)"
 
-  melhorias_pendentes:
-    sessao_3_baixos_e_funcionais:
-      - "Melhoria 8: squad.yaml — registrar fill_sheets.py e dados no manifest"
-      - "Melhoria 9: mover fill_sheets.py de data/ para scripts/"
-      - "Melhoria 10: proteção contra evento duplicado no publicador"
-      - "Melhoria 11: métricas resumidas na mensagem WhatsApp"
-      - "Melhoria 12: tratamento granular 401 vs 403 no coletor"
-      - "Melhoria 13: design paralelo multi-cliente (@architect — apenas design)"
-    limpeza_residual:
-      - "weekly-report-pipeline.md linha 58: '6 checks' → '8 checks' (observação @qa Sessão 23)"
+  proxima_acao: |
+    MELHORIA 13 — Design paralelo multi-cliente
+
+    Chamar @architect (/AIOX:agents:architect) com este briefing:
+
+    "Contexto: o squad relatorio-semanal tem pipeline sequencial para múltiplos clientes.
+    Cada cliente é independente (sem estado compartilhado). Pipeline atual: ~2 min/cliente;
+    com 11 clientes = ~22 minutos sequencial.
+    Desenhar variante 'batch paralelo' para o relatorio-chief:
+    1. Batch size seguro (rate limit Reportei: 0.6s entre chamadas)
+    2. Falha em 1 cliente não cancela os outros
+    3. Formato do resumo final consolidado
+    4. Partes paralelizáveis vs não-paralelizáveis (ex: Sheets write — race condition?)
+    5. Atualizar weekly-report-pipeline.md com a nova variante
+    Entregar: seção 'Modo multi-cliente paralelo' para adicionar ao workflow."
+
+  correcoes_residuais_baixa_prioridade:
+    - "publicador.md linha 79: mensagem 401 genérica — diferenciar 401 vs 403 (igual à M12)"
+    - "whatsapp-writer.md Saída esperada: comentário '← omitida se conversas = 0' inline no bloco de código"
 
   problema_mcp_reportei:
     status: "BLOQUEADO — aguardando reconexão do MCP pelo usuário no claude.ai"
