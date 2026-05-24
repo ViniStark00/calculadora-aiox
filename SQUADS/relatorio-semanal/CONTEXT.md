@@ -22,11 +22,11 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : MELHORIAS ARQUITETURAIS — Sessão 22 encerrada
-Última ação : Fixes críticos e high concluídos (Melhorias 1, 2, 3 de HANDOFF-melhorias-aria.md).
-              qa-relatorio C2 corrigido · quality-gate 6→8 checks · token removido do CONTEXT.md.
-              Commit f53ff8e em main. Bug MCP Reportei ainda pendente (Plano B ativo).
-Próxima ação: Sessão de ajustes médios — Melhorias 4, 5 e 6 do HANDOFF-melhorias-aria.md.
+Etapa atual : MELHORIAS ARQUITETURAIS — Sessão 23 encerrada
+Última ação : Ajustes médios concluídos (Melhorias 4, 5, 6 de HANDOFF-melhorias-aria.md).
+              Config duplicata removida · retry logic adicionado · tier contexto-cliente corrigido.
+              Commit 1230c75 em main. Bug MCP Reportei ainda pendente (Plano B ativo).
+Próxima ação: Sessão 3 — dívida técnica e funcionais (Melhorias 8-13 do HANDOFF-melhorias-aria.md).
               Após reconexão: mapear 6 IDs desconhecidos + rodar pipeline 11/11 clientes.
 Bloqueadores: MCP Reportei com token limitado a 4 projetos — ação requerida FORA do Claude Code.
 ```
@@ -1864,33 +1864,59 @@ O MCP Reportei (`mcp__30ebe978-db99-4dee-927c-b72f6abac9d8`) é um conector do m
 
 ---
 
-## HANDOFF — SESSÃO 23
+### Sessão 23 — 2026-05-23
+
+**Início:** Execução da Sessão 2 de melhorias — ajustes médios (Melhorias 4, 5 e 6 do HANDOFF-melhorias-aria.md).
+
+**Atividades desta sessão:**
+
+| Ação | Agente | Resultado |
+|------|--------|-----------|
+| Remoção da chave duplicada "Dr. Lucas Consentino" em `clientes-config.yaml` | @dev | ✅ |
+| Sincronização do retry logic no `relatorio-chief.md` (Opção A — 1 retry) | @dev | ✅ |
+| Correção de `tier: 0 → tier: 2` em `contexto-cliente.md` | @dev | ✅ |
+| Validação das 3 correções + consistência com `weekly-report-pipeline.md` | @qa | ✅ APROVADO |
+| Commit `1230c75` + push para main | @devops | ✅ |
+
+**Observação do @qa (não-bloqueante):** `weekly-report-pipeline.md` linha 58 ainda diz "6 checks" — resquício da Sessão 22. Candidato a limpeza na Sessão 3.
+
+**Arquivos modificados nesta sessão:**
+- `SQUADS/relatorio-semanal/config/clientes-config.yaml` — duplicata removida
+- `SQUADS/relatorio-semanal/agents/relatorio-chief.md` — retry logic adicionado
+- `SQUADS/relatorio-semanal/agents/contexto-cliente.md` — tier corrigido
+
+---
+
+## HANDOFF — SESSÃO 24
 
 > **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
-> Sessão 22 encerrada. Fixes críticos e high concluídos (Melhorias 1, 2, 3). Próxima: Sessão de ajustes médios (Melhorias 4, 5, 6).
+> Sessão 23 encerrada. Ajustes médios concluídos (Melhorias 4, 5, 6). Próxima: Sessão 3 — dívida técnica e funcionais (Melhorias 8-13).
 
 ```yaml
 handoff:
-  from_session: 22
+  from_session: 23
   date: 2026-05-23
   branch: main
   base: main
 
-  o_que_foi_feito_sessao_22:
-    - "qa-relatorio.md: C2 corrigido — título fixo 'Relatório de Tráfego'"
-    - "quality-gate.md: mensagem de aprovação atualizada de 6 para 8 checks"
-    - "CONTEXT.md: 14 ocorrências do REPORTEI_TOKEN real removidas"
-    - "Commit f53ff8e mergeado em main"
+  o_que_foi_feito_sessao_23:
+    - "clientes-config.yaml: duplicata Dr. Lucas Consentino removida da section project_ids"
+    - "relatorio-chief.md: retry logic adicionado — 1ª reprovação regenera, 2ª interrompe"
+    - "contexto-cliente.md: tier 0 → tier 2"
+    - "Commit 1230c75 mergeado em main"
 
-  proxima_sessao_recomendada: "Sessão de ajustes médios — Melhorias 4, 5 e 6 do HANDOFF-melhorias-aria.md"
+  proxima_sessao_recomendada: "Sessão 3 — dívida técnica e funcionais (Melhorias 8-13 do HANDOFF-melhorias-aria.md)"
 
   melhorias_pendentes:
-    sessao_2_medios:
-      - "Melhoria 4: chave duplicada Dr. Lucas Consentino em clientes-config.yaml"
-      - "Melhoria 5: sincronizar retry logic (relatorio-chief vs workflow) — confirmar Opção A ou B"
-      - "Melhoria 6: corrigir tier do agente contexto-cliente (tier 0 → tier 2)"
     sessao_3_baixos_e_funcionais:
-      - "Melhorias 8-13 conforme HANDOFF-melhorias-aria.md"
+      - "Melhoria 8: squad.yaml — registrar fill_sheets.py e dados no manifest"
+      - "Melhoria 9: mover fill_sheets.py de data/ para scripts/"
+      - "Melhoria 10: proteção contra evento duplicado no publicador"
+      - "Melhoria 11: métricas resumidas na mensagem WhatsApp"
+      - "Melhoria 12: tratamento granular 401 vs 403 no coletor"
+      - "Melhoria 13: design paralelo multi-cliente (@architect — apenas design)"
+    limpeza_residual:
+      - "weekly-report-pipeline.md linha 58: '6 checks' → '8 checks' (observação @qa Sessão 23)"
 
   problema_mcp_reportei:
     status: "BLOQUEADO — aguardando reconexão do MCP pelo usuário no claude.ai"
