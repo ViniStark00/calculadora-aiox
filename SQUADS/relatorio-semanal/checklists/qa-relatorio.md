@@ -39,7 +39,7 @@ Critério de aceite objetivo. Todos os itens devem passar antes de considerar o 
 ## Bloco C — Publicação na Timeline
 
 - [ ] **C1** — MCP `create_timeline_event` retornou ID de evento
-- [ ] **C2** — Título do evento segue formato: "Relatório Semanal — [DD/MM] a [DD/MM/AAAA]"
+- [ ] **C2** — Título do evento é exatamente: "Relatório de Tráfego"
 - [ ] **C3** — Conteúdo do evento corresponde ao texto aprovado
 
 ---

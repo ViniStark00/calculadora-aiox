@@ -62,6 +62,6 @@ Ação necessária: regenerar o texto.
 ```
 ✅ validate-report APROVADO
 ────────────────────────────
-Todos os 6 checks passaram.
+Todos os 8 checks passaram.
 Texto pronto para publicação.
 ```

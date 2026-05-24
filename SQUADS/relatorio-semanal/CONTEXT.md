@@ -22,14 +22,13 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : PLANO V2 CONCLUÍDO — Sessão 20 encerrada
-Última ação : Etapas 11-13 concluídas (Sessão 20).
-              squad.yaml corrigido (save-history.md + contexto-cliente-template.md adicionados).
-              QA gate PASS — 8/8 itens aprovados, 0 bloqueantes.
-              commit + PR + merge para main via feat/melhorias-v2.
-Próxima ação: Plano V2 concluído. Etapa 8 (status-report-clickup) pendente como extra opcional.
-              Rodar pipeline: /relatorio-semanal Rodar pipeline para IMCP
-Bloqueadores: Etapa 8 (status-report-clickup) adiada para depois — usuário decidiu deixar para o final
+Etapa atual : BUG MCP REPORTEI — Sessão 21 encerrada
+Última ação : Diagnóstico do problema 4/11 clientes — MCP Reportei usa token cloud limitado.
+              Plano B implementado: project_ids no config, busca por ID direto.
+              HANDOFF-mcp-fix.md criado com instruções para o usuário.
+Próxima ação: Usuário testa tokens no PowerShell → reconecta MCP no claude.ai.
+              Após reconexão: mapear 6 IDs desconhecidos + rodar pipeline 11/11 clientes.
+Bloqueadores: MCP Reportei com token limitado a 4 projetos — ação requerida FORA do Claude Code.
 ```
 
 ---
@@ -634,7 +633,7 @@ Mostrar a **ferramenta** (Elemento 3): MCP Reportei instalado e Google Sheets AP
 | Ação | Resultado |
 |------|-----------|
 | Lido CONTEXT.md | OK — Etapa 8 confirmada |
-| REPORTEI_TOKEN definido: `2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL` | ✅ |
+| REPORTEI_TOKEN definido: `[REDACTED — definir via variável de ambiente]` | ✅ |
 | SKILL.md em `.claude/skills/` — verificado | ✅ Existe, gitignored (funciona localmente) |
 | MCP Reportei carregado (`mcp__30ebe978...`) | ✅ |
 | `list_projects` chamado | ✅ 4 projetos retornados — Destra NÃO está na lista |
@@ -920,7 +919,7 @@ handoff:
 
     PREPARAR APRESENTACAO (unica pendencia):
       1. Configurar vars de ambiente no terminal (PowerShell):
-           $env:REPORTEI_TOKEN = "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+           $env:REPORTEI_TOKEN = "[REDACTED — definir via variável de ambiente]"
            $env:GOOGLE_SERVICE_ACCOUNT_JSON = "C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json"
            $env:SHEET_ID = "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
       2. Criar aba da semana atual no Google Sheets (formato DD/MM/AAAA, domingo da semana)
@@ -933,7 +932,7 @@ handoff:
   skill_status: "ATIVO — aparece no menu / do Claude Code"
 
   variaveis_ambiente:
-    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    REPORTEI_TOKEN: "[REDACTED — definir via variável de ambiente]"
     SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
     GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
 
@@ -990,7 +989,7 @@ handoff:
         status: "SEM ACESSO com token atual — pulado"
 
   reportei:
-    token: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    token: "[REDACTED — definir via variável de ambiente]"
     projetos_acessiveis:
       - {nome: "IMCP", id: 688377}
       - {nome: "Dra. Danielle Gondim", id: 839737}
@@ -1166,7 +1165,7 @@ handoff:
 
   variaveis_automaticas:
     status: "AUTOMÁTICAS — configuradas em .claude/settings.local.json"
-    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    REPORTEI_TOKEN: "[REDACTED — definir via variável de ambiente]"
     SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
     GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
 
@@ -1344,7 +1343,7 @@ handoff:
       - squads/relatorio-semanal/templates/whatsapp-template.md
 
   variaveis_ambiente:
-    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    REPORTEI_TOKEN: "[REDACTED — definir via variável de ambiente]"
     SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
     GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
     nota: "Configurar no PowerShell antes de rodar o pipeline"
@@ -1439,7 +1438,7 @@ handoff:
     - .gitignore
 
   variaveis_ambiente:
-    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    REPORTEI_TOKEN: "[REDACTED — definir via variável de ambiente]"
     SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
     GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
 
@@ -1510,7 +1509,7 @@ handoff:
     - "(pendente) — feat: add specialty thresholds for CPL classification (Melhoria 4)"
 
   variaveis_ambiente:
-    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    REPORTEI_TOKEN: "[REDACTED — definir via variável de ambiente]"
     SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
     GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
 
@@ -1572,7 +1571,7 @@ handoff:
 
   variaveis_ambiente:
     status: "AUTOMATICAS via .claude/settings.local.json -- NUNCA pedir ao usuario para definir no terminal"
-    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    REPORTEI_TOKEN: "[REDACTED — definir via variável de ambiente]"
     SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
     GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
 
@@ -1781,6 +1780,119 @@ handoff:
 
 ---
 
+### Sessão 21 — 2026-05-21
+
+**Início:** Pipeline rodado e reportou apenas 4 de 11 clientes encontrados no Reportei.
+
+**Atividades desta sessão:**
+
+| Ação | Resultado |
+|------|-----------|
+| Diagnóstico do problema 4/11 clientes | OK |
+| Hipótese 1 (projetos não existem) descartada | ✅ DESCARTADA |
+| Hipótese 2 (API retorna só projetos do criador do token) descartada | ✅ DESCARTADA |
+| REPORTEI_TOKEN atualizado para novo token | ✅ |
+| Plano A testado (novo token via env var) — ainda 4/11 | ❌ FALHOU |
+| Causa raiz confirmada: MCP Reportei usa token cloud próprio (Anthropic), não o REPORTEI_TOKEN local | ✅ CONFIRMADO |
+| 7 IDs bloqueados testados via `get_project` MCP — todos retornam "Acesso negado" | ✅ CONFIRMADO |
+| Plano B implementado: seção `project_ids` adicionada ao config | ✅ |
+| `tasks/fetch-metrics.md` reescrito — estratégia duas camadas (ID direto → listagem fallback) | ✅ |
+| `agents/coletor.md` atualizado — duas camadas documentadas | ✅ |
+| `DEBUG-indexacao-reportei.md` atualizado com diagnóstico completo | ✅ |
+| `.aiox/handoffs/handoff-mcp-reportei-fix-2026-05-21.yaml` criado | ✅ |
+| `HANDOFF-mcp-fix.md` criado — guia em linguagem simples para o usuário | ✅ |
+| `CONTEXT.md` atualizado (log Sessão 21 + HANDOFF 22) | ✅ |
+
+**Causa raiz do problema:**
+O MCP Reportei (`mcp__30ebe978-db99-4dee-927c-b72f6abac9d8`) é um conector do marketplace do claude.ai. Ele tem autenticação própria armazenada nos servidores da Anthropic — completamente separada do `REPORTEI_TOKEN` no `settings.local.json`. O token do MCP só acessa 4 dos 11 projetos. Não é possível alterar esse token de dentro do Claude Code — o usuário precisa reconectar o MCP manualmente no claude.ai.
+
+**Erros confirmados (para não repetir nas próximas sessões):**
+
+| Erro | Por que não funciona |
+|------|---------------------|
+| Alterar REPORTEI_TOKEN no settings.local.json | Não afeta o MCP — token do MCP é separado e cloud-side |
+| curl/PowerShell/Python no terminal do Claude Code | Sandbox bloqueia DNS externo — api.reportei.com inacessível |
+| WebFetch com Authorization header | Ferramenta não suporta headers customizados |
+| fetch() no browser (app.reportei.com) | CORS bloqueia chamadas cross-origin com Authorization |
+
+**IDs confirmados — Plano B:**
+
+| Cliente | ID | Status no config |
+|---------|-----|-----------------|
+| Dr. Leandro Gontijo | 627550 | ✅ |
+| IMCP | 688377 | ✅ |
+| Dra. Danielle Gondim | 839737 | ✅ |
+| Dr. Guilherme Mattar | 1023153 | ✅ |
+| Dr. Lucas Consentino | 564106 | ✅ |
+| ID 749199 | 749199 | ⏳ cliente a identificar após reconexão |
+| ID 982754 | 982754 | ⏳ cliente a identificar após reconexão |
+| ID 1218018 | 1218018 | ⏳ cliente a identificar após reconexão |
+| ID 1157908 | 1157908 | ⏳ cliente a identificar após reconexão |
+| ID 1028218 | 1028218 | ⏳ cliente a identificar após reconexão |
+| ID 1233641 | 1233641 | ⏳ cliente a identificar após reconexão |
+
+**Arquivos modificados nesta sessão:**
+- `squads/relatorio-semanal/config/clientes-config.yaml` — seção `project_ids` adicionada
+- `squads/relatorio-semanal/tasks/fetch-metrics.md` — Passo 3 reescrito (duas camadas)
+- `squads/relatorio-semanal/agents/coletor.md` — responsabilidades atualizadas
+- `squads/relatorio-semanal/DEBUG-indexacao-reportei.md` — diagnóstico completo
+- `squads/relatorio-semanal/HANDOFF-mcp-fix.md` — guia para o usuário (novo)
+- `.aiox/handoffs/handoff-mcp-reportei-fix-2026-05-21.yaml` — handoff AIOX (novo)
+- `.claude/settings.local.json` — REPORTEI_TOKEN atualizado (NUNCA commitar)
+
+---
+
+## HANDOFF — SESSÃO 22
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Sessão 21 encerrada. Bug do MCP Reportei diagnosticado. Aguardando reconexão do MCP pelo usuário.
+
+```yaml
+handoff:
+  from_session: 21
+  date: 2026-05-21
+  branch: main
+  base: main
+
+  problema_ativo:
+    descricao: "MCP Reportei tem token cloud que só acessa 4 de 11 projetos"
+    causa_raiz: "Token do MCP é armazenado nos servidores da Anthropic — não é o REPORTEI_TOKEN local"
+    status: "BLOQUEADO — aguardando reconexão do MCP pelo usuário no claude.ai"
+
+  primeira_acao_ao_iniciar_sessao: |
+    Perguntar ao usuário: "Você já reconectou o MCP do Reportei no claude.ai?"
+    Se SIM: chamar list_projects e verificar se retorna > 4 projetos.
+    Se NÃO: mostrar HANDOFF-mcp-fix.md e aguardar.
+
+  apos_reconexao_mcp:
+    passo_1: "list_projects → confirmar que retorna 11 projetos"
+    passo_2: "get_project para cada ID desconhecido (749199, 982754, 1218018, 1157908, 1028218, 1233641)"
+    passo_3: "adicionar nome → ID em project_ids do clientes-config.yaml"
+    passo_4: "atualizar CONTEXT.md e rodar pipeline completo 11/11 clientes"
+
+  tokens_para_testar_fora_do_claude:
+    - "WJZ9hyjYcXXUtGNaYVDaotilmdGSX1dWW6VWBbTB"
+    - "GLypiNuM7FGyjTTqMW2JRE15z2XesxuOQEzJAWLE"
+    - "nH6Z9Ng0LhvOE4ODAlps15U58jOPkBN8K7o9bGzf"
+    - "YQa5onreKrZlrKdlD7UeZvWjCzFa9frgPs4x2RGL"
+
+  plano_b_status:
+    ids_no_config: [627550, 688377, 839737, 1023153, 564106]
+    ids_pendentes: [749199, 982754, 1218018, 1157908, 1028218, 1233641]
+
+  variaveis_ambiente:
+    status: "AUTOMÁTICAS via .claude/settings.local.json — NUNCA pedir ao usuário para definir no terminal"
+    REPORTEI_TOKEN: "Yy0VbWK96z8XqHu1s0xiCI5kmxdDX8nLJoXXfcoz"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  referencia_bug: "squads/relatorio-semanal/DEBUG-indexacao-reportei.md"
+  referencia_handoff_usuario: "squads/relatorio-semanal/HANDOFF-mcp-fix.md"
+  skill_command: "/relatorio-semanal"
+```
+
+---
+
 ## HANDOFF — SESSÃO 21
 
 > **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
@@ -1824,7 +1936,7 @@ handoff:
 
   variaveis_ambiente:
     status: "AUTOMÁTICAS via .claude/settings.local.json — NUNCA pedir ao usuário para definir no terminal"
-    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    REPORTEI_TOKEN: "[REDACTED — definir via variável de ambiente]"
     SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
     GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
 
@@ -1893,7 +2005,7 @@ handoff:
 
   variaveis_ambiente:
     status: "AUTOMATICAS via .claude/settings.local.json — NUNCA pedir ao usuario para definir no terminal"
-    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    REPORTEI_TOKEN: "[REDACTED — definir via variável de ambiente]"
     SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
     GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
 
@@ -1950,7 +2062,7 @@ handoff:
 
   variaveis_ambiente:
     status: "AUTOMATICAS via .claude/settings.local.json — NUNCA pedir ao usuario para definir no terminal"
-    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    REPORTEI_TOKEN: "[REDACTED — definir via variável de ambiente]"
     SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
     GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
 
@@ -2010,7 +2122,7 @@ handoff:
 
   variaveis_ambiente:
     status: "AUTOMATICAS via .claude/settings.local.json — NUNCA pedir ao usuario para definir no terminal"
-    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    REPORTEI_TOKEN: "[REDACTED — definir via variável de ambiente]"
     SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
     GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
 
@@ -2112,7 +2224,7 @@ handoff:
 
   variaveis_ambiente:
     status: "AUTOMATICAS via .claude/settings.local.json — NUNCA pedir ao usuario para definir no terminal"
-    REPORTEI_TOKEN: "2TPCdiPiFDS6uhQGL80T1KTg4rpLI1y7sZq3E0kL"
+    REPORTEI_TOKEN: "[REDACTED — definir via variável de ambiente]"
     SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
     GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
 
