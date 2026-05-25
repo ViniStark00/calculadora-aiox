@@ -22,12 +22,12 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : PLANO V2 GUSTAVO — Sessão 26 concluída. Melhorias A1-A4 implementadas no redator.md.
-Última ação : Sessão 26 encerrada. @dev (Dex) implementou A1 (sentimento), A2 (MOFU),
-              A3 (próximos-passos) e A4 (CPL fallback) no agents/redator.md.
+Etapa atual : PLANO V2 GUSTAVO — Sessão 27 concluída. Melhorias B1-B3 implementadas no thresholds-especialidade.yaml.
+Última ação : Sessão 27 encerrada. @dev (Dex) implementou B1 (kill-switch), B2 (frequencia-por-tipo),
+              B3 (quando-nao-alertar) no data/thresholds-especialidade.yaml.
               Aguardando @qa para validar + @devops para commit.
-Próxima ação: Sessão 27 — abrir nova sessão, chamar @dev, pedir Melhorias B1-B3 no thresholds-especialidade.yaml.
-              Briefing exato no HANDOFF — SESSÃO 27 deste arquivo (seção PLANO V2 GUSTAVO).
+Próxima ação: Sessão 28 — abrir nova sessão, chamar @dev, pedir Melhorias C1-C2 no squad.yaml + publicador.md.
+              Briefing exato na seção PLANO V2 GUSTAVO — SESSÃO 28 deste arquivo.
 Bloqueadores: MCP Reportei com token limitado a 4 projetos — ação requerida FORA do Claude Code.
 ```
 
@@ -2409,6 +2409,32 @@ Leia squads/relatorio-semanal/CONTEXT.md. Execute a Sessão 26 do Plano V2 Gusta
 - Rodar `/relatorio-semanal` para IMCP e confirmar que o pipeline não quebrou.
 - @qa validar que A1–A4 estão presentes e corretos no redator.md.
 - @devops commit: `feat(relatorio-semanal): add sentimento MOFU proximos-passos CPL-fallback [Sessao26]`
+
+---
+
+### Sessão 27 — 2026-05-25
+
+**Início:** CONTEXT.md lido — Sessão 27 do Plano V2 Gustavo. Melhorias B1-B3 no thresholds-especialidade.yaml.
+
+**Atividades desta sessão:**
+
+| Ação | Agente | Resultado |
+|------|--------|-----------|
+| Lido CONTEXT.md — handoff Sessão 27 identificado | @dev | OK |
+| Lido data/thresholds-especialidade.yaml — estado atual absorvido | @dev | OK |
+| B1 — seção `kill_switch:` adicionada no root (8 especialidades + N/A ortognática) | @dev | ✅ |
+| B2 — seção `frequencia_por_tipo_campanha:` adicionada (4 tipos + DEFAULT) | @dev | ✅ |
+| B3 — seção `quando_nao_alertar:` adicionada (5 regras de supressão) | @dev | ✅ |
+| CONTEXT.md atualizado (log + estado atual) | @dev | ✅ |
+
+**Arquivos modificados nesta sessão:**
+- `squads/relatorio-semanal/data/thresholds-especialidade.yaml` — 3 seções novas no root
+- `squads/relatorio-semanal/CONTEXT.md` — estado atual + log desta sessão
+
+**Pendências abertas:**
+- @qa — validar B1–B3 no thresholds-especialidade.yaml
+- @devops — commit após @qa aprovar
+- Sessão 28 — Melhorias C1-C2 no squad.yaml + publicador.md
 
 ---
 
