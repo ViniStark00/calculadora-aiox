@@ -22,12 +22,13 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : PLANO V2 GUSTAVO — Sessão 28 concluída. Melhorias C1-C2 implementadas em squad.yaml e publicador.md.
-Última ação : Sessão 28 encerrada. @dev (Dex) implementou C1 (heuristics no squad.yaml) e
-              C2 (gestão de rate limit no publicador.md).
-              Aguardando @qa para validar + @devops para commit + push + PR + merge.
-Próxima ação: @qa validar C1-C2 → @devops commit + push + PR + merge (última sessão do Plano V2 Gustavo).
+Etapa atual : PLANO V2 GUSTAVO — CONCLUÍDO. PR #8 mergeado em main (2026-05-25).
+              3 sessões × 9 melhorias: A1-A4 (redator), B1-B3 (thresholds), C1-C2 (squad+publicador).
+Última ação : @devops commit 3e9afb2 (Sessão 28) + push + PR #8 + merge para main.
+              Branch feat/melhorias-v2-gustavo deletada.
+Próxima ação: Ver seção HANDOFF — SESSÃO 29 para opções disponíveis.
 Bloqueadores: MCP Reportei com token limitado a 4 projetos — ação requerida FORA do Claude Code.
+              (Reconectar no claude.ai → Settings → Integrations → Reportei)
 ```
 
 ---
@@ -3259,4 +3260,90 @@ PR:
 - Body: bullets com as melhorias acima
 
 Após criar PR: fazer merge e confirmar que main está atualizada.
+```
+
+---
+
+## HANDOFF — SESSÃO 29
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Plano V2 Gustavo concluído integralmente. PR #8 mergeado em main. Squad em estado saudável.
+
+```yaml
+handoff:
+  from_session: 28
+  date: 2026-05-25
+  branch: main
+  base: main
+  ultimo_commit: "c50ec6e (Merge PR #8)"
+
+  plano_v2_gustavo:
+    status: "CONCLUÍDO — PR #8 mergeado em main"
+    commits:
+      - "86554e8 — Sessão 26: A1 sentimento, A2 MOFU, A3 próximos-passos, A4 CPL fallback (redator.md)"
+      - "328d1e7 — Sessão 27: B1 kill-switch, B2 frequência-por-tipo, B3 quando-não-alertar (thresholds-especialidade.yaml)"
+      - "3e9afb2 — Sessão 28: C1 heuristics, C2 rate-limit (squad.yaml + publicador.md)"
+      - "c50ec6e — Merge PR #8 feat/melhorias-v2-gustavo → main"
+    pr: "https://github.com/ViniStark00/calculadora-aiox/pull/8"
+
+  o_que_foi_feito_sessao_28:
+    C1: >
+      squad.yaml — bloco heuristics.absolute_vetos inserido após integrations e antes
+      de pipeline_flow. 5 vetos absolutos: sem ações em Meta/Google Ads, sem publicação
+      sem QA Bloco B, sem valores estimados na planilha, sem recomendações pós-lead,
+      sem exposição de tokens no output.
+    C2: >
+      agents/publicador.md — seção "Gestão de rate limit" inserida após deduplicação
+      e antes de MCP utilizado. Limiar 38/40 req por janela de 9min, ScheduleWakeup
+      540s ao atingir 38, contador global entre clientes (não reiniciar por cliente).
+
+  estado_squad:
+    squad_yaml: "ATUALIZADO — heuristics adicionado"
+    redator_md: "ATUALIZADO — A1-A4 (sentimento, MOFU, próximos-passos, CPL fallback)"
+    thresholds_yaml: "ATUALIZADO — B1-B3 (kill-switch, frequência-por-tipo, quando-não-alertar)"
+    publicador_md: "ATUALIZADO — C2 (gestão de rate limit)"
+    pipeline: "OPERACIONAL — modo paralelo + multi-cliente disponível"
+
+  opcoes_proxima_sessao:
+    A: |
+      RECONECTAR MCP REPORTEI (fora do Claude Code — feito pelo usuário):
+      1. Acessar claude.ai → Settings → Integrations → Reportei
+      2. Desconectar e reconectar com token que tem acesso a todos os 11 clientes
+      3. Após reconexão: chamar /relatorio-semanal
+         "Liste os projetos disponíveis e atualize config/clientes-config.yaml
+         com os 6 IDs pendentes: 749199, 982754, 1218018, 1157908, 1028218, 1233641"
+
+    B: |
+      TESTAR PIPELINE COM NOVOS AGENTES:
+      Chamar /relatorio-semanal com:
+      "Rodar pipeline para IMCP (project_id 688377) — semana atual"
+      Validar que monitor-diario, contexto-cliente e whatsapp-writer estão funcionando
+      com as melhorias V2 Gustavo ativas.
+
+    C: |
+      MELHORIA EXTRA — Anotação no ClickUp (branch separada):
+      Criar branch: feat/extra-anotacao-clickup
+      Chamar @dev com briefing da seção EXTRA deste CONTEXT.md
+      (agents/anotador-clickup.md + tasks/annotate-clickup.md)
+
+    D: |
+      USO OPERACIONAL NORMAL:
+      /relatorio-semanal + "Rodar pipeline para [CLIENTE]"
+
+  bloqueadores:
+    mcp_reportei: >
+      Token do MCP Reportei (cloud) tem acesso a apenas 4 de 11 clientes.
+      Solução: reconectar no claude.ai com token correto.
+      Referência: squads/relatorio-semanal/HANDOFF-mcp-fix.md
+    plano_b_ids_mapeados: [627550, 688377, 839737, 1023153, 564106]
+    plano_b_ids_pendentes: [749199, 982754, 1218018, 1157908, 1028218, 1233641]
+
+  variaveis_ambiente:
+    status: "AUTOMÁTICAS via .claude/settings.local.json — NUNCA pedir ao usuário para definir no terminal"
+    REPORTEI_TOKEN: "[REDACTED — definir via variável de ambiente]"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  skill_command: "/relatorio-semanal"
+  pr_merged: "PR #8 — feat/melhorias-v2-gustavo para main (2026-05-25)"
 ```
