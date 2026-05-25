@@ -34,6 +34,28 @@ Publica o relatório aprovado como evento (marco) na Linha do Tempo do cliente n
 
 > O registro em `timeline-log.jsonl` é feito automaticamente pelo hook `hooks/log-timeline-event.py` após publicação bem-sucedida — não duplicar essa lógica aqui.
 
+## Gestão de rate limit
+
+O Reportei limita a **40 requisições por janela de 9 minutos**. O publicador rastreia o consumo globalmente para evitar erro 429.
+
+**Regras:**
+
+| Situação | Ação |
+|----------|------|
+| Contador < 38 | Prosseguir normalmente |
+| Contador ≥ 38 | Pausar 9 minutos antes da próxima chamada (`ScheduleWakeup(delaySeconds: 540)`) |
+
+**Chamadas que incrementam o contador:**
+- `create_timeline_event`
+- `list_projects`
+- `get_project`
+
+**Instruções operacionais:**
+- Iniciar contador global em 0 antes do primeiro cliente.
+- **Não** reiniciar o contador entre clientes — a janela de rate limit é global.
+- Maximizar chamadas paralelas por batch quando possível — economiza requisições.
+- Ao atingir 38 requisições, aguardar a janela de 9 minutos antes de continuar.
+
 ## MCP utilizado
 
 ```

@@ -354,3 +354,106 @@ especialidades:
         max: 3.5
       critico:
         min: 3.5
+
+# ──────────────────────────────────────────────────────────────────────────
+# B1 — KILL-SWITCH POR ESPECIALIDADE
+# Adicionado em Sessão 27 (Plano V2 Gustavo)
+#
+# Define o gasto de 3 dias que, sem nenhuma conversa, acende alerta crítico.
+# Aplica-se APENAS a campanhas com 7+ dias de veiculação.
+# Condição: conversas = 0 em lookback de 3 dias consecutivos.
+# Severidade: CRÍTICO — notificar gestor, NUNCA pausar automaticamente.
+# N/A = cirurgia_ortognatica (Google Ads — métrica diferente, sem kill-switch)
+# ──────────────────────────────────────────────────────────────────────────
+
+kill_switch:
+  regra: "conversas = 0 em lookback de 3 dias consecutivos, com 7+ dias de veiculação"
+  severidade: "CRITICO"
+  acao: "notificar gestor — NUNCA pausar automaticamente"
+  por_especialidade:
+    cirurgia_plastica:
+      gasto_3_dias_sem_conversa: 30.00
+    dermatologia:
+      gasto_3_dias_sem_conversa: 50.00
+    medicina_estetica:
+      gasto_3_dias_sem_conversa: 90.00
+    cirurgia_facial:
+      gasto_3_dias_sem_conversa: 36.00
+    cirurgia_corporal:
+      gasto_3_dias_sem_conversa: 30.00
+    mommy_makeover:
+      gasto_3_dias_sem_conversa: 35.00
+    cirurgia_trans:
+      gasto_3_dias_sem_conversa: 60.00
+    cirurgia_ortognatica:
+      gasto_3_dias_sem_conversa: null
+      nota: "N/A — Google Ads usa métrica de conversão diferente, sem kill-switch"
+
+# ──────────────────────────────────────────────────────────────────────────
+# B2 — FREQUÊNCIA POR TIPO DE CAMPANHA
+# Adicionado em Sessão 27 (Plano V2 Gustavo)
+#
+# Substitui o threshold genérico de frequência por thresholds diferenciados
+# por tipo de campanha. Janela: last_7d.
+# Mínimo 1.000 impressões — abaixo disso a frequência é estatisticamente
+# instável: não alertar.
+# Prefixos de identificação: nome da campanha começa com o prefixo listado.
+# Default (tipo não identificável): usar TOFU como conservador.
+# ──────────────────────────────────────────────────────────────────────────
+
+frequencia_por_tipo_campanha:
+  janela: "last_7d"
+  minimo_impressoes: 1000
+  nota: "Abaixo de 1.000 impressões a frequência é estatisticamente instável — não alertar"
+  tipos:
+    TOFU:
+      descricao: "Prospecting — topo de funil"
+      prefixos: [TOFU, IMP]
+      alerta: 2.5
+      pause: 3.0
+    MOFU:
+      descricao: "Engajamento — meio de funil"
+      prefixos: [MOFU, TRAF]
+      alerta: 3.0
+      pause: 3.5
+    BOFU:
+      descricao: "Conversão — fundo de funil"
+      prefixos: [BOFU, CONV]
+      alerta: 4.0
+      pause: 4.5
+    AWARENESS:
+      descricao: "Awareness e alcance"
+      prefixos: [AW, REACH]
+      alerta: 2.2
+      pause: 2.8
+    DEFAULT:
+      descricao: "Tipo não identificável pelo prefixo — usar TOFU como conservador"
+      alerta: 2.5
+      pause: 3.0
+
+# ──────────────────────────────────────────────────────────────────────────
+# B3 — QUANDO NÃO ALERTAR
+# Adicionado em Sessão 27 (Plano V2 Gustavo)
+#
+# Regras explícitas de supressão para evitar falso-positivos.
+# O monitor e o redator devem verificar estas condições ANTES de emitir
+# qualquer alerta sobre CPL, CPM, CTR ou frequência.
+# ──────────────────────────────────────────────────────────────────────────
+
+quando_nao_alertar:
+  regras:
+    - id: campanha_nova
+      condicao: "Campanha com menos de 7 dias de veiculação"
+      motivo: "Dados insuficientes para avaliação estatística"
+    - id: spend_baixo
+      condicao: "Spend < R$20 no lookback de 3 dias"
+      motivo: "Volume muito baixo — qualquer variação é ruído, não sinal"
+    - id: impressoes_baixas
+      condicao: "Impressões < 1.000"
+      motivo: "Frequência e CTR estatisticamente instáveis abaixo deste volume"
+    - id: awareness_cpm
+      condicao: "Campanhas com prefixo AW ou REACH com CPM elevado"
+      motivo: "CPM alto é esperado em campanhas de awareness — não é alerta"
+    - id: laureano_meta
+      condicao: "Cliente Dr. Laureano Filho em campanhas Meta Ads"
+      motivo: "Dr. Laureano opera exclusivamente Google Ads — ignorar monitoramento Meta"

@@ -22,13 +22,11 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : MELHORIAS ARQUITETURAIS — Sessão 25 encerrada
-Última ação : Melhoria 13 concluída — pipeline multi-cliente paralelo implementado.
-              @architect design 5 estágios → @dev docs (relatorio-chief.md + weekly-report-pipeline.md)
-              → @qa aprovado → @devops commits a0ea009 (M13) + 39be095 (housekeeping) pusheados.
-              Plano de melhorias Aria: CONCLUÍDO. Bug MCP Reportei ainda pendente (Plano B ativo).
-Próxima ação: Correções residuais baixa prioridade (publicador.md linha 79, whatsapp-writer.md inline comment).
-              Após reconexão MCP: mapear 6 IDs desconhecidos + rodar pipeline 11/11 clientes.
+Etapa atual : PLANO V2 GUSTAVO — Sessão 28 concluída. Melhorias C1-C2 implementadas em squad.yaml e publicador.md.
+Última ação : Sessão 28 encerrada. @dev (Dex) implementou C1 (heuristics no squad.yaml) e
+              C2 (gestão de rate limit no publicador.md).
+              Aguardando @qa para validar + @devops para commit + push + PR + merge.
+Próxima ação: @qa validar C1-C2 → @devops commit + push + PR + merge (última sessão do Plano V2 Gustavo).
 Bloqueadores: MCP Reportei com token limitado a 4 projetos — ação requerida FORA do Claude Code.
 ```
 
@@ -2337,6 +2335,315 @@ handoff:
     etapa_9_monitor_tarefas: "PENDENTE"
     etapa_10_integrar_pipeline: "PENDENTE"
     etapa_11_validar: "PENDENTE"
+```
+
+---
+
+## PLANO V2 GUSTAVO — 9 MELHORIAS EM 3 SESSÕES
+
+**Origem:** Análise comparativa com squad `gestor-trafego-ia` de Gustavo Radler.
+**Sessão de análise:** 25 — 2026-05-25 — @analyst (Atlas).
+
+| Sessão | Arquivo | Melhorias | Agente | Status |
+|--------|---------|-----------|--------|--------|
+| **26** | `agents/redator.md` | A1 sentimento · A2 MOFU · A3 próximos-passos · A4 CPL fallback | @dev | PENDENTE |
+| **27** | `data/thresholds-especialidade.yaml` | B1 kill-switch · B2 frequência-por-tipo · B3 quando-não-alertar | @dev | PENDENTE |
+| **28** | `squad.yaml` + `agents/publicador.md` | C1 heurísticas · C2 rate-limit | @dev | PENDENTE |
+
+---
+
+### SESSÃO 26 — Melhorias no redator.md (A1–A4)
+
+**Agente:** @dev (Dex)
+**Por que @dev:** edita arquivos de configuração do squad (L4 — sempre modificável).
+**Arquivo:** `squads/relatorio-semanal/agents/redator.md`
+
+**O que dizer para abrir a sessão:**
+```
+Leia squads/relatorio-semanal/CONTEXT.md. Execute a Sessão 26 do Plano V2 Gustavo — Melhorias A1-A4 no redator.md.
+```
+
+**O que o @dev vai fazer:**
+
+**A1 — Classificação de sentimento do contexto (nova seção)**
+- Onde inserir: entre "Contexto dinâmico do cliente — pré-geração" e "Contexto histórico — pré-geração".
+- O que faz: após receber `contexto_cliente`, o redator classifica o sentimento com base em palavras-chave nos campos `momento_comercial_atual` e `pontos_de_atencao`.
+  - POSITIVO: crescimento, recorde, expansão, fechamento alto, escalada, pleno, meta atingida
+  - NEGATIVO: queda, cancelamento, baixo volume, saturação, desistência, urgência, abaixo
+  - NEUTRO: qualquer outro caso (padrão)
+- Aplicar ao tom da narrativa:
+  - POSITIVO → animador e positivo, SEM hipérboles. Sentimento: continuidade e evolução do projeto.
+  - NEUTRO → descritivo e técnico, foco em fatos. Sentimento: estabilidade com pontos a monitorar.
+  - NEGATIVO → validar a situação, NUNCA hipérboles ou termos irrecuperáveis. Sentimento: turbulência com controle.
+- Fallback: se `contexto_cliente.disponivel = false` ou ausente → sentimento = NEUTRO silenciosamente.
+
+**A2 — Regras MOFU (nova seção)**
+- Onde inserir: após "Classificação por thresholds — pré-geração" e ANTES de "Lógica de seleção de conteúdo".
+- O que faz: orienta como interpretar e escrever sobre dados de meio de funil.
+- Princípio central: MOFU = estágio de maturidade da audiência na jornada do paciente. NÃO = gargalo mecânico.
+- Fórmulas internas (calcular, não expor no relatório):
+  - `cliques_estimados = Impressões × (CTR ÷ 100)`
+  - `CPC_estimado = Investimento ÷ cliques_estimados`
+  - `taxa_clique_conversa = Conversas ÷ cliques_estimados`
+- Leitura de CTR: > 2,5% = criativo conduzindo o paciente; < 2% = descompasso entre mensagem e estágio (não "falha técnica").
+- Leitura de taxa_cc: > 2% = audiência madura no momento do clique; < 1% = paciente curioso mas não pronto.
+- Leitura de frequência: alta + CPL estável = nutrição funcionando; alta + CPL crescendo = saturação — diversificar conteúdo educativo.
+- Vocabulário OBRIGATÓRIO: "maturidade da audiência", "aquecimento prévio", "nutrição com conteúdo educativo", "construção de autoridade", "consideração informada", "intenção qualificada".
+- Vocabulário PROIBIDO: "gargalo de funil", "funil furado", "fricção pós-clique", "passa / não passa".
+- Fallback silencioso se CTR, impressões ou conversas indisponíveis.
+
+**A3 — Regras Próximos Passos (nova seção)**
+- Onde inserir: antes de "Estrutura do texto gerado".
+- O que faz: define o que o redator pode e não pode recomendar na seção Próximos Passos.
+- PERMITIDO recomendar: criativos (pausar, criar, testar, A/B), audiências (lookalike, broad, expansão, exclusões), orçamento (escalar, redistribuir, bid), frequência/CPM, CTR (formatos, copy), remarketing (cliques sem conversão, visitantes de perfil), conteúdo orgânico (reels, posts), canais (Google Ads, TikTok), fluxo pós-clique (CTA, destino do anúncio, direct link).
+- PROIBIDO recomendar: processo de atendimento, script de follow-up ou recontato, protocolo de resposta a leads, taxa de conversão conversa → agendamento, tempo de resposta, qualquer recomendação sobre leads APÓS conversa iniciada.
+
+**A4 — CPL fallback em cascata (adicionar em "Tratamento de dados ausentes")**
+- Onde inserir: ao final da seção "Tratamento de dados ausentes", no fim do arquivo.
+- O que faz: define o comportamento quando CPL não pode ser calculado.
+  - Se `conversas = 0` → CPL = "-" (nunca dividir por zero).
+  - Se métricas de conversas indisponíveis (timeout, integração offline) → registrar CPL como "não monitorável neste ciclo — usar dados do Reportei" e continuar relatório sem travar.
+
+**Após @dev — o que verificar:**
+- Rodar `/relatorio-semanal` para IMCP e confirmar que o pipeline não quebrou.
+- @qa validar que A1–A4 estão presentes e corretos no redator.md.
+- @devops commit: `feat(relatorio-semanal): add sentimento MOFU proximos-passos CPL-fallback [Sessao26]`
+
+---
+
+### Sessão 27 — 2026-05-25
+
+**Início:** CONTEXT.md lido — Sessão 27 do Plano V2 Gustavo. Melhorias B1-B3 no thresholds-especialidade.yaml.
+
+**Atividades desta sessão:**
+
+| Ação | Agente | Resultado |
+|------|--------|-----------|
+| Lido CONTEXT.md — handoff Sessão 27 identificado | @dev | OK |
+| Lido data/thresholds-especialidade.yaml — estado atual absorvido | @dev | OK |
+| B1 — seção `kill_switch:` adicionada no root (8 especialidades + N/A ortognática) | @dev | ✅ |
+| B2 — seção `frequencia_por_tipo_campanha:` adicionada (4 tipos + DEFAULT) | @dev | ✅ |
+| B3 — seção `quando_nao_alertar:` adicionada (5 regras de supressão) | @dev | ✅ |
+| CONTEXT.md atualizado (log + estado atual) | @dev | ✅ |
+
+**Arquivos modificados nesta sessão:**
+- `squads/relatorio-semanal/data/thresholds-especialidade.yaml` — 3 seções novas no root
+- `squads/relatorio-semanal/CONTEXT.md` — estado atual + log desta sessão
+
+**Pendências abertas:**
+- @qa — validar B1–B3 no thresholds-especialidade.yaml ✅ (aprovado na mesma sessão)
+- @devops — commit 328d1e7 após @qa aprovar ✅
+
+---
+
+### Sessão 28 — 2026-05-25
+
+**Início:** CONTEXT.md lido — Sessão 28 do Plano V2 Gustavo. Melhorias C1-C2 em squad.yaml e publicador.md.
+
+**Atividades desta sessão:**
+
+| Ação | Agente | Resultado |
+|------|--------|-----------|
+| Lido CONTEXT.md — handoff Sessão 28 identificado | @dev | OK |
+| Lido squad.yaml e agents/publicador.md — estado atual absorvido | @dev | OK |
+| C1 — bloco `heuristics:` inserido no squad.yaml (após `integrations:`, antes de `pipeline_flow:`) | @dev | ✅ |
+| C2 — seção "Gestão de rate limit" inserida no publicador.md (após deduplicação, antes de MCP) | @dev | ✅ |
+| CONTEXT.md atualizado (log + estado atual) | @dev | ✅ |
+
+**Arquivos modificados nesta sessão:**
+- `squads/relatorio-semanal/squad.yaml` — bloco `heuristics:` adicionado
+- `squads/relatorio-semanal/agents/publicador.md` — seção "Gestão de rate limit" adicionada
+- `squads/relatorio-semanal/CONTEXT.md` — estado atual + log desta sessão
+
+**Pendências abertas:**
+- @qa — validar C1–C2
+- @devops — commit + push + PR + merge (última sessão do Plano V2 Gustavo)
+
+---
+
+### SESSÃO 27 — Melhorias no thresholds-especialidade.yaml (B1–B3)
+
+**Agente:** @dev (Dex)
+**Arquivo:** `squads/relatorio-semanal/data/thresholds-especialidade.yaml`
+
+**O que dizer para abrir a sessão:**
+```
+Leia squads/relatorio-semanal/CONTEXT.md. Execute a Sessão 27 do Plano V2 Gustavo — Melhorias B1-B3 no thresholds-especialidade.yaml.
+```
+
+**O que o @dev vai fazer:**
+
+**B1 — Kill-switch por especialidade (nova seção `kill_switch:` no root do yaml)**
+- O que faz: define o gasto de 3 dias que, sem nenhuma conversa, acende alerta crítico.
+- Regra: applies apenas a campanhas com 7+ dias de veiculação. `conversas = 0` em lookback de 3 dias consecutivos.
+- Severidade: CRÍTICO — notificar gestor, NUNCA pausar automaticamente.
+- Valores por especialidade (Meta Ads — carteira Vinicius):
+  - cirurgia_plastica: R$30
+  - dermatologia: R$50
+  - medicina_estetica: R$90
+  - cirurgia_facial: R$36
+  - cirurgia_corporal: R$30
+  - mommy_makeover: R$35
+  - cirurgia_trans: R$60
+  - cirurgia_ortognatica: N/A (Google Ads — métrica diferente, sem kill-switch)
+
+**B2 — Frequência por tipo de campanha (nova seção `frequencia_por_tipo_campanha:` no root)**
+- O que faz: substitui o threshold genérico de frequência por thresholds diferenciados por tipo de campanha.
+- Janela: last_7d. Mínimo 1.000 impressões (abaixo = frequência estatisticamente instável, não alertar).
+- Valores:
+  - TOFU / Prospecting (prefixos TOFU, IMP): alerta > 2.5 · pause > 3.0
+  - MOFU / Engajamento (prefixos MOFU, TRAF): alerta > 3.0 · pause > 3.5
+  - BOFU / Conversão (prefixos BOFU, CONV): alerta > 4.0 · pause > 4.5
+  - Awareness / Alcance (prefixos AW, REACH): alerta > 2.2 · pause > 2.8
+  - Default (tipo não identificável): usar TOFU como conservador.
+
+**B3 — Quando NÃO alertar (nova seção `quando_nao_alertar:` no root)**
+- O que faz: evita falso-positivos com regras explícitas de supressão.
+- Casos onde NÃO emitir alerta:
+  - Campanha com menos de 7 dias de veiculação.
+  - Spend < R$20 no lookback.
+  - Impressões < 1.000 (frequência estatisticamente instável).
+  - Campanhas awareness/reach: CPM alto é esperado, não é alerta.
+  - Dr. Laureano: excluído do monitoramento Meta Ads (apenas Google Ads ativo).
+
+**Após @dev — o que verificar:**
+- Confirmar yaml válido (sem erro de indentação).
+- @qa validar que B1–B3 estão presentes e os valores batem com o descrito.
+- @devops commit: `feat(relatorio-semanal): add kill-switch frequencia-por-tipo quando-nao-alertar [Sessao27]`
+
+---
+
+### SESSÃO 28 — squad.yaml + publicador.md (C1–C2)
+
+**Agente:** @dev (Dex)
+**Arquivos:** `squads/relatorio-semanal/squad.yaml` + `squads/relatorio-semanal/agents/publicador.md`
+
+**O que dizer para abrir a sessão:**
+```
+Leia squads/relatorio-semanal/CONTEXT.md. Execute a Sessão 28 do Plano V2 Gustavo — Melhorias C1-C2 no squad.yaml e publicador.md.
+```
+
+**O que o @dev vai fazer:**
+
+**C1 — Heurísticas e vetos absolutos no squad.yaml (novo bloco `heuristics:`)**
+- Onde inserir: após o bloco `integrations:` e antes de `pipeline_flow:`.
+- O que faz: torna explícito no manifest o que o squad jamais pode fazer — fica visível para qualquer agente que leia o squad.yaml.
+- Conteúdo do bloco:
+  ```yaml
+  heuristics:
+    absolute_vetos:
+      - Nunca executar ação no Meta Ads ou Google Ads — apenas leitura de métricas via Reportei
+      - Nunca publicar na Timeline do Reportei sem o quality-gate Bloco B aprovado
+      - Nunca preencher a planilha com valores estimados — zeros são válidos, campos vazios não
+      - Nunca recomendar ações sobre atendimento, follow-up ou processo comercial pós-lead
+      - Nunca expor tokens, credenciais ou paths de service_account no output do pipeline
+  ```
+
+**C2 — Gestão de rate limit Reportei no publicador.md (nova seção)**
+- Onde inserir: após "Verificação de deduplicação" e antes de "MCP utilizado".
+- O que faz: o publicador passa a rastrear o número de chamadas MCP Reportei e pausar ao atingir o limite para evitar erros 429.
+- Regras:
+  - Limite Reportei: 40 requisições por janela de 9 minutos.
+  - Threshold de alerta interno: 38 requisições.
+  - Ao atingir 38 → chamar `ScheduleWakeup(delaySeconds: 540)` antes de continuar.
+  - Maximizar chamadas paralelas por batch para economizar requisições.
+  - Contador: incrementar a cada chamada MCP (create_timeline_event, list_projects, get_project).
+  - Pipeline multi-cliente: gerenciar contador globalmente — não reiniciar por cliente.
+
+**Após @dev — o que verificar:**
+- Confirmar squad.yaml válido.
+- @qa validar C1–C2.
+- @devops: commit `feat(relatorio-semanal): add heuristics-vetos rate-limit-management [Sessao28]`
+- @devops: push + PR + merge para main (todas as 3 sessões concluídas — esta é a última).
+
+---
+
+### Sessão 26 — 2026-05-25
+
+**Início:** CONTEXT.md lido — Sessão 26 do Plano V2 Gustavo. Melhorias A1-A4 no redator.md.
+
+**Atividades desta sessão:**
+
+| Ação | Agente | Resultado |
+|------|--------|-----------|
+| Lido CONTEXT.md — handoff Sessão 26 identificado | @dev | OK |
+| Lido agents/redator.md — estado atual absorvido | @dev | OK |
+| A1 — seção "Classificação de sentimento do contexto" inserida (entre contexto-dinâmico e histórico) | @dev | ✅ |
+| A2 — seção "Regras MOFU — análise de meio de funil" inserida (após thresholds, antes de lógica de seleção) | @dev | ✅ |
+| A3 — seção "Regras Próximos Passos" inserida (antes de "Estrutura do texto gerado") | @dev | ✅ |
+| A4 — "CPL fallback em cascata" adicionado ao final de "Tratamento de dados ausentes" | @dev | ✅ |
+| CONTEXT.md atualizado (log + estado atual) | @dev | ✅ |
+
+**Arquivos modificados nesta sessão:**
+- `squads/relatorio-semanal/agents/redator.md` — 4 seções novas adicionadas
+- `squads/relatorio-semanal/CONTEXT.md` — estado atual + log desta sessão
+
+**Pendências abertas:**
+- @qa — validar A1–A4 no redator.md
+- @devops — commit após @qa aprovar
+- Sessão 27 — Melhorias B1-B3 no thresholds-especialidade.yaml
+
+---
+
+## HANDOFF — SESSÃO 26
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Plano V2 Gustavo criado. Próximo: Sessão 26 — Melhorias A1-A4 no redator.md.
+
+```yaml
+handoff:
+  from_session: 25
+  date: 2026-05-25
+  branch: main
+  proxima_branch: feat/melhorias-v2-gustavo
+
+  contexto: |
+    @analyst (Atlas) comparou squad relatorio-semanal com squad gestor-trafego-ia do Gustavo
+    Radler (treinamento Stark, mai/2026). 9 melhorias identificadas. Plano V2 Gustavo
+    documentado na seção "PLANO V2 GUSTAVO" deste CONTEXT.md. Implementar em 3 sessões:
+    26 (redator.md), 27 (thresholds), 28 (squad.yaml + publicador.md).
+
+  estado_plano_v2_gustavo:
+    sessao_26_redator: "PENDENTE — A1 sentimento, A2 MOFU, A3 próximos-passos, A4 CPL fallback"
+    sessao_27_thresholds: "PENDENTE — B1 kill-switch, B2 frequencia-por-tipo, B3 quando-nao-alertar"
+    sessao_28_squad_publicador: "PENDENTE — C1 heuristics, C2 rate-limit"
+    push_pr_merge: "PENDENTE — fazer após Sessão 28"
+
+  proxima_acao: |
+    SESSÃO 26 — Melhorias A1–A4 no redator.md
+
+    Agente: @dev (/AIOX:agents:dev)
+    O que dizer:
+    "Leia squads/relatorio-semanal/CONTEXT.md. Execute a Sessão 26 do Plano V2 Gustavo —
+    Melhorias A1-A4 no redator.md."
+
+    Após @dev implementar:
+    @qa (/AIOX:agents:qa):
+    "Leia squads/relatorio-semanal/CONTEXT.md. Valide a Sessão 26 do Plano V2 Gustavo.
+    Verificar em agents/redator.md: (1) seção de classificação de sentimento com 3 classes
+    (POSITIVO/NEUTRO/NEGATIVO) e regras de tom por classe, (2) seção MOFU com vocabulário
+    obrigatório/proibido e fórmulas (cliques_estimados, CPC_estimado, taxa_clique_conversa),
+    (3) seção Próximos Passos com listas PERMITIDO/PROIBIDO explícitas, (4) CPL fallback na
+    seção de tratamento de dados ausentes (conversas=0 → '-', indisponível → não-monitorável).
+    Reporte APROVADO ou lista numerada de problemas."
+
+    Após @qa aprovar:
+    @devops (/AIOX:agents:devops):
+    "Criar branch feat/melhorias-v2-gustavo a partir de main (se não existir).
+    Commit com: squads/relatorio-semanal/agents/redator.md, squads/relatorio-semanal/CONTEXT.md.
+    Mensagem: feat(relatorio-semanal): add sentimento MOFU proximos-passos CPL-fallback [Sessao26]
+    Não fazer push ainda — aguardar Sessões 27 e 28."
+
+  variaveis_ambiente:
+    status: "AUTOMATICAS via .claude/settings.local.json — NUNCA pedir ao usuario para definir"
+    REPORTEI_TOKEN: "[REDACTED — definir via variável de ambiente]"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  cliente_teste: "IMCP (project_id 688377)"
+  skill_command: "/relatorio-semanal"
+  plano_referencia: "seção PLANO V2 GUSTAVO deste CONTEXT.md — briefings completos das 3 sessões"
+```
     etapa_12_qa: "PENDENTE"
     etapa_13_commit_pr_merge: "PENDENTE"
 

@@ -55,6 +55,39 @@ Se `disponivel: true`, incorporar as informações de forma fluida no `PARAGRAFO
 
 ---
 
+## Classificação de sentimento do contexto — pré-geração
+
+> ⚠️ **Executar APÓS o contexto dinâmico do cliente e ANTES do contexto histórico.** Se `contexto_cliente.disponivel = false` ou ausente: sentimento = NEUTRO silenciosamente.
+
+### 1. Classificar sentimento
+
+Com base nos campos `momento_comercial_atual` e `pontos_de_atencao` do objeto `contexto_cliente`:
+
+| Sentimento | Palavras-chave que indicam |
+|------------|---------------------------|
+| **POSITIVO** | crescimento, recorde, expansão, fechamento alto, escalada, pleno, meta atingida |
+| **NEGATIVO** | queda, cancelamento, baixo volume, saturação, desistência, urgência, abaixo |
+| **NEUTRO** | qualquer outro caso (padrão) |
+
+**Fallback silencioso:** se `contexto_cliente` ausente, `disponivel = false`, ou sem texto útil → sentimento = NEUTRO.
+
+### 2. Aplicar ao tom da narrativa
+
+| Sentimento | Tom a aplicar |
+|------------|---------------|
+| **POSITIVO** | Animador e positivo, sem hipérboles. Sentimento de continuidade e evolução do projeto. |
+| **NEUTRO** | Descritivo e técnico, foco em fatos. Sentimento de estabilidade com pontos a monitorar. |
+| **NEGATIVO** | Valida a situação sem hipérboles ou termos irrecuperáveis. Sentimento de turbulência com controle. |
+
+### 3. Regras de uso
+
+- **Nunca expor** o sentimento classificado no texto do relatório
+- **Nunca usar** palavras proibidas do `CLAUDE.md` independentemente do sentimento
+- O sentimento ajusta o **tom geral** da narrativa — não altera as métricas reportadas
+- Sentimento NEGATIVO **não** autoriza palavras como "preocupante", "alarmante" ou "crítico"
+
+---
+
 ## Contexto histórico — pré-geração
 
 > ⚠️ **Executar ANTES de gerar o texto.** Se o histórico estiver vazio ou tiver menos de 2 entradas: pular silenciosamente, sem erro.
@@ -145,6 +178,43 @@ Comparar `cpl_atual` com os ranges do nível `cpl` da especialidade:
 
 ---
 
+## Regras MOFU — análise de meio de funil
+
+> ⚠️ **Executar APÓS "Classificação por thresholds" e ANTES de "Lógica de seleção de conteúdo".** Fallback silencioso se CTR, impressões ou conversas indisponíveis.
+
+### 1. Princípio central
+
+MOFU (meio de funil) = estágio de maturidade da audiência na jornada do paciente. **NÃO** é um gargalo mecânico entre etapas.
+
+### 2. Fórmulas internas
+
+Calcular internamente — **não expor no relatório:**
+
+```
+cliques_estimados    = Impressões × (CTR ÷ 100)
+CPC_estimado         = Investimento ÷ cliques_estimados
+taxa_clique_conversa = Conversas ÷ cliques_estimados
+```
+
+### 3. Interpretação dos indicadores
+
+| Indicador | Resultado | Como interpretar |
+|-----------|-----------|-----------------|
+| CTR | > 2,5% | Criativo conduzindo o paciente na jornada |
+| CTR | < 2% | Descompasso entre mensagem e estágio — não "falha técnica" |
+| taxa_cc | > 2% | Audiência madura no momento do clique |
+| taxa_cc | < 1% | Paciente curioso mas não pronto para contato |
+| Frequência alta + CPL estável | — | Nutrição funcionando |
+| Frequência alta + CPL crescendo | — | Saturação — diversificar conteúdo educativo |
+
+### 4. Vocabulário
+
+**OBRIGATÓRIO usar:** "maturidade da audiência", "aquecimento prévio", "nutrição com conteúdo educativo", "construção de autoridade", "consideração informada", "intenção qualificada"
+
+**PROIBIDO usar:** "gargalo de funil", "funil furado", "fricção pós-clique", "passa / não passa"
+
+---
+
 ## Lógica de seleção de conteúdo (automática)
 
 O redator verifica os dados recebidos e monta o texto dinamicamente:
@@ -175,6 +245,35 @@ Sem config manual: o redator decide o que escrever com base nos dados que chegar
 
 **Exemplo errado:**
 > "Infelizmente o resultado ficou muito abaixo do esperado."
+
+---
+
+## Regras Próximos Passos
+
+> Define o que o redator pode e não pode recomendar na seção Próximos Passos do relatório.
+
+### PERMITIDO recomendar
+
+- **Criativos:** pausar, criar, testar, A/B entre formatos
+- **Audiências:** lookalike, broad, expansão, exclusões
+- **Orçamento:** escalar, redistribuir, bid
+- **Frequência e CPM:** reduzir frequência, otimizar CPM
+- **CTR:** formatos, copy, chamada para ação
+- **Remarketing:** cliques sem conversão, visitantes de perfil
+- **Conteúdo orgânico:** reels, posts para aquecimento de audiência
+- **Canais:** Google Ads, TikTok (como alternativa ou complemento)
+- **Fluxo pós-clique:** CTA, destino do anúncio, direct link
+
+### PROIBIDO recomendar
+
+- Processo de atendimento
+- Script de follow-up ou recontato
+- Protocolo de resposta a leads
+- Taxa de conversão conversa → agendamento
+- Tempo de resposta
+- Qualquer recomendação sobre leads **após** a conversa iniciada
+
+---
 
 ## Estrutura do texto gerado
 
@@ -306,3 +405,10 @@ Usar `get_report` ou `get_metrics` do MCP `mcp__30ebe978-db99-4dee-927c-b72f6aba
 ## Tratamento de dados ausentes
 
 Se dado extra não disponível via MCP → mencionar apenas as métricas disponíveis. Nunca inventar ou estimar valores sem fonte.
+
+### CPL fallback em cascata
+
+| Situação | Comportamento |
+|----------|--------------|
+| `conversas = 0` | CPL = "-" — nunca dividir por zero |
+| Métricas de conversas indisponíveis (timeout, integração offline) | Registrar CPL como "não monitorável neste ciclo — usar dados do Reportei" e continuar relatório sem travar |
