@@ -66,13 +66,15 @@ MENSAGEM WHATSAPP — [CLIENTE]
 Segue o resumo da semana *[DD/MM] a [DD/MM]*:
 
 💰 *Investimento:* [INVESTIMENTO]
-💬 *Conversas:* [N] | *CPL:* R$[CPL]   ← omitida se conversas = 0
+💬 *Conversas:* [N] | *CPL:* R$[CPL]
 
 Relatório completo disponível no link abaixo:
 🔗 [LINK]
 ════════════════════════════════════════════════════
 📋 Copie a mensagem acima e envie ao cliente via WhatsApp.
 ```
+
+> A linha de Conversas/CPL é **omitida** quando `conversas = 0`, `meta_spend = 0` ou CPL < 0 (ver "Regras de preenchimento" acima).
 
 ## Tratamento de erros
 

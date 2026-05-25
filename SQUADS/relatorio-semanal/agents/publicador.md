@@ -76,4 +76,5 @@ PUBLICAÇÃO CONCLUÍDA
 |------|------|
 | `project_id` não encontrado | Usar `list_projects` MCP, apresentar opções ao usuário |
 | MCP retorna erro | Registrar erro com detalhes, NÃO tentar novamente automaticamente |
-| Token expirado (401) | "Token Reportei expirado. Atualizar REPORTEI_TOKEN." |
+| Token inválido/expirado (401) | "Token Reportei inválido ou expirado. Atualizar REPORTEI_TOKEN." |
+| Sem acesso ao projeto (403) | "Sem acesso ao projeto [ID] no Reportei. Verificar permissões do token ou usar outro token com acesso ao cliente." |
