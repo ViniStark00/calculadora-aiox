@@ -11,3 +11,8 @@
 {"timestamp": "2026-05-21T11:18:14.000000", "event_id": 107651, "cliente": "839737"}
 {"timestamp": "2026-05-21T11:18:24.000000", "event_id": 107652, "cliente": "627550"}
 {"timestamp": "2026-05-21T11:18:30.000000", "event_id": 107653, "cliente": "688377"}
+{"timestamp": "2026-05-22T08:49:38.667213", "event_id": null, "cliente": "839737"}
+{"timestamp": "2026-05-22T08:49:47.137570", "event_id": null, "cliente": "627550"}
+{"timestamp": "2026-05-22T08:49:54.148256", "event_id": null, "cliente": "1023153"}
+{"timestamp": "2026-05-22T08:49:59.350898", "event_id": null, "cliente": "688377"}
+{"timestamp": "2026-05-23T22:27:49.880070", "event_id": null, "cliente": "839737"}

@@ -39,18 +39,45 @@ nome_aba = data_inicio.strftime('%d/%m/%Y')
 3. **Se não existir:** interromper com erro claro:
    > "Aba '[DD/MM/AAAA]' não encontrada na planilha [SHEET_ID]. Criar manualmente e rodar novamente."
 
-### Passo 3 — Buscar projetos do Reportei (com paginação)
+### Passo 3 — Buscar projetos do Reportei
+
+**Estratégia em duas camadas (Plano B — IDs diretos têm prioridade):**
+
+A API `GET /v2/projects` retorna apenas 4 projetos com o token do Vinicius (Admin).
+Para contornar, o config tem `project_ids` com IDs conhecidos — usar lookup direto.
+
 ```
-page = 1
 todos_projetos = []
+project_ids_config = clientes_config.get('project_ids', {})
+
+# Camada 1 — IDs configurados: chamar GET /v2/projects/{id} diretamente
+for nome_planilha, project_id in project_ids_config.items():
+    resp = GET /v2/projects/{project_id}
+    if resp.status_code == 200:
+        projeto = resp.json()
+        todos_projetos.append(projeto)
+        sleep(0.6)
+    else:
+        registrar aviso: f"ID {project_id} ({nome_planilha}): erro {resp.status_code}"
+
+# Camada 2 — Descoberta por listagem (fallback para clientes sem ID configurado)
+ids_ja_carregados = {p['id'] for p in todos_projetos}
+page = 1
 while True:
     resp = GET /v2/projects?per_page=100&page={page}
     projetos = resp.json()
-    todos_projetos.extend(projetos)
+    for p in projetos:
+        if p['id'] not in ids_ja_carregados:
+            todos_projetos.append(p)
+            ids_ja_carregados.add(p['id'])
     if len(projetos) < 100: break
     page += 1
     sleep(0.6)
 ```
+
+> **Nota:** Quando todos os clientes tiverem IDs mapeados em `project_ids`, a Camada 2
+> (listagem paginada) não adicionará projetos novos — serve apenas de fallback para novos
+> clientes ainda não mapeados.
 
 ### Passo 4 — Identificar bloco Vinicius na planilha
 1. Ler todas as linhas da aba `nome_aba`
