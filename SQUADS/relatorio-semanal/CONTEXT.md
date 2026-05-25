@@ -22,12 +22,11 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : PLANO V2 GUSTAVO — Sessão 27 concluída. Melhorias B1-B3 implementadas no thresholds-especialidade.yaml.
-Última ação : Sessão 27 encerrada. @dev (Dex) implementou B1 (kill-switch), B2 (frequencia-por-tipo),
-              B3 (quando-nao-alertar) no data/thresholds-especialidade.yaml.
-              Aguardando @qa para validar + @devops para commit.
-Próxima ação: Sessão 28 — abrir nova sessão, chamar @dev, pedir Melhorias C1-C2 no squad.yaml + publicador.md.
-              Briefing exato na seção PLANO V2 GUSTAVO — SESSÃO 28 deste arquivo.
+Etapa atual : PLANO V2 GUSTAVO — Sessão 28 concluída. Melhorias C1-C2 implementadas em squad.yaml e publicador.md.
+Última ação : Sessão 28 encerrada. @dev (Dex) implementou C1 (heuristics no squad.yaml) e
+              C2 (gestão de rate limit no publicador.md).
+              Aguardando @qa para validar + @devops para commit + push + PR + merge.
+Próxima ação: @qa validar C1-C2 → @devops commit + push + PR + merge (última sessão do Plano V2 Gustavo).
 Bloqueadores: MCP Reportei com token limitado a 4 projetos — ação requerida FORA do Claude Code.
 ```
 
@@ -2432,9 +2431,33 @@ Leia squads/relatorio-semanal/CONTEXT.md. Execute a Sessão 26 do Plano V2 Gusta
 - `squads/relatorio-semanal/CONTEXT.md` — estado atual + log desta sessão
 
 **Pendências abertas:**
-- @qa — validar B1–B3 no thresholds-especialidade.yaml
-- @devops — commit após @qa aprovar
-- Sessão 28 — Melhorias C1-C2 no squad.yaml + publicador.md
+- @qa — validar B1–B3 no thresholds-especialidade.yaml ✅ (aprovado na mesma sessão)
+- @devops — commit 328d1e7 após @qa aprovar ✅
+
+---
+
+### Sessão 28 — 2026-05-25
+
+**Início:** CONTEXT.md lido — Sessão 28 do Plano V2 Gustavo. Melhorias C1-C2 em squad.yaml e publicador.md.
+
+**Atividades desta sessão:**
+
+| Ação | Agente | Resultado |
+|------|--------|-----------|
+| Lido CONTEXT.md — handoff Sessão 28 identificado | @dev | OK |
+| Lido squad.yaml e agents/publicador.md — estado atual absorvido | @dev | OK |
+| C1 — bloco `heuristics:` inserido no squad.yaml (após `integrations:`, antes de `pipeline_flow:`) | @dev | ✅ |
+| C2 — seção "Gestão de rate limit" inserida no publicador.md (após deduplicação, antes de MCP) | @dev | ✅ |
+| CONTEXT.md atualizado (log + estado atual) | @dev | ✅ |
+
+**Arquivos modificados nesta sessão:**
+- `squads/relatorio-semanal/squad.yaml` — bloco `heuristics:` adicionado
+- `squads/relatorio-semanal/agents/publicador.md` — seção "Gestão de rate limit" adicionada
+- `squads/relatorio-semanal/CONTEXT.md` — estado atual + log desta sessão
+
+**Pendências abertas:**
+- @qa — validar C1–C2
+- @devops — commit + push + PR + merge (última sessão do Plano V2 Gustavo)
 
 ---
 

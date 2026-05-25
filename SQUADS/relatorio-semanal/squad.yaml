@@ -89,6 +89,14 @@ integrations:
       - clickup_get_task
       - clickup_update_task
 
+heuristics:
+  absolute_vetos:
+    - Nunca executar ação no Meta Ads ou Google Ads — apenas leitura de métricas via Reportei
+    - Nunca publicar na Timeline do Reportei sem o quality-gate Bloco B aprovado
+    - Nunca preencher a planilha com valores estimados — zeros são válidos, campos vazios não
+    - Nunca recomendar ações sobre atendimento, follow-up ou processo comercial pós-lead
+    - Nunca expor tokens, credenciais ou paths de service_account no output do pipeline
+
 pipeline_flow: >
   relatorio-chief → contexto-cliente (leitura) → coletor → quality-gate (verify-fill)
   → redator → quality-gate (validate-report) → publicador → whatsapp-writer
