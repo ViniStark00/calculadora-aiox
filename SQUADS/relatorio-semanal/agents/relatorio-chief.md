@@ -15,6 +15,7 @@ Tier 0 do squad `relatorio-semanal`. Recebe o comando do usuário, carrega a con
 
 ```
 Rodar pipeline para [NOME DO CLIENTE]
+Rodar pipeline para todos os clientes do bloco Vinicius
 ```
 
 Exemplos válidos:
@@ -22,7 +23,19 @@ Exemplos válidos:
 - `Rodar pipeline para Dr. Alvaro Rodrigues`
 - `Rodar pipeline para todos os clientes do bloco Vinicius`
 
-## Fluxo de execução
+## Roteamento de modo
+
+```
+Receber trigger
+│
+├─ trigger contém "todos os clientes" ou "bloco Vinicius"
+│    └─ MODO PARALELO (ver seção abaixo)
+│
+└─ trigger contém nome de cliente específico
+     └─ MODO SEQUENCIAL (fluxo padrão)
+```
+
+## Fluxo de execução — Modo sequencial (1 cliente)
 
 ```
 1.  Receber cliente
@@ -45,6 +58,46 @@ Exemplos válidos:
 13. CHAMAR contexto-cliente (ATUALIZAÇÃO) — NÃO-BLOQUEANTE
     └─ Atualiza aprendizados no Drive; falha → aviso, continua
 14. Exibir resumo final
+```
+
+## Fluxo de execução — Modo paralelo (todos os clientes)
+
+Ativado quando o trigger contém "todos os clientes" ou "bloco Vinicius".
+Referência completa: `workflows/weekly-report-pipeline.md` → seção "Modo multi-cliente paralelo".
+
+```
+ESTÁGIO 1 — COLETA
+  Carregar lista completa de clientes do bloco Vinicius via config/clientes-config.yaml.
+  Calcular período único (segunda a domingo da semana anterior) — igual para todos.
+  Para cada cliente (sequencial, 0.6s entre chamadas Reportei):
+    ├─ get_project_metrics → dict_resultados[cliente]
+    └─ contexto-cliente LEITURA (chamadas Drive em paralelo)
+  Falha por cliente → status[cliente] = FAILED_FETCH, continuar os demais.
+
+ESTÁGIO 2 — SHEETS (serializado)
+  fill_sheets.py com TODOS os dados de dict_resultados em uma chamada.
+  Falha parcial → registrar + continuar.
+
+ESTÁGIO 3 — GERAÇÃO (lotes de 3)
+  Para cada lote de 3 clientes com status != FAILED_FETCH:
+    ├─ quality-gate verify-fill
+    ├─ redator generate-report
+    └─ quality-gate validate-report
+  Falha por cliente → status[cliente] = FAILED_REPORT, excluir da publicação.
+
+ESTÁGIO 4 — PUBLICAÇÃO + LOGS (serializado)
+  Para cada cliente com status = APPROVED, em sequência:
+    ├─ publicador publish-timeline → append data/timeline-log.jsonl
+    └─ coletor save-history → rewrite data/historico-clientes.yaml
+
+ESTÁGIO 5 — WRAP-UP (paralelo)
+  Para todos os clientes concluídos, em paralelo:
+    ├─ whatsapp-writer
+    ├─ monitor-tarefas-clickup — NÃO-BLOQUEANTE
+    └─ contexto-cliente ATUALIZAÇÃO — NÃO-BLOQUEANTE
+
+RESUMO FINAL CONSOLIDADO
+  Exibir tabela de resultados + mensagens WhatsApp agrupadas + erros.
 ```
 
 ## Resolução de cliente

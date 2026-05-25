@@ -111,6 +111,107 @@ FIM ✅
 - **Todos os clientes:** Rodar sequencialmente para todos os clientes do bloco Vinicius
   - Se um cliente falhar → registrar erro e continuar com o próximo
 
+---
+
+## Modo multi-cliente paralelo
+
+> Variante otimizada para executar o pipeline completo para todos os clientes do bloco.
+> Reduz o tempo de ~22 min (sequencial) para ~5 min (paralelo em 5 estágios).
+
+### Trigger
+
+```
+Rodar pipeline para todos os clientes do bloco Vinicius
+```
+
+### Arquitetura em 5 Estágios
+
+```
+ESTÁGIO 1 — COLETA (sequencial rate-limited + Drive paralelo)
+  Para cada cliente, com 0.6s entre chamadas Reportei:
+  ├─ get_project_metrics  →  salva resultado em memória (dict por cliente)
+  └─ contexto-cliente LEITURA  →  chamadas Drive em paralelo (MCP batched)
+  Falha por cliente: marca status=FAILED_FETCH, continua os demais.
+
+ESTÁGIO 2 — SHEETS (serializado — 1 chamada única)
+  fill_sheets.py recebe TODOS os dados do Estágio 1 em uma chamada.
+  Único processo Python → sem race condition no arquivo da planilha.
+  Falha parcial: registra quais clientes falharam + continua.
+
+ESTÁGIO 3 — GERAÇÃO DE RELATÓRIOS (lotes de 3)
+  Lote = 3 clientes processados em paralelo (MCP batched):
+    quality-gate verify-fill → redator generate-report → quality-gate validate-report
+  Lotes sequenciais até esgotar a lista de clientes.
+  Falha por cliente: marca status=FAILED_REPORT, exclui da publicação.
+
+ESTÁGIO 4 — PUBLICAÇÃO + LOGS (serializado — arquivos compartilhados)
+  Para cada cliente com status=APPROVED, em sequência:
+  ├─ publicador publish-timeline  →  append em data/timeline-log.jsonl
+  └─ coletor save-history         →  rewrite em data/historico-clientes.yaml
+  Serialização obrigatória: escritas concorrentes corrompem os arquivos.
+
+ESTÁGIO 5 — WRAP-UP (paralelo — recursos isolados por cliente)
+  Para todos os clientes concluídos, em paralelo:
+  ├─ whatsapp-writer             (formatação em memória)
+  ├─ monitor-tarefas-clickup     (task_id isolado por cliente)
+  └─ contexto-cliente ATUALIZAÇÃO (doc Drive isolado por cliente)
+```
+
+### Por que batch size = 3 no Estágio 3?
+
+Cada cliente carrega ~2.600 tokens de contexto na geração.
+Lote de 3 = ~7.800 tokens de contexto simultâneo — margem segura.
+Lote de 11 = ~28.600 tokens — risco de degradação na qualidade da narrativa.
+
+### Projeção de tempo (11 clientes)
+
+| Estágio | Modo sequencial | Modo paralelo |
+|---------|----------------|---------------|
+| 1 — Coleta | ~7s | ~7s (rate limit) |
+| 2 — Sheets | ~8s | ~8s (inalterado) |
+| 3 — Geração | ~660s | ~240s (4 lotes) |
+| 4 — Publicação | ~22s | ~22s (serializado) |
+| 5 — Wrap-up | ~55s | ~10s |
+| **Total** | **~22 min** | **~5 min** |
+
+### Regras de falha isolada
+
+- Falha no Estágio 1 (fetch): cliente marcado como `FAILED_FETCH` — excluído dos estágios seguintes
+- Falha no Estágio 3 (geração): cliente marcado como `FAILED_REPORT` — não publicado, sem erro geral
+- Falha no Estágio 4 (publicação): registrada no resumo final — pipeline NÃO interrompido
+- Estágio 5 (wrap-up): falhas já eram não-bloqueantes no modo sequencial — mantém comportamento
+
+### Saída esperada — Resumo final consolidado
+
+```
+PIPELINE MULTI-CLIENTE CONCLUÍDO — [DD/MM/AAAA] a [DD/MM/AAAA]
+═════════════════════════════════════════════════════════════════
+RESULTADO: [N]/[TOTAL] concluídos | Tempo total: ~X min
+
+╔══════════════════════════════╦═══════════════════════════╗
+║ Cliente                      ║ Status                    ║
+╠══════════════════════════════╬═══════════════════════════╣
+║ IMCP                         ║ ✅ ID: XXXXXX             ║
+║ Dra Danielle Gondim          ║ ✅ ID: XXXXXX             ║
+║ ...                          ║ ...                       ║
+║ [cliente com erro]           ║ ❌ ERRO: [motivo]         ║
+╚══════════════════════════════╩═══════════════════════════╝
+
+PLANILHA: [N] clientes × 5 colunas preenchidos ✅
+
+MENSAGENS WHATSAPP:
+───────────────────────────────────────────
+[CLIENTE 1]
+[mensagem formatada]
+───────────────────────────────────────────
+[CLIENTE 2]
+[mensagem formatada]
+
+ERROS (se houver):
+  • [CLIENTE] — [motivo detalhado]
+═════════════════════════════════════════════════════════════════
+```
+
 ## Saída final esperada
 
 ```
