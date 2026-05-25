@@ -22,13 +22,12 @@ Este arquivo é atualizado **ao final de cada etapa concluída** e sempre que:
 ## ESTADO ATUAL (atualizar a cada etapa)
 
 ```
-Etapa atual : MELHORIAS ARQUITETURAIS — Sessão 24 encerrada
-Última ação : Dívida técnica e funcionais concluídos (Melhorias 8-13 de HANDOFF-melhorias-aria.md).
-              squad.yaml atualizado · fill_sheets.py movido para scripts/ · dedup no publicador
-              · métricas no WhatsApp · 401 vs 403 no coletor · 8 checks corrigidos no pipeline.
-              Commit 7758604 em main. Bug MCP Reportei ainda pendente (Plano B ativo).
-Próxima ação: Melhoria 13 — design paralelo multi-cliente (@architect — apenas design).
-              Correção residual: publicador.md linha 79 (401 genérico) — baixa prioridade.
+Etapa atual : MELHORIAS ARQUITETURAIS — Sessão 25 encerrada
+Última ação : Melhoria 13 concluída — pipeline multi-cliente paralelo implementado.
+              @architect design 5 estágios → @dev docs (relatorio-chief.md + weekly-report-pipeline.md)
+              → @qa aprovado → @devops commits a0ea009 (M13) + 39be095 (housekeeping) pusheados.
+              Plano de melhorias Aria: CONCLUÍDO. Bug MCP Reportei ainda pendente (Plano B ativo).
+Próxima ação: Correções residuais baixa prioridade (publicador.md linha 79, whatsapp-writer.md inline comment).
               Após reconexão MCP: mapear 6 IDs desconhecidos + rodar pipeline 11/11 clientes.
 Bloqueadores: MCP Reportei com token limitado a 4 projetos — ação requerida FORA do Claude Code.
 ```
@@ -1920,6 +1919,88 @@ O MCP Reportei (`mcp__30ebe978-db99-4dee-927c-b72f6abac9d8`) é um conector do m
 - `SQUADS/relatorio-semanal/agents/whatsapp-writer.md` — handoff expandido + regras
 - `SQUADS/relatorio-semanal/agents/relatorio-chief.md` — 401 vs 403
 - `SQUADS/relatorio-semanal/agents/coletor.md` — tabela de erros adicionada
+
+### Sessão 25 — 2026-05-25
+
+**Início:** Melhoria 13 — design e implementação do modo paralelo multi-cliente. Limpeza de 3 arquivos pendentes de sessões anteriores.
+
+**Atividades desta sessão:**
+
+| Ação | Agente | Resultado |
+|------|--------|-----------|
+| Design do pipeline paralelo em 5 estágios (batch=3, rate-limit 0.6s, falha isolada) | @architect | ✅ Design entregue |
+| `workflows/weekly-report-pipeline.md` — seção "Modo multi-cliente paralelo" adicionada | @dev | ✅ |
+| `agents/relatorio-chief.md` — roteamento modo paralelo/sequencial + fluxo 5 estágios | @dev | ✅ |
+| Validação da implementação (consistência arquitetura × docs) | @qa | ✅ APROVADO |
+| Commit `a0ea009` — feat(relatorio-semanal): M13 pipeline multi-cliente paralelo | @devops | ✅ |
+| Housekeeping: commit `39be095` — 3 arquivos pendentes de sessões anteriores | @devops | ✅ |
+| CONTEXT.md atualizado + push para main | @devops | ✅ |
+
+**Decisão técnica (Plano B):** Confirmado que lookup por ID direto (`GET /v2/projects/{id}`) é mais robusto que listagem — clientes com IDs mapeados terão lookup direto; novos clientes usam fallback de listagem. Quando o acesso MCP completo for restaurado, o Plano B continuará funcionando como camada prioritária.
+
+**Arquivos modificados nesta sessão:**
+- `SQUADS/relatorio-semanal/workflows/weekly-report-pipeline.md` — seção modo paralelo adicionada
+- `SQUADS/relatorio-semanal/agents/relatorio-chief.md` — roteamento + fluxo paralelo
+- `SQUADS/relatorio-semanal/data/timeline-log.jsonl` — 5 entradas de sessões anteriores (housekeeping)
+- `SQUADS/relatorio-semanal/examples/imcp-2026-05-17.md` — atualizado (housekeeping)
+- `SQUADS/relatorio-semanal/tasks/fetch-metrics.md` — Plano B implementado (housekeeping)
+
+---
+
+## HANDOFF — SESSÃO 26
+
+> **LEIA ESTE BLOCO PRIMEIRO na próxima sessão.**
+> Sessão 25 encerrada. Melhoria 13 (pipeline paralelo) concluída e commitada. Commits a0ea009 + 39be095 pusheados para main.
+> Plano de melhorias Aria: CONCLUÍDO integralmente (exceto M7 — irrelevante para este squad).
+
+```yaml
+handoff:
+  from_session: 25
+  date: 2026-05-25
+  branch: main
+  base: main
+  ultimo_commit: "39be095"
+
+  o_que_foi_feito_sessao_25:
+    - "Melhoria 13: design @architect (5 estágios) → implementação @dev → QA aprovado → commit a0ea009"
+    - "weekly-report-pipeline.md: seção 'Modo multi-cliente paralelo' (5 estágios, projeção de tempo ~22min→~5min)"
+    - "relatorio-chief.md: roteamento modo paralelo/sequencial + fluxo dos 5 estágios documentado"
+    - "Housekeeping: 3 arquivos pendentes de sessões anteriores commitados (39be095)"
+    - "Plano de melhorias Aria: CONCLUÍDO — todas as 13 melhorias implementadas"
+
+  melhorias_plano_aria:
+    status: "CONCLUÍDO"
+    concluidas: [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13]
+    obs: "Melhoria 7 (sync calculadora-aiox) não era relevante para este squad — ignorada"
+
+  proxima_acao: |
+    OPÇÃO A — Correções residuais (baixa prioridade):
+      - publicador.md linha 79: mensagem 401 genérica → diferenciar 401 vs 403 (igual à M12)
+      - whatsapp-writer.md "Saída esperada": remover comentário inline do bloco de código
+
+    OPÇÃO B — Após reconexão MCP Reportei:
+      Mapear 6 IDs desconhecidos em config/clientes-config.yaml:
+      IDs a mapear: [749199, 982754, 1218018, 1157908, 1028218, 1233641]
+      Após mapeamento: rodar "Rodar pipeline para todos os clientes do bloco Vinicius"
+      para testar o novo modo paralelo com 11/11 clientes.
+
+    OPÇÃO C — Uso operacional normal:
+      "Rodar pipeline para [CLIENTE]" — uso normal do squad.
+
+  problema_mcp_reportei:
+    status: "BLOQUEADO — aguardando reconexão do MCP pelo usuário no claude.ai"
+    referencia: "squads/relatorio-semanal/HANDOFF-mcp-fix.md"
+    plano_b_ids_mapeados: [627550, 688377, 839737, 1023153, 564106]
+    plano_b_ids_pendentes: [749199, 982754, 1218018, 1157908, 1028218, 1233641]
+
+  variaveis_ambiente:
+    status: "AUTOMÁTICAS via .claude/settings.local.json — NUNCA pedir ao usuário para definir no terminal"
+    REPORTEI_TOKEN: "[REDACTED — definir via variável de ambiente]"
+    SHEET_ID: "1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og"
+    GOOGLE_SERVICE_ACCOUNT_JSON: 'C:\Users\Usuario\Desktop\Claude_Stark\squads\relatorio-semanal\service_account.json'
+
+  skill_command: "/relatorio-semanal"
+```
 
 ---
 
