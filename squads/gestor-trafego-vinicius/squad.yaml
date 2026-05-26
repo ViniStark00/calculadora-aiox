@@ -1,0 +1,118 @@
+name: relatorio-semanal
+version: 1.0.0
+description: >
+  Automatiza 3 atividades semanais do gestor de tráfego:
+  coleta de métricas via Reportei API, geração de relatório
+  narrativo e publicação na Timeline do Reportei.
+  Pipeline multi-cliente — bloco Vinicius na planilha Google Sheets.
+author: ViniStark00
+license: MIT
+slashPrefix: relatorio-semanal
+
+aiox:
+  minVersion: "2.1.0"
+  type: squad
+
+domain:
+  primary: weekly-report-automation
+  secondary: [trafego-pago, meta-ads, google-ads, relatorio-cliente]
+  multi_client: true
+  gestor_block: "Vinicius"
+
+components:
+  agents:
+    - relatorio-chief.md
+    - contexto-cliente.md
+    - coletor.md
+    - redator.md
+    - publicador.md
+    - quality-gate.md
+    - whatsapp-writer.md
+    - monitor-tarefas-clickup.md
+    - monitor-diario.md
+  tasks:
+    - fetch-metrics.md
+    - verify-fill.md
+    - generate-report.md
+    - validate-report.md
+    - publish-timeline.md
+    - save-history.md
+  workflows:
+    - weekly-report-pipeline.md
+    - daily-monitor-pipeline.md
+  checklists:
+    - qa-relatorio.md
+  templates:
+    - relatorio-template.md
+    - whatsapp-template.md
+    - contexto-cliente-template.md
+  data:
+    - thresholds-especialidade.yaml   # Benchmarks CPL/CPM/CTR/frequencia por especialidade médica
+    - historico-clientes.yaml         # Histórico semanal por cliente (gitignored — gerado em runtime)
+  tools: []
+  scripts:
+    - fill_sheets.py                  # Script Python: coleta Reportei → preenche Google Sheets
+
+config:
+  extends: extend
+  entrypoint: agents/relatorio-chief.md
+
+integrations:
+  - name: Reportei API v2
+    type: http-rest
+    base_url: "https://api.reportei.com/v2"
+    auth: bearer-token
+    env: REPORTEI_TOKEN
+  - name: Google Sheets API
+    type: service-account
+    env: GOOGLE_SERVICE_ACCOUNT_JSON
+    sheet_id_env: SHEET_ID
+  - name: MCP Reportei
+    id: "mcp__30ebe978-db99-4dee-927c-b72f6abac9d8"
+    tools:
+      - create_timeline_event
+      - get_metrics
+      - get_project
+      - get_report
+      - list_projects
+  - name: Google Drive MCP
+    id: "mcp__92a31705-b51e-422b-abc2-e6cb82a79330"
+    tools:
+      - search_files
+      - read_file_content
+      - create_file
+      - download_file_content
+  - name: ClickUp MCP
+    id: "mcp__2d24fa11-1001-4c98-bf3c-7dcc3b7bdfaf"
+    tools:
+      - clickup_filter_tasks
+      - clickup_get_task
+      - clickup_update_task
+
+heuristics:
+  absolute_vetos:
+    - Nunca executar ação no Meta Ads ou Google Ads — apenas leitura de métricas via Reportei
+    - Nunca publicar na Timeline do Reportei sem o quality-gate Bloco B aprovado
+    - Nunca preencher a planilha com valores estimados — zeros são válidos, campos vazios não
+    - Nunca recomendar ações sobre atendimento, follow-up ou processo comercial pós-lead
+    - Nunca expor tokens, credenciais ou paths de service_account no output do pipeline
+
+pipeline_flow: >
+  relatorio-chief → contexto-cliente (leitura) → coletor → quality-gate (verify-fill)
+  → redator → quality-gate (validate-report) → publicador → whatsapp-writer
+  → monitor-tarefas-clickup → contexto-cliente (atualização) → resumo final
+
+dependencies:
+  node: []
+  python: []
+  squads: []
+
+tags:
+  - trafego-pago
+  - relatorio-semanal
+  - google-sheets
+  - reportei
+  - meta-ads
+  - google-ads
+  - multi-cliente
+  - automacao

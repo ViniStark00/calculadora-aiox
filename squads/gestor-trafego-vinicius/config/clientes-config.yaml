@@ -1,0 +1,202 @@
+# clientes-config.yaml — Configuração por cliente
+# NÃO incluir tokens ou credenciais aqui.
+# SHEET_ID e REPORTEI_TOKEN devem estar em variáveis de ambiente.
+
+gestor:
+  nome: Vinicius
+  bloco_planilha: "Vinicius"  # header que delimita o bloco na planilha
+
+planilha:
+  # SHEET_ID vem da variável de ambiente SHEET_ID
+  # IMPORTANTE: abas nomeadas pelo DOMINGO da semana (ex: 17/05/2026 = semana 11-17/05)
+  # Nomes curtos na coluna A (ex: 'IMCP', 'DESTRA', 'Dra Danielle Gondim')
+  # Colunas por métrica (índice 0 = coluna A)
+  colunas:
+    meta_spend: C      # Meta Ads — Spend (R$)
+    google_spend: E    # Google Ads — Spend (R$)
+    seguidores: H      # Seguidores Instagram
+    conversas: K       # Conversas WhatsApp (leads)
+    conversoes: O      # Conversões
+
+reportei:
+  api_base: "https://api.reportei.com/v2"
+  per_page: 100
+  rate_limit_sleep: 0.6    # segundos entre chamadas
+  rate_limit_retry: 60     # segundos para aguardar após erro 429
+
+# project_ids: mapeamento direto nome_planilha → ID do projeto no Reportei
+# PLANO B: a API GET /v2/projects retorna só 4 projetos com o token do Vinicius (Admin).
+# Solução: chamar GET /v2/projects/{ID} diretamente, bypassing a listagem.
+# Para adicionar ID de um novo cliente: abrir Reportei → clicar no cliente → ver número na URL.
+project_ids:
+  "Dr. Leandro Gontijio":                          627550
+  "IMCP - Instituto Mineiro de Cirurgia Plastica":  688377
+  "Dra Danielle Gondim":                            839737
+  "Dr. Guilherme Mattar":                           1023153
+  "Dr. Lucas Consentino":                           564106
+  # IDs abaixo: confirmados via URL do Reportei — inacessíveis via MCP atual
+  # Ficam prontos para quando o MCP for reconectado com token correto
+  # Ordem dos URLs fornecidos pelo usuário (cliente exato a confirmar ao reconectar):
+  # app.reportei.com/client/749199   → cliente a identificar
+  # app.reportei.com/client/982754   → cliente a identificar
+  # app.reportei.com/client/1218018  → cliente a identificar
+  # app.reportei.com/client/1157908  → cliente a identificar
+  # app.reportei.com/client/1028218  → cliente a identificar
+  # app.reportei.com/client/1233641  → cliente a identificar
+
+# MANUAL_MAP: chave = nome do projeto no Reportei (lowercase), valor = nome na planilha
+# null = ignorar (não é cliente ativo do bloco Vinicius)
+manual_map:
+  # IMCP
+  "imcp": "IMCP - Instituto Mineiro de Cirurgia Plastica"
+  "imcp - instituto mineiro de cirurgia plastica": "IMCP - Instituto Mineiro de Cirurgia Plastica"
+  "imcp - instituto mineiro de cirurgia plástica": "IMCP - Instituto Mineiro de Cirurgia Plastica"
+  # Destra
+  "destra": "Destra Desenvolvimentos"
+  "destra desenvolvimentos": "Destra Desenvolvimentos"
+  # Dra. Danielle Gondim
+  "dra. danielle gondim": "Dra Danielle Gondim"
+  "dra danielle gondim": "Dra Danielle Gondim"
+  # Dr. Leandro Gontijo (Reportei) → Gontijio (planilha) — grafias diferentes!
+  "dr leandro gontijo": "Dr. Leandro Gontijio"
+  "dr. leandro gontijo": "Dr. Leandro Gontijio"
+  # Dr. Lucas Consentino
+  "dr lucas consentino": "Dr. Lucas Consentino"
+  "dr. lucas consentino": "Dr. Lucas Consentino"
+  # Dr. Luiz Borba
+  "dr. luiz borba": "Dr Luiz Borba"
+  "dr luiz borba": "Dr Luiz Borba"
+  # Dr. Guilherme Mattar
+  "dr. guilherme mattar": "Dr. Guilherme Mattar"
+  # Dr. Laureano Filho
+  "dr. laureano filho": "Dr. Laureano Filho"
+  # Diego Gonzalez (Reportei) → Diego Gonzalez Salvador (planilha) — sobrenome a mais!
+  "diego gonzalez": "Diego Gonzalez Salvador"
+  "diego gonzalez salvador": "Diego Gonzalez Salvador"
+  # Dr. Joel Abdala
+  "dr. joel abdala": "Dr. Joel Abdala"
+  # Dr. Humberto
+  "dr. humberto": "Dr. Humberto"
+
+# Nomes reais na coluna A da planilha (descobertos na Sessão 5)
+# Usar esses valores para localizar a linha correta no Sheets
+nomes_planilha:
+  "IMCP - Instituto Mineiro de Cirurgia Plastica": "IMCP"
+  "Destra Desenvolvimentos": "DESTRA"
+  "Dra Danielle Gondim": "Dra Danielle Gondim"
+  "igo implantes/mensagens": "IGO"
+  "igo implantes": "IGO"
+  "dr. alvaro": "Dr. Alvaro Rodrigues"
+  "dr. alvaro rodrigues": "Dr. Alvaro Rodrigues"
+  "dr. enzo": "Dr. Enzo Carvalho"
+  "dr. enzo carvalho": "Dr. Enzo Carvalho"
+  "dr javier": "Dr Javier Cucchiaro"
+  "dr javier cucchiaro": "Dr Javier Cucchiaro"
+  "dr. daniel renno (maxioral)": "MaxiOral"
+  "maxioral": "MaxiOral"
+  "zanicare  / mensagens": "Zenicare"
+  "zanicare": "Zenicare"
+  "dra nicolle andrade": "Dra Nicolli"
+  "dra nicolli": "Dra Nicolli"
+  "dra danielle gondim": "Dra Danielle Gondim"
+  "danielle gondim": "Dra Danielle Gondim"
+  # Novos clientes adicionados em 2026-05-21
+  "Dr. Leandro Gontijio": "Dr. Leandro Gontijio"
+  "dr. leandro gontijio": "Dr. Leandro Gontijio"
+  "dr leandro gontijo": "Dr. Leandro Gontijio"
+  "Dr. Lucas Consentino": "Dr. Lucas Consentino"
+  "dr. lucas consentino": "Dr. Lucas Consentino"
+  "Dr Luiz Borba": "Dr Luiz Borba"
+  "dr luiz borba": "Dr Luiz Borba"
+  "Dr. Guilherme Mattar": "Dr. Guilherme Mattar"
+  "dr. guilherme mattar": "Dr. Guilherme Mattar"
+  "Dr. Humberto": "Dr. Humberto"
+  "dr. humberto": "Dr. Humberto"
+  "Dr. Laureano Filho": "Dr. Laureano Filho"
+  "dr. laureano filho": "Dr. Laureano Filho"
+  "Diego Gonzalez Salvador": "Diego Gonzalez Salvador"
+  "diego gonzalez salvador": "Diego Gonzalez Salvador"
+  "diego gonzalez": "Diego Gonzalez Salvador"
+  "Dr. Joel Abdala": "Dr. Joel Abdala"
+  "dr. joel abdala": "Dr. Joel Abdala"
+  "dr juan lopez": null       # não é cliente ativo
+  "stark marketing": null     # não é cliente ativo
+  "dr, matheus ocampo": null  # não é cliente ativo
+  "l348": null                # não é cliente ativo
+
+fuzzy_threshold: 0.60  # similaridade mínima para match fuzzy (fallback)
+
+# Exceções por cliente
+excecoes:
+  skip_meta_spend:
+    - "Dr Javier Cucchiaro"  # Meta Spend bloqueado em ARS — pular sem erro
+
+# Slugs de métricas no Reportei (exatos — não alterar)
+slugs:
+  google_ads: "google_adwords"           # NÃO usar "google_ads"
+  seguidores: "ig:new_followers_count"   # match exato
+  conversas: "messaging_conversation_started_7d"  # match exato
+  google_cost_unit: "direct"             # custo Google = valor direto, SEM ÷ 1.000.000
+
+# Nome personalizado para saudação no WhatsApp
+# Usado pelo whatsapp-writer para montar: "[SAUDACAO], [NOME_WHATSAPP]!"
+# Para clínicas/empresas sem médico responsável: usar "pessoal"
+nome_whatsapp_por_cliente:
+  # --- Bloco Vinicius — clientes ativos ---
+  "IMCP - Instituto Mineiro de Cirurgia Plastica": "pessoal"
+  "Dra Danielle Gondim":                           "Dra. Danielle"
+  "Dr. Leandro Gontijio":                          "Dr. Leandro"
+  "Dr. Guilherme Mattar":                          "Dr. Guilherme"
+  "Dr. Luiz Borba":                                "Dr. Luiz"
+  "Dr. Lucas Consentino":                          "Dr. Lucas"
+  "Dr. Humberto":                                  "Dr. Humberto"
+  "Dr. Laureano Filho":                            "Dr. Laureano"
+  "Dr. Diego Gonzalez Salvador":                   "Dr. Diego"
+  "Dr. Joel Abdala":                               "Dr. Joel"
+  "Dr. Matheus Ocampo":                            "Dr. Matheus"
+  "Destra Desenvolvimentos":                        "pessoal"
+  "Dr. Alvaro Rodrigues":                           "Dr. Alvaro"
+  "Dr. Enzo Carvalho":                              "Dr. Enzo"
+  "Dr Javier Cucchiaro":                            "Dr. Javier"
+  "MaxiOral":                                       "pessoal"
+  "Zenicare":                                       "pessoal"
+  "Dra Nicolli":                                    "Dra. Nicolli"
+  "IGO":                                            "pessoal"
+
+# Especialidade médica por cliente
+# Valores permitidos (slugs exatos das chaves em thresholds-especialidade.yaml):
+#   cirurgia_plastica | cirurgia_facial | cirurgia_corporal | mommy_makeover |
+#   cirurgia_trans | cirurgia_ortognatica | dermatologia | medicina_estetica | null
+# null = sem threshold — redator usa apenas os dados brutos, sem classificação
+# Usado pelo redator para classificar métricas via data/thresholds-especialidade.yaml
+especialidade_por_cliente:
+  # --- Bloco Vinicius — clientes ativos (confirmados em 2026-05-20) ---
+  "IMCP - Instituto Mineiro de Cirurgia Plastica": cirurgia_plastica   # geral
+  "Dra Danielle Gondim":                           cirurgia_facial      # rinoplastia, blefaroplastia, face
+  "Dr. Leandro Gontijio":                          cirurgia_corporal    # silicone, lipo, contorno corporal
+  "Dr. Guilherme Mattar":                          cirurgia_trans       # mastectomia afirmativa (trans masc)
+  "Dr. Luiz Borba":                                mommy_makeover       # corporal pós-gestação
+  "Dr. Lucas Consentino":                          cirurgia_corporal    # corporal geral
+  "Dr. Humberto":                                  mommy_makeover       # pós-gestação
+  "Dr. Laureano Filho":                            cirurgia_ortognatica # só Google Ads
+  "Dr. Diego Gonzalez Salvador":                   mommy_makeover       # pós-gestação
+  "Dr. Joel Abdala":                               cirurgia_facial      # facial
+  "Dr. Matheus Ocampo":                            cirurgia_corporal    # corporal
+  # --- Clientes sem threshold (não são clínicas médicas ou especialidade fora do escopo) ---
+  "Destra Desenvolvimentos":                        null   # não é clínica médica
+  "Dr. Alvaro Rodrigues":                           null   # especialidade não confirmada
+  "Dr. Enzo Carvalho":                              null   # especialidade não confirmada
+  "Dr Javier Cucchiaro":                            null   # especialidade não confirmada
+  "MaxiOral":                                       null   # cirurgia buco-maxilofacial
+  "Zenicare":                                       null   # especialidade não confirmada
+  "Dra Nicolli":                                    null   # especialidade não confirmada
+  "IGO":                                            null   # implantes dentários
+
+# Lógica de plataformas (coletor + redator):
+# O coletor tenta coletar TODAS as métricas para todos os clientes.
+# Se uma plataforma não existir no projeto, o valor volta zerado ou ausente — sem erro.
+# O redator verifica o que tem dado e escreve apenas sobre isso:
+#   - tem meta_spend > 0  → incluir seção Meta Ads e criativos
+#   - tem google_spend > 0 → incluir seção Google Ads e palavras-chave
+#   - tem ambos           → incluir as duas seções
+# Nenhuma configuração manual de plataforma necessária.
