@@ -37,12 +37,12 @@ a criação do squad gestor-trafego-stark a partir da próxima etapa pendente.
 | 5B | @dev | Agentes Tier 0 e Tier 2 | ✅ CONCLUÍDA |
 | 5C | @dev | Agentes Tier 1 Grupo A | ✅ CONCLUÍDA |
 | 5D | @dev | Agentes Tier 1 Grupo B | ✅ CONCLUÍDA |
-| 5E | @dev | Tasks e Workflows | → PRÓXIMA |
-| 6 | @qa | Testes de Integração | ⬜ AGUARDANDO |
+| 5E | @dev | Tasks e Workflows | ✅ CONCLUÍDA |
+| 6 | @qa | Testes de Integração | → PRÓXIMA |
 | 7 | @devops | Commit e PR | ⬜ AGUARDANDO |
 
 **Última atualização:** 2026-05-28
-**Próxima ação:** Iniciar Etapa 5E com @dev (Dex) — implementar 10 tasks + 1 workflow + 4 checklists + 3 templates (story GTS-001.06)
+**Próxima ação:** Iniciar Etapa 6 com @qa (Quinn) — QA Report (story GTS-001.07): validar 7 critérios estruturais e produzir QA-REPORT.md
 
 ---
 
@@ -617,8 +617,18 @@ proxima_etapa: 5D
 #### Handoff desta etapa (preencher ao concluir)
 ```yaml
 # HANDOFF ETAPA 5D
-status: pendente
-arquivos_criados: []
+status: concluida
+arquivos_criados:
+  - squads/gestor-trafego-stark/agents/alerta-monitor.md
+  - squads/gestor-trafego-stark/agents/clickup-writer.md
+  - squads/gestor-trafego-stark/agents/task-monitor.md
+destaques:
+  - alerta-monitor: itera 28 clientes, fallback Reportei quando meta_ad_account_id null,
+    skip excluir_meta_monitoring:true, disponibiliza metricas_coletadas dict (ADR-04)
+  - clickup-writer: roteamento doc por gestor (Vinicius ou Gustavo), suporte compartilhados,
+    9-passo workflow com aprovação obrigatória antes de escrever
+  - task-monitor: inbox por assignee, doc correto por gestor para status_report,
+    verificação automática via MCP, organização por urgência
 pendencias: []
 proxima_etapa: 5E
 ```
@@ -698,9 +708,33 @@ proxima_etapa: 5E
 #### Handoff desta etapa (preencher ao concluir)
 ```yaml
 # HANDOFF ETAPA 5E
-status: pendente
-arquivos_criados: []
+status: concluida
+arquivos_criados:
+  - squads/gestor-trafego-stark/checklists/sheets-gate.md
+  - squads/gestor-trafego-stark/checklists/relatorio-gate.md
+  - squads/gestor-trafego-stark/checklists/alertas-gate.md
+  - squads/gestor-trafego-stark/checklists/clickup-gate.md
+  - squads/gestor-trafego-stark/templates/relatorio-template.md
+  - squads/gestor-trafego-stark/templates/whatsapp-template.md
+  - squads/gestor-trafego-stark/templates/contexto-cliente-template.md
+  - squads/gestor-trafego-stark/tasks/fetch-metrics.md
+  - squads/gestor-trafego-stark/tasks/verify-fill.md
+  - squads/gestor-trafego-stark/tasks/generate-report.md
+  - squads/gestor-trafego-stark/tasks/validate-report.md
+  - squads/gestor-trafego-stark/tasks/publish-timeline.md
+  - squads/gestor-trafego-stark/tasks/save-history.md
+  - squads/gestor-trafego-stark/tasks/monitorar-contas.md
+  - squads/gestor-trafego-stark/tasks/preencher-clickup.md
+  - squads/gestor-trafego-stark/tasks/rotina-diaria.md
+  - squads/gestor-trafego-stark/tasks/rotina-semanal.md
+  - squads/gestor-trafego-stark/workflows/weekly-pipeline.md
 rotina_semanal_fases: 6
+destaques:
+  - rotina-semanal.md: 6 fases explícitas com handoffs, gates, fallbacks e tabela de falhas
+  - FASE 1→2 handoff: metricas_coletadas dict documentado (ADR-04)
+  - FASE 4∥5: paralelo explícito documentado (ADR-05)
+  - FASE 6: todos os sub-passos não-bloqueantes
+  - weekly-pipeline.md: diagrama ASCII completo + tabela de handoffs + MCPs por fase
 pendencias: []
 proxima_etapa: 6
 ```
