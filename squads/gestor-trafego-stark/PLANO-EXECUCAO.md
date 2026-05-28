@@ -36,13 +36,13 @@ a criação do squad gestor-trafego-stark a partir da próxima etapa pendente.
 | 5A | @dev | Estrutura Base + Dados | ✅ CONCLUÍDA |
 | 5B | @dev | Agentes Tier 0 e Tier 2 | ✅ CONCLUÍDA |
 | 5C | @dev | Agentes Tier 1 Grupo A | ✅ CONCLUÍDA |
-| 5D | @dev | Agentes Tier 1 Grupo B | → PRÓXIMA |
-| 5E | @dev | Tasks e Workflows | ⬜ AGUARDANDO |
+| 5D | @dev | Agentes Tier 1 Grupo B | ✅ CONCLUÍDA |
+| 5E | @dev | Tasks e Workflows | → PRÓXIMA |
 | 6 | @qa | Testes de Integração | ⬜ AGUARDANDO |
 | 7 | @devops | Commit e PR | ⬜ AGUARDANDO |
 
 **Última atualização:** 2026-05-28
-**Próxima ação:** Iniciar Etapa 5D com @dev (Dex) — implementar 3 agentes Tier 1 Grupo B (story GTS-001.05)
+**Próxima ação:** Iniciar Etapa 5E com @dev (Dex) — implementar 10 tasks + 1 workflow + 4 checklists + 3 templates (story GTS-001.06)
 
 ---
 
