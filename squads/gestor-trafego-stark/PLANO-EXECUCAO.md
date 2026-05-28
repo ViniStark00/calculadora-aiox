@@ -35,14 +35,14 @@ a criação do squad gestor-trafego-stark a partir da próxima etapa pendente.
 | 4 | @po | Validação das Stories | ✅ CONCLUÍDA |
 | 5A | @dev | Estrutura Base + Dados | ✅ CONCLUÍDA |
 | 5B | @dev | Agentes Tier 0 e Tier 2 | ✅ CONCLUÍDA |
-| 5C | @dev | Agentes Tier 1 Grupo A | → PRÓXIMA |
-| 5D | @dev | Agentes Tier 1 Grupo B | ⬜ AGUARDANDO |
+| 5C | @dev | Agentes Tier 1 Grupo A | ✅ CONCLUÍDA |
+| 5D | @dev | Agentes Tier 1 Grupo B | → PRÓXIMA |
 | 5E | @dev | Tasks e Workflows | ⬜ AGUARDANDO |
 | 6 | @qa | Testes de Integração | ⬜ AGUARDANDO |
 | 7 | @devops | Commit e PR | ⬜ AGUARDANDO |
 
 **Última atualização:** 2026-05-28
-**Próxima ação:** Iniciar Etapa 5C com @dev (Dex) — implementar 5 agentes Tier 1 Grupo A (story GTS-001.04)
+**Próxima ação:** Iniciar Etapa 5D com @dev (Dex) — implementar 3 agentes Tier 1 Grupo B (story GTS-001.05)
 
 ---
 
@@ -520,7 +520,7 @@ proxima_etapa: 5C
 **Agente:** `@dev (Dex)`
 **Story:** GTS-001.04
 **Commit ao concluir:** `feat(gestor-trafego-stark): add tier1-A agents — coletor redator publicador whatsapp contexto [Story GTS-001.04]`
-**Status:** → PRÓXIMA
+**Status:** ✅ CONCLUÍDA
 
 #### Briefing para @dev
 
@@ -560,8 +560,21 @@ proxima_etapa: 5C
 #### Handoff desta etapa (preencher ao concluir)
 ```yaml
 # HANDOFF ETAPA 5C
-status: pendente
-arquivos_criados: []
+status: concluida
+arquivos_criados:
+  - squads/gestor-trafego-stark/agents/coletor.md
+  - squads/gestor-trafego-stark/agents/redator.md
+  - squads/gestor-trafego-stark/agents/publicador.md
+  - squads/gestor-trafego-stark/agents/whatsapp-writer.md
+  - squads/gestor-trafego-stark/agents/contexto-cliente.md
+destaques:
+  - coletor: extensão ADR-04 — aceita metricas_coletadas (FASE 1), reutiliza Meta Ads sem nova chamada
+  - coletor: documenta fonte por métrica no output (metricas_coletadas vs Meta Ads MCP vs Reportei)
+  - redator: referencia data/thresholds-por-especialidade.yaml e data/clientes.yaml
+  - redator: lógica cirurgia_ortognatica (CPL = custo por conversão Google Ads, não WhatsApp)
+  - publicador: handoff completo ao whatsapp-writer com todos os campos necessários
+  - whatsapp-writer: saudação por horário (05h-11h59=dia, 12h-17h59=tarde, 18h-04h59=noite)
+  - contexto-cliente: pasta "Contexto Clientes - Stark", documento "Contexto - {nome_cliente}"
 pendencias: []
 proxima_etapa: 5D
 ```
@@ -572,7 +585,7 @@ proxima_etapa: 5D
 **Agente:** `@dev (Dex)`
 **Story:** GTS-001.05
 **Commit ao concluir:** `feat(gestor-trafego-stark): add tier1-B agents — alerta-monitor clickup-writer task-monitor [Story GTS-001.05]`
-**Status:** ⬜ AGUARDANDO
+**Status:** → PRÓXIMA
 
 #### Briefing para @dev
 
