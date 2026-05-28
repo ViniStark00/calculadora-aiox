@@ -32,8 +32,8 @@ a criação do squad gestor-trafego-stark a partir da próxima etapa pendente.
 | 1 | @architect | Design da Arquitetura | ✅ CONCLUÍDA |
 | 2 | @pm | Criação do Epic | ✅ CONCLUÍDA |
 | 3 | @sm | Criação das Stories | ✅ CONCLUÍDA |
-| 4 | @po | Validação das Stories | → PRÓXIMA |
-| 5A | @dev | Estrutura Base + Dados | ⬜ AGUARDANDO |
+| 4 | @po | Validação das Stories | ✅ CONCLUÍDA |
+| 5A | @dev | Estrutura Base + Dados | → PRÓXIMA |
 | 5B | @dev | Agentes Tier 0 e Tier 2 | ⬜ AGUARDANDO |
 | 5C | @dev | Agentes Tier 1 Grupo A | ⬜ AGUARDANDO |
 | 5D | @dev | Agentes Tier 1 Grupo B | ⬜ AGUARDANDO |
@@ -42,7 +42,7 @@ a criação do squad gestor-trafego-stark a partir da próxima etapa pendente.
 | 7 | @devops | Commit e PR | ⬜ AGUARDANDO |
 
 **Última atualização:** 2026-05-28
-**Próxima ação:** Iniciar Etapa 4 com @po (Pax) — validar as 7 stories
+**Próxima ação:** Iniciar Etapa 5A com @dev (Dex) — implementar squad base + dados (stories GTS-001.01 + GTS-001.02)
 
 ---
 
@@ -351,9 +351,19 @@ proxima_etapa: 4
 #### Handoff desta etapa (preencher ao concluir)
 ```yaml
 # HANDOFF ETAPA 4
-status: pendente
-stories_aprovadas: []
+status: concluida
+stories_aprovadas:
+  - GTS-001.01  # 10/10 — GO
+  - GTS-001.02  # 10/10 — GO
+  - GTS-001.03  # 10/10 — GO
+  - GTS-001.04  # 10/10 — GO
+  - GTS-001.05  # 10/10 — GO
+  - GTS-001.06  # 9.9/10 — GO (escopo 18 arquivos aceitavel — definido no PLANO)
+  - GTS-001.07  # 10/10 — GO
 stories_reprovadas: []
+observacoes:
+  - GTS-001.06: escopo amplo (18 arquivos). Dev deve criar checklists/templates antes das tasks. rotina-semanal.md deve ser o ultimo arquivo.
+  - Contrato metricas_coletadas documentado em ambas as stories 04 e 05 — elimina risco de interface incompativel.
 pendencias: []
 proxima_etapa: 5A
 ```
