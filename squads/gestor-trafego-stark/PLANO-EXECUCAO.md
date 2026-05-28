@@ -31,8 +31,8 @@ a criação do squad gestor-trafego-stark a partir da próxima etapa pendente.
 | 0 | @analyst | Análise + Plano | ✅ CONCLUÍDA |
 | 1 | @architect | Design da Arquitetura | ✅ CONCLUÍDA |
 | 2 | @pm | Criação do Epic | ✅ CONCLUÍDA |
-| 3 | @sm | Criação das Stories | → PRÓXIMA |
-| 4 | @po | Validação das Stories | ⬜ AGUARDANDO |
+| 3 | @sm | Criação das Stories | ✅ CONCLUÍDA |
+| 4 | @po | Validação das Stories | → PRÓXIMA |
 | 5A | @dev | Estrutura Base + Dados | ⬜ AGUARDANDO |
 | 5B | @dev | Agentes Tier 0 e Tier 2 | ⬜ AGUARDANDO |
 | 5C | @dev | Agentes Tier 1 Grupo A | ⬜ AGUARDANDO |
@@ -42,7 +42,7 @@ a criação do squad gestor-trafego-stark a partir da próxima etapa pendente.
 | 7 | @devops | Commit e PR | ⬜ AGUARDANDO |
 
 **Última atualização:** 2026-05-28
-**Próxima ação:** Iniciar Etapa 3 com @sm (River) — criar as 7 stories
+**Próxima ação:** Iniciar Etapa 4 com @po (Pax) — validar as 7 stories
 
 ---
 
@@ -303,10 +303,25 @@ proxima_etapa: 3
 #### Handoff desta etapa (preencher ao concluir)
 ```yaml
 # HANDOFF ETAPA 3
-status: pendente
-arquivos_criados: []
-decisoes_tomadas: []
-pendencias: []
+status: concluida
+arquivos_criados:
+  - docs/stories/gestor-trafego-stark/GTS-001.01.story.md
+  - docs/stories/gestor-trafego-stark/GTS-001.02.story.md
+  - docs/stories/gestor-trafego-stark/GTS-001.03.story.md
+  - docs/stories/gestor-trafego-stark/GTS-001.04.story.md
+  - docs/stories/gestor-trafego-stark/GTS-001.05.story.md
+  - docs/stories/gestor-trafego-stark/GTS-001.06.story.md
+  - docs/stories/gestor-trafego-stark/GTS-001.07.story.md
+decisoes_tomadas:
+  - Cada story tem user story + contexto + arquivos a criar + criterios de aceite + DoD + notas
+  - Criterios obrigatorios especiais incluidos:
+    - GTS-001.02: criterio de ausencia de duplicatas + IDs Reportei confirmados listados
+    - GTS-001.06: criterio de 6 fases em ordem + metricas_coletadas na FASE 2 + paralelo 4+5
+    - GTS-001.07: criterio de executar *rotina-semanal (QA-05) + 7 criterios QA objetivos
+  - Interface metricas_coletadas documentada em GTS-001.04 e GTS-001.05 (contrato produtor/consumidor)
+  - Logica de fallback do alerta-monitor (meta_ad_account_id null → Reportei) documentada em GTS-001.05
+pendencias:
+  - Stories precisam ser validadas pelo @po (Etapa 4) antes da implementacao
 proxima_etapa: 4
 ```
 
