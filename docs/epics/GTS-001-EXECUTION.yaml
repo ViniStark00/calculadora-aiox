@@ -1,0 +1,463 @@
+---
+# EPIC GTS-001 — Criação do Squad gestor-trafego-stark
+# Gerado na Etapa 2 por @pm (Morgan)
+# Referência arquitetural: squads/gestor-trafego-stark/DESIGN.md
+
+epic:
+  id: GTS-001
+  title: "Squad gestor-trafego-stark — Criação e Implementação"
+  squad: gestor-trafego-stark
+  version: "1.0"
+  status: in_progress
+  created_at: "2026-05-28"
+  owner: gustavoradler-cybe
+
+  description: |
+    Criar do zero o squad `gestor-trafego-stark`, unificando o melhor de dois squads
+    existentes (gestor-trafego-vinicius e gestor-trafego-gustavo) em um squad único
+    que automatiza as 4 rotinas operacionais de gestão de tráfego pago médico da Stark Marketing.
+
+    Gestores atendidos: Vinicius Lima e Gustavo Radler.
+    Carteira total: ~30 clientes (19 Vinicius + 11 Gustavo, 2 compartilhados).
+
+  problema: |
+    Atualmente existem dois squads separados com lógica duplicada e incompleta:
+    - gestor-trafego-vinicius: cobre relatório semanal mas não monitora Meta Ads diretamente
+    - gestor-trafego-gustavo: cobre monitoramento e ClickUp mas sem pipeline de relatório completo
+    Nenhum dos dois cobre todas as 4 rotinas de forma integrada.
+
+  objetivo: |
+    Um único squad que execute as 4 rotinas sem duplicação de chamadas API,
+    com dados compartilhados entre fases do pipeline e quality gates em cada saída.
+
+  rotinas_automatizadas:
+    - id: R1
+      nome: Monitoramento de contas
+      frequencia: diaria
+      agente_responsavel: alerta-monitor
+      output: "Painel de alertas 🔴🟡ℹ️ classificados por especialidade médica"
+    - id: R2
+      nome: Preenchimento de planilha Google Sheets
+      frequencia: semanal
+      agente_responsavel: coletor
+      output: "Colunas meta_spend/google_spend/seguidores/conversas/conversoes preenchidas"
+      restricao: "Somente clientes onde vinicius in gestores[]"
+    - id: R3
+      nome: Relatório Reportei
+      frequencia: semanal
+      agente_responsavel: redator + publicador
+      output: "Narrativa markdown + HTML timeline + marco publicado no Reportei"
+    - id: R4
+      nome: Status Report ClickUp
+      frequencia: semanal
+      agente_responsavel: clickup-writer
+      output: "Narrativa de ações da semana escrita no doc ClickUp do gestor"
+
+  constraints:
+    - "Squads originais (vinicius e gustavo) NÃO devem ser modificados"
+    - "Todos os agentes/tasks são escritos do zero — nenhum arquivo copiado"
+    - "Campanhas no Meta Ads: apenas leitura — nunca ações"
+    - "Status de criação de objetos (campanhas, etc.): sempre PAUSED"
+    - "Tokens e credenciais nunca expostos em outputs"
+
+  architecture_reference: "squads/gestor-trafego-stark/DESIGN.md"
+
+---
+
+# STORIES
+
+stories:
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  - id: GTS-001.01
+    title: "Estrutura base do squad — squad.yaml, CLAUDE.md, README.md"
+    etapa_implementacao: "5A"
+    agente_implementacao: "@dev (Dex)"
+    status: pending
+    prioridade: 1
+
+    descricao: |
+      Criar os 3 arquivos fundacionais do squad que definem sua identidade,
+      contrato de uso e documentação para novos usuários.
+      Estes arquivos são pré-requisito para toda a implementação subsequente.
+
+    arquivos_a_criar:
+      - path: "squads/gestor-trafego-stark/squad.yaml"
+        descricao: "Manifest completo do squad com todos os componentes e integrações"
+      - path: "squads/gestor-trafego-stark/CLAUDE.md"
+        descricao: "Briefing unificado com identidade, regras de voz, restrições técnicas"
+      - path: "squads/gestor-trafego-stark/README.md"
+        descricao: "Documentação de uso com tabela antes/depois e comandos disponíveis"
+
+    criterios_aceite:
+      - "squad.yaml lista todos os 10 agentes (stark-chief + 8 Tier1 + validator)"
+      - "squad.yaml lista todas as 10 tasks"
+      - "squad.yaml lista todos os 4 checklists"
+      - "squad.yaml lista as 3 integrações MCP (Reportei, Google Drive, ClickUp, Meta Ads)"
+      - "squad.yaml entrypoint aponta para agents/stark-chief.md"
+      - "CLAUDE.md contém tabela das 4 rotinas com agente responsável e output"
+      - "CLAUDE.md contém lista completa de palavras proibidas do redator"
+      - "CLAUDE.md contém credenciais necessárias (3 variáveis de ambiente)"
+      - "README.md contém os 7 comandos do stark-chief com descrição"
+      - "README.md contém tabela de pré-requisitos e estrutura de arquivos"
+      - "Nenhum arquivo referencia paths dos squads antigos (gestor-trafego-vinicius ou gestor-trafego-gustavo)"
+
+    dependencias_de: []
+    bloqueia: [GTS-001.03, GTS-001.04, GTS-001.05]
+
+    notas_implementacao: |
+      squad.yaml deve seguir a estrutura do gestor-trafego-vinicius/squad.yaml como referência de formato.
+      Adicionar campo domain.gestores: [vinicius, gustavo] (não existe nos squads originais).
+      heuristics.absolute_vetos deve ser a união dos vetos dos dois squads originais.
+      pipeline_flow deve refletir o fluxo de 6 fases da rotina-semanal (DESIGN.md seção 3).
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  - id: GTS-001.02
+    title: "Arquivos de dados — clientes.yaml, thresholds, config"
+    etapa_implementacao: "5A"
+    agente_implementacao: "@dev (Dex)"
+    status: pending
+    prioridade: 1
+
+    descricao: |
+      Criar os arquivos de dados que alimentam todos os agentes do squad.
+      O clientes.yaml é o arquivo mais crítico — centraliza todos os clientes
+      de ambos os gestores sem duplicatas, usando o schema definido no DESIGN.md.
+
+    arquivos_a_criar:
+      - path: "squads/gestor-trafego-stark/data/clientes.yaml"
+        descricao: "Todos os clientes de Vinicius e Gustavo unificados, schema DESIGN.md seção 2.2"
+      - path: "squads/gestor-trafego-stark/data/thresholds-por-especialidade.yaml"
+        descricao: "Thresholds fundidos dos dois squads (DESIGN.md seção 5)"
+      - path: "squads/gestor-trafego-stark/config/settings.yaml"
+        descricao: "Configurações operacionais do squad (rate limits, fuzzy threshold, etc.)"
+
+    criterios_aceite:
+      - "clientes.yaml contém todos os 19 clientes do bloco Vinicius (incluindo inativos com ativo: false)"
+      - "clientes.yaml contém todos os 11 clientes da carteira Gustavo"
+      - "Sem duplicatas — Dr. Laureano Filho e Dra. Nicolli têm UMA entrada com gestores: [vinicius, gustavo]"
+      - "Todos os clientes têm campo gestores como array (mínimo 1 elemento)"
+      - "Clientes Vinicius têm sheet_columns preenchido (ou null com nota explicativa)"
+      - "Clientes Gustavo têm reportei_project_id preenchido"
+      - "thresholds-por-especialidade.yaml cobre todas as especialidades dos dois squads (mínimo 15)"
+      - "thresholds-por-especialidade.yaml tem seção kill_switch por especialidade"
+      - "thresholds-por-especialidade.yaml tem seção frequencia_por_tipo_campanha (TOFU/MOFU/BOFU/AWARENESS)"
+      - "thresholds-por-especialidade.yaml tem seção quando_nao_alertar com regras explícitas"
+      - "config/settings.yaml tem rate_limit_reportei, fuzzy_match_threshold (0.60), lote_paralelo"
+      - "Nenhum arquivo referencia paths dos squads antigos"
+
+    dependencias_de: []
+    bloqueia: [GTS-001.03, GTS-001.04, GTS-001.05]
+
+    notas_implementacao: |
+      Fontes dos dados dos clientes:
+      - Vinicius: squads/gestor-trafego-vinicius/config/clientes-config.yaml
+      - Gustavo: squads/gestor-trafego-gustavo/data/clientes.md (via gh api)
+      IDs Reportei de 8 clientes Vinicius estão "a confirmar" no DESIGN.md — usar null com nota.
+      meta_ad_account_id dos clientes Gustavo não está disponível — usar null com nota.
+      Ver DESIGN.md seção 2.4 para lista completa com conflitos resolvidos.
+      Ver DESIGN.md seção 5 para regras de merge dos thresholds.
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  - id: GTS-001.03
+    title: "Agentes Tier 0 e Tier 2 — stark-chief + validator"
+    etapa_implementacao: "5B"
+    agente_implementacao: "@dev (Dex)"
+    status: pending
+    prioridade: 2
+
+    descricao: |
+      Criar os 2 agentes estruturais do squad: o orquestrador único (stark-chief)
+      e o gate de qualidade (validator). Estes agentes controlam entrada e saída
+      de todo o pipeline — devem ser escritos com precisão.
+
+    arquivos_a_criar:
+      - path: "squads/gestor-trafego-stark/agents/stark-chief.md"
+        descricao: "Orquestrador Tier 0 — fusão de gestor-chief + relatorio-chief"
+      - path: "squads/gestor-trafego-stark/agents/validator.md"
+        descricao: "Gate de qualidade Tier 2 — 4 gates incluindo gate_sheets novo"
+
+    criterios_aceite:
+      - "stark-chief suporta todos os 7 comandos (rotina-diaria, rotina-semanal, planilha, relatorio-reportei, status-report-clickup, monitorar-contas, monitor-tarefas)"
+      - "stark-chief tem routing rules por keyword cobrindo todos os 7 comandos"
+      - "stark-chief implementa resolução de cliente via data/clientes.yaml (manual_map + fuzzy 0.60)"
+      - "stark-chief suporta modo multi-cliente (bloco Vinicius / carteira Gustavo / todos)"
+      - "stark-chief nunca executa lógica de domínio — apenas roteia"
+      - "stark-chief sempre aguarda gate do validator antes de entregar output"
+      - "validator tem gate_sheets com 7 critérios (DESIGN.md seção 4.1)"
+      - "validator tem gate_reportei, gate_alertas, gate_clickup (do squad Gustavo)"
+      - "validator output: PASS libera / FAIL retorna ao agente com lista numerada"
+      - "Nenhum agente referencia paths dos squads antigos"
+
+    dependencias_de: [GTS-001.01, GTS-001.02]
+    bloqueia: [GTS-001.06]
+
+    notas_implementacao: |
+      Ver DESIGN.md seção 6 para routing rules completas do stark-chief.
+      stark-chief deve identificar o gestor do cliente para decidir se executa FASE 2 (sheets):
+        - FASE 2 só executa quando vinicius in cliente.gestores
+      Referência de estilo: gestor-chief.md (Gustavo) para tom direto e operacional.
+      Referência de lógica multi-cliente: relatorio-chief.md (Vinicius) para estágios paralelos.
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  - id: GTS-001.04
+    title: "Agentes Tier 1 Grupo A — coletor, redator, publicador, whatsapp-writer, contexto-cliente"
+    etapa_implementacao: "5C"
+    agente_implementacao: "@dev (Dex)"
+    status: pending
+    prioridade: 2
+
+    descricao: |
+      Criar os 5 agentes do pipeline de relatório semanal. Todos têm base no squad Vinicius
+      mas devem ser reescritos para o novo squad com os novos paths e extensões necessárias.
+
+    arquivos_a_criar:
+      - path: "squads/gestor-trafego-stark/agents/coletor.md"
+        descricao: "Coleta métricas — aceita metricas_coletadas como parâmetro opcional"
+      - path: "squads/gestor-trafego-stark/agents/redator.md"
+        descricao: "Gera narrativa + HTML timeline para Reportei"
+      - path: "squads/gestor-trafego-stark/agents/publicador.md"
+        descricao: "Publica marco na Timeline do Reportei via MCP"
+      - path: "squads/gestor-trafego-stark/agents/whatsapp-writer.md"
+        descricao: "Formata mensagem WhatsApp com regras de saudação e campos condicionais"
+      - path: "squads/gestor-trafego-stark/agents/contexto-cliente.md"
+        descricao: "Gerencia contexto por cliente no Google Drive (leitura e atualização)"
+
+    criterios_aceite:
+      - "coletor aceita metricas_coletadas como parâmetro opcional e pula chamadas Meta Ads quando disponível"
+      - "coletor ainda busca Google Ads e seguidores via Reportei mesmo quando metricas_coletadas fornecido"
+      - "coletor referencia data/clientes.yaml (não config/clientes-config.yaml)"
+      - "redator aplica lista completa de palavras proibidas do CLAUDE.md"
+      - "redator gera HTML válido para HTML timeline do Reportei (sem tags abertas sem fechar)"
+      - "redator referencia data/thresholds-por-especialidade.yaml para calibrar tom"
+      - "publicador usa MCP Reportei create_timeline_event (ID correto do squad)"
+      - "publicador referencia reportei_project_id de data/clientes.yaml"
+      - "whatsapp-writer tem lógica de saudação por horário (bom dia/tarde/noite)"
+      - "whatsapp-writer omite linha CPL quando conversas = 0"
+      - "whatsapp-writer referencia nome_whatsapp de data/clientes.yaml"
+      - "contexto-cliente usa leitura não-bloqueante (falha → continua)"
+      - "contexto-cliente usa atualização não-bloqueante (falha → aviso, não bloqueia)"
+      - "Nenhum agente referencia paths dos squads antigos"
+
+    dependencias_de: [GTS-001.01, GTS-001.02]
+    bloqueia: [GTS-001.06]
+
+    notas_implementacao: |
+      Interface de dados coletor↔alerta-monitor (DESIGN.md seção 3.2):
+        metricas_coletadas dict keyed por slug do cliente, com campos:
+        meta_spend, conversas, meta_cpl, cpm, ctr, frequency, fonte, lookback, coletado_em
+      O coletor deve verificar: se metricas_coletadas[slug] existe E fonte é recente (mesma semana),
+      então não buscar esses campos no Meta Ads MCP. Sempre buscar Google Ads + seguidores.
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  - id: GTS-001.05
+    title: "Agentes Tier 1 Grupo B — alerta-monitor, clickup-writer, task-monitor"
+    etapa_implementacao: "5D"
+    agente_implementacao: "@dev (Dex)"
+    status: pending
+    prioridade: 2
+
+    descricao: |
+      Criar os 3 agentes do pipeline de monitoramento e ClickUp. Base no squad Gustavo,
+      mas reescritos para o novo squad com extensões para atender ambos os gestores.
+
+    arquivos_a_criar:
+      - path: "squads/gestor-trafego-stark/agents/alerta-monitor.md"
+        descricao: "Monitora métricas — Meta Ads MCP + fallback Reportei — disponibiliza metricas_coletadas"
+      - path: "squads/gestor-trafego-stark/agents/clickup-writer.md"
+        descricao: "Escreve status report narrativo no ClickUp para ambos os gestores"
+      - path: "squads/gestor-trafego-stark/agents/task-monitor.md"
+        descricao: "Verifica inbox ClickUp e marca tarefas concluídas"
+
+    criterios_aceite:
+      - "alerta-monitor itera sobre data/clientes.yaml (não data/clientes.md)"
+      - "alerta-monitor usa Meta Ads MCP quando meta_ad_account_id está preenchido"
+      - "alerta-monitor faz fallback para Reportei API quando meta_ad_account_id é null"
+      - "alerta-monitor disponibiliza metricas_coletadas ao final (ver DESIGN.md seção 3.2)"
+      - "alerta-monitor classifica: 🔴 CRÍTICO / 🟡 ATENÇÃO / ℹ️ INFO por threshold de especialidade"
+      - "alerta-monitor nunca recomenda ação de campanha — apenas notifica"
+      - "alerta-monitor cobre: CPM, CTR, frequência por tipo de campanha, kill-switch, CPL"
+      - "alerta-monitor inclui seção explicando exclusões (ex: Dr. Laureano sem Meta)"
+      - "clickup-writer suporta ambos gestores: 'Status Report - Gustavo' E 'Status Report - Vinicius'"
+      - "clickup-writer apresenta draft para aprovação antes de escrever no ClickUp"
+      - "clickup-writer referencia gestor do cliente em data/clientes.yaml para escolher doc alvo"
+      - "task-monitor lista tasks por assignee (Vinicius ou Gustavo)"
+      - "Nenhum agente referencia paths dos squads antigos"
+
+    dependencias_de: [GTS-001.01, GTS-001.02]
+    bloqueia: [GTS-001.06]
+
+    notas_implementacao: |
+      alerta-monitor é o único agente que também serve como pré-condição para rotina-semanal.
+      Ao final da execução, deve disponibilizar metricas_coletadas para consumo pelo coletor (FASE 2).
+      Para clientes sem meta_ad_account_id no YAML: usar Reportei get_project_metrics.
+      clickup-writer deve verificar cliente.gestores para decidir qual doc ClickUp atualizar.
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  - id: GTS-001.06
+    title: "Tasks e Workflows — rotina-semanal fundida (6 fases)"
+    etapa_implementacao: "5E"
+    agente_implementacao: "@dev (Dex)"
+    status: pending
+    prioridade: 3
+
+    descricao: |
+      Criar todas as tasks, workflows e checklists do squad. O arquivo mais crítico é
+      tasks/rotina-semanal.md — implementa o pipeline fundido com 6 fases, reuso de dados
+      entre fases e paralelização das fases 4+5. Todos os arquivos escritos do zero.
+
+    arquivos_a_criar:
+      - path: "squads/gestor-trafego-stark/tasks/fetch-metrics.md"
+      - path: "squads/gestor-trafego-stark/tasks/verify-fill.md"
+      - path: "squads/gestor-trafego-stark/tasks/generate-report.md"
+      - path: "squads/gestor-trafego-stark/tasks/validate-report.md"
+      - path: "squads/gestor-trafego-stark/tasks/publish-timeline.md"
+      - path: "squads/gestor-trafego-stark/tasks/save-history.md"
+      - path: "squads/gestor-trafego-stark/tasks/monitorar-contas.md"
+      - path: "squads/gestor-trafego-stark/tasks/preencher-clickup.md"
+      - path: "squads/gestor-trafego-stark/tasks/rotina-diaria.md"
+      - path: "squads/gestor-trafego-stark/tasks/rotina-semanal.md"
+        descricao: "ARQUIVO MAIS CRÍTICO — 6 fases com reuso de dados e paralelização"
+      - path: "squads/gestor-trafego-stark/workflows/weekly-pipeline.md"
+      - path: "squads/gestor-trafego-stark/checklists/sheets-gate.md"
+      - path: "squads/gestor-trafego-stark/checklists/relatorio-gate.md"
+      - path: "squads/gestor-trafego-stark/checklists/alertas-gate.md"
+      - path: "squads/gestor-trafego-stark/checklists/clickup-gate.md"
+      - path: "squads/gestor-trafego-stark/templates/relatorio-template.md"
+      - path: "squads/gestor-trafego-stark/templates/whatsapp-template.md"
+      - path: "squads/gestor-trafego-stark/templates/contexto-cliente-template.md"
+
+    criterios_aceite:
+      - "rotina-semanal.md implementa exatamente 6 fases na ordem definida no DESIGN.md seção 3.1"
+      - "rotina-semanal.md FASE 1 executa alerta-monitor e passa metricas_coletadas para FASE 2"
+      - "rotina-semanal.md FASE 2 só executa se vinicius in cliente.gestores"
+      - "rotina-semanal.md FASE 3 recebe metricas_completas (Meta + Google + seguidores)"
+      - "rotina-semanal.md fases 4+5 são acionadas em paralelo após gate_reportei PASS"
+      - "rotina-semanal.md FASE 6 é não-bloqueante (falhas aqui não param o resumo)"
+      - "rotina-semanal.md referencia data/clientes.yaml (não config do squad antigo)"
+      - "sheets-gate.md tem 7 critérios exatos conforme DESIGN.md seção 4.1"
+      - "Todos os checklists referenciados pelos agentes existem fisicamente"
+      - "Todos os templates referenciados pelos agentes existem fisicamente"
+      - "Nenhum arquivo referencia paths dos squads antigos"
+
+    dependencias_de: [GTS-001.03, GTS-001.04, GTS-001.05]
+    bloqueia: [GTS-001.07]
+
+    notas_implementacao: |
+      Ver DESIGN.md seção 3 para o diagrama completo das 6 fases com setas de dependência.
+      Ver DESIGN.md seção 3.4 para comportamento de falha por fase.
+      O arquivo rotina-semanal.md é a cola que une todos os agentes — implementar com cuidado.
+      rotina-diaria.md = alertas (alerta-monitor) + inbox de tarefas (task-monitor).
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  - id: GTS-001.07
+    title: "Testes de Integração e QA — validação end-to-end"
+    etapa_implementacao: "6"
+    agente_implementacao: "@qa (Quinn)"
+    status: pending
+    prioridade: 4
+
+    descricao: |
+      Validar o squad completo antes do lançamento. Verificação estrutural, de referências,
+      de dados, de fluxo e de comandos. Produzir relatório QA com PASS/FAIL por critério.
+
+    arquivos_a_criar:
+      - path: "squads/gestor-trafego-stark/QA-REPORT.md"
+        descricao: "Relatório QA com PASS/FAIL por critério + lista de problemas"
+
+    criterios_aceite:
+      - "QA-REPORT.md existe e tem data de execução"
+      - "Todos os 7 critérios estruturais verificados (ver notas abaixo)"
+      - "Score QA >= 7/7 critérios PASS para considerar aprovado para produção"
+      - "Se qualquer critério FAIL: lista de problemas específicos com path do arquivo afetado"
+      - "Relatório inclui contagem: N clientes Vinicius + N clientes Gustavo + N compartilhados"
+
+    criterios_qa:
+      - id: QA-01
+        descricao: "ESTRUTURAL: todos os arquivos listados em squad.yaml → components existem fisicamente"
+      - id: QA-02
+        descricao: "REFERÊNCIAS: nenhum agente ou task referencia paths de gestor-trafego-vinicius ou gestor-trafego-gustavo"
+      - id: QA-03
+        descricao: "DADOS: data/clientes.yaml tem clientes de ambos os gestores sem duplicatas de nome/slug"
+      - id: QA-04
+        descricao: "DADOS: todos os campos obrigatórios preenchidos (nome, slug, gestores, reportei_project_id) para clientes com IDs confirmados"
+      - id: QA-05
+        descricao: "FLUXO: tasks/rotina-semanal.md tem lógica de reaproveitamento de dados FASE 1→2 explícita"
+      - id: QA-06
+        descricao: "VALIDATOR: agents/validator.md tem gates para os 4 tipos (sheets, relatorio, alertas, clickup)"
+      - id: QA-07
+        descricao: "COMANDOS: os 7 comandos do stark-chief têm tasks correspondentes que existem fisicamente"
+
+    dependencias_de: [GTS-001.06]
+    bloqueia: []
+
+    notas_implementacao: |
+      QA é bloqueante para o PR final (Etapa 7).
+      Se QA-REPORT.md tiver qualquer FAIL, retornar para a etapa correspondente antes do commit final.
+      O @qa não deve criar ou editar arquivos além do QA-REPORT.md.
+
+---
+
+# DEPENDENCY GRAPH
+
+dependency_graph:
+  GTS-001.01: {depends_on: [], parallel_with: [GTS-001.02]}
+  GTS-001.02: {depends_on: [], parallel_with: [GTS-001.01]}
+  GTS-001.03: {depends_on: [GTS-001.01, GTS-001.02], parallel_with: [GTS-001.04, GTS-001.05]}
+  GTS-001.04: {depends_on: [GTS-001.01, GTS-001.02], parallel_with: [GTS-001.03, GTS-001.05]}
+  GTS-001.05: {depends_on: [GTS-001.01, GTS-001.02], parallel_with: [GTS-001.03, GTS-001.04]}
+  GTS-001.06: {depends_on: [GTS-001.03, GTS-001.04, GTS-001.05], parallel_with: []}
+  GTS-001.07: {depends_on: [GTS-001.06], parallel_with: []}
+
+implementation_phases:
+  fase_1:
+    label: "Fase 1 — Base"
+    etapas: [5A]
+    stories: [GTS-001.01, GTS-001.02]
+    paralelo: true
+    commit: "feat(gestor-trafego-stark): add squad base — squad.yaml CLAUDE.md README.md data/ [Story GTS-001.01 + GTS-001.02]"
+
+  fase_2:
+    label: "Fase 2 — Agentes"
+    etapas: [5B, 5C, 5D]
+    stories: [GTS-001.03, GTS-001.04, GTS-001.05]
+    paralelo: true
+    commits:
+      - "feat(gestor-trafego-stark): add stark-chief validator [Story GTS-001.03]"
+      - "feat(gestor-trafego-stark): add tier1-A agents — coletor redator publicador whatsapp contexto [Story GTS-001.04]"
+      - "feat(gestor-trafego-stark): add tier1-B agents — alerta-monitor clickup-writer task-monitor [Story GTS-001.05]"
+
+  fase_3:
+    label: "Fase 3 — Tasks e Workflows"
+    etapas: [5E]
+    stories: [GTS-001.06]
+    paralelo: false
+    commit: "feat(gestor-trafego-stark): add tasks workflows — rotina-semanal completa [Story GTS-001.06]"
+
+  fase_4:
+    label: "Fase 4 — QA"
+    etapas: [6]
+    stories: [GTS-001.07]
+    paralelo: false
+    commit: "test(gestor-trafego-stark): QA PASS — squad aprovado para produção [Story GTS-001.07]"
+
+---
+
+# MÉTRICAS DE SUCESSO
+
+success_metrics:
+  arquivos_totais: 37
+  agentes: 10
+  tasks: 10
+  checklists: 4
+  templates: 3
+  workflows: 1
+  data_files: 3
+  config_files: 1
+  docs: 4  # squad.yaml, CLAUDE.md, README.md, QA-REPORT.md
+
+  kpis_operacionais:
+    - "rotina-semanal executa sem buscar métricas duas vezes (reuso FASE1→2)"
+    - "Um único comando *rotina-semanal [cliente] executa todas as 4 rotinas"
+    - "Os dois gestores (Vinicius e Gustavo) atendidos pelo mesmo squad"
+    - "Quality gates em todas as saídas (sheets, relatório, alertas, ClickUp)"

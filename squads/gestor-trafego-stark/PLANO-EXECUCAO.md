@@ -30,8 +30,8 @@ a criação do squad gestor-trafego-stark a partir da próxima etapa pendente.
 |-------|--------|-----------|--------|
 | 0 | @analyst | Análise + Plano | ✅ CONCLUÍDA |
 | 1 | @architect | Design da Arquitetura | ✅ CONCLUÍDA |
-| 2 | @pm | Criação do Epic | → PRÓXIMA |
-| 3 | @sm | Criação das Stories | ⬜ AGUARDANDO |
+| 2 | @pm | Criação do Epic | ✅ CONCLUÍDA |
+| 3 | @sm | Criação das Stories | → PRÓXIMA |
 | 4 | @po | Validação das Stories | ⬜ AGUARDANDO |
 | 5A | @dev | Estrutura Base + Dados | ⬜ AGUARDANDO |
 | 5B | @dev | Agentes Tier 0 e Tier 2 | ⬜ AGUARDANDO |
@@ -42,7 +42,7 @@ a criação do squad gestor-trafego-stark a partir da próxima etapa pendente.
 | 7 | @devops | Commit e PR | ⬜ AGUARDANDO |
 
 **Última atualização:** 2026-05-28
-**Próxima ação:** Iniciar Etapa 2 com @pm (Morgan) — criar epic GTS-001
+**Próxima ação:** Iniciar Etapa 3 com @sm (River) — criar as 7 stories
 
 ---
 
@@ -260,10 +260,19 @@ proxima_etapa: 2
 #### Handoff desta etapa (preencher ao concluir)
 ```yaml
 # HANDOFF ETAPA 2
-status: pendente
-arquivos_criados: []
-decisoes_tomadas: []
-pendencias: []
+status: concluida
+arquivos_criados:
+  - docs/epics/GTS-001-EXECUTION.yaml
+  - docs/stories/gestor-trafego-stark/  # diretório criado (vazio — Etapa 3 popula)
+decisoes_tomadas:
+  - 7 stories mapeadas para etapas de implementação (5A a 6)
+  - Stories 01+02 paralelas (Etapa 5A); 03+04+05 paralelas (Etapas 5B/5C/5D)
+  - Story 06 depende de 03+04+05; Story 07 depende de 06
+  - 37 arquivos no total documentados por story
+  - Critérios de aceite definidos por story (total: ~60 critérios verificáveis)
+pendencias:
+  - Stories detalhadas precisam ser criadas na Etapa 3 (@sm River)
+  - docs/stories/gestor-trafego-stark/GTS-001.0X.story.md para cada uma das 7 stories
 proxima_etapa: 3
 ```
 
