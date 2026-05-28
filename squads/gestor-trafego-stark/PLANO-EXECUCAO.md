@@ -34,15 +34,15 @@ a criação do squad gestor-trafego-stark a partir da próxima etapa pendente.
 | 3 | @sm | Criação das Stories | ✅ CONCLUÍDA |
 | 4 | @po | Validação das Stories | ✅ CONCLUÍDA |
 | 5A | @dev | Estrutura Base + Dados | ✅ CONCLUÍDA |
-| 5B | @dev | Agentes Tier 0 e Tier 2 | → PRÓXIMA |
-| 5C | @dev | Agentes Tier 1 Grupo A | ⬜ AGUARDANDO |
+| 5B | @dev | Agentes Tier 0 e Tier 2 | ✅ CONCLUÍDA |
+| 5C | @dev | Agentes Tier 1 Grupo A | → PRÓXIMA |
 | 5D | @dev | Agentes Tier 1 Grupo B | ⬜ AGUARDANDO |
 | 5E | @dev | Tasks e Workflows | ⬜ AGUARDANDO |
 | 6 | @qa | Testes de Integração | ⬜ AGUARDANDO |
 | 7 | @devops | Commit e PR | ⬜ AGUARDANDO |
 
 **Última atualização:** 2026-05-28
-**Próxima ação:** Iniciar Etapa 5B com @dev (Dex) — implementar stark-chief e validator (story GTS-001.03)
+**Próxima ação:** Iniciar Etapa 5C com @dev (Dex) — implementar 5 agentes Tier 1 Grupo A (story GTS-001.04)
 
 ---
 
@@ -464,7 +464,7 @@ proxima_etapa: 5B
 **Agente:** `@dev (Dex)`
 **Story:** GTS-001.03
 **Commit ao concluir:** `feat(gestor-trafego-stark): add stark-chief validator [Story GTS-001.03]`
-**Status:** → PRÓXIMA
+**Status:** ✅ CONCLUÍDA
 
 #### Briefing para @dev
 
@@ -500,8 +500,16 @@ proxima_etapa: 5B
 #### Handoff desta etapa (preencher ao concluir)
 ```yaml
 # HANDOFF ETAPA 5B
-status: pendente
-arquivos_criados: []
+status: concluida
+arquivos_criados:
+  - squads/gestor-trafego-stark/agents/stark-chief.md
+  - squads/gestor-trafego-stark/agents/validator.md
+destaques:
+  - stark-chief: tier 0, 7 comandos, resolução de cliente 4 passos, multi-cliente (vinicius/gustavo/todos)
+  - stark-chief: routing rules com 3+ keywords por comando conforme story
+  - stark-chief: pipeline routing 6 fases explícito com comportamento de falha por fase
+  - validator: 4 gates — gate_sheets (novo, 7 critérios), gate_reportei, gate_alertas, gate_clickup
+  - validator: gate_alertas adaptado para squad (sem "11 contas" hardcoded)
 pendencias: []
 proxima_etapa: 5C
 ```
@@ -512,7 +520,7 @@ proxima_etapa: 5C
 **Agente:** `@dev (Dex)`
 **Story:** GTS-001.04
 **Commit ao concluir:** `feat(gestor-trafego-stark): add tier1-A agents — coletor redator publicador whatsapp contexto [Story GTS-001.04]`
-**Status:** ⬜ AGUARDANDO
+**Status:** → PRÓXIMA
 
 #### Briefing para @dev
 
