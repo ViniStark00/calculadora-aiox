@@ -33,8 +33,8 @@ a criação do squad gestor-trafego-stark a partir da próxima etapa pendente.
 | 2 | @pm | Criação do Epic | ✅ CONCLUÍDA |
 | 3 | @sm | Criação das Stories | ✅ CONCLUÍDA |
 | 4 | @po | Validação das Stories | ✅ CONCLUÍDA |
-| 5A | @dev | Estrutura Base + Dados | → PRÓXIMA |
-| 5B | @dev | Agentes Tier 0 e Tier 2 | ⬜ AGUARDANDO |
+| 5A | @dev | Estrutura Base + Dados | ✅ CONCLUÍDA |
+| 5B | @dev | Agentes Tier 0 e Tier 2 | → PRÓXIMA |
 | 5C | @dev | Agentes Tier 1 Grupo A | ⬜ AGUARDANDO |
 | 5D | @dev | Agentes Tier 1 Grupo B | ⬜ AGUARDANDO |
 | 5E | @dev | Tasks e Workflows | ⬜ AGUARDANDO |
@@ -42,7 +42,7 @@ a criação do squad gestor-trafego-stark a partir da próxima etapa pendente.
 | 7 | @devops | Commit e PR | ⬜ AGUARDANDO |
 
 **Última atualização:** 2026-05-28
-**Próxima ação:** Iniciar Etapa 5A com @dev (Dex) — implementar squad base + dados (stories GTS-001.01 + GTS-001.02)
+**Próxima ação:** Iniciar Etapa 5B com @dev (Dex) — implementar stark-chief e validator (story GTS-001.03)
 
 ---
 
@@ -374,7 +374,7 @@ proxima_etapa: 5A
 **Agente:** `@dev (Dex)`
 **Story:** GTS-001.01 + GTS-001.02
 **Commit ao concluir:** `feat(gestor-trafego-stark): add squad base — squad.yaml CLAUDE.md README.md data/ [Story GTS-001.01 + GTS-001.02]`
-**Status:** ⬜ AGUARDANDO
+**Status:** ✅ CONCLUÍDA
 
 #### Briefing para @dev
 
@@ -439,12 +439,22 @@ proxima_etapa: 5A
 #### Handoff desta etapa (preencher ao concluir)
 ```yaml
 # HANDOFF ETAPA 5A
-status: pendente
-arquivos_criados: []
-clientes_vinicius_count: 0
-clientes_gustavo_count: 0
-total_clientes_yaml: 0
-pendencias: []
+status: concluida
+arquivos_criados:
+  - squads/gestor-trafego-stark/squad.yaml
+  - squads/gestor-trafego-stark/CLAUDE.md
+  - squads/gestor-trafego-stark/README.md
+  - squads/gestor-trafego-stark/data/clientes.yaml
+  - squads/gestor-trafego-stark/data/thresholds-por-especialidade.yaml
+  - squads/gestor-trafego-stark/config/settings.yaml
+clientes_vinicius_count: 17
+clientes_gustavo_count: 9
+clientes_compartilhados_count: 2
+total_clientes_yaml: 28
+thresholds_especialidades: [cirurgia_plastica, dermatologia, medicina_estetica, cirurgia_facial, cirurgia_corporal, mommy_makeover, cirurgia_trans, cirurgia_ortognatica, saude_geral, oncologia, tricologia]
+pendencias:
+  - meta_ad_account_id de todos os clientes está null — preencher com act_XXXXX quando disponível
+  - clickup_status_list_id de clientes Gustavo (exceto Dr. Caio Fernandes) está null — preencher antes do primeiro uso
 proxima_etapa: 5B
 ```
 
@@ -454,7 +464,7 @@ proxima_etapa: 5B
 **Agente:** `@dev (Dex)`
 **Story:** GTS-001.03
 **Commit ao concluir:** `feat(gestor-trafego-stark): add stark-chief validator [Story GTS-001.03]`
-**Status:** ⬜ AGUARDANDO
+**Status:** → PRÓXIMA
 
 #### Briefing para @dev
 

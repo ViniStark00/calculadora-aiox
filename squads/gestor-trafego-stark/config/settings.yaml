@@ -1,0 +1,43 @@
+# settings.yaml — Configurações operacionais do squad gestor-trafego-stark
+# NÃO incluir tokens, credenciais ou IDs de conta aqui.
+# Variáveis de ambiente: REPORTEI_TOKEN, SHEET_ID, GOOGLE_SERVICE_ACCOUNT_JSON
+
+reportei:
+  api_base: "https://api.reportei.com/v2"
+  per_page: 100
+  rate_limit_sleep: 0.6     # segundos entre chamadas (evitar rate limit)
+  rate_limit_retry: 60      # segundos para aguardar após erro 429
+
+planilha:
+  # SHEET_ID vem da variável de ambiente SHEET_ID
+  # Abas nomeadas pelo DOMINGO da semana (ex: 17/05/2026 = semana 11-17/05)
+  # Nomes curtos na coluna A (ex: 'IMCP', 'Dra Danielle Gondim')
+  # Nomes de bloco que delimitam os gestores: "Vinicius", "Gustavo"
+  bloco_vinicius: "Vinicius"
+  bloco_gustavo: "Gustavo"
+
+matching:
+  fuzzy_threshold: 0.60     # similaridade mínima para match fuzzy de nome de cliente
+
+pipeline:
+  lote_paralelo: 3          # máximo de clientes processados em paralelo no alerta-monitor
+
+meta_ads:
+  lookback_metricas: "last_3d"   # janela para CPM, CTR, frequência e kill-switch
+  lookback_frequencia: "last_7d"  # janela específica para frequência por tipo de campanha
+  nivel_padrao: ["ad", "account"] # nível de agregação: ad (detalhe) + account (visão geral)
+
+slugs_reportei:
+  google_ads: "google_adwords"                  # NÃO usar "google_ads"
+  seguidores: "ig:new_followers_count"           # match exato
+  conversas: "messaging_conversation_started_7d" # match exato
+  google_cost_unit: "direct"                     # custo Google = valor direto, SEM ÷ 1.000.000
+
+clickup:
+  # Docs alvo para status report — determinado pelo gestor do cliente
+  doc_vinicius: "Status Report - Vinicius"
+  doc_gustavo: "Status Report - Gustavo"
+
+contexto_drive:
+  pasta: "Contexto Clientes - Stark"
+  prefixo_documento: "Contexto - "  # ex: "Contexto - IMCP"
