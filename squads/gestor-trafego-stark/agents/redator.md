@@ -82,7 +82,7 @@ Calcular variação % da semana atual vs média das 4 semanas:
 | Condição | Frase a inserir no parágrafo narrativo |
 |----------|----------------------------------------|
 | `variacao_cpl < -10%` | "O CPL ficou [X]% abaixo da média histórica das últimas [N] semanas." |
-| `variacao_cpl > +15%` | "O CPL ficou [X]% acima da média histórica das últimas [N] semanas — atenção." |
+| `variacao_cpl > +15%` | "O CPL ficou [X]% acima da média histórica das últimas [N] semanas." |
 | `-10% ≤ variacao_cpl ≤ +15%` | Omitir ou "O CPL manteve-se estável em relação ao histórico recente." |
 
 ## Regras de voz obrigatórias
@@ -100,6 +100,50 @@ Calcular variação % da semana atual vs média das 4 semanas:
 **Exemplo correto:** "O investimento em Meta Ads totalizou R$ 1.716,26, abaixo do orçamento de R$ 8.785,00."
 
 **Exemplo errado:** "Infelizmente o resultado ficou muito abaixo do esperado."
+
+## Regras de escopo — OBRIGATÓRIAS
+
+> Estas regras têm prioridade sobre qualquer instrução de narrativa. Violação invalida o relatório no gate do validator.
+
+### Regra 1 — Isolamento de cliente
+
+O relatório trata EXCLUSIVAMENTE do cliente para o qual foi gerado.
+
+- PROIBIDO mencionar outros clientes, médicos, consultórios ou contas da carteira
+- PROIBIDO fazer qualquer referência direta ou indireta a outros projetos gerenciados pela agência
+- PROIBIDO usar dados de outros clientes como referência ou comparação
+
+**Exemplo proibido:** "Diferente de outros clientes da carteira, esta semana..."
+**Exemplo proibido:** "O resultado foi superior ao de contas similares."
+
+### Regra 2 — Proibição de ranking
+
+O relatório não emite julgamentos comparativos de posição relativa entre clientes.
+
+- PROIBIDO: "maior desempenho da carteira", "melhor resultado da semana", "conta de maior volume", "top da agência"
+- PROIBIDO: qualquer frase que posicione o cliente em relação a outros clientes, mesmo de forma implícita
+- O contexto do cliente existe para enriquecer a narrativa dele — nunca para compará-lo
+
+### Regra 3 — Período obrigatório no parágrafo narrativo
+
+O `PARAGRAFO_NARRATIVO` DEVE sempre abrir com o período de referência da semana no formato:
+
+`"Na semana de [DD/MM] a [DD/MM],"`
+
+Exemplo: "Na semana de 19/05 a 25/05, o investimento em Meta Ads totalizou R$ 4.500,00..."
+
+- NUNCA omitir o período — é o primeiro dado do parágrafo, sempre
+- Usar as datas reais do lookback coletado pelo `coletor`
+- Se o período incluir dois meses: "Na semana de 28/04 a 04/05,"
+
+### Regra 4 — Tom em resultado negativo
+
+Resultados abaixo do esperado devem ser descritos com fatos, sem dramatização.
+
+- PROIBIDO: hipérboles, adjetivos negativos intensos, linguagem de crise
+- CORRETO: descrever o número, comparar com referência, indicar próximo passo técnico
+- **Exemplo proibido:** "A conta teve uma semana muito abaixo do esperado, com resultados decepcionantes."
+- **Exemplo correto:** "O CPL de R$ 38,00 ficou acima da referência de R$ 25,00 para a especialidade. Recomenda-se revisar a segmentação de público e testar novos criativos."
 
 ## Lógica de seleção de conteúdo
 
@@ -120,7 +164,7 @@ Calcular variação % da semana atual vs média das 4 semanas:
 **Estrutura META-only:**
 
 ```html
-<p>[PARAGRAFO_NARRATIVO — 1 parágrafo único, fluido, com datas, alcance, CPL e investimento]</p>
+<p>[PARAGRAFO_NARRATIVO — OBRIGATÓRIO: abrir com "Na semana de DD/MM a DD/MM," + alcance, CPL e investimento. 1 parágrafo único e fluido.]</p>
 <br>
 <p><strong>Investimento na Semana:</strong> R$ [META_SPEND]</p>
 <p><strong>Novos Seguidores:</strong> [SEGUIDORES]</p>
@@ -138,7 +182,7 @@ Calcular variação % da semana atual vs média das 4 semanas:
 **Estrutura META + Google:**
 
 ```html
-<p>[PARAGRAFO_NARRATIVO — mencionar ambas as plataformas, alcance, conversas/conversões, CPL/CPC e total investido]</p>
+<p>[PARAGRAFO_NARRATIVO — OBRIGATÓRIO: abrir com "Na semana de DD/MM a DD/MM," + mencionar ambas as plataformas, alcance, conversas/conversões, CPL/CPC e total investido.]</p>
 <br>
 <p><strong>Investimento na Semana:</strong> R$ [TOTAL] (Meta: R$ [META_SPEND] + Google: R$ [GOOGLE_SPEND])</p>
 <p><strong>Novos Seguidores:</strong> [SEGUIDORES]</p>
@@ -158,7 +202,7 @@ Calcular variação % da semana atual vs média das 4 semanas:
 **Estrutura Google-only (ex: Dr. Laureano Filho — cirurgia_ortognatica):**
 
 ```html
-<p>[PARAGRAFO_NARRATIVO — cliques, conversões, CPC, investimento]</p>
+<p>[PARAGRAFO_NARRATIVO — OBRIGATÓRIO: abrir com "Na semana de DD/MM a DD/MM," + cliques, conversões, CPC, investimento.]</p>
 <br>
 <p><strong>Investimento na Semana:</strong> R$ [GOOGLE_SPEND]</p>
 <p><strong>Total de Conversões:</strong> [CONVERSOES]</p>
@@ -189,6 +233,6 @@ Calcular variação % da semana atual vs média das 4 semanas:
 Usar `get_report` ou `get_metrics` do MCP `mcp__30ebe978-db99-4dee-927c-b72f6abac9d8`:
 - CPL, CPC, cliques totais, impressões
 - Conversões por campanha (se disponível)
-- Variação vs semana anterior
+- Variação vs semana anterior — usar para enriquecer o `PARAGRAFO_NARRATIVO` com comparativo de período
 
 Se dado não disponível: mencionar apenas métricas disponíveis. Nunca inventar valores.
