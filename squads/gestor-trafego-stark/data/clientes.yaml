@@ -4,6 +4,7 @@
 # meta_ad_account_id: preencher com act_XXXXX quando disponível; null = fallback Reportei
 # sheet_columns: apenas clientes Vinicius (coluna na planilha Google Sheets)
 # clickup_status_list_id: apenas clientes Gustavo; null = preencher antes do primeiro uso
+# Especialidades corrigidas em 2026-05-28 via cruzamento com docs "Contexto Clientes - Stark" no Drive
 
 _sheet_cols: &sheet_cols
   meta_spend: C
@@ -266,7 +267,7 @@ clientes:
     ativo: true
     prioridade: 1
     reportei_project_id: 696403
-    especialidade: saude_geral
+    especialidade: cirurgia_plastica        # corrigido: era saude_geral — foco em mama/mastopexia
     meta_ad_account_id: null
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Fernando"
@@ -279,7 +280,7 @@ clientes:
     ativo: true
     prioridade: 2
     reportei_project_id: 1064037
-    especialidade: oncologia
+    especialidade: emagrecimento            # corrigido: era oncologia — especialista em emagrecimento/GLP-1
     meta_ad_account_id: null
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Diego"
@@ -305,7 +306,7 @@ clientes:
     ativo: true
     prioridade: 4
     reportei_project_id: 1097249
-    especialidade: tricologia
+    especialidade: cirurgia_facial          # corrigido: era tricologia — cirurgião plástico especialista em face/facelift
     meta_ad_account_id: null
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Higner"
@@ -318,7 +319,7 @@ clientes:
     ativo: true
     prioridade: 5
     reportei_project_id: 1097223
-    especialidade: medicina_estetica
+    especialidade: cirurgia_facial          # corrigido: era medicina_estetica — cirurgiã plástica especializada em face/facelift
     meta_ad_account_id: null
     excluir_meta_monitoring: false
     nome_whatsapp: "Dra. Mariângela"
@@ -331,7 +332,7 @@ clientes:
     ativo: true
     prioridade: 6
     reportei_project_id: 1170455
-    especialidade: saude_geral
+    especialidade: cirurgia_plastica        # corrigido: era saude_geral — cirurgião plástico
     meta_ad_account_id: null
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Caio"
@@ -344,7 +345,7 @@ clientes:
     ativo: true
     prioridade: 9
     reportei_project_id: 913731
-    especialidade: medicina_estetica
+    especialidade: cirurgia_plastica        # corrigido: era medicina_estetica — cirurgiã plástica (Lipo HD, abdominoplastia)
     meta_ad_account_id: null
     excluir_meta_monitoring: false
     nome_whatsapp: "Fernanda"
@@ -357,7 +358,7 @@ clientes:
     ativo: true
     prioridade: 10
     reportei_project_id: 672682
-    especialidade: medicina_estetica
+    especialidade: ginecologia              # corrigido: era medicina_estetica — ginecologista e obstetra
     meta_ad_account_id: null
     excluir_meta_monitoring: false
     nome_whatsapp: "Graciela"
@@ -370,7 +371,7 @@ clientes:
     ativo: true
     prioridade: 11
     reportei_project_id: 1025271
-    especialidade: dermatologia
+    especialidade: cirurgia_bucomaxilofacial  # corrigido: era dermatologia — cirurgiã buco-maxilofacial/ortognática
     meta_ad_account_id: null
     excluir_meta_monitoring: false
     nome_whatsapp: "Dra. Érica"
