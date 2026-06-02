@@ -154,6 +154,23 @@ Resultados abaixo do esperado devem ser descritos com fatos, sem dramatização.
 | Ambos > 0 | Incluir as duas seções |
 | `meta_spend = 0` ou `null` | Não mencionar Meta Ads |
 | `google_spend = 0` ou `null` | Não mencionar Google Ads |
+| `total_leads > conversas` | Mostrar breakdown de fontes no relatório (ver abaixo) |
+| `total_leads = conversas` | Usar label "Total de Conversas" (comportamento legado) |
+
+### Breakdown de leads (quando total_leads > conversas)
+
+Quando o cliente tem `lead_sources` com pixel_evento e/ou lead_site, o relatório DEVE:
+
+1. Substituir o label "Total de Conversas" por "Total de Leads"
+2. Exibir o `total_leads` na linha principal
+3. Exibir uma linha de detalhamento abaixo, omitindo fontes com valor zero ou null:
+   ```
+   ↳ WhatsApp: [CONVERSAS] · Pixel: [PIXEL_LEADS] · Site: [SITE_LEADS]
+   ```
+4. Na linha de CPL, usar o label "Custo por Lead (CPL)" em vez de "Custo por Conversa (CPL)"
+5. No PARAGRAFO_NARRATIVO, mencionar o total consolidado:
+   - Correto: "...registramos [TOTAL_LEADS] leads no período (conversas WhatsApp, pixel e formulário de site)."
+   - Proibido: citar apenas `conversas` se houver outras fontes configuradas
 
 ## Estrutura do texto gerado (HTML obrigatório)
 
@@ -168,8 +185,13 @@ Resultados abaixo do esperado devem ser descritos com fatos, sem dramatização.
 <br>
 <p><strong>Investimento na Semana:</strong> R$ [META_SPEND]</p>
 <p><strong>Novos Seguidores:</strong> [SEGUIDORES]</p>
+<!-- SE total_leads = conversas (apenas WhatsApp): -->
 <p><strong>Total de Conversas:</strong> [CONVERSAS]</p>
 <p><strong>Custo por Conversa (CPL):</strong> R$ [CPL]</p>
+<!-- SE total_leads > conversas (múltiplas fontes — ver seção Breakdown de leads): -->
+<!-- <p><strong>Total de Leads:</strong> [TOTAL_LEADS]</p> -->
+<!-- <p>↳ WhatsApp: [CONVERSAS] · Pixel: [PIXEL_LEADS] · Site: [SITE_LEADS]</p> -->
+<!-- <p><strong>Custo por Lead (CPL):</strong> R$ [CPL]</p> -->
 <br>
 <p><strong>Desempenho de Anúncios em Destaque</strong></p>
 <p>A análise individual dos criativos mostra variações importantes na eficiência de custo e engajamento:</p>
@@ -186,9 +208,15 @@ Resultados abaixo do esperado devem ser descritos com fatos, sem dramatização.
 <br>
 <p><strong>Investimento na Semana:</strong> R$ [TOTAL] (Meta: R$ [META_SPEND] + Google: R$ [GOOGLE_SPEND])</p>
 <p><strong>Novos Seguidores:</strong> [SEGUIDORES]</p>
+<!-- SE total_leads = conversas (apenas WhatsApp): -->
 <p><strong>Total de Conversas:</strong> [CONVERSAS]</p>
 <p><strong>Total de Conversões:</strong> [CONVERSOES]</p>
 <p><strong>Custo por Conversa (CPL):</strong> R$ [CPL]</p>
+<!-- SE total_leads > conversas (múltiplas fontes — ver seção Breakdown de leads): -->
+<!-- <p><strong>Total de Leads:</strong> [TOTAL_LEADS]</p> -->
+<!-- <p>↳ WhatsApp: [CONVERSAS] · Pixel: [PIXEL_LEADS] · Site: [SITE_LEADS]</p> -->
+<!-- <p><strong>Total de Conversões:</strong> [CONVERSOES]</p> -->
+<!-- <p><strong>Custo por Lead (CPL):</strong> R$ [CPL]</p> -->
 <br>
 <p><strong>Desempenho de Anúncios em Destaque</strong></p>
 [seções Meta]
@@ -225,7 +253,8 @@ Resultados abaixo do esperado devem ser descritos com fatos, sem dramatização.
 
 | Situação | Comportamento |
 |----------|--------------|
-| `conversas = 0` | CPL = "-" — nunca dividir por zero |
+| `total_leads = 0` (ou null) | CPL = "-" — nunca dividir por zero |
+| `total_leads > conversas` (há pixel ou site) | Usar `total_leads` no CPL — mencionar breakdown no texto |
 | Métricas indisponíveis (timeout, integração offline) | Registrar CPL como "não monitorável neste ciclo" e continuar sem travar |
 
 ## Dados extras via MCP Reportei
@@ -236,3 +265,32 @@ Usar `get_report` ou `get_metrics` do MCP `mcp__30ebe978-db99-4dee-927c-b72f6aba
 - Variação vs semana anterior — usar para enriquecer o `PARAGRAFO_NARRATIVO` com comparativo de período
 
 Se dado não disponível: mencionar apenas métricas disponíveis. Nunca inventar valores.
+
+## Auto-discovery de leads (sem config manual)
+
+Ao buscar métricas via `get_project_metrics`, varrer TODOS os slugs disponíveis do projeto.
+Identificar automaticamente qualquer métrica de lead além de `messaging_conversation_started_7d`:
+
+| Padrão de slug | Tipo de lead | Campo |
+|----------------|-------------|-------|
+| `offsite_conversion.*` | Pixel Meta (evento externo) | `pixel_leads` |
+| `onsite_conversion.*` | Lead nativo/formulário no site | `site_leads` |
+| `*lead*` (outros) | Qualquer outro evento de lead | `pixel_leads` |
+
+**Regras:**
+- Incluir apenas slugs com valor > 0 no período
+- Ignorar slugs de `messaging_conversation_started_7d` (já capturado como `conversas`)
+- Somar todas as fontes encontradas:
+  ```
+  total_leads = conversas + pixel_leads + site_leads
+  meta_cpl    = meta_spend / total_leads  (se total_leads > 0)
+  ```
+- Se nenhum slug adicional encontrado: `total_leads = conversas` — comportamento legado, sem mudança
+- Logar internamente quais slugs foram encontrados e seus valores antes de gerar o texto
+
+**No relatório:** aplicar Bloco A ou Bloco B conforme template:
+- `total_leads = conversas` → Bloco A (label "Total de Conversas", comportamento atual)
+- `total_leads > conversas` → Bloco B (label "Total de Leads" + linha ↳ com breakdown por fonte)
+- No `PARAGRAFO_NARRATIVO`, quando Bloco B: mencionar o total consolidado e as fontes detectadas
+  - Correto: "...registramos 44 leads no período (32 via WhatsApp, 9 via pixel e 3 via formulário do site)."
+  - Proibido: citar apenas `conversas` quando `total_leads > conversas`
