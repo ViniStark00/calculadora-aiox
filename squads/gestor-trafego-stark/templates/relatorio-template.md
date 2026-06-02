@@ -14,8 +14,18 @@
 
 <p><strong>Investimento na Semana:</strong> R$ [META_SPEND]</p>
 <p><strong>Novos Seguidores:</strong> [SEGUIDORES]</p>
+
+<!-- LEADS — usar bloco A se cliente tem apenas WhatsApp; bloco B se tem pixel/site também -->
+
+<!-- BLOCO A: apenas WhatsApp (total_leads = conversas) -->
 <p><strong>Total de Conversas:</strong> [CONVERSAS]</p>
 <p><strong>Custo por Conversa (CPL):</strong> R$ [CPL]</p>
+
+<!-- BLOCO B: múltiplas fontes (total_leads > conversas) — substituir bloco A -->
+<!-- <p><strong>Total de Leads:</strong> [TOTAL_LEADS]</p> -->
+<!-- <p>↳ WhatsApp: [CONVERSAS]  ·  Pixel: [PIXEL_LEADS]  ·  Site: [SITE_LEADS]</p> -->
+<!-- (omitir ↳ linha quando PIXEL_LEADS ou SITE_LEADS for zero/null) -->
+<!-- <p><strong>Custo por Lead (CPL):</strong> R$ [CPL]</p> -->
 
 <br>
 
@@ -46,9 +56,20 @@
 
 <p><strong>Investimento na Semana:</strong> R$ [TOTAL] (Meta: R$ [META_SPEND] + Google: R$ [GOOGLE_SPEND])</p>
 <p><strong>Novos Seguidores:</strong> [SEGUIDORES]</p>
+
+<!-- LEADS — usar bloco A se cliente tem apenas WhatsApp; bloco B se tem pixel/site também -->
+
+<!-- BLOCO A: apenas WhatsApp (total_leads = conversas) -->
 <p><strong>Total de Conversas:</strong> [CONVERSAS]</p>
 <p><strong>Total de Conversões:</strong> [CONVERSOES]</p>
 <p><strong>Custo por Conversa (CPL):</strong> R$ [CPL]</p>
+
+<!-- BLOCO B: múltiplas fontes (total_leads > conversas) — substituir bloco A -->
+<!-- <p><strong>Total de Leads:</strong> [TOTAL_LEADS]</p> -->
+<!-- <p>↳ WhatsApp: [CONVERSAS]  ·  Pixel: [PIXEL_LEADS]  ·  Site: [SITE_LEADS]</p> -->
+<!-- (omitir ↳ linha quando PIXEL_LEADS ou SITE_LEADS for zero/null) -->
+<!-- <p><strong>Total de Conversões:</strong> [CONVERSOES]</p> -->
+<!-- <p><strong>Custo por Lead (CPL):</strong> R$ [CPL]</p> -->
 
 <br>
 
@@ -127,6 +148,9 @@
 | `[TOTAL]` | Calculado (META + Google) | ✅ se ambos | Formato: R$ X.XXX,XX |
 | `[SEGUIDORES]` | Sheets col. H | ✅ se META | Pode ser negativo |
 | `[CONVERSAS]` | Sheets col. K / metricas_coletadas | ✅ se META | Leads WhatsApp |
+| `[PIXEL_LEADS]` | Reportei (slug do cliente) | ⚠️ se pixel_evento configurado | Leads de pixel Meta |
+| `[SITE_LEADS]` | Reportei (slug do cliente) | ⚠️ se lead_site configurado | Leads de formulário/site |
+| `[TOTAL_LEADS]` | Calculado (conversas + pixel + site) | ⚠️ se múltiplas fontes | Base do CPL quando > conversas |
 | `[CONVERSOES]` | Sheets col. O | ✅ se Google | Conversões diretas |
 | `[CPL]` | MCP Reportei ou calculado | ✅ se META | `R$ X,XX` ou `-` se conversas = 0 |
 | `[CPC_CONVERSAO]` / `[CUSTO_POR_CONVERSAO]` | MCP Reportei | ✅ se Google | Custo por conversão Google |
