@@ -8,41 +8,58 @@
 ## TEMPLATE META-ONLY — HTML (clientes apenas com Meta Ads)
 
 ```html
-<p>Nesta última semana ([DATA_INICIO] a [DATA_FIM]), [CONTEXTO_OU_NOVIDADE]. Em termos de alcance, atingimos um total de [ALCANCE] contas e geramos [IMPRESSOES] impressões totais. No que diz respeito à conversão direta, registramos [CONVERSAS] conversas iniciadas por mensagem. O custo por conversa iniciada (CPL) ficou em R$ [CPL]. O investimento total no período analisado foi de R$ [META_SPEND].</p>
+<p><strong>📊 Relatório de Performance | [DATA_INICIO] a [DATA_FIM]</strong></p>
 
 <br>
 
-<p><strong>Investimento na Semana:</strong> R$ [META_SPEND]</p>
-<p><strong>Novos Seguidores:</strong> [SEGUIDORES]</p>
+<p><strong>🚀 Visão Geral do Período</strong></p>
+<p>[PARAGRAFO_NARRATIVO — abrir com "Na semana de [DATA_INICIO] a [DATA_FIM]," + alcance, CPL e investimento. 1 parágrafo único e fluido.]</p>
+<p><strong>Investimento Total Meta:</strong> R$ [META_SPEND]</p>
 
-<!-- LEADS — usar bloco A se cliente tem apenas WhatsApp; bloco B se tem pixel/site também -->
+<!-- SE total_leads = conversas (apenas WhatsApp): -->
+<p><strong>Custo Médio por Lead (CPL):</strong> R$ [CPL]</p>
 
-<!-- BLOCO A: apenas WhatsApp (total_leads = conversas) -->
-<p><strong>Total de Conversas:</strong> [CONVERSAS]</p>
-<p><strong>Custo por Conversa (CPL):</strong> R$ [CPL]</p>
-
-<!-- BLOCO B: múltiplas fontes (total_leads > conversas) — substituir bloco A -->
-<!-- <p><strong>Total de Leads:</strong> [TOTAL_LEADS]</p> -->
-<!-- <p>↳ WhatsApp: [CONVERSAS]  ·  Pixel: [PIXEL_LEADS]  ·  Site: [SITE_LEADS]</p> -->
-<!-- (omitir ↳ linha quando PIXEL_LEADS ou SITE_LEADS for zero/null) -->
-<!-- <p><strong>Custo por Lead (CPL):</strong> R$ [CPL]</p> -->
+<!-- SE total_leads > conversas (Respondi ou outros leads detectados): -->
+<!-- <p><strong>Custo Médio por Lead (CPL):</strong> R$ [CPL] ([TOTAL_LEADS] leads — WhatsApp: [CONVERSAS] · Respondi: [RESPONDI_LEADS] · Pixel: [PIXEL_LEADS])</p> -->
+<!-- (omitir fontes com valor zero ou null na linha de detalhamento) -->
 
 <br>
 
-<p><strong>Desempenho de Anúncios em Destaque</strong></p>
-<p>A análise individual dos criativos mostra variações importantes na eficiência de custo e engajamento:</p>
+<p><strong>🔍 Análise do Funil de Vendas (Meta)</strong></p>
+
+<p><strong>Topo de Funil (TOFU) — Atração e Alcance</strong></p>
+<p>Alcance: ~[ALCANCE] | Impressões: ~[IMPRESSOES] | Frequência: [FREQUENCIA]</p>
+<p>[ANALISE_TOFU — 1–2 frases objetivas sobre alcance, volume e saturação de público.]</p>
 
 <br>
 
-<p><strong>[TITULO_SUBSECAO_1] ([FORMATO]):</strong> [DESCRICAO_RESULTADO]</p>
+<p><strong>Meio de Funil (MOFU) — Qualificação e Consideração</strong></p>
+<p>CTR no link: [CTR]% | CPC estimado: R$ [CPC] | CPM: R$ [CPM]</p>
+<p>Taxa clique→conversa: ~[TAXA_CLIQUE_CONVERSA]%</p>
+<p>[ANALISE_MOFU — 1–2 frases sobre qualidade do tráfego, engajamento e eficiência de custo por clique.]</p>
 
 <br>
 
-<p><strong>[TITULO_SUBSECAO_2] ([FORMATO]):</strong> [DESCRICAO_RESULTADO]</p>
+<p><strong>Fundo de Funil (BOFU) — Conversão Direta</strong></p>
+
+<!-- SE total_leads = conversas (apenas WhatsApp): -->
+<p>[CONVERSAS] conversas | CPL R$ [CPL] | [STATUS_CPL]</p>
+
+<!-- SE total_leads > conversas (Respondi ou outros): -->
+<!-- <p>[TOTAL_LEADS] leads ([CONVERSAS] WhatsApp + [RESPONDI_LEADS] Respondi) | CPL R$ [CPL] | [STATUS_CPL]</p> -->
+<!-- (omitir fontes com valor zero ou null) -->
+
+<p>[ANALISE_BOFU — 1–2 frases sobre volume de leads, CPL vs referência da especialidade e variação histórica se disponível.]</p>
 
 <br>
 
-<p>👇 Confira os dados do relatório no link abaixo:</p>
+<p><strong>📝 Próximos Passos & Otimizações</strong></p>
+<p>→ [ACAO_1]</p>
+<p>→ [ACAO_2]</p>
+
+<br>
+
+<p>🔗 Confira os dados do relatório no link abaixo:</p>
 ```
 
 ---
@@ -50,52 +67,66 @@
 ## TEMPLATE META + GOOGLE — HTML (clientes com ambas as plataformas)
 
 ```html
-<p>Nesta última semana, entre os dias [DATA_INICIO] e [DATA_FIM], [ANALISE_GERAL_1_FRASE]. Em relação ao investimento, foram aplicados R$ [META_SPEND] no Meta Ads e R$ [GOOGLE_SPEND] no Google Ads, totalizando R$ [TOTAL]. No Meta, atingimos [ALCANCE] contas e [CONVERSAS] conversas iniciadas, com CPL de R$ [CPL]. No Google, registramos [CLIQUES] cliques e [CONVERSOES] conversões, com custo por conversão de R$ [CPC_CONVERSAO].</p>
+<p><strong>📊 Relatório de Performance | [DATA_INICIO] a [DATA_FIM]</strong></p>
 
 <br>
 
-<p><strong>Investimento na Semana:</strong> R$ [TOTAL] (Meta: R$ [META_SPEND] + Google: R$ [GOOGLE_SPEND])</p>
-<p><strong>Novos Seguidores:</strong> [SEGUIDORES]</p>
+<p><strong>🚀 Visão Geral do Período</strong></p>
+<p>[PARAGRAFO_NARRATIVO — abrir com "Na semana de [DATA_INICIO] a [DATA_FIM]," + mencionar ambas as plataformas, alcance, conversas/conversões, CPL/CPC e total investido.]</p>
+<p><strong>Investimento Total:</strong> R$ [TOTAL] (Meta: R$ [META_SPEND] + Google: R$ [GOOGLE_SPEND])</p>
 
-<!-- LEADS — usar bloco A se cliente tem apenas WhatsApp; bloco B se tem pixel/site também -->
+<!-- SE total_leads = conversas (apenas WhatsApp): -->
+<p><strong>Custo Médio por Lead Meta (CPL):</strong> R$ [CPL]</p>
 
-<!-- BLOCO A: apenas WhatsApp (total_leads = conversas) -->
-<p><strong>Total de Conversas:</strong> [CONVERSAS]</p>
-<p><strong>Total de Conversões:</strong> [CONVERSOES]</p>
-<p><strong>Custo por Conversa (CPL):</strong> R$ [CPL]</p>
+<!-- SE total_leads > conversas (Respondi ou outros): -->
+<!-- <p><strong>Custo Médio por Lead Meta (CPL):</strong> R$ [CPL] ([TOTAL_LEADS] leads — WhatsApp: [CONVERSAS] · Respondi: [RESPONDI_LEADS] · Pixel: [PIXEL_LEADS])</p> -->
+<!-- (omitir fontes com valor zero ou null) -->
 
-<!-- BLOCO B: múltiplas fontes (total_leads > conversas) — substituir bloco A -->
-<!-- <p><strong>Total de Leads:</strong> [TOTAL_LEADS]</p> -->
-<!-- <p>↳ WhatsApp: [CONVERSAS]  ·  Pixel: [PIXEL_LEADS]  ·  Site: [SITE_LEADS]</p> -->
-<!-- (omitir ↳ linha quando PIXEL_LEADS ou SITE_LEADS for zero/null) -->
-<!-- <p><strong>Total de Conversões:</strong> [CONVERSOES]</p> -->
-<!-- <p><strong>Custo por Lead (CPL):</strong> R$ [CPL]</p> -->
+<p><strong>Custo por Conversão Google:</strong> R$ [CPC_CONVERSAO]</p>
 
 <br>
 
-<p><strong>Desempenho de Anúncios em Destaque</strong></p>
-<p>A análise individual dos criativos mostra variações importantes na eficiência de custo e engajamento:</p>
+<p><strong>🔍 Análise do Funil de Vendas (Meta)</strong></p>
+
+<p><strong>Topo de Funil (TOFU) — Atração e Alcance</strong></p>
+<p>Alcance: ~[ALCANCE] | Impressões: ~[IMPRESSOES] | Frequência: [FREQUENCIA]</p>
+<p>[ANALISE_TOFU]</p>
 
 <br>
 
-<p><strong>[TITULO_SUBSECAO_META_1]:</strong> [DESCRICAO_RESULTADO]</p>
+<p><strong>Meio de Funil (MOFU) — Qualificação e Consideração</strong></p>
+<p>CTR no link: [CTR]% | CPC estimado: R$ [CPC] | CPM: R$ [CPM]</p>
+<p>Taxa clique→conversa: ~[TAXA_CLIQUE_CONVERSA]%</p>
+<p>[ANALISE_MOFU]</p>
 
 <br>
 
-<p><strong>Desempenho de Palavras-Chave em Destaque</strong></p>
-<p>A análise individual dos termos de pesquisa mostra variações importantes na eficiência de custo e volume de conversão:</p>
+<p><strong>Fundo de Funil (BOFU) — Conversão Direta</strong></p>
+
+<!-- SE total_leads = conversas (apenas WhatsApp): -->
+<p>[CONVERSAS] conversas | CPL R$ [CPL] | [STATUS_CPL]</p>
+
+<!-- SE total_leads > conversas (Respondi ou outros): -->
+<!-- <p>[TOTAL_LEADS] leads ([CONVERSAS] WhatsApp + [RESPONDI_LEADS] Respondi) | CPL R$ [CPL] | [STATUS_CPL]</p> -->
+<!-- (omitir fontes com valor zero ou null) -->
+
+<p>[ANALISE_BOFU]</p>
 
 <br>
 
-<p><strong>[PALAVRA_CHAVE_1]:</strong> [DESCRICAO_RESULTADO]</p>
+<p><strong>🔍 Análise Google Ads</strong></p>
+<p>Cliques: [CLIQUES] | Conversões: [CONVERSOES] | Custo por Conversão: R$ [CPC_CONVERSAO]</p>
+<p>[ANALISE_GOOGLE — 1–2 frases sobre performance das palavras-chave e conversões Google.]</p>
 
 <br>
 
-<p><strong>[PALAVRA_CHAVE_2]:</strong> [DESCRICAO_RESULTADO]</p>
+<p><strong>📝 Próximos Passos & Otimizações</strong></p>
+<p>→ [ACAO_1]</p>
+<p>→ [ACAO_2]</p>
 
 <br>
 
-<p>👇 Confira os dados do relatório no link abaixo:</p>
+<p>🔗 Confira os dados do relatório no link abaixo:</p>
 ```
 
 ---
@@ -103,35 +134,38 @@
 ## TEMPLATE GOOGLE-ONLY — HTML (ex: Dr. Laureano Filho — cirurgia_ortognatica)
 
 ```html
-<p>Nesta última semana, entre os dias [DATA_INICIO] e [DATA_FIM], [ANALISE_GERAL]. Alcançamos um total de [CLIQUES] cliques, que resultaram em [CONVERSOES] conversões diretas. O investimento total no período analisado foi de R$ [GOOGLE_SPEND]. Com base nesses dados, o custo por conversão ficou em R$ [CUSTO_POR_CONVERSAO].</p>
+<p><strong>📊 Relatório de Performance | [DATA_INICIO] a [DATA_FIM]</strong></p>
 
 <br>
 
-<p><strong>Investimento na Semana:</strong> R$ [GOOGLE_SPEND]</p>
-<p><strong>Total de Conversões:</strong> [CONVERSOES]</p>
-<p><strong>Custo por Conversão:</strong> R$ [CUSTO_POR_CONVERSAO]</p>
-<p><strong>Total de Cliques:</strong> [CLIQUES]</p>
+<p><strong>🚀 Visão Geral do Período</strong></p>
+<p>[PARAGRAFO_NARRATIVO — abrir com "Na semana de [DATA_INICIO] a [DATA_FIM]," + cliques, conversões, custo por conversão e investimento total.]</p>
+<p><strong>Investimento Total Google:</strong> R$ [GOOGLE_SPEND]</p>
+<p><strong>Custo por Conversão:</strong> R$ [CPC_CONVERSAO]</p>
 
 <br>
 
-<p><strong>Desempenho de Palavras-Chave em Destaque</strong></p>
-<p>A análise individual dos termos de pesquisa mostra variações importantes na eficiência de custo e volume de conversão:</p>
+<p><strong>🔍 Análise Google Ads</strong></p>
+
+<p><strong>Volume de Tráfego</strong></p>
+<p>Cliques: [CLIQUES] | Impressões: ~[IMPRESSOES] | CTR: [CTR]%</p>
+<p>[ANALISE_VOLUME — 1–2 frases sobre volume de busca, CTR e qualidade do tráfego.]</p>
 
 <br>
 
-<p><strong>[PALAVRA_CHAVE_1]:</strong> [DESCRICAO]</p>
+<p><strong>Conversões</strong></p>
+<p>[CONVERSOES] conversões | Custo por Conversão: R$ [CPC_CONVERSAO] | [STATUS_CPC]</p>
+<p>[ANALISE_CONVERSOES — 1–2 frases sobre volume de conversões, custo vs referência da especialidade e variação histórica se disponível.]</p>
 
 <br>
 
-<p><strong>[PALAVRA_CHAVE_2]:</strong> [DESCRICAO]</p>
+<p><strong>📝 Próximos Passos & Otimizações</strong></p>
+<p>→ [ACAO_1]</p>
+<p>→ [ACAO_2]</p>
 
 <br>
 
-<p><strong>[PALAVRA_CHAVE_3]:</strong> [DESCRICAO]</p>
-
-<br>
-
-<p>👇 Confira os dados do relatório no link abaixo:</p>
+<p>🔗 Confira os dados do relatório no link abaixo:</p>
 ```
 
 ---
@@ -140,21 +174,31 @@
 
 | Placeholder | Fonte | Obrigatório | Notas |
 |-------------|-------|-------------|-------|
-| `[DATA_INICIO]` | Calculado (segunda-feira) | ✅ | Formato: DD/MM/AAAA |
-| `[DATA_FIM]` | Calculado (domingo) | ✅ | Formato: DD/MM/AAAA |
-| `[ANALISE_GERAL_1_FRASE]` | Gerado pelo redator | ✅ | Tom neutro — descreve tendência geral |
-| `[META_SPEND]` | Sheets col. C / metricas_coletadas | ✅ se META | Formato: R$ X.XXX,XX |
-| `[GOOGLE_SPEND]` | Sheets col. E | ✅ se Google | Formato: R$ X.XXX,XX |
+| `[DATA_INICIO]` | Calculado (segunda-feira) | ✅ | Formato: DD/MM |
+| `[DATA_FIM]` | Calculado (domingo) | ✅ | Formato: DD/MM |
+| `[PARAGRAFO_NARRATIVO]` | Gerado pelo redator | ✅ | Abre com "Na semana de DD/MM a DD/MM," |
+| `[META_SPEND]` | metricas_coletadas | ✅ se META | Formato: R$ X.XXX,XX |
+| `[GOOGLE_SPEND]` | metricas_coletadas | ✅ se Google | Formato: R$ X.XXX,XX |
 | `[TOTAL]` | Calculado (META + Google) | ✅ se ambos | Formato: R$ X.XXX,XX |
-| `[SEGUIDORES]` | Sheets col. H | ✅ se META | Pode ser negativo |
-| `[CONVERSAS]` | Sheets col. K / metricas_coletadas | ✅ se META | Leads WhatsApp |
-| `[PIXEL_LEADS]` | Reportei (slug do cliente) | ⚠️ se pixel_evento configurado | Leads de pixel Meta |
-| `[SITE_LEADS]` | Reportei (slug do cliente) | ⚠️ se lead_site configurado | Leads de formulário/site |
-| `[TOTAL_LEADS]` | Calculado (conversas + pixel + site) | ⚠️ se múltiplas fontes | Base do CPL quando > conversas |
-| `[CONVERSOES]` | Sheets col. O | ✅ se Google | Conversões diretas |
-| `[CPL]` | MCP Reportei ou calculado | ✅ se META | `R$ X,XX` ou `-` se conversas = 0 |
-| `[CPC_CONVERSAO]` / `[CUSTO_POR_CONVERSAO]` | MCP Reportei | ✅ se Google | Custo por conversão Google |
-| `[CLIQUES]` | MCP Reportei | ✅ se Google | Cliques totais Google |
-| `[ALCANCE]` | MCP Reportei | ⚠️ se disponível | Contas alcançadas Meta |
-| `[IMPRESSOES]` | MCP Reportei | ⚠️ se disponível | Impressões Meta |
-| `[TITULO_SUBSECAO_N]` | MCP Reportei + redator | ✅ | Criativos (META) ou palavras-chave (Google) |
+| `[ALCANCE]` | MCP Reportei | ✅ se META | Contas alcançadas |
+| `[IMPRESSOES]` | MCP Reportei | ✅ | Impressões totais |
+| `[FREQUENCIA]` | MCP Reportei | ⚠️ se disponível | Impressões / Alcance |
+| `[CTR]` | MCP Reportei | ✅ | CTR no link (%) |
+| `[CPC]` | MCP Reportei | ✅ se META | Custo por clique |
+| `[CPM]` | MCP Reportei | ✅ se META | Custo por mil impressões |
+| `[TAXA_CLIQUE_CONVERSA]` | Calculado (conversas / cliques × 100) | ⚠️ se disponível | % de cliques que viraram conversa |
+| `[CONVERSAS]` | metricas_coletadas | ✅ se META | Leads WhatsApp |
+| `[RESPONDI_LEADS]` | Auto-discovery slug `*respondi*` | ⚠️ se detectado | Leads formulário Respondi |
+| `[PIXEL_LEADS]` | Auto-discovery slug `offsite_conversion.*` | ⚠️ se detectado | Leads de pixel Meta |
+| `[TOTAL_LEADS]` | Calculado (conversas + respondi + pixel) | ⚠️ se múltiplas fontes | Base do CPL quando > conversas |
+| `[CPL]` | Calculado (meta_spend / total_leads) | ✅ se META | `R$ X,XX` ou `-` se total_leads = 0 |
+| `[STATUS_CPL]` | Classificação por threshold | ✅ se META | Ex: "dentro da referência", "acima da referência para a especialidade" |
+| `[CLIQUES]` | MCP Reportei | ✅ se Google | Cliques totais |
+| `[CONVERSOES]` | metricas_coletadas | ✅ se Google | Conversões diretas |
+| `[CPC_CONVERSAO]` | MCP Reportei | ✅ se Google | Custo por conversão Google |
+| `[STATUS_CPC]` | Classificação por threshold | ✅ se Google | Ex: "dentro da referência" |
+| `[ANALISE_TOFU]` | Gerado pelo redator | ✅ se META | 1–2 frases objetivas |
+| `[ANALISE_MOFU]` | Gerado pelo redator | ✅ se META | 1–2 frases objetivas |
+| `[ANALISE_BOFU]` | Gerado pelo redator | ✅ se META | 1–2 frases + CPL vs threshold |
+| `[ANALISE_GOOGLE]` | Gerado pelo redator | ✅ se Google | 1–2 frases objetivas |
+| `[ACAO_1]`, `[ACAO_2]` | Gerado pelo redator | ✅ | Ações técnicas concretas (ver regras de escopo) |
