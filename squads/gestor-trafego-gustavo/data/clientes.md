@@ -2,9 +2,9 @@
 
 Carteira ativa: 11 clientes, nicho saúde/medicina.
 
-> **Configuração obrigatória antes do primeiro uso:**
-> Preencha o campo `clickup_status_list_id` para cada cliente.
-> Os `reportei_project_id` já estão pré-carregados.
+> **Configuração:** `reportei_project_id` e `clickup_status_list_id` pré-carregados para todos os clientes.
+> `clickup_task_id` mapeado em 03/06/2026 via rotina semanal. Apenas Dr. Laureano Filho sem task (excluído Meta).
+> Pendente: preencher `meta_cpl` para clientes sem meta definida.
 
 ---
 
@@ -17,7 +17,8 @@ clientes:
     especialidade: saude_geral
     meta_cpl: null # TODO: definir meta de CPL
     reportei_project_id: 696403
-    clickup_status_list_id: "TODO"
+    clickup_status_list_id: "901300668557"
+    clickup_task_id: "86ahu5pub"
     prioridade: 1
     nota: "PRIORIDADE — baixo volume de leads"
 
@@ -26,7 +27,8 @@ clientes:
     especialidade: oncologia
     meta_cpl: 80
     reportei_project_id: 1064037
-    clickup_status_list_id: "TODO"
+    clickup_status_list_id: "901300668557"
+    clickup_task_id: "86ahu5prn"
     prioridade: 2
     nota: "CPL crítico — histórico de alertas"
 
@@ -35,7 +37,8 @@ clientes:
     especialidade: cirurgia_plastica
     meta_cpl: null # TODO: definir meta de CPL
     reportei_project_id: 610559
-    clickup_status_list_id: "TODO"
+    clickup_status_list_id: "901300668557"
+    clickup_task_id: "86ahu5pu7"
     prioridade: 3
     nota: "Baixo volume de agendamentos — atenção"
 
@@ -44,7 +47,8 @@ clientes:
     especialidade: tricologia
     meta_cpl: null # TODO: definir meta de CPL
     reportei_project_id: 1097249
-    clickup_status_list_id: "TODO"
+    clickup_status_list_id: "901300668557"
+    clickup_task_id: "86ahu5pqy"
     prioridade: 4
     nota: "Baixo agendamento, CPM alto"
 
@@ -53,7 +57,8 @@ clientes:
     especialidade: medicina_estetica
     meta_cpl: null # TODO: definir meta de CPL
     reportei_project_id: 1097223
-    clickup_status_list_id: "TODO"
+    clickup_status_list_id: "901300668557"
+    clickup_task_id: "86ahu5prg"
     prioridade: 5
     nota: "Ausência de conteúdo orgânico"
 
@@ -63,6 +68,7 @@ clientes:
     meta_cpl: 55
     reportei_project_id: 1170455
     clickup_status_list_id: "901300668557"
+    clickup_task_id: "86ahu5pqv"
     prioridade: 6
     nota: "Alto alcance — monitorar follows"
 
@@ -72,6 +78,7 @@ clientes:
     meta_cpl: null
     reportei_project_id: 982754
     clickup_status_list_id: "TODO"
+    clickup_task_id: null # sem task na lista Status Report
     prioridade: 7
     nota: "EXCLUÍDO do monitoramento Meta Ads — toda análise considera apenas Google Ads"
 
@@ -80,7 +87,8 @@ clientes:
     especialidade: medicina_estetica
     meta_cpl: null # TODO: definir meta de CPL
     reportei_project_id: 642925
-    clickup_status_list_id: "TODO"
+    clickup_status_list_id: "901300668557"
+    clickup_task_id: "86ahu5ptc"
     prioridade: 8
     nota: "Boa conversão — monitorar frequência"
 
@@ -89,7 +97,8 @@ clientes:
     especialidade: medicina_estetica
     meta_cpl: null # TODO: definir meta de CPL
     reportei_project_id: 913731
-    clickup_status_list_id: "TODO"
+    clickup_status_list_id: "901300668557"
+    clickup_task_id: "86ahu5pt5"
     prioridade: 9
     nota: "Alto volume de conversas"
 
@@ -98,7 +107,8 @@ clientes:
     especialidade: medicina_estetica
     meta_cpl: null # TODO: definir meta de CPL
     reportei_project_id: 672682
-    clickup_status_list_id: "TODO"
+    clickup_status_list_id: "901300668557"
+    clickup_task_id: "86ahu5pu1"
     prioridade: 10
     nota: "Bom momento comercial"
 
@@ -107,7 +117,8 @@ clientes:
     especialidade: dermatologia
     meta_cpl: null # TODO: definir meta de CPL
     reportei_project_id: 1025271
-    clickup_status_list_id: "TODO"
+    clickup_status_list_id: "901300668557"
+    clickup_task_id: "86ahu5prp"
     prioridade: 11
     nota: "Bom momento de fechamento"
 
@@ -139,5 +150,5 @@ excluidos:
 
 ## TODOs de configuração
 
-1. Preencher `meta_cpl` para cada cliente (CPL meta em R$)
-2. Preencher `clickup_status_list_id` para cada cliente (ID numérico da lista no ClickUp)
+1. Preencher `meta_cpl` para cada cliente sem meta definida (CPL meta em R$)
+2. Localizar task do Dr. Laureano Filho no ClickUp e preencher `clickup_status_list_id` + `clickup_task_id`
