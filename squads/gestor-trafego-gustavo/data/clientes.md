@@ -1,9 +1,9 @@
 # Clientes — Gestor Tráfego IA
 
-Carteira ativa: 11 clientes, nicho saúde/medicina.
+Carteira ativa: 12 clientes, nicho saúde/medicina.
 
 > **Configuração:** `reportei_project_id` e `clickup_status_list_id` pré-carregados para todos os clientes.
-> `clickup_task_id` mapeado em 03/06/2026 via rotina semanal. Apenas Dr. Laureano Filho sem task (excluído Meta).
+> `clickup_task_id` mapeado em 03/06/2026 via rotina semanal. Todos os clientes com task mapeada.
 > Pendente: preencher `meta_cpl` para clientes sem meta definida.
 
 ---
@@ -77,8 +77,8 @@ clientes:
     especialidade: saude_geral
     meta_cpl: null
     reportei_project_id: 982754
-    clickup_status_list_id: "TODO"
-    clickup_task_id: null # sem task na lista Status Report
+    clickup_status_list_id: "901300668557"
+    clickup_task_id: "86ahu5p22"
     prioridade: 7
     nota: "EXCLUÍDO do monitoramento Meta Ads — toda análise considera apenas Google Ads"
 
@@ -122,6 +122,16 @@ clientes:
     prioridade: 11
     nota: "Bom momento de fechamento"
 
+  - nome: "Dra. Luana Girondi"
+    slug: "dra-luana-girondi"
+    especialidade: cirurgia_plastica
+    meta_cpl: null # TODO: definir meta de CPL
+    reportei_project_id: 989108
+    clickup_status_list_id: "901300668557"
+    clickup_task_id: "86ahu5prw"
+    prioridade: 12
+    nota: ""
+
 excluidos:
   - nome: "Dr. Fernando Mattioli - FACE"
     reportei_project_id: 772702
@@ -145,10 +155,10 @@ excluidos:
 | fernanda-encinas | Fernanda Encinas |
 | graciela-machado | Graciela Machado |
 | dra-erica-marchiori | Dra. Érica Marchiori |
+| dra-luana-girondi | Dra. Luana Girondi |
 
 ---
 
 ## TODOs de configuração
 
 1. Preencher `meta_cpl` para cada cliente sem meta definida (CPL meta em R$)
-2. Localizar task do Dr. Laureano Filho no ClickUp e preencher `clickup_status_list_id` + `clickup_task_id`
