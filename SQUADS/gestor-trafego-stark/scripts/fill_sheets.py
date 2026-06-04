@@ -65,11 +65,16 @@ def carregar_clientes_batch(slugs=None):
 
 
 def calcular_aba():
-    """Calcula nome da aba = segunda-feira da semana anterior (DD/MM/AAAA)."""
+    """Calcula nome da aba = segunda-feira da semana anterior (DD/MM/AAAA).
+
+    Lógica: segunda_desta_semana = hoje - weekday() (0=seg…6=dom, sempre correto).
+    segunda_anterior = segunda_desta_semana - 7 dias.
+    A fórmula anterior (hoje - (weekday+1)%7 - 6) quebrava aos domingos.
+    """
     hoje = datetime.date.today()
-    ultimo_domingo = hoje - datetime.timedelta(days=(hoje.weekday() + 1) % 7)
-    segunda = ultimo_domingo - datetime.timedelta(days=6)
-    return segunda.strftime("%d/%m/%Y")
+    segunda_desta_semana = hoje - datetime.timedelta(days=hoje.weekday())
+    segunda_anterior = segunda_desta_semana - datetime.timedelta(days=7)
+    return segunda_anterior.strftime("%d/%m/%Y")
 
 
 def autenticar():

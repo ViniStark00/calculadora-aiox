@@ -39,6 +39,24 @@ Antes de iniciar as fases:
 3. **Fuzzy match** (threshold 0.60) pelo `nome` — aceitar se score ≥ 0.60
 4. Se nenhum: listar todos os slugs e pedir confirmação
 
+### PASSO 0 — Calcular e confirmar período (obrigatório antes de qualquer coleta)
+
+**Regra:** SEMPRE segunda a domingo da semana anterior. Nunca "últimos 7 dias".
+
+```
+dia_da_semana        = hoje.weekday()                      # 0=segunda … 6=domingo
+segunda_desta_semana = hoje - timedelta(days=dia_da_semana)
+data_inicio          = segunda_desta_semana - timedelta(days=7)  # segunda anterior
+data_fim             = data_inicio + timedelta(days=6)           # domingo anterior
+```
+
+Exibir ao gestor antes de prosseguir:
+```
+⚙️ Período calculado: {data_inicio:%d/%m/%Y} (seg) a {data_fim:%d/%m/%Y} (dom)
+   Se correto → continuar automaticamente.
+   Se o gestor especificou datas diferentes no comando → usar as datas do comando.
+```
+
 Determinar `gestor` do cliente:
 - `gestores: [vinicius]` → apenas fases Vinicius (inclui FASE 2)
 - `gestores: [gustavo]` → FASE 2 pulada
@@ -270,7 +288,18 @@ Se clientes vazio:
 
 **Agentes:** `alerta-monitor` + `coletor` + `contexto-cliente`
 
-Calcular período único — segunda a domingo da semana anterior (igual para todos os N clientes).
+**PASSO 0 — Calcular e exibir período antes de qualquer coleta:**
+
+```
+dia_da_semana        = hoje.weekday()                      # 0=segunda … 6=domingo
+segunda_desta_semana = hoje - timedelta(days=dia_da_semana)
+data_inicio          = segunda_desta_semana - timedelta(days=7)  # segunda anterior
+data_fim             = data_inicio + timedelta(days=6)           # domingo anterior
+```
+
+Exibir: `⚙️ Período: {data_inicio:%d/%m/%Y} (seg) a {data_fim:%d/%m/%Y} (dom) — N clientes`
+
+**Regra:** período fixo para todos os clientes da rodada. Nunca "últimos 7 dias".
 
 Para cada cliente, sequencialmente, com intervalo de 0.6s entre chamadas Reportei:
 
