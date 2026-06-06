@@ -12,23 +12,136 @@
 ## 👉 ESTADO ATUAL — onde parar e retomar
 
 ```
-FASE:         Execução — PRÉ-SESSÃO CONCLUÍDA ✔️
-ETAPA:        Hooks H1, H2, H3 configurados e testados em .claude/settings.json
-PRÓXIMO:      1. Commitar hooks: @dev "commita com: chore(hooks): adicionar hooks H1/H2/H3"
-              2. Push: @devops "push da branch feat/paralelismo-stark-chief"
-              3. SESSÃO 1: @dev → D2 (cross-reference Reportei × Planilha)
-AGENTE ATIVO: Aria (Architect) → próximo: @dev (Dex)
+FASE:         Execução — SESSÕES 1, 2, 3 e 4 CONCLUÍDAS ✔️
+ETAPA:        Sessão 4 concluída — C1/C2 commitados (6cb8700) e pushados
+PRÓXIMO:      SESSÃO 5: @dev → C3 (campo nome_reportei no clientes.yaml) + D1 (lista completa ~90 clientes)
+              PRÉ-REQUISITO: Vinicius confirmar qual gestor cuida de cada bloco da lista D1 antes de iniciar
+AGENTE ATIVO: —
 BRANCH:       feat/paralelismo-stark-chief
 ```
 
 **Para retomar em nova sessão:**
 1. Leia este documento inteiro
-2. Leia DECISION-REGISTRY.md para ver status atual de cada item
-3. Identifique qual sessão ainda não foi executada (marcador 👉)
-4. Siga o plano detalhado da sessão correspondente
+2. Leia a seção MANUAL_MAP abaixo (lista D1 com project_ids — base para Sessão 5)
+3. Confirme o gestor (vinicius/gustavo) de cada cliente antes de chamar @dev
+4. Vá direto para SESSÃO 5 — copie o texto e envie ao @dev
 
-**Calendário:** Junho 1, 2026 = segunda-feira (importante para cálculos de período)
-**Bug crítico ativo:** fill_sheets.py + agentes usam período errado (A0-a + A0-b)
+**Calendário:** Junho 6, 2026 (hoje). Semana corrente: seg 02/06 – dom 08/06.
+
+**Destino final do squad:** Após o PR mergeado em `ViniStark00/calculadora-aiox`, copiar a pasta `squads/gestor-trafego-stark/` para o clone local de `gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego` e pushar para main. Ver seção SYNC FINAL na Sessão 6.
+
+---
+
+## MANUAL_MAP — resultado do D2 (usar na Sessão 5)
+
+> Cross-reference confirmado por Vinicius em 2026-06-06.
+> 100 clientes com project_id validado. 15 saíram da carteira.
+
+| nome_planilha | nome_reportei (exato no Reportei) | project_id |
+|---|---|---|
+| IMCP | IMCP - Instituto Mineiro de Cirurgia Plástica | 688377 |
+| Dr Fernando Froes | Dr Fernando Froes | 448115 |
+| Felipe Maximo | Dr Felipe Máximo | 469860 |
+| Dr Fernando Suguita | Dr Fernando Suguita | 504343 |
+| Dr Thiago Bandeira | Dr Thiago Bandeira | 526806 |
+| Dr. Alexandre Calandrini | Dr Alexandre Calandrini | 545105 |
+| Dr Matheus Manica | Dr Matheus Manica | 556442 |
+| Dra Cecilia Ruiz | Dra Cecília | 564092 |
+| Dr Juan Sanchez | Dr Juan Sanchez | 564095 |
+| Dr Francisco Tribulato | Dr Francisco Tribulato | 564103 |
+| Dr Lucas Consentino | Dr Lucas Consentino | 564106 |
+| Dr Rodolfo Soares | Dr Rodolfo Soares | 564110 |
+| Dr. Daniel Morais | Dr. Daniel Morais | 564114 |
+| Dr Vinicius Camargo | Dr Vinicius Camargo | 564117 |
+| Dr. Rafael Varella | Dr Rafael Varella | 573035 |
+| Dr Victor Augusto | Dr Victor Augusto | 583406 |
+| Dr Thiago Faria | Dr Thiago Faria | 583409 |
+| Dr Thiago Souza | Dr Thiago Souza | 596243 |
+| Dra Luana Rios | Dra Luana Rios | 608098 |
+| Dr Marcelo Bezerra | Dr Marcelo Bezerra | 610559 |
+| Dr Fabricio Camargo | Dr Fabrício Camargo | 621692 |
+| Dr. Leandro Gontijio | Dr Leandro Gontijo | 627550 |
+| Dr Carlos Matheus | Dr Carlos Matheus | 632306 |
+| Dra Nicolli | Dra Nicolli | 642925 |
+| Dr. Cadu Gazinelli | Dr Cadu Gazinelli | 656833 |
+| Dr Ricardo Martins | Dr Ricardo Martins | 663715 |
+| Graciela Machado | Graciela Machado | 672682 |
+| Dr. Luiz Fernando | Dr. Luiz Fernando | 677267 |
+| Dr. George | Dr. George Regis | 678927 |
+| Dra. Marina Rossato | Dra. Marina Rossato | 693058 |
+| Dr. Fernando Bezerra | Dr. Fernando Bezerra | 696403 |
+| Dra Priscila Lotierzo | Dra. Priscilla Lotierzo | 715136 |
+| Dr. Alvaro | Dr. Alvaro Rodrigues | 715143 |
+| Dr. Fernando Franco | Dr. Fernando Franco | 715663 |
+| Dr Charles Berres | Dr Charles berres | 747289 |
+| Dr. Luiz Borba | Dr. Luiz Borba | 749199 |
+| Ranieri | Dr. Raniéri | 751396 |
+| Dr Anderson Kuboniwa | Dr Anderson Kuboniwa | 752930 |
+| Dr. Marcelo Azevedo | Dr. Marcelo Azevedo | 765898 |
+| Dr. Orozimbo | Dr. Orozimbo | 783368 |
+| Dr Luis Fernando Garcia | Dr Luis Fernando Garcia | 787347 |
+| Dra. Samille | Dra. Samille | 799544 |
+| Dr Cleber Vieira | Dr Cleber Vieira | 820195 |
+| Dra Lenise Franco | Dra Lenise Franco | 842867 |
+| Dra. Taissa Recalde | Dra. Taissa Recalde | 846955 |
+| Dra. Amandia Marchetti | Dra. Amandia Marchetti | 875147 |
+| Dr. Joao Felippe | Dr. João Felippe | 886784 |
+| Fernanda Encinas | Fernanda Encinas | 913731 |
+| Dr. Laureano Filho | Dr. Laureano Filho | 982754 |
+| Dr Eduardo Nakagawa | Dr Eduardo Nakagawa | 988324 |
+| Dra Luana Girondi | Dra Luana Girondi | 989108 |
+| Dra Fernanda Marcio | Dr Fernanda Marcio | 1005589 |
+| Dr. Guilherme Mattar | Dr. Guilherme Mattar | 1023153 |
+| Dra. Erica Marchiori | Dra. Érica Marchiori | 1025271 |
+| MaxiOral | MaxiOral | 1026194 |
+| Destra | Destra Desenvolvimentos | 1028218 |
+| Dr Carlos Costa | Dr Carlos Costa | 1038469 |
+| Dr. Eduardo Raulino | Dr. Eduardo Raulino | 1041425 |
+| Dra. Viviane Borba | Dra Viviane Borba | 1042021 |
+| Dr. Diego Alencar | Dr. Diego Alencar | 1064037 |
+| ConciergeIA | ConciergeIA | 1070641 |
+| Dr. Adriano Cicarelli | Dr. Adriano Cicarelli | 1072253 |
+| Dra. Janete Clivea | Dra. Janete Clívea | 1077142 |
+| Clinica Empoderatti | Clínica Empoderatti | 1077157 |
+| Edson Prata | Edson Prata | 1077381 |
+| Dr. David Zuluaga | Dr. David Zuluaga | 1089979 |
+| Dr. Tulio Martins | Dr. Túlio Martins | 1095244 |
+| Dra. Mariangela Santiago | Dra. Mariângela Santiago | 1097223 |
+| Dr. Higner Forastieri | Dr. Higner Forastieri | 1097249 |
+| Dr. Rafael Mello | Dr. Rafael Mello | 1101514 |
+| Dra. Andrea Yuan | Dra. Andrea Yuan | 1105489 |
+| Dra Luiza Coutinho | Dra Luiza Coutinho | 1106868 |
+| Dr Marcus Calazans | Dr Marcus Calazans | 1109573 |
+| Dr Daniel Valente | Dr Daniel Valente | 1112452 |
+| Dr. Thiago Iria | Dr. Thiago Iria | 1122992 |
+| Dr. Gilberto Filho | Dr. Gilberto Filho | 1126940 |
+| Dr. Alessandro Miron | Dr. Alessandro Miron | 1147744 |
+| Dr. Leandro Angel | Dr. Leandro Angel | 1148012 |
+| Dra. Anne Groth | Dra. Anne Groth | 1152353 |
+| Diego Gonzalez | Diego Gonzalez | 1157908 |
+| Dr. Caio Fernandes | Dr. Caio Fernandes | 1170455 |
+| Fernanda Comora | Fernanda Comora | 1181206 |
+| Dr. Enzo Carvalho | Dr. Enzo Carvalho | 1195572 |
+| Felipe Salles | Felipe Salles | 1198792 |
+| Dra. Jussara | Dra. Jussara | 1206122 |
+| Dr Luciano Esteves | Dr Luciano Esteves | 1217001 |
+| Dr. Joel Abdala | Dr. Joel Abdala | 1218018 |
+| Dr Javier Cucchiaro | Dr Javier Cucchiaro | 1218270 |
+| Dra Juliana Jordao | Dra Juliana Jordão | 1219304 |
+| Dr. Marcello Santos | Dr. Marcello Santos | 1222966 |
+| IGO | IGO | 1230428 |
+| Dr. Humberto | Dr. Humberto | 1233641 |
+| Dr. Matheus Ocampo | Dr. Matheus Ocampo | 1233644 |
+| Dra Nicolle | Dra Nicolle Andrade | 1235657 |
+| Dra. Ivy Magri | Dra. Ivy Magri | 1243422 |
+| Dra. Livia Dantas | Dra. Livia Dantas | 1243423 |
+| Dra. Ana Paula | Dra. Ana Paula | 1251738 |
+| Dr Thiago Lins | Dr Thiago Lins | 1256126 |
+| Dr Enio Almeida | Dr Ênio Almeida | 1256423 |
+| Dr. Daniel Curi | Dr. Daniel Curi | 1256454 |
+| Dr Rodrigo Gomide | Dr Rodrigo Gomide | 1258235 |
+
+**Saíram da carteira (15):** Dr Eduardo Uebel · Dr. Daniel Renne · Dra Danielle Gondim · Dra. Mariella · Dr. Renato Bacher · Dr. Lucas Nunes · Dr Juan Lopez · Dra Beathriz Goes · Dr Gabriel Campelo · Dra Ingrid Luckmann · Renato Donatelli · Dr Wilson Novaes · Aquatech · ANADEM · Stark Marketing
 
 ---
 
@@ -309,6 +422,20 @@ Opção B — um commit único ao final (mais simples):
 → Você revisa o PR no GitHub → aprova
 
 → @devops: "Faz merge do PR" → branch fechada → trabalho 100% concluído ✅
+
+── SYNC FINAL — Atualizar repo do Gustavo ──
+
+O squad foi desenvolvido aqui (ViniStark00/calculadora-aiox) e precisa ser
+copiado de volta para o repositório original após o merge do PR.
+
+Passos manuais (você executa):
+1. Abrir o clone local de:
+   https://github.com/gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego
+2. Substituir a pasta squads/gestor-trafego-stark/ pelo conteúdo atualizado
+3. Commitar com: "feat(gestor-trafego-stark): 16 melhorias — período, planilha, agentes, dados e monitoramento"
+4. Push para main daquele repo
+
+→ Squad disponível no destino final ✅
 ```
 
 ---
@@ -441,21 +568,25 @@ Opção B — um commit único ao final (mais simples):
 ## Sequência de Execução
 
 ```
-PRÉ      /update-config    H1 + H2 + H3 (hooks)              → commit → push
+PRÉ      /update-config    H1 + H2 + H3 (hooks)              → commit → push   ✔️
 │
-SESSÃO 1  @dev             D2 (cross-reference — sem arquivos) → SEM commit (só leitura)
+SESSÃO 1  @dev             D2 (cross-reference — sem arquivos) → SEM commit      ✔️
 │
-SESSÃO 2  @dev             A0-a + A0-b (bug fixes de período) → commit → push
+SESSÃO 2  @dev             A0-a + A0-b (bug fixes de período) → commit → push   ✔️
 │
-SESSÃO 3  @dev             A1 + A2 + A3 + C4 (fill_sheets.py) → commit → push
+SESSÃO 3  @dev             A1 + A2 + A3 + C4 (fill_sheets.py) → commit → push  ✔️
 │
-SESSÃO 4  @dev             C1 + C2 (agentes: lotes + rate limit) → commit → push
+SESSÃO 4  @dev             C1 + C2 (agentes: lotes + rate limit) → commit → push ✔️
 │
-SESSÃO 5  @dev             C3 + D1 (clientes.yaml completo) ← depende de D2 → commit → push
+SESSÃO 5  @dev             C3 + D1 (clientes.yaml completo) ← confirmar gestores
 │
 SESSÃO 6  @architect       B2 (badge alerta-monitor.md)        → commit → push
           @dev             B1 (histórico JSONL)                → commit → push
           @devops          gh pr create + gh pr merge → BRANCH FECHADA ✅
+│
+SYNC      Você (manual)    Copiar squads/gestor-trafego-stark/ para
+FINAL                      gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego
+                           → commit → push → SQUAD NO DESTINO FINAL ✅
 ```
 
 > Antes da Sessão 5: Vinicius confirma qual gestor cuida de cada bloco da lista D1.
@@ -504,3 +635,5 @@ SESSÃO 6  @architect       B2 (badge alerta-monitor.md)        → commit → p
 | CP-01 | 2026-06-06 | Planejamento | Diagnóstico e plano criados. Docs DECISION-REGISTRY.md e EXECUTION-PLAN.md criados. | Vinicius aprovar/reprovar A1–A3, B1–B2. |
 | CP-02 | 2026-06-06 | Planejamento | Sessão 2 concluída. Todos os 16 itens aprovados. Escopo de A1 refinado: isolamento por --gestor/--clientes, sem limpar aba inteira. Plano detalhado por sessão definido. | Executar PRÉ-SESSÃO (hooks) e depois Sessão 1 (D2). |
 | CP-03 | 2026-06-06 | PRÉ-SESSÃO | Hooks H1, H2, H3 configurados em .claude/settings.json e testados (5 cenários, todos corretos). JSON válido. | Commitar hooks (@dev) + push (@devops). Iniciar Sessão 1 com @dev para D2 (cross-reference Reportei × Planilha). |
+| CP-04 | 2026-06-06 | Execução | PRÉ-SESSÃO commitada e pushada (commit 847774d). Squad completo + hooks versionados. SESSÃO 1 (D2) concluída: 100 clientes mapeados Reportei × Planilha, 15 descartados. MANUAL_MAP salvo neste documento. | SESSÃO 2: @dev corrigir A0-a (edge case domingo em calcular_aba) + A0-b (substituir last_7d por datas fixas nos agentes). |
+| CP-05 | 2026-06-06 | Execução | SESSÃO 2 concluída: A0-a (edge case domingo) + A0-b (last_7d → date_from/date_to) corrigidos. Commit 782ab72. SESSÃO 3 concluída: A1 (tab management + isolamento multi-gestor) + A2 (--dry-run) + A3 (validação de schema) + C4 (_to_float, retry 429, ARS) implementados em fill_sheets.py. Commit b7fb46e. | SESSÃO 4: @dev → C1 (lotes de 3 em paralelo nos agentes) + C2 (contador global rate limit Reportei). |
