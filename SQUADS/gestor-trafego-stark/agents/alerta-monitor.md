@@ -92,7 +92,14 @@ fonte_dados:
   reportei_fallback:
     condicao: "meta_ad_account_id: null em data/clientes.yaml"
     mcp: "mcp__30ebe978-db99-4dee-927c-b72f6abac9d8"
-    ferramenta: "get_project_metrics(project_id, lookback: last_7d)"
+    ferramenta: "get_project_metrics(project_id, date_from: YYYY-MM-DD, date_to: YYYY-MM-DD)"
+    periodo_calculo: |
+      Mesmo método de calcular_aba() em fill_sheets.py:
+        dias_ate_domingo = (hoje.weekday() + 1) % 7
+        if dias_ate_domingo == 0: dias_ate_domingo = 7
+        ultimo_domingo = hoje - timedelta(days=dias_ate_domingo)
+        date_from = (ultimo_domingo - timedelta(days=6)).strftime("%Y-%m-%d")  # segunda-feira
+        date_to = ultimo_domingo.strftime("%Y-%m-%d")  # domingo
     aviso_output: "⚠️ [{cliente}] meta_ad_account_id ausente — dados via Reportei (CPL apenas)"
     metricas_disponiveis:
       - "meta_spend (aggregado)"

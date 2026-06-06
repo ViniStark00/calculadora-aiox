@@ -89,6 +89,7 @@ O coletor tenta coletar todas as métricas. Escreve o que encontrou:
 | Filtro | `vinicius in gestores AND ativo: true` |
 | Aba do Sheets | Deve existir com nome `DD/MM/AAAA` — ERRO CLARO se não encontrada |
 | Período | `last_sunday - 6` até `last_sunday` (7 dias completos) |
+| Parâmetros Reportei | Usar `date_from`/`date_to` — NUNCA `lookback: last_7d` |
 | Slug Google | Usar `'google_adwords'` — NUNCA `'google_ads'` |
 | Custo Google | Valor direto — NÃO dividir por 1.000.000 |
 | Seguidores | Match exato: `ref == 'ig:new_followers_count'` |
@@ -96,6 +97,22 @@ O coletor tenta coletar todas as métricas. Escreve o que encontrou:
 | Rate limit Reportei | `sleep(0.6s)` entre chamadas; aguardar 60s após erro 429 |
 | Dr. Javier | Pular Meta Spend (bloqueado em ARS) — sem erro, só aviso |
 | Paginação | Continuar enquanto `len(results) == per_page` |
+
+## Cálculo de período (date_from / date_to)
+
+Todas as chamadas ao Reportei API usam datas fixas, nunca `lookback`:
+
+```python
+# Mesmo algoritmo de calcular_aba() em fill_sheets.py
+dias_ate_domingo = (hoje.weekday() + 1) % 7
+if dias_ate_domingo == 0:
+    dias_ate_domingo = 7
+ultimo_domingo = hoje - timedelta(days=dias_ate_domingo)
+date_from = (ultimo_domingo - timedelta(days=6)).strftime("%Y-%m-%d")  # segunda-feira
+date_to = ultimo_domingo.strftime("%Y-%m-%d")  # domingo
+```
+
+Aplicar em: `get_project_metrics`, `get_metrics`, e qualquer outra chamada Reportei com período.
 
 ## Função _to_float() (comportamento esperado)
 

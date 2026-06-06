@@ -50,7 +50,10 @@ def carregar_clientes():
 def calcular_aba():
     """Calcula nome da aba = segunda-feira da semana anterior (DD/MM/AAAA)."""
     hoje = datetime.date.today()
-    ultimo_domingo = hoje - datetime.timedelta(days=(hoje.weekday() + 1) % 7)
+    dias_ate_domingo = (hoje.weekday() + 1) % 7
+    if dias_ate_domingo == 0:
+        dias_ate_domingo = 7
+    ultimo_domingo = hoje - datetime.timedelta(days=dias_ate_domingo)
     segunda = ultimo_domingo - datetime.timedelta(days=6)
     return segunda.strftime("%d/%m/%Y")
 
