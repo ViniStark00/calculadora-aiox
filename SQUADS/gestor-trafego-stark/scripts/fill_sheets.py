@@ -13,6 +13,7 @@ import sys
 import json
 import yaml
 import datetime
+import time
 import argparse
 from pathlib import Path
 
@@ -20,6 +21,7 @@ from pathlib import Path
 try:
     from google.oauth2.service_account import Credentials
     from googleapiclient.discovery import build
+    from googleapiclient.errors import HttpError
 except ImportError:
     print("[ERRO] google-auth-httplib2 e google-api-python-client não instalados.")
     print("   pip install google-auth-httplib2 google-api-python-client")
@@ -34,17 +36,19 @@ SHEET_ID = os.environ.get("SHEET_ID", "")
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 
-def carregar_clientes():
-    """Carrega data/clientes.yaml e filtra clientes Vinicius ativos."""
+def carregar_clientes(gestor=None, slugs=None):
+    """Carrega data/clientes.yaml com filtros por gestor ou slugs.
+    Padrão (nenhum passado): filtra por 'vinicius'.
+    """
     with open(CLIENTES_YAML, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
     clientes = data.get("clientes", [])
-    return [
-        c for c in clientes
-        if c.get("ativo", True)
-        and "vinicius" in c.get("gestores", [])
-        and c.get("sheet_columns")
-    ]
+    ativos = [c for c in clientes if c.get("ativo", True) and c.get("sheet_columns")]
+    if slugs:
+        return [c for c in ativos if c.get("slug") in slugs]
+    if gestor:
+        return [c for c in ativos if gestor in c.get("gestores", [])]
+    return [c for c in ativos if "vinicius" in c.get("gestores", [])]
 
 
 def calcular_aba():
@@ -68,16 +72,27 @@ def autenticar():
     return build("sheets", "v4", credentials=creds)
 
 
-def verificar_aba(sheets, nome_aba):
-    """Verifica se a aba existe na planilha."""
+def verificar_ou_criar_aba(sheets, nome_aba):
+    """Verifica se a aba existe; se não, duplica a última aba e renomeia."""
     meta = sheets.spreadsheets().get(spreadsheetId=SHEET_ID).execute()
-    nomes = [s["properties"]["title"] for s in meta["sheets"]]
-    if nome_aba not in nomes:
-        print(f"[ERRO] Aba '{nome_aba}' não encontrada na planilha.")
-        print(f"   Abas disponíveis: {nomes}")
-        print("   Crie a aba manualmente (formato DD/MM/AAAA = segunda-feira) e rode novamente.")
-        return False
-    print(f"[OK] Aba '{nome_aba}' encontrada.")
+    abas = meta["sheets"]
+    nomes = [s["properties"]["title"] for s in abas]
+
+    if nome_aba in nomes:
+        print(f"[OK] Aba '{nome_aba}' encontrada.")
+        return True
+
+    ultima_aba = abas[-1]
+    source_id = ultima_aba["properties"]["sheetId"]
+    source_name = ultima_aba["properties"]["title"]
+    print(f"[INFO] Aba '{nome_aba}' não existe. Duplicando '{source_name}'...")
+    body = {"requests": [{"duplicateSheet": {
+        "sourceSheetId": source_id,
+        "insertSheetIndex": len(abas),
+        "newSheetName": nome_aba
+    }}]}
+    sheets.spreadsheets().batchUpdate(spreadsheetId=SHEET_ID, body=body).execute()
+    print(f"[OK] Aba '{nome_aba}' criada por duplicação de '{source_name}'.")
     return True
 
 
@@ -98,32 +113,88 @@ def localizar_linha(nome_cliente, col_a):
     return None
 
 
-def preencher_cliente(sheets, nome_aba, row_idx, metricas, sheet_columns):
-    """Preenche colunas do cliente conforme sheet_columns de data/clientes.yaml."""
+def _to_float(valor):
+    """Converte qualquer formato para float seguro. Retorna None se inválido."""
+    if valor is None:
+        return None
+    if isinstance(valor, (int, float)):
+        return float(valor)
+    if isinstance(valor, str):
+        try:
+            return float(valor.strip().replace(",", "."))
+        except ValueError:
+            return None
+    if isinstance(valor, list):
+        return sum(v for item in valor if (v := _to_float(item)) is not None)
+    if isinstance(valor, dict):
+        for chave in ("value", "total"):
+            if chave in valor:
+                return _to_float(valor[chave])
+    return None
+
+
+def preencher_cliente(sheets, nome_aba, row_idx, metricas, sheet_columns, slug="", dry_run=False, moeda="BRL"):
+    """Preenche colunas do cliente. Se dry_run=True, apenas imprime sem escrever."""
     updates = []
     for campo, col_letra in sheet_columns.items():
-        valor = metricas.get(campo)
+        if moeda != "BRL" and "spend" in campo:
+            print(f"   [AVISO] {slug} — moeda {moeda}, pulando coluna de spend ({campo})")
+            continue
+        valor = _to_float(metricas.get(campo))
         if valor is None:
             continue
-        cell_range = f"'{nome_aba}'!{col_letra}{row_idx}"
-        updates.append({"range": cell_range, "values": [[valor]]})
-        print(f"   {col_letra} ({campo}) <- {valor}")
+        if dry_run:
+            print(f"[DRY-RUN] {slug} → linha {row_idx} → {col_letra}={valor}")
+        else:
+            cell_range = f"'{nome_aba}'!{col_letra}{row_idx}"
+            updates.append({"range": cell_range, "values": [[valor]]})
+            print(f"   {col_letra} ({campo}) <- {valor}")
+
+    if dry_run:
+        return 0
 
     if not updates:
         print(f"   [AVISO] Nenhuma métrica para preencher.")
         return 0
 
     body = {"valueInputOption": "USER_ENTERED", "data": updates}
-    response = sheets.spreadsheets().values().batchUpdate(
-        spreadsheetId=SHEET_ID, body=body
-    ).execute()
+    try:
+        response = sheets.spreadsheets().values().batchUpdate(
+            spreadsheetId=SHEET_ID, body=body
+        ).execute()
+    except HttpError as e:
+        if e.resp.status == 429:
+            print(f"   [AVISO] Rate limit (429) — aguardando 60s e tentando novamente...")
+            time.sleep(60)
+            response = sheets.spreadsheets().values().batchUpdate(
+                spreadsheetId=SHEET_ID, body=body
+            ).execute()
+        else:
+            raise
     return response.get("totalUpdatedCells", 0)
+
+
+def validar_metricas(slug, metricas, sheet_columns):
+    """Valida colunas e valores antes de escrever. Retorna (ok, motivo)."""
+    import re
+    for campo, col_letra in sheet_columns.items():
+        if not re.fullmatch(r'[A-Z]', str(col_letra)):
+            return False, f"coluna inválida '{col_letra}' em sheet_columns"
+        valor = metricas.get(campo)
+        if valor is None:
+            continue
+        if not isinstance(valor, (int, float)):
+            return False, f"valor inválido para '{campo}': {repr(valor)} (esperado int ou float)"
+    return True, ""
 
 
 def main():
     parser = argparse.ArgumentParser(description="fill_sheets.py — stark squad")
     parser.add_argument("--semana", help="Nome da aba DD/MM/AAAA (padrão: calculado automaticamente)")
     parser.add_argument("--metricas-json", help="JSON com métricas por slug: {slug: {meta_spend: X, ...}}")
+    parser.add_argument("--gestor", help="Filtrar por gestor (ex: vinicius, gustavo)")
+    parser.add_argument("--clientes", help="Slugs separados por vírgula (ex: imcp,dr-carlos)")
+    parser.add_argument("--dry-run", action="store_true", help="Simular escrita sem alterar a planilha")
     args = parser.parse_args()
 
     if not SHEET_ID:
@@ -141,13 +212,15 @@ def main():
         metricas_por_slug = json.load(sys.stdin)
 
     # Carregar clientes
-    clientes = carregar_clientes()
-    print(f"[INFO] Clientes Vinicius ativos: {len(clientes)}")
+    slugs = [s.strip() for s in args.clientes.split(",")] if args.clientes else None
+    clientes = carregar_clientes(gestor=args.gestor, slugs=slugs)
+    filtro_desc = f"--clientes {args.clientes}" if slugs else f"--gestor {args.gestor or 'vinicius'}"
+    print(f"[INFO] Clientes ({filtro_desc}): {len(clientes)}")
 
     # Autenticar e verificar aba
     service = autenticar()
     sheets = service
-    if not verificar_aba(sheets, nome_aba):
+    if not verificar_ou_criar_aba(sheets, nome_aba):
         sys.exit(1)
 
     col_a = ler_col_a(sheets, nome_aba)
@@ -177,7 +250,14 @@ def main():
             resultados.append({"slug": slug, "status": "pulado", "motivo": "sem métricas"})
             continue
 
-        cells = preencher_cliente(sheets, nome_aba, row_idx, metricas, sheet_columns)
+        ok, motivo = validar_metricas(slug, metricas, sheet_columns)
+        if not ok:
+            print(f"[AVISO] {slug} — schema inválido: {motivo}. Pulando cliente.")
+            resultados.append({"slug": slug, "status": "pulado", "motivo": f"schema inválido: {motivo}"})
+            continue
+
+        moeda = cliente.get("moeda", "BRL")
+        cells = preencher_cliente(sheets, nome_aba, row_idx, metricas, sheet_columns, slug=slug, dry_run=args.dry_run, moeda=moeda)
         print(f"[OK] {cells} células preenchidas")
         resultados.append({"slug": slug, "status": "processado", "celulas": cells, "linha": row_idx})
 
@@ -196,6 +276,9 @@ def main():
     # Output JSON para o coletor
     print("\n[STATUS_JSON]")
     print(json.dumps(resultados, ensure_ascii=False))
+
+    if args.dry_run:
+        print("\n[DRY-RUN] Nenhuma célula foi alterada.")
 
     sys.exit(0 if todos_ok else 1)
 
