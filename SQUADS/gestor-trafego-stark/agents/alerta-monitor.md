@@ -62,11 +62,38 @@ iteracao_por_cliente:
   filtros:
     - "ativo: true"
     - "excluir_meta_monitoring: true → PULAR (registrar na seção EXCLUÍDOS)"
+  processamento_paralelo: |
+    1. Ler lote_paralelo de config/settings.yaml → pipeline.lote_paralelo (padrão: 3)
+    2. Agrupar clientes filtrados em lotes de lote_paralelo
+    3. Para cada lote:
+       a. Disparar chamadas MCP de todos os clientes do lote SIMULTANEAMENTE
+       b. Aguardar TODOS finalizarem antes de iniciar o próximo lote
+       c. Exibir progresso: "[LOTE N/T] Processando: cliente_a, cliente_b, cliente_c"
+    4. rate_limit_global é compartilhado entre todos os clientes do lote
   ordem_output: |
     Exibir por bloco de gestor:
     1. Bloco Vinicius (gestores contém 'vinicius', excluindo compartilhados)
     2. Bloco Compartilhado (gestores: [vinicius, gustavo])
     3. Bloco Gustavo (gestores contém 'gustavo', excluindo compartilhados)
+
+# ─────────────────────────────────────────
+# RATE LIMIT GLOBAL (Reportei)
+# ─────────────────────────────────────────
+rate_limit_global:
+  api: "mcp__30ebe978-db99-4dee-927c-b72f6abac9d8 (Reportei)"
+  limite_requisicoes: 38
+  pausa_segundos: 540
+  mensagem_pausa: "[RATE LIMIT] 38 requisições atingidas — aguardando 9 min..."
+  comportamento: |
+    Manter contador global de chamadas ao MCP Reportei durante toda a execução.
+    A cada chamada bem-sucedida ao Reportei: incrementar contador_global em +1.
+    Quando contador_global >= 38:
+      1. Exibir: "[RATE LIMIT] 38 requisições atingidas — aguardando 9 min..."
+      2. Pausar execução por 540 segundos
+      3. Zerar contador_global para 0
+      4. Continuar processamento normalmente
+    O contador é compartilhado entre todos os lotes — não reinicia a cada lote.
+    Compatível com processamento_paralelo: lote aguarda antes de continuar se rate limit ativo.
 
 # ─────────────────────────────────────────
 # FONTE DE DADOS POR CONTA

@@ -94,9 +94,29 @@ O coletor tenta coletar todas as métricas. Escreve o que encontrou:
 | Custo Google | Valor direto — NÃO dividir por 1.000.000 |
 | Seguidores | Match exato: `ref == 'ig:new_followers_count'` |
 | Conversas | Match exato: `'messaging_conversation_started_7d'` |
-| Rate limit Reportei | `sleep(0.6s)` entre chamadas; aguardar 60s após erro 429 |
+| Rate limit Reportei | `sleep(0.6s)` entre chamadas; aguardar 60s após erro 429; contador global: pausar 540s ao atingir 38 req |
 | Dr. Javier | Pular Meta Spend (bloqueado em ARS) — sem erro, só aviso |
 | Paginação | Continuar enquanto `len(results) == per_page` |
+
+## Rate Limit Global (Reportei)
+
+Manter contador global de chamadas ao MCP Reportei durante toda a execução.
+
+| Parâmetro | Valor |
+|-----------|-------|
+| Limite | 38 requisições |
+| Pausa | 540 segundos (9 minutos) |
+| Mensagem | `[RATE LIMIT] 38 requisições atingidas — aguardando 9 min...` |
+
+**Comportamento:**
+1. A cada chamada bem-sucedida ao Reportei: incrementar `contador_global` em +1
+2. Quando `contador_global >= 38`:
+   - Exibir: `[RATE LIMIT] 38 requisições atingidas — aguardando 9 min...`
+   - Pausar 540 segundos
+   - Zerar `contador_global` para 0
+   - Continuar normalmente
+3. O `sleep(0.6s)` entre chamadas continua ativo (contador global é adicional, não o substitui)
+4. Erro 429 continua acionando pausa de 60s independentemente do contador
 
 ## Cálculo de período (date_from / date_to)
 
