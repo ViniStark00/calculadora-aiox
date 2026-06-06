@@ -26,22 +26,12 @@ outputs:
 
 ## Passo 1 — Calcular período
 
-**Regra:** SEMPRE segunda a domingo da semana anterior (não os últimos 7 dias).
-
 ```
-# Fórmula correta — funciona em qualquer dia da semana, inclusive domingo
-hoje = date.today()
-dia_da_semana = hoje.weekday()                     # 0=segunda … 6=domingo
-segunda_desta_semana = hoje - timedelta(days=dia_da_semana)
-data_inicio = segunda_desta_semana - timedelta(days=7)   # segunda anterior
-data_fim   = data_inicio + timedelta(days=6)             # domingo anterior
-nome_aba   = data_inicio.strftime('%d/%m/%Y')
-
-# Exemplo — hoje = quinta 04/06/2026 (weekday=3):
-#   segunda_desta_semana = 04/06 - 3 = 01/06 (seg)
-#   data_inicio          = 01/06 - 7 = 25/05 (seg) ✓
-#   data_fim             = 25/05 + 6 = 31/05 (dom) ✓
-#   Período correto: 25/05 a 31/05 — NÃO 28/05 a 03/06 (últimos 7 dias)
+data_hoje = hoje
+ultimo_domingo = hoje - timedelta(days=(hoje.weekday() + 1) % 7)
+data_inicio = ultimo_domingo - timedelta(days=6)  # segunda-feira
+data_fim = ultimo_domingo                          # domingo
+nome_aba = data_inicio.strftime('%d/%m/%Y')
 ```
 
 ## Passo 2 — Verificar aba no Sheets

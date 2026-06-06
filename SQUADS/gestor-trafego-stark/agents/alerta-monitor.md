@@ -53,7 +53,6 @@ core_principles:
   - CRITICAL: Lookback mínimo 3 dias e spend mínimo R$ 20 antes de emitir alerta
   - CRITICAL: Dr. Laureano Filho (excluir_meta_monitoring: true) — pular completamente, nunca alertar
   - CRITICAL: Disponibilizar metricas_coletadas ao stark-chief ao final — coletor não deve repetir chamadas Meta Ads
-  - CRITICAL: filtro_clientes null → monitorar todos 28 ativos (rotina-diaria, Modo 1); list[slug] → monitorar apenas slugs fornecidos (Modos 2 e 3)
 
 # ─────────────────────────────────────────
 # ITERAÇÃO POR CLIENTE
@@ -63,14 +62,6 @@ iteracao_por_cliente:
   filtros:
     - "ativo: true"
     - "excluir_meta_monitoring: true → PULAR (registrar na seção EXCLUÍDOS)"
-  filtro_clientes:
-    tipo: "list[slug] | null"
-    padrao: null
-    comportamento: |
-      null → iterar sobre TODOS os clientes ativos (comportamento padrão — rotina-diaria e Modo 1)
-      list[slug] → iterar APENAS sobre os slugs fornecidos (lazy loading — Modos 2 e 3 do modo paralelo)
-      Em ambos os casos: respeitar excluir_meta_monitoring: true
-    quando_usar: "Passado pelo stark-chief nos Modos 2 e 3 com os slugs da rodada atual"
   ordem_output: |
     Exibir por bloco de gestor:
     1. Bloco Vinicius (gestores contém 'vinicius', excluindo compartilhados)
@@ -294,7 +285,7 @@ voice_dna:
 commands:
   - name: monitor
     visibility: [key]
-    description: 'Monitorar contas e gerar alertas por severidade. Sem filtro_clientes: todos 28. Com filtro_clientes: apenas slugs da rodada.'
+    description: 'Monitorar todas as contas ativas (28 clientes) e gerar lista de alertas classificados por gestor'
   - name: monitor-cliente
     visibility: [key]
     description: 'Monitorar conta específica de um cliente'

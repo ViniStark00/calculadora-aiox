@@ -18,7 +18,8 @@ desktop.ini
 .env*
 
 # AIOX — configuração e memória local (nunca expor)
-.claude/
+.claude/*
+!.claude/settings.json
 .aiox-core/
 .aiox/
 

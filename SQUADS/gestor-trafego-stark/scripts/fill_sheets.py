@@ -1,15 +1,11 @@
 """
-fill_sheets.py — Estágio 2: preenche métricas na planilha Google Sheets
+fill_sheets.py — FASE 2: preenche métricas na planilha Google Sheets
 Squad: gestor-trafego-stark | Agente: coletor
-
-Modo original (1 cliente ou todos Vinicius):
-  python scripts/fill_sheets.py --semana "DD/MM/AAAA" --metricas-json '{slug: {...}}'
-
-Modo batch — ADR-09 (Modos 2 e 3, múltiplos clientes, qualquer gestor):
-  python scripts/fill_sheets.py --batch '{slug1: {...}, slug2: {...}}'
+Uso: python scripts/fill_sheets.py --cliente "nome" --semana "DD/MM/AAAA"
 
 Lê configuração de clientes em data/clientes.yaml.
-Modo original: filtra 'vinicius in gestores'. Modo batch: processa todos os slugs do JSON.
+Recebe métricas via stdin (JSON) ou argumentos.
+Filtra clientes com 'vinicius in gestores' e 'ativo: true'.
 """
 
 import os
@@ -51,30 +47,12 @@ def carregar_clientes():
     ]
 
 
-def carregar_clientes_batch(slugs=None):
-    """Carrega clientes de qualquer gestor para modo batch multi-cliente (ADR-09)."""
-    with open(CLIENTES_YAML, "r", encoding="utf-8") as f:
-        data = yaml.safe_load(f)
-    clientes = [
-        c for c in data.get("clientes", [])
-        if c.get("ativo", True) and c.get("sheet_columns")
-    ]
-    if slugs:
-        return [c for c in clientes if c["slug"] in slugs]
-    return clientes
-
-
 def calcular_aba():
-    """Calcula nome da aba = segunda-feira da semana anterior (DD/MM/AAAA).
-
-    Lógica: segunda_desta_semana = hoje - weekday() (0=seg…6=dom, sempre correto).
-    segunda_anterior = segunda_desta_semana - 7 dias.
-    A fórmula anterior (hoje - (weekday+1)%7 - 6) quebrava aos domingos.
-    """
+    """Calcula nome da aba = segunda-feira da semana anterior (DD/MM/AAAA)."""
     hoje = datetime.date.today()
-    segunda_desta_semana = hoje - datetime.timedelta(days=hoje.weekday())
-    segunda_anterior = segunda_desta_semana - datetime.timedelta(days=7)
-    return segunda_anterior.strftime("%d/%m/%Y")
+    ultimo_domingo = hoje - datetime.timedelta(days=(hoje.weekday() + 1) % 7)
+    segunda = ultimo_domingo - datetime.timedelta(days=6)
+    return segunda.strftime("%d/%m/%Y")
 
 
 def autenticar():
@@ -143,7 +121,6 @@ def main():
     parser = argparse.ArgumentParser(description="fill_sheets.py — stark squad")
     parser.add_argument("--semana", help="Nome da aba DD/MM/AAAA (padrão: calculado automaticamente)")
     parser.add_argument("--metricas-json", help="JSON com métricas por slug: {slug: {meta_spend: X, ...}}")
-    parser.add_argument("--batch", help="Modo batch (ADR-09): JSON {slug: {metricas}} — múltiplos clientes, qualquer gestor")
     args = parser.parse_args()
 
     if not SHEET_ID:
@@ -153,22 +130,16 @@ def main():
     nome_aba = args.semana or calcular_aba()
     print(f"[INFO] Semana: {nome_aba}")
 
-    # ── Detectar modo de operação ──────────────────────────────────────────────
-    if args.batch:
-        # Modo batch: múltiplos clientes de qualquer gestor (Modos 2 e 3 do modo paralelo)
-        metricas_por_slug = json.loads(args.batch)
-        slugs_batch = list(metricas_por_slug.keys())
-        clientes = carregar_clientes_batch(slugs_batch)
-        print(f"[INFO] Modo batch: {len(clientes)} clientes — todos os gestores")
-    else:
-        # Modo original: apenas clientes Vinicius (Modo 1 e rotina legada)
-        metricas_por_slug = {}
-        if args.metricas_json:
-            metricas_por_slug = json.loads(args.metricas_json)
-        elif not sys.stdin.isatty():
-            metricas_por_slug = json.load(sys.stdin)
-        clientes = carregar_clientes()
-        print(f"[INFO] Clientes Vinicius ativos: {len(clientes)}")
+    # Carregar métricas do parâmetro ou stdin
+    metricas_por_slug = {}
+    if args.metricas_json:
+        metricas_por_slug = json.loads(args.metricas_json)
+    elif not sys.stdin.isatty():
+        metricas_por_slug = json.load(sys.stdin)
+
+    # Carregar clientes
+    clientes = carregar_clientes()
+    print(f"[INFO] Clientes Vinicius ativos: {len(clientes)}")
 
     # Autenticar e verificar aba
     service = autenticar()

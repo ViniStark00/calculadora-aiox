@@ -4,8 +4,8 @@
 ## Identidade
 
 **Squad:** `gestor-trafego-stark`
-**Gestores:** vinicius, gustavo, andreyves, richard, luiz, mateus, thiago, wallison — 8 gestores de tráfego pago, Stark Marketing
-**Clientes:** ~93 clientes ativos, nicho saúde/medicina
+**Gestores:** Vinicius Lima + Gustavo Radler — gestores de tráfego pago, Stark Marketing
+**Clientes:** 28 clientes ativos, nicho saúde/medicina
 **Objetivo:** Automatizar rotinas diárias e semanais dos dois gestores de tráfego
 
 ## As 4 Rotinas
@@ -41,21 +41,10 @@
 
 ## Contexto Multi-Gestor
 
-O squad opera sobre 8 gestores independentes, cada um com seu bloco de clientes na planilha:
-
-| Gestor | Clientes exclusivos | Notas |
-|--------|--------------------|-|
-| vinicius | 10 | + 2 compartilhados |
-| gustavo | 11 | + 2 compartilhados |
-| andreyves | 8 | — |
-| richard | 9 | inclui Dr. Alvaro Rodrigues |
-| luiz | 10 | — |
-| mateus | 13 | — |
-| thiago | 16 | inclui Dr. Enzo e Dr. Javier |
-| wallison | 11 | inclui IGO e MaxiOral |
-
-- **Clientes compartilhados** (`gestores: [vinicius, gustavo]`): Dr. Laureano Filho, Dra. Nicolli — aparecem UMA VEZ no YAML (ADR-01)
-- **Sem gestor** (`gestores: []`): 3 clientes externos — Thiago Bandeira, Felipe Máximo, Fabrício Camargo
+O squad opera sobre dois blocos na planilha:
+- **Bloco Vinicius** (`gestores: [vinicius]`): 17 clientes exclusivos + 2 compartilhados = 19 entradas
+- **Bloco Gustavo** (`gestores: [gustavo]`): 9 clientes exclusivos + 2 compartilhados = 11 entradas
+- **Clientes compartilhados** (`gestores: [vinicius, gustavo]`): Dr. Laureano Filho, Dra. Nicolli
 
 Fonte de dados: `data/clientes.yaml` — lista única, sem duplicatas.
 

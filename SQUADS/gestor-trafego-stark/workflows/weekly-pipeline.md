@@ -75,95 +75,6 @@ stark-chief → RESUMO FINAL (status por fase + mensagem WhatsApp)
 
 ---
 
-## Diagrama — Modo Paralelo (Modos 2 e 3)
-
-> Ativo quando trigger é `todos {gestor}` (Modo 2) ou lista de múltiplos nomes (Modo 3).
-> Modo 1 (1 cliente) usa o diagrama sequencial acima.
-
-```
-INPUT: "todos vinicius" | "todos gustavo" | "{nome1}, {nome2}, ..."
-│
-├── MODO 2: gestor_solicitado = trim(trigger após "todos ").lower()
-│           clientes = [c if gestor_solicitado in c.gestores AND c.ativo]
-│           Vazio → erro claro com nome do gestor solicitado
-│
-└── MODO 3: resolver cada nome individualmente (fuzzy 0.60, ativo: true)
-
-período único: segunda → domingo da semana anterior (igual para todos os N clientes)
-
-───────────────────────────────────────────────────────────────────
-ESTÁGIO 1 — COLETA  (sequencial rate-limited, 0.6s entre chamadas)
-───────────────────────────────────────────────────────────────────
-Para cada cliente:
-│   alerta-monitor → dict_alertas[slug]
-│   ├── excluir_meta_monitoring: true → skip Meta (Dr. Laureano Filho)
-│   └── meta_ad_account_id: null     → fallback Reportei (CPL apenas)
-│
-│   coletor (fetch-metrics) → dict_resultados[slug]
-│   └── reusa CPL do alerta-monitor (ADR-04) — sem chamada dupla ao Meta
-│
-│   contexto-cliente LEITURA (Drive em paralelo/batched)
-│   └── ctx_cliente[slug] → pass-through para Estágios 3 e 4 (ADR-08)
-│       Falha Drive → ctx_cliente[slug] = {} + aviso; continua
-│
-│   Falha por cliente → status[slug] = FAILED_FETCH; demais continuam
-
-───────────────────────────────────────────────────────────────────
-ESTÁGIO 2 — SHEETS  (serializado — TODOS, sem condicional por gestor)
-───────────────────────────────────────────────────────────────────
-│   fill_sheets.py --batch dict_resultados.json  (ADR-09)
-│   ├── Cada cliente → bloco do seu gestor na planilha (via slug)
-│   ├── Falha parcial → registra + continua
-│   └── Falha total (0 escritas) → PAUSA + confirmação gestor
-
-───────────────────────────────────────────────────────────────────
-ESTÁGIO 3 — GERAÇÃO  (lotes de 5 em paralelo — ADR-05)
-───────────────────────────────────────────────────────────────────
-│   Candidatos: status != FAILED_FETCH
-│
-│   [lote de 5 em paralelo]
-│   ├── validator (verify-fill) → FAIL → FAILED_VERIFY
-│   ├── redator (generate-report)
-│   │   └── recebe ctx_cliente[slug] do Estágio 1 (ADR-08 — sem releitura Drive)
-│   └── validator (validate-report)
-│       ├── FAIL 1ª → redator regenera (1 retry)
-│       └── FAIL 2ª → FAILED_REPORT
-│
-│   Falha por cliente: isolada; demais lotes continuam
-
-───────────────────────────────────────────────────────────────────
-ESTÁGIO 4 — PUBLICAÇÃO  (serializado — guard de idempotência)
-───────────────────────────────────────────────────────────────────
-│   Candidatos: status = APPROVED
-│
-│   Para cada cliente (em sequência):
-│   ├── GUARD: timeline-log.jsonl → slug+período já publicado → SKIP (ALREADY_PUBLISHED)
-│   │   Protege Dr. Laureano e Dra. Nicolli (clientes compartilhados)
-│   ├── publicador (publish-timeline) → create_timeline_event → append timeline-log.jsonl
-│   └── coletor (save-history) → append historico-clientes.yaml
-│
-│   Serialização obrigatória: escritas concorrentes corrompem timeline-log.jsonl
-
-───────────────────────────────────────────────────────────────────
-ESTÁGIO 5 — WRAP-UP  (paralelo — recursos isolados por cliente)
-───────────────────────────────────────────────────────────────────
-│   Para todos os clientes concluídos, em paralelo:
-│   ├── whatsapp-writer (formatação em memória — isolada por cliente)
-│   ├── clickup-writer (task_id isolado — condicional: clickup_status_list_id != null)
-│   └── contexto-cliente ATUALIZAÇÃO (Drive isolado por cliente — não-bloqueante)
-│
-│   Falhas no Estágio 5 nunca bloqueiam o pipeline
-
-           │
-           ▼
-stark-chief → RESUMO FINAL CONSOLIDADO
-  ├── Tabela: N clientes × [Sheets ✅/❌ | Publicação ✅/❌ ID]
-  ├── Mensagens WhatsApp agrupadas por cliente
-  └── Erros detalhados por estágio
-```
-
----
-
 ## Handoffs entre fases
 
 | De | Para | Dado transferido |
@@ -203,10 +114,6 @@ stark-chief → RESUMO FINAL CONSOLIDADO
 |-----|---------|
 | ADR-01 | `gestores` é array — clientes compartilhados têm uma entrada, não duas |
 | ADR-04 | `metricas_coletadas` passa da FASE 1 para FASE 2 — sem chamada dupla à API |
-| ADR-05 (Modo 1) | FASE 4 e FASE 5 executam em paralelo — nenhuma bloqueia a outra |
-| ADR-05 (Modos 2/3) | Batch size = 5 no Estágio 3 — 40% menos lotes vs. batch 3, margem segura (~13k tokens/lote) |
-| ADR-06 | Falha isolada por cliente em todos os estágios — pipeline nunca para por falha individual |
-| ADR-06-threshold | Thresholds conservadores quando duas especialidades colidem |
+| ADR-05 | FASE 4 e FASE 5 executam em paralelo — nenhuma bloqueia a outra |
+| ADR-06 | Thresholds conservadores quando duas especialidades colidem |
 | ADR-07 | Dr. Laureano Filho: CPL = Google Ads, excluir_meta_monitoring: true |
-| ADR-08 | `ctx_cliente` lido UMA vez no Estágio 1 e passado como parâmetro — sem releitura Drive |
-| ADR-09 | `fill_sheets.py` recebe batch JSON único com TODOS os clientes da rodada |

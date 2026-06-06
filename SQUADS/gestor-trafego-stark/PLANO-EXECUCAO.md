@@ -29,20 +29,20 @@ a criação do squad gestor-trafego-stark a partir da próxima etapa pendente.
 | Etapa | Agente | Descrição | Status |
 |-------|--------|-----------|--------|
 | 0 | @analyst | Análise + Plano | ✅ CONCLUÍDA |
-| 1 | @architect | Design da Arquitetura | → PRÓXIMA |
-| 2 | @pm | Criação do Epic | ⬜ AGUARDANDO |
-| 3 | @sm | Criação das Stories | ⬜ AGUARDANDO |
-| 4 | @po | Validação das Stories | ⬜ AGUARDANDO |
-| 5A | @dev | Estrutura Base + Dados | ⬜ AGUARDANDO |
-| 5B | @dev | Agentes Tier 0 e Tier 2 | ⬜ AGUARDANDO |
-| 5C | @dev | Agentes Tier 1 Grupo A | ⬜ AGUARDANDO |
-| 5D | @dev | Agentes Tier 1 Grupo B | ⬜ AGUARDANDO |
-| 5E | @dev | Tasks e Workflows | ⬜ AGUARDANDO |
-| 6 | @qa | Testes de Integração | ⬜ AGUARDANDO |
-| 7 | @devops | Commit e PR | ⬜ AGUARDANDO |
+| 1 | @architect | Design da Arquitetura | ✅ CONCLUÍDA |
+| 2 | @pm | Criação do Epic | ✅ CONCLUÍDA |
+| 3 | @sm | Criação das Stories | ✅ CONCLUÍDA |
+| 4 | @po | Validação das Stories | ✅ CONCLUÍDA |
+| 5A | @dev | Estrutura Base + Dados | ✅ CONCLUÍDA |
+| 5B | @dev | Agentes Tier 0 e Tier 2 | ✅ CONCLUÍDA |
+| 5C | @dev | Agentes Tier 1 Grupo A | ✅ CONCLUÍDA |
+| 5D | @dev | Agentes Tier 1 Grupo B | ✅ CONCLUÍDA |
+| 5E | @dev | Tasks e Workflows | ✅ CONCLUÍDA |
+| 6 | @qa | Testes de Integração | ✅ CONCLUÍDA |
+| 7 | @devops | Commit e PR | ✅ CONCLUÍDA |
 
-**Última atualização:** 2026-05-27
-**Próxima ação:** Iniciar Etapa 1 com @architect
+**Última atualização:** 2026-05-28
+**Status:** 🎉 SQUAD COMPLETO — todos os commits no main, pushed para origin.
 
 ---
 
@@ -208,10 +208,23 @@ squads/gestor-trafego-stark/
 #### Handoff desta etapa (preencher ao concluir)
 ```yaml
 # HANDOFF ETAPA 1
-status: pendente
-arquivos_criados: []
-decisoes_tomadas: []
-pendencias: []
+status: concluida
+arquivos_criados:
+  - squads/gestor-trafego-stark/DESIGN.md
+decisoes_tomadas:
+  - ADR-01: gestores é array (não scalar) — 2 clientes compartilhados identificados
+  - ADR-02: monitor-diario.md do Vinicius absorvido pelo alerta-monitor (não importar)
+  - ADR-03: reportei-writer.md do Gustavo excluído (manter separação redator/publicador)
+  - ADR-04: reuso parcial de métricas FASE 1→2 via metricas_coletadas dict
+  - ADR-05: fases 4+5 da rotina-semanal em paralelo (publicador + clickup-writer)
+  - ADR-06: thresholds CPM adotam o valor mais conservador entre os dois squads
+  - ADR-07: Dr. Laureano Filho usa especialidade cirurgia_ortognatica (dado do Vinicius, mais específico)
+clientes_compartilhados:
+  - Dr. Laureano Filho (reportei_project_id 982754 — presente em ambos os squads)
+  - Dra. Nicolli (reportei_project_id 642925 — gestores [vinicius, gustavo])
+pendencias:
+  - IDs Reportei de 8 clientes Vinicius estão marcados como "a confirmar" em DESIGN.md seção 2.4
+  - meta_ad_account_id dos clientes Gustavo não estão em data/clientes.md — precisam ser preenchidos manualmente na Etapa 5A
 proxima_etapa: 2
 ```
 
@@ -247,10 +260,19 @@ proxima_etapa: 2
 #### Handoff desta etapa (preencher ao concluir)
 ```yaml
 # HANDOFF ETAPA 2
-status: pendente
-arquivos_criados: []
-decisoes_tomadas: []
-pendencias: []
+status: concluida
+arquivos_criados:
+  - docs/epics/GTS-001-EXECUTION.yaml
+  - docs/stories/gestor-trafego-stark/  # diretório criado (vazio — Etapa 3 popula)
+decisoes_tomadas:
+  - 7 stories mapeadas para etapas de implementação (5A a 6)
+  - Stories 01+02 paralelas (Etapa 5A); 03+04+05 paralelas (Etapas 5B/5C/5D)
+  - Story 06 depende de 03+04+05; Story 07 depende de 06
+  - 37 arquivos no total documentados por story
+  - Critérios de aceite definidos por story (total: ~60 critérios verificáveis)
+pendencias:
+  - Stories detalhadas precisam ser criadas na Etapa 3 (@sm River)
+  - docs/stories/gestor-trafego-stark/GTS-001.0X.story.md para cada uma das 7 stories
 proxima_etapa: 3
 ```
 
@@ -281,10 +303,25 @@ proxima_etapa: 3
 #### Handoff desta etapa (preencher ao concluir)
 ```yaml
 # HANDOFF ETAPA 3
-status: pendente
-arquivos_criados: []
-decisoes_tomadas: []
-pendencias: []
+status: concluida
+arquivos_criados:
+  - docs/stories/gestor-trafego-stark/GTS-001.01.story.md
+  - docs/stories/gestor-trafego-stark/GTS-001.02.story.md
+  - docs/stories/gestor-trafego-stark/GTS-001.03.story.md
+  - docs/stories/gestor-trafego-stark/GTS-001.04.story.md
+  - docs/stories/gestor-trafego-stark/GTS-001.05.story.md
+  - docs/stories/gestor-trafego-stark/GTS-001.06.story.md
+  - docs/stories/gestor-trafego-stark/GTS-001.07.story.md
+decisoes_tomadas:
+  - Cada story tem user story + contexto + arquivos a criar + criterios de aceite + DoD + notas
+  - Criterios obrigatorios especiais incluidos:
+    - GTS-001.02: criterio de ausencia de duplicatas + IDs Reportei confirmados listados
+    - GTS-001.06: criterio de 6 fases em ordem + metricas_coletadas na FASE 2 + paralelo 4+5
+    - GTS-001.07: criterio de executar *rotina-semanal (QA-05) + 7 criterios QA objetivos
+  - Interface metricas_coletadas documentada em GTS-001.04 e GTS-001.05 (contrato produtor/consumidor)
+  - Logica de fallback do alerta-monitor (meta_ad_account_id null → Reportei) documentada em GTS-001.05
+pendencias:
+  - Stories precisam ser validadas pelo @po (Etapa 4) antes da implementacao
 proxima_etapa: 4
 ```
 
@@ -314,9 +351,19 @@ proxima_etapa: 4
 #### Handoff desta etapa (preencher ao concluir)
 ```yaml
 # HANDOFF ETAPA 4
-status: pendente
-stories_aprovadas: []
+status: concluida
+stories_aprovadas:
+  - GTS-001.01  # 10/10 — GO
+  - GTS-001.02  # 10/10 — GO
+  - GTS-001.03  # 10/10 — GO
+  - GTS-001.04  # 10/10 — GO
+  - GTS-001.05  # 10/10 — GO
+  - GTS-001.06  # 9.9/10 — GO (escopo 18 arquivos aceitavel — definido no PLANO)
+  - GTS-001.07  # 10/10 — GO
 stories_reprovadas: []
+observacoes:
+  - GTS-001.06: escopo amplo (18 arquivos). Dev deve criar checklists/templates antes das tasks. rotina-semanal.md deve ser o ultimo arquivo.
+  - Contrato metricas_coletadas documentado em ambas as stories 04 e 05 — elimina risco de interface incompativel.
 pendencias: []
 proxima_etapa: 5A
 ```
@@ -327,7 +374,7 @@ proxima_etapa: 5A
 **Agente:** `@dev (Dex)`
 **Story:** GTS-001.01 + GTS-001.02
 **Commit ao concluir:** `feat(gestor-trafego-stark): add squad base — squad.yaml CLAUDE.md README.md data/ [Story GTS-001.01 + GTS-001.02]`
-**Status:** ⬜ AGUARDANDO
+**Status:** ✅ CONCLUÍDA
 
 #### Briefing para @dev
 
@@ -392,12 +439,22 @@ proxima_etapa: 5A
 #### Handoff desta etapa (preencher ao concluir)
 ```yaml
 # HANDOFF ETAPA 5A
-status: pendente
-arquivos_criados: []
-clientes_vinicius_count: 0
-clientes_gustavo_count: 0
-total_clientes_yaml: 0
-pendencias: []
+status: concluida
+arquivos_criados:
+  - squads/gestor-trafego-stark/squad.yaml
+  - squads/gestor-trafego-stark/CLAUDE.md
+  - squads/gestor-trafego-stark/README.md
+  - squads/gestor-trafego-stark/data/clientes.yaml
+  - squads/gestor-trafego-stark/data/thresholds-por-especialidade.yaml
+  - squads/gestor-trafego-stark/config/settings.yaml
+clientes_vinicius_count: 17
+clientes_gustavo_count: 9
+clientes_compartilhados_count: 2
+total_clientes_yaml: 28
+thresholds_especialidades: [cirurgia_plastica, dermatologia, medicina_estetica, cirurgia_facial, cirurgia_corporal, mommy_makeover, cirurgia_trans, cirurgia_ortognatica, saude_geral, oncologia, tricologia]
+pendencias:
+  - meta_ad_account_id de todos os clientes está null — preencher com act_XXXXX quando disponível
+  - clickup_status_list_id de clientes Gustavo (exceto Dr. Caio Fernandes) está null — preencher antes do primeiro uso
 proxima_etapa: 5B
 ```
 
@@ -407,7 +464,7 @@ proxima_etapa: 5B
 **Agente:** `@dev (Dex)`
 **Story:** GTS-001.03
 **Commit ao concluir:** `feat(gestor-trafego-stark): add stark-chief validator [Story GTS-001.03]`
-**Status:** ⬜ AGUARDANDO
+**Status:** ✅ CONCLUÍDA
 
 #### Briefing para @dev
 
@@ -443,8 +500,16 @@ proxima_etapa: 5B
 #### Handoff desta etapa (preencher ao concluir)
 ```yaml
 # HANDOFF ETAPA 5B
-status: pendente
-arquivos_criados: []
+status: concluida
+arquivos_criados:
+  - squads/gestor-trafego-stark/agents/stark-chief.md
+  - squads/gestor-trafego-stark/agents/validator.md
+destaques:
+  - stark-chief: tier 0, 7 comandos, resolução de cliente 4 passos, multi-cliente (vinicius/gustavo/todos)
+  - stark-chief: routing rules com 3+ keywords por comando conforme story
+  - stark-chief: pipeline routing 6 fases explícito com comportamento de falha por fase
+  - validator: 4 gates — gate_sheets (novo, 7 critérios), gate_reportei, gate_alertas, gate_clickup
+  - validator: gate_alertas adaptado para squad (sem "11 contas" hardcoded)
 pendencias: []
 proxima_etapa: 5C
 ```
@@ -455,7 +520,7 @@ proxima_etapa: 5C
 **Agente:** `@dev (Dex)`
 **Story:** GTS-001.04
 **Commit ao concluir:** `feat(gestor-trafego-stark): add tier1-A agents — coletor redator publicador whatsapp contexto [Story GTS-001.04]`
-**Status:** ⬜ AGUARDANDO
+**Status:** ✅ CONCLUÍDA
 
 #### Briefing para @dev
 
@@ -495,8 +560,21 @@ proxima_etapa: 5C
 #### Handoff desta etapa (preencher ao concluir)
 ```yaml
 # HANDOFF ETAPA 5C
-status: pendente
-arquivos_criados: []
+status: concluida
+arquivos_criados:
+  - squads/gestor-trafego-stark/agents/coletor.md
+  - squads/gestor-trafego-stark/agents/redator.md
+  - squads/gestor-trafego-stark/agents/publicador.md
+  - squads/gestor-trafego-stark/agents/whatsapp-writer.md
+  - squads/gestor-trafego-stark/agents/contexto-cliente.md
+destaques:
+  - coletor: extensão ADR-04 — aceita metricas_coletadas (FASE 1), reutiliza Meta Ads sem nova chamada
+  - coletor: documenta fonte por métrica no output (metricas_coletadas vs Meta Ads MCP vs Reportei)
+  - redator: referencia data/thresholds-por-especialidade.yaml e data/clientes.yaml
+  - redator: lógica cirurgia_ortognatica (CPL = custo por conversão Google Ads, não WhatsApp)
+  - publicador: handoff completo ao whatsapp-writer com todos os campos necessários
+  - whatsapp-writer: saudação por horário (05h-11h59=dia, 12h-17h59=tarde, 18h-04h59=noite)
+  - contexto-cliente: pasta "Contexto Clientes - Stark", documento "Contexto - {nome_cliente}"
 pendencias: []
 proxima_etapa: 5D
 ```
@@ -507,7 +585,7 @@ proxima_etapa: 5D
 **Agente:** `@dev (Dex)`
 **Story:** GTS-001.05
 **Commit ao concluir:** `feat(gestor-trafego-stark): add tier1-B agents — alerta-monitor clickup-writer task-monitor [Story GTS-001.05]`
-**Status:** ⬜ AGUARDANDO
+**Status:** → PRÓXIMA
 
 #### Briefing para @dev
 
@@ -539,8 +617,18 @@ proxima_etapa: 5D
 #### Handoff desta etapa (preencher ao concluir)
 ```yaml
 # HANDOFF ETAPA 5D
-status: pendente
-arquivos_criados: []
+status: concluida
+arquivos_criados:
+  - squads/gestor-trafego-stark/agents/alerta-monitor.md
+  - squads/gestor-trafego-stark/agents/clickup-writer.md
+  - squads/gestor-trafego-stark/agents/task-monitor.md
+destaques:
+  - alerta-monitor: itera 28 clientes, fallback Reportei quando meta_ad_account_id null,
+    skip excluir_meta_monitoring:true, disponibiliza metricas_coletadas dict (ADR-04)
+  - clickup-writer: roteamento doc por gestor (Vinicius ou Gustavo), suporte compartilhados,
+    9-passo workflow com aprovação obrigatória antes de escrever
+  - task-monitor: inbox por assignee, doc correto por gestor para status_report,
+    verificação automática via MCP, organização por urgência
 pendencias: []
 proxima_etapa: 5E
 ```
@@ -620,9 +708,33 @@ proxima_etapa: 5E
 #### Handoff desta etapa (preencher ao concluir)
 ```yaml
 # HANDOFF ETAPA 5E
-status: pendente
-arquivos_criados: []
+status: concluida
+arquivos_criados:
+  - squads/gestor-trafego-stark/checklists/sheets-gate.md
+  - squads/gestor-trafego-stark/checklists/relatorio-gate.md
+  - squads/gestor-trafego-stark/checklists/alertas-gate.md
+  - squads/gestor-trafego-stark/checklists/clickup-gate.md
+  - squads/gestor-trafego-stark/templates/relatorio-template.md
+  - squads/gestor-trafego-stark/templates/whatsapp-template.md
+  - squads/gestor-trafego-stark/templates/contexto-cliente-template.md
+  - squads/gestor-trafego-stark/tasks/fetch-metrics.md
+  - squads/gestor-trafego-stark/tasks/verify-fill.md
+  - squads/gestor-trafego-stark/tasks/generate-report.md
+  - squads/gestor-trafego-stark/tasks/validate-report.md
+  - squads/gestor-trafego-stark/tasks/publish-timeline.md
+  - squads/gestor-trafego-stark/tasks/save-history.md
+  - squads/gestor-trafego-stark/tasks/monitorar-contas.md
+  - squads/gestor-trafego-stark/tasks/preencher-clickup.md
+  - squads/gestor-trafego-stark/tasks/rotina-diaria.md
+  - squads/gestor-trafego-stark/tasks/rotina-semanal.md
+  - squads/gestor-trafego-stark/workflows/weekly-pipeline.md
 rotina_semanal_fases: 6
+destaques:
+  - rotina-semanal.md: 6 fases explícitas com handoffs, gates, fallbacks e tabela de falhas
+  - FASE 1→2 handoff: metricas_coletadas dict documentado (ADR-04)
+  - FASE 4∥5: paralelo explícito documentado (ADR-05)
+  - FASE 6: todos os sub-passos não-bloqueantes
+  - weekly-pipeline.md: diagrama ASCII completo + tabela de handoffs + MCPs por fase
 pendencias: []
 proxima_etapa: 6
 ```
