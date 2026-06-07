@@ -12,21 +12,26 @@
 ## 👉 ESTADO ATUAL — onde parar e retomar
 
 ```
-FASE:         Execução — SESSÕES 1, 2, 3 e 4 CONCLUÍDAS ✔️
-ETAPA:        Sessão 4 concluída — C1/C2 commitados (6cb8700) e pushados
-PRÓXIMO:      SESSÃO 5: @dev → C3 (campo nome_reportei no clientes.yaml) + D1 (lista completa ~90 clientes)
-              PRÉ-REQUISITO: Vinicius confirmar qual gestor cuida de cada bloco da lista D1 antes de iniciar
+FASE:         Execução — SESSÕES 1, 2, 3, 4 e 5 CONCLUÍDAS ✔️
+ETAPA:        Sessão 5 concluída — C3/D1 commitados (c742250) e pushados
+PRÓXIMO:      SESSÃO 6 (ÚLTIMA):
+                1. @architect → B2: badge "dados parciais" em agents/alerta-monitor.md
+                2. @dev      → B1: histórico JSONL em tasks/save-history.md + rotina-semanal.md
+                3. @devops   → gh pr create feat/paralelismo-stark-chief → main
+                4. Você revisa e aprova o PR no GitHub
+                5. @devops   → gh pr merge
+                6. SYNC FINAL (manual): copiar squads/gestor-trafego-stark/ para
+                   gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego → push main
 AGENTE ATIVO: —
 BRANCH:       feat/paralelismo-stark-chief
 ```
 
 **Para retomar em nova sessão:**
 1. Leia este documento inteiro
-2. Leia a seção MANUAL_MAP abaixo (lista D1 com project_ids — base para Sessão 5)
-3. Confirme o gestor (vinicius/gustavo) de cada cliente antes de chamar @dev
-4. Vá direto para SESSÃO 5 — copie o texto e envie ao @dev
+2. Comece pela SESSÃO 6 abaixo — copie cada bloco de instrução para o agente correspondente
+3. Ordem obrigatória: @architect (B2) → @dev (B1) → @devops (PR + merge) → SYNC FINAL manual
 
-**Calendário:** Junho 6, 2026 (hoje). Semana corrente: seg 02/06 – dom 08/06.
+**Calendário:** Junho 7, 2026 (hoje). Semana corrente: seg 02/06 – dom 08/06.
 
 **Destino final do squad:** Após o PR mergeado em `ViniStark00/calculadora-aiox`, copiar a pasta `squads/gestor-trafego-stark/` para o clone local de `gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego` e pushar para main. Ver seção SYNC FINAL na Sessão 6.
 
@@ -637,3 +642,4 @@ FINAL                      gustavoradler-cyber/treinamento-orquestradores-stark-
 | CP-03 | 2026-06-06 | PRÉ-SESSÃO | Hooks H1, H2, H3 configurados em .claude/settings.json e testados (5 cenários, todos corretos). JSON válido. | Commitar hooks (@dev) + push (@devops). Iniciar Sessão 1 com @dev para D2 (cross-reference Reportei × Planilha). |
 | CP-04 | 2026-06-06 | Execução | PRÉ-SESSÃO commitada e pushada (commit 847774d). Squad completo + hooks versionados. SESSÃO 1 (D2) concluída: 100 clientes mapeados Reportei × Planilha, 15 descartados. MANUAL_MAP salvo neste documento. | SESSÃO 2: @dev corrigir A0-a (edge case domingo em calcular_aba) + A0-b (substituir last_7d por datas fixas nos agentes). |
 | CP-05 | 2026-06-06 | Execução | SESSÃO 2 concluída: A0-a (edge case domingo) + A0-b (last_7d → date_from/date_to) corrigidos. Commit 782ab72. SESSÃO 3 concluída: A1 (tab management + isolamento multi-gestor) + A2 (--dry-run) + A3 (validação de schema) + C4 (_to_float, retry 429, ARS) implementados em fill_sheets.py. Commit b7fb46e. | SESSÃO 4: @dev → C1 (lotes de 3 em paralelo nos agentes) + C2 (contador global rate limit Reportei). |
+| CP-06 | 2026-06-07 | Execução | SESSÃO 4 concluída: C1/C2 commitados (6cb8700) e pushados. SESSÃO 5 concluída: D1 — clientes.yaml expandido com 8 gestores (andreyves, richard, luiz, mateus, thiago, wallison + novos gustavo, amanda), ~70 novos clientes, 11 reportei_project_ids preenchidos, 6 gestores atualizados, 3 marcados ativo:false, 8 inativos adicionados. C3 — campo nome_reportei adicionado em 34 entradas com divergência nome×Reportei. CLAUDE.md atualizado para 8 gestores. Commit c742250 pushado. Dr. Orozimbo (783368) confirmado fora da carteira. | SESSÃO 6: @architect → B2 (alerta-monitor.md) + @dev → B1 (histórico JSONL) + @devops → PR + merge + SYNC FINAL. |
