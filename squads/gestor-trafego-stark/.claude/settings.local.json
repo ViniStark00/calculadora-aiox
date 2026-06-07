@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__claude_ai_Reportei_AI__get_project_metrics",
+      "mcp__claude_ai_Reportei_AI__list_integrations",
+      "mcp__claude_ai_Reportei_AI__list_templates",
+      "mcp__claude_ai_Reportei_AI__list_reports",
+      "mcp__claude_ai_Reportei_AI__create_report",
+      "mcp__claude_ai_Reportei_AI__create_timeline_event",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\gusta\\\\stark\\\\treinamento-orquestradores-stark-gestoresdetrafego\\\\squads\\\\gestor-trafego-stark\" -Recurse -Force)",
+      "Bash(Select-Object FullName, PSIsContainer)",
+      "Bash(Sort-Object FullName)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\gusta\\\\stark\\\\treinamento-orquestradores-stark-gestoresdetrafego\\\\squads\\\\gestor-trafego-stark\" -Recurse -File -Force | Select-Object @{Name='Path';Expression={$_.FullName -replace [regex]::Escape\\(\"C:\\\\Users\\\\gusta\\\\stark\\\\treinamento-orquestradores-stark-gestoresdetrafego\\\\squads\\\\gestor-trafego-stark\\\\\"\\), ''}}, Name | Sort-Object Path)"
+    ]
+  }
+}
