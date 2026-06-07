@@ -85,28 +85,38 @@ Calcular variação % da semana atual vs média das 4 semanas:
 | `variacao_cpl > +15%` | "O CPL ficou [X]% acima da média histórica das últimas [N] semanas." |
 | `-10% ≤ variacao_cpl ≤ +15%` | Omitir ou "O CPL manteve-se estável em relação ao histórico recente." |
 
-## Auto-discovery de leads
+## Discovery de leads
 
-Ao buscar métricas via `get_project_metrics`, varrer TODOS os slugs disponíveis do projeto.
-Identificar automaticamente qualquer métrica de lead além de `messaging_conversation_started_7d`:
+### Fonte primária: Meta Ads MCP (quando `meta_ad_account_id` disponível)
 
-| Padrão de slug | Tipo de lead | Campo | Label no relatório |
-|----------------|-------------|-------|-------------------|
-| `*respondi*` ou `*RespondiConversion*` | Formulário Respondi | `respondi_leads` | "Respondi" |
-| `offsite_conversion.*` (exceto Respondi) | Pixel Meta (evento externo) | `pixel_leads` | "Pixel" |
-| `onsite_conversion.*` | Lead nativo/formulário no site | `pixel_leads` | "Pixel" |
-| `*lead*` (outros não enquadrados acima) | Outro evento de lead | `pixel_leads` | "Pixel" |
+Se `meta_ad_account_id` não é null:
+- Chamar Meta Ads MCP com `get_insights`, período do relatório, campo `action_types`
+- Esta é a fonte primária de leads — não usar Reportei para leads neste caso
+
+| Padrão de action_type | Campo | Label no relatório |
+|-----------------------|-------|-------------------|
+| `onsite_conversion.messaging_conversation_started_7d` | `conversas` | WhatsApp |
+| `offsite_conversion.fb_pixel_custom.Respondi*` | `respondi_leads` | Respondi |
+| `offsite_conversion.fb_pixel_custom.*Conversion*` | `respondi_leads` | Respondi |
+| `offsite_conversion.fb_pixel_custom.*` (outros, valor > 0) | `pixel_leads` | Pixel |
 
 **Regras:**
 - Verificar Respondi PRIMEIRO — tem prioridade e label próprio no relatório
-- Incluir apenas slugs com valor > 0 no período
-- Ignorar `messaging_conversation_started_7d` (já capturado como `conversas`)
-- Calcular ao final:
-  ```
-  total_leads = conversas + respondi_leads + pixel_leads
-  meta_cpl    = meta_spend / total_leads  (se total_leads > 0)
-  ```
-- Se nenhum slug adicional encontrado: `total_leads = conversas` — comportamento padrão, sem mudança
+- Incluir apenas action_types com valor > 0 no período
+
+### Fonte fallback: Reportei (quando `meta_ad_account_id` null)
+
+Se `meta_ad_account_id` é null (`reportei_fallback`):
+- Buscar via `get_project_metrics` do MCP Reportei
+- Extrair apenas `messaging_conversation_started_7d` → `conversas`
+- `respondi_leads = 0`, `pixel_leads = 0`
+
+### Cálculo de totais e seleção de label
+
+```
+total_leads = conversas + respondi_leads + pixel_leads
+meta_cpl    = meta_spend / total_leads  (se total_leads > 0)
+```
 
 **Seleção de label e breakdown:**
 - `total_leads = conversas` → `[LABEL_LEADS]` = "conversas"; sem linha de breakdown
