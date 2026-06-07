@@ -4,9 +4,9 @@
 ## Identidade
 
 **Squad:** `gestor-trafego-stark`
-**Gestores:** Vinicius Lima + Gustavo Radler — gestores de tráfego pago, Stark Marketing
+**Gestores:** Vinicius Lima · Gustavo Radler · Andreyves · Richard · Luiz · Mateus · Thiago · Wallison — gestores de tráfego pago, Stark Marketing
 **Clientes:** 28 clientes ativos, nicho saúde/medicina
-**Objetivo:** Automatizar rotinas diárias e semanais dos dois gestores de tráfego
+**Objetivo:** Automatizar rotinas diárias e semanais dos 8 gestores de tráfego
 
 ## As 4 Rotinas
 
@@ -41,12 +41,13 @@
 
 ## Contexto Multi-Gestor
 
-O squad opera sobre dois blocos na planilha:
-- **Bloco Vinicius** (`gestores: [vinicius]`): 17 clientes exclusivos + 2 compartilhados = 19 entradas
-- **Bloco Gustavo** (`gestores: [gustavo]`): 9 clientes exclusivos + 2 compartilhados = 11 entradas
-- **Clientes compartilhados** (`gestores: [vinicius, gustavo]`): Dr. Laureano Filho, Dra. Nicolli
+O squad opera com 8 gestores ativos: vinicius, gustavo, andreyves, richard, luiz, mateus, thiago, wallison.
+Clientes com `gestores: [amanda]` estão ativos mas não são processados pelas automações do squad.
 
 Fonte de dados: `data/clientes.yaml` — lista única, sem duplicatas.
+
+Gestores com planilha Google Sheets (FASE 2): vinicius (estrutura legada; outros gestores: a definir).
+Gestores com ClickUp (FASE 5): gustavo (estrutura legada; outros gestores: a definir).
 
 ## Lógica de Fallback Meta Ads → Reportei
 
