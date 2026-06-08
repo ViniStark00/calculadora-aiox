@@ -4,21 +4,47 @@ agent: stark-chief
 squad: gestor-trafego-stark
 elicit: false
 inputs:
-  - cliente: nome ou slug do cliente (resolvido pelo stark-chief de data/clientes.yaml)
-  - gestor: vinicius | gustavo | ambos (inferido do campo gestores do cliente)
+  - cliente: nome, slug do cliente OU nome do gestor (resolvido pelo stark-chief de data/clientes.yaml)
+  - gestor: vinicius | gustavo | thiago | wallison | andreyves | richard | luiz | mateus (inferido do input ou do campo gestores do cliente)
 outputs:
   - resumo_final: status completo das 6 fases (COMPLETED | PARTIAL | FAILED por fase)
 ---
 
 # Task: rotina-semanal â€” Pipeline Completo Semanal (6 Fases)
 
+<<<<<<< HEAD
 **AtivaÃ§Ã£o por comando `*rotina-semanal [cliente]`:** pipeline completo com 6 fases ordenadas, handoffs entre agentes e gates de qualidade. Arquivo mais importante do squad.
 
 ---
 
 ## PRÃ‰-EXECUÃ‡ÃƒO: ResoluÃ§Ã£o do cliente
+=======
+**Ativação por comando `*rotina-semanal [cliente ou gestor]`:** pipeline completo com 6 fases ordenadas, handoffs entre agentes e gates de qualidade. Arquivo mais importante do squad.
 
-Antes de iniciar as fases:
+---
+
+## PRÉ-EXECUÇÃO: Resolução do input
+>>>>>>> main
+
+### Modo 1 — Input é nome de gestor (modo batch)
+
+Gestores válidos: `vinicius`, `gustavo`, `thiago`, `wallison`, `andreyves`, `richard`, `luiz`, `mateus`
+
+Se o input bater exatamente com um desses nomes (case-insensitive):
+1. Filtrar `data/clientes.yaml` → todos os clientes onde `[gestor] in gestores AND ativo: true`
+2. Exibir lista ao gestor:
+   ```
+   🗂 Modo batch — [N] clientes encontrados para [gestor]:
+   1. [nome-cliente-1]
+   2. [nome-cliente-2]
+   ...
+   Confirmar? (s/n)
+   ```
+3. Aguardar confirmação antes de iniciar
+4. Rodar o pipeline completo para cada cliente **em lotes** (tamanho: `pipeline.lote_paralelo` em `config/settings.yaml`, padrão: 3)
+5. FASE 2 (Sheets) permanece serializada mesmo em batch — um cliente por vez
+
+### Modo 2 — Input é nome ou slug de cliente (modo individual)
 
 1. **Exact match** por `nome` em `data/clientes.yaml`
 2. **Exact match** por `slug` em `data/clientes.yaml`
@@ -26,9 +52,14 @@ Antes de iniciar as fases:
 4. Se nenhum: listar todos os slugs e pedir confirmaÃ§Ã£o
 
 Determinar `gestor` do cliente:
+<<<<<<< HEAD
 - `gestores: [vinicius]` â†’ apenas fases Vinicius (inclui FASE 2)
 - `gestores: [gustavo]` â†’ FASE 2 pulada
 - `gestores: [vinicius, gustavo]` â†’ perguntar "Para qual gestor rodar a rotina semanal?"
+=======
+- `gestores: [X]` → rodar pipeline completo (todas as 6 fases)
+- `gestores: [X, Y]` → perguntar "Para qual gestor rodar a rotina semanal?"
+>>>>>>> main
 
 ---
 
@@ -41,7 +72,18 @@ Determinar `gestor` do cliente:
 Monitorar TODAS as contas ativas â€” nÃ£o apenas o cliente solicitado.
 O monitoramento Ã© sempre global (carteira completa, ambos os gestores).
 
+<<<<<<< HEAD
 ### Handoff de saÃ­da
+=======
+### Orquestração em lotes (C1)
+O `alerta-monitor` processa clientes em lotes paralelos:
+- Tamanho do lote: `pipeline.lote_paralelo` em `config/settings.yaml` (padrão: 3)
+- Cada lote processa todos os seus clientes EM PARALELO
+- Próximo lote só inicia após o lote atual terminar completamente
+- Rate limit global compartilhado entre clientes do mesmo lote (ver `rate_limit_global` em alerta-monitor)
+
+### Handoff de saída
+>>>>>>> main
 ```yaml
 alertas_ativos: list[alerta]    # ðŸ”´ðŸŸ¡â„¹ï¸ gerados
 metricas_coletadas: dict        # keyed por slug â€” para reuso na FASE 2
@@ -59,10 +101,16 @@ metricas_coletadas: dict        # keyed por slug â€” para reuso na FASE 2
 
 ---
 
+<<<<<<< HEAD
 ## FASE 2 â€” PLANILHA GOOGLE SHEETS (condicional: sÃ³ clientes Vinicius)
 
 **CondiÃ§Ã£o:** `vinicius in cliente.gestores`
 **Se cliente sÃ³ de Gustavo:** PULAR FASE 2 completamente â€” avanÃ§ar para FASE 3
+=======
+## FASE 2 — PLANILHA GOOGLE SHEETS (obrigatória para todos os gestores)
+
+> **Serializada:** FASE 2 processa um cliente por vez — sem paralelismo.
+>>>>>>> main
 
 **Agente:** `coletor`
 **Tasks:** `tasks/fetch-metrics.md` + `tasks/verify-fill.md`
@@ -86,7 +134,18 @@ metricas_coletadas: dict  # reutilizar dados Meta Ads sem nova chamada Ã  API 
 
 ## FASE 3 â€” NARRATIVA DO RELATÃ“RIO (obrigatÃ³ria)
 
+<<<<<<< HEAD
 **Agentes:** `contexto-cliente` (nÃ£o-bloqueante) â†’ `redator` â†’ `validator`
+=======
+### Orquestração em lotes (modo bulk — C1)
+Quando `*rotina-semanal` processa múltiplos clientes simultaneamente:
+- Tamanho do lote: `pipeline.lote_paralelo` em `config/settings.yaml` (padrão: 3)
+- FASE 3 executa em lotes de `lote_paralelo` em paralelo
+- Cada lote aguarda o anterior finalizar antes de prosseguir
+- FASE 2 (Sheets) permanece serializada — não é afetada por este modo
+
+**Agentes:** `contexto-cliente` (não-bloqueante) → `redator` → `validator`
+>>>>>>> main
 **Tasks:** `tasks/generate-report.md` + `tasks/validate-report.md`
 
 ### Sub-passo 3.1 â€” Leitura do contexto do cliente (nÃ£o-bloqueante)
@@ -100,7 +159,11 @@ metricas_coletadas: dict  # reutilizar dados Meta Ads sem nova chamada Ã  API 
 ### Sub-passo 3.2 â€” GeraÃ§Ã£o da narrativa
 
 **Agente:** `redator`
+<<<<<<< HEAD
 - Receber mÃ©tricas (FASE 2 ou direto do Reportei se FASE 2 pulada)
+=======
+- Receber métricas da FASE 2 (Google Sheets já preenchido)
+>>>>>>> main
 - Receber `contexto_cliente` (pode ser `disponivel: false`)
 - Classificar CPL por especialidade (thresholds-por-especialidade.yaml)
 - Consultar histÃ³rico (data/historico-clientes.yaml)
@@ -176,8 +239,14 @@ mensagem_whatsapp: str
 
 **Agente:** `coletor`
 **Task:** `tasks/save-history.md`
+<<<<<<< HEAD
 - Persistir mÃ©tricas da semana em `data/historico-clientes.yaml`
 - Nunca bloqueia; falha emite aviso e continua
+=======
+- Persistir métricas da semana em `data/historico-metricas.jsonl` (uma linha JSON por cliente)
+- Idempotente: rodar duas vezes na mesma semana não duplica entradas
+- Nunca bloqueia; se save-history falhar, emitir aviso no resumo final e continuar
+>>>>>>> main
 
 ### Sub-passo 6.2 â€” Atualizar contexto do cliente no Drive
 
@@ -201,6 +270,7 @@ mensagem_whatsapp: str
 Ao concluir todas as fases, exibir:
 
 ```
+<<<<<<< HEAD
 ROTINA SEMANAL â€” [CLIENTE] â€” [DD/MM] a [DD/MM/AAAA]
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 âœ… FASE 1 â€” Monitoramento       COMPLETED Â· N alertas (XðŸ”´ YðŸŸ¡ Zâœ…)
@@ -209,6 +279,16 @@ ROTINA SEMANAL â€” [CLIENTE] â€” [DD/MM] a [DD/MM/AAAA]
 âœ… FASE 4 â€” PublicaÃ§Ã£o Reportei  COMPLETED Â· event_id: XXXXX
 âœ… FASE 5 â€” Status ClickUp       COMPLETED | AWAITING_APPROVAL | SKIPPED
 âœ… FASE 6 â€” Wrap-up              COMPLETED Â· contexto: âœ… | histÃ³rico: âœ… | tasks: âœ…
+=======
+ROTINA SEMANAL — [CLIENTE] — [DD/MM] a [DD/MM/AAAA]
+════════════════════════════════════════════════════
+✅ FASE 1 — Monitoramento       COMPLETED · N alertas (X🔴 Y🟡 Z✅)
+✅ FASE 2 — Sheets               COMPLETED
+✅ FASE 3 — Relatório            COMPLETED
+✅ FASE 4 — Publicação Reportei  COMPLETED · event_id: XXXXX
+✅ FASE 5 — Status ClickUp       COMPLETED | AWAITING_APPROVAL | SKIPPED
+✅ FASE 6 — Wrap-up              COMPLETED · contexto: ✅ | histórico: ✅ | tasks: ✅
+>>>>>>> main
 
 Status geral: COMPLETED | PARTIAL (listar fases com problema)
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•

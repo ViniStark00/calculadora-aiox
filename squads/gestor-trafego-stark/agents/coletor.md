@@ -136,14 +136,53 @@ O coletor tenta coletar todas as métricas. Escreve o que encontrou:
 | Filtro | `vinicius in gestores AND ativo: true` |
 | Aba do Sheets | Deve existir com nome `DD/MM/AAAA` — ERRO CLARO se não encontrada |
 | Período | `last_sunday - 6` até `last_sunday` (7 dias completos) |
+| Parâmetros Reportei | Usar `date_from`/`date_to` — NUNCA `lookback: last_7d` |
 | Slug Google | Usar `'google_adwords'` — NUNCA `'google_ads'` |
 | Custo Google | Valor direto — NÃO dividir por 1.000.000 |
 | Seguidores | Match exato: `ref == 'ig:new_followers_count'` |
+| Conversas | Match exato: `'messaging_conversation_started_7d'` |
+| Rate limit Reportei | `sleep(0.6s)` entre chamadas; aguardar 60s após erro 429; contador global: pausar 540s ao atingir 38 req |
 | Conversas (meta_ad_account_id disponível) | Meta Ads MCP: `onsite_conversion.messaging_conversation_started_7d` |
 | Conversas (meta_ad_account_id null) | Reportei: `messaging_conversation_started_7d` |
 | Rate limit Reportei | `sleep(0.6s)` entre chamadas; aguardar 60s após erro 429 |
 | Dr. Javier | Pular Meta Spend (bloqueado em ARS) — sem erro, só aviso |
 | Paginação | Continuar enquanto `len(results) == per_page` |
+
+## Rate Limit Global (Reportei)
+
+Manter contador global de chamadas ao MCP Reportei durante toda a execução.
+
+| Parâmetro | Valor |
+|-----------|-------|
+| Limite | 38 requisições |
+| Pausa | 540 segundos (9 minutos) |
+| Mensagem | `[RATE LIMIT] 38 requisições atingidas — aguardando 9 min...` |
+
+**Comportamento:**
+1. A cada chamada bem-sucedida ao Reportei: incrementar `contador_global` em +1
+2. Quando `contador_global >= 38`:
+   - Exibir: `[RATE LIMIT] 38 requisições atingidas — aguardando 9 min...`
+   - Pausar 540 segundos
+   - Zerar `contador_global` para 0
+   - Continuar normalmente
+3. O `sleep(0.6s)` entre chamadas continua ativo (contador global é adicional, não o substitui)
+4. Erro 429 continua acionando pausa de 60s independentemente do contador
+
+## Cálculo de período (date_from / date_to)
+
+Todas as chamadas ao Reportei API usam datas fixas, nunca `lookback`:
+
+```python
+# Mesmo algoritmo de calcular_aba() em fill_sheets.py
+dias_ate_domingo = (hoje.weekday() + 1) % 7
+if dias_ate_domingo == 0:
+    dias_ate_domingo = 7
+ultimo_domingo = hoje - timedelta(days=dias_ate_domingo)
+date_from = (ultimo_domingo - timedelta(days=6)).strftime("%Y-%m-%d")  # segunda-feira
+date_to = ultimo_domingo.strftime("%Y-%m-%d")  # domingo
+```
+
+Aplicar em: `get_project_metrics`, `get_metrics`, e qualquer outra chamada Reportei com período.
 
 ## Função _to_float() (comportamento esperado)
 
