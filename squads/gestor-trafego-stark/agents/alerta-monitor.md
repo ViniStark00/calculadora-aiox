@@ -62,6 +62,14 @@ iteracao_por_cliente:
   filtros:
     - "ativo: true"
     - "excluir_meta_monitoring: true → PULAR (registrar na seção EXCLUÍDOS)"
+  processamento_paralelo: |
+    1. Ler lote_paralelo de config/settings.yaml → pipeline.lote_paralelo (padrão: 3)
+    2. Agrupar clientes filtrados em lotes de lote_paralelo
+    3. Para cada lote:
+       a. Disparar chamadas MCP de todos os clientes do lote SIMULTANEAMENTE
+       b. Aguardar TODOS finalizarem antes de iniciar o próximo lote
+       c. Exibir progresso: "[LOTE N/T] Processando: cliente_a, cliente_b, cliente_c"
+    4. rate_limit_global é compartilhado entre todos os clientes do lote
   ordem_output: |
     Exibir por bloco de gestor:
     1. Bloco Vinicius (gestores contém 'vinicius', excluindo compartilhados)
@@ -69,10 +77,29 @@ iteracao_por_cliente:
     3. Bloco Gustavo (gestores contém 'gustavo', excluindo compartilhados)
 
 # ─────────────────────────────────────────
+# RATE LIMIT GLOBAL (Reportei)
+# ─────────────────────────────────────────
+rate_limit_global:
+  api: "mcp__30ebe978-db99-4dee-927c-b72f6abac9d8 (Reportei)"
+  limite_requisicoes: 38
+  pausa_segundos: 540
+  mensagem_pausa: "[RATE LIMIT] 38 requisições atingidas — aguardando 9 min..."
+  comportamento: |
+    Manter contador global de chamadas ao MCP Reportei durante toda a execução.
+    A cada chamada bem-sucedida ao Reportei: incrementar contador_global em +1.
+    Quando contador_global >= 38:
+      1. Exibir: "[RATE LIMIT] 38 requisições atingidas — aguardando 9 min..."
+      2. Pausar execução por 540 segundos
+      3. Zerar contador_global para 0
+      4. Continuar processamento normalmente
+    O contador é compartilhado entre todos os lotes — não reinicia a cada lote.
+    Compatível com processamento_paralelo: lote aguarda antes de continuar se rate limit ativo.
+
+# ─────────────────────────────────────────
 # FONTE DE DADOS POR CONTA
 # ─────────────────────────────────────────
 fonte_dados:
-  meta_ads_disponivel:
+  meta_ads_mcp:
     condicao: "meta_ad_account_id preenchido (não null) em data/clientes.yaml"
     mcp: "mcp__c0a7182d-bfb1-44b9-9206-83cca8f17d52"
     metricas_buscar:
@@ -92,18 +119,50 @@ fonte_dados:
   reportei_fallback:
     condicao: "meta_ad_account_id: null em data/clientes.yaml"
     mcp: "mcp__30ebe978-db99-4dee-927c-b72f6abac9d8"
-    ferramenta: "get_project_metrics(project_id, lookback: last_7d)"
-    aviso_output: "⚠️ [{cliente}] meta_ad_account_id ausente — dados via Reportei (CPL apenas)"
-    metricas_disponiveis:
-      - "meta_spend (aggregado)"
-      - "conversas (messaging_conversation_started_7d)"
-      - "CPL calculado: meta_spend / conversas"
-    metricas_indisponiveis:
-      - "CPM — não disponível via Reportei"
-      - "CTR de link — não disponível via Reportei"
-      - "Frequência — não disponível via Reportei"
-      - "Dados por anúncio (level: ad) — não disponível via Reportei"
-    restricao_alertas: "Não emitir alertas de CPM, CTR ou frequência se fonte = reportei_fallback"
+    ferramenta: "get_project_metrics(project_id, date_from: YYYY-MM-DD, date_to: YYYY-MM-DD)"
+    periodo_calculo: |
+      Mesmo método de calcular_aba() em fill_sheets.py:
+        dias_ate_domingo = (hoje.weekday() + 1) % 7
+        if dias_ate_domingo == 0: dias_ate_domingo = 7
+        ultimo_domingo = hoje - timedelta(days=dias_ate_domingo)
+        date_from = (ultimo_domingo - timedelta(days=6)).strftime("%Y-%m-%d")  # segunda-feira
+        date_to = ultimo_domingo.strftime("%Y-%m-%d")  # domingo
+    logica_deteccao: |
+      Após chamar get_project_metrics, varrer as integrações retornadas:
+        campos_meta = [spend, cpm, ctr, frequency]
+        se qualquer integração tiver pelo menos um campo_meta com valor não-null e não-zero:
+          → fonte: 'reportei_meta'  (dados Meta completos via Reportei)
+        senão:
+          → fonte: 'reportei_sem_meta'  (dados parciais — sem integração Meta no Reportei)
+
+    reportei_meta:
+      descricao: "Reportei com integração Meta Ads ativa — dados completos disponíveis"
+      fonte: "reportei_meta"
+      metricas_disponiveis:
+        - "spend (Meta Ads)"
+        - "cpm"
+        - "ctr"
+        - "frequency"
+        - "impressions / reach"
+        - "conversas (messaging_conversation_started_7d)"
+        - "CPL calculado: spend / conversas"
+      restricao_alertas: "Mesmas regras de severidade que meta_ads_mcp — dados completos"
+      badge: "nenhum"
+
+    reportei_sem_meta:
+      descricao: "Reportei sem integração Meta Ads — dados parciais"
+      fonte: "reportei_sem_meta"
+      metricas_disponiveis:
+        - "conversas (messaging_conversation_started_7d)"
+        - "CPL calculado (se spend disponível via outra integração Reportei)"
+      metricas_indisponiveis:
+        - "CPM — sem integração Meta Ads no Reportei"
+        - "CTR — sem integração Meta Ads no Reportei"
+        - "Frequência — sem integração Meta Ads no Reportei"
+        - "Dados por anúncio (level: ad) — sem integração Meta Ads no Reportei"
+      restricao_alertas: "Não emitir alertas de CPM, CTR ou frequência se fonte = reportei_sem_meta"
+      badge: "· ⚠️ dados parciais (CPM/CTR/freq indisponíveis — sem integração Meta no Reportei)"
+      aviso_output: "⚠️ [{cliente}] sem integração Meta Ads no Reportei — apenas CPL disponível"
 
 # ─────────────────────────────────────────
 # REGRAS DE SEVERIDADE
@@ -111,18 +170,18 @@ fonte_dados:
 severity_rules:
   critical:
     - "CPL > meta_cpl × 1.6 (meta_cpl em data/clientes.yaml)"
-    - "CTR no link < 0.8% após 3+ dias com spend > R$ 20 (apenas fonte: meta_ads)"
-    - "CPM > threshold_pause da especialidade em thresholds-por-especialidade.yaml (apenas fonte: meta_ads)"
-    - "Frequência > threshold_pause do tipo de campanha (apenas fonte: meta_ads)"
-    - "Spend > kill_switch da especialidade + 0 conversas em 3 dias, anúncio com 7+ dias (apenas fonte: meta_ads)"
+    - "CTR no link < 0.8% após 3+ dias com spend > R$ 20 (apenas fonte: meta_ads_mcp ou reportei_meta)"
+    - "CPM > threshold_pause da especialidade em thresholds-por-especialidade.yaml (apenas fonte: meta_ads_mcp ou reportei_meta)"
+    - "Frequência > threshold_pause do tipo de campanha (apenas fonte: meta_ads_mcp ou reportei_meta)"
+    - "Spend > kill_switch da especialidade + 0 conversas em 3 dias, anúncio com 7+ dias (apenas fonte: meta_ads_mcp ou reportei_meta)"
   attention:
     - "CPL entre meta_cpl × 1.3 e meta_cpl × 1.6"
-    - "CPM acima da faixa saudável mas abaixo do threshold de pause (apenas fonte: meta_ads)"
-    - "Frequência acima do threshold de alerta mas abaixo do pause (apenas fonte: meta_ads)"
-    - "CTR (Todos) < 1.5% após 3+ dias (apenas fonte: meta_ads)"
+    - "CPM acima da faixa saudável mas abaixo do threshold de pause (apenas fonte: meta_ads_mcp ou reportei_meta)"
+    - "Frequência acima do threshold de alerta mas abaixo do pause (apenas fonte: meta_ads_mcp ou reportei_meta)"
+    - "CTR (Todos) < 1.5% após 3+ dias (apenas fonte: meta_ads_mcp ou reportei_meta)"
   info_notify:
     - "Verba diária acima do pacing threshold (threshold_diario = orcamento_mensal ÷ 30 × 1.8)"
-    - "Frequência chegando a 80% do limite de pause (apenas fonte: meta_ads)"
+    - "Frequência chegando a 80% do limite de pause (apenas fonte: meta_ads_mcp ou reportei_meta)"
 
 # ─────────────────────────────────────────
 # FORMATO DE OUTPUT
@@ -156,7 +215,11 @@ alert_format: |
   ⏭️ [{cliente}] excluir_meta_monitoring: true — monitoramento desabilitado
 
   ── CONTAS COM FALLBACK REPORTEI ───────────────────────────
-  ⚠️ [{cliente}] meta_ad_account_id ausente — dados via Reportei (CPL apenas)
+  ℹ️ [{cliente}] meta_ad_account_id ausente — Reportei com Meta Ads ativo (dados completos)
+  ⚠️ [{cliente}] meta_ad_account_id ausente — sem integração Meta no Reportei (CPL apenas)
+
+  Regra badge: fonte == 'reportei_sem_meta' → appender ao bloco do cliente:
+               · ⚠️ dados parciais (CPM/CTR/freq indisponíveis — sem integração Meta no Reportei)
 
 # ─────────────────────────────────────────
 # METRICAS_COLETADAS (ADR-04 — reuso pelo coletor)
@@ -169,17 +232,18 @@ metricas_coletadas_output:
       meta_spend: float          # R$ — 0.0 se indisponível
       conversas: int             # 0 se indisponível
       meta_cpl: "float | null"   # null se conversas = 0 ou fonte = reportei_fallback sem CPL
-      cpm: "float | null"        # null se fonte = reportei_fallback
-      ctr: "float | null"        # null se fonte = reportei_fallback
-      frequency: "float | null"  # null se fonte = reportei_fallback
-      fonte: "meta_ads"          # "meta_ads" | "reportei_fallback" | "excluido"
+      cpm: "float | null"        # null se fonte = reportei_sem_meta
+      ctr: "float | null"        # null se fonte = reportei_sem_meta
+      frequency: "float | null"  # null se fonte = reportei_sem_meta
+      fonte: "meta_ads_mcp"      # "meta_ads_mcp" | "reportei_meta" | "reportei_sem_meta" | "excluido"
       lookback: "last_3d"        # "last_3d" | "last_7d"
       coletado_em: "ISO 8601"    # timestamp de coleta
   regras:
     - "Incluir entrada para TODOS os clientes ativos, inclusive excluídos (fonte: excluido)"
     - "fonte: excluido → todos os campos null — coletor sabe que não deve buscar via Meta Ads"
-    - "fonte: reportei_fallback → cpm/ctr/frequency = null — coletor não tenta buscar via Meta Ads"
-    - "fonte: meta_ads → todos os campos preenchidos conforme disponibilidade na API"
+    - "fonte: reportei_sem_meta → cpm/ctr/frequency = null — sem integração Meta no Reportei"
+    - "fonte: reportei_meta → todos os campos preenchidos via Reportei (integração Meta ativa)"
+    - "fonte: meta_ads_mcp → todos os campos preenchidos via Meta Ads MCP direto"
     - "Chave do dict = slug do cliente em data/clientes.yaml"
 
 # ─────────────────────────────────────────
@@ -192,7 +256,7 @@ heuristics:
     - "Audiência < 1.000 impressões: frequência é estatisticamente instável"
     - "Spend < R$ 20 em 3 dias: dados insuficientes"
     - "Dr. Laureano Filho (excluir_meta_monitoring: true): ignorar completamente"
-    - "fonte: reportei_fallback: não alertar por CPM, CTR ou frequência"
+    - "fonte: reportei_sem_meta: não alertar por CPM, CTR ou frequência"
 
   fluxo_investigacao_cpm_alto:
     # Rodar SEMPRE que CPM > threshold de pause antes de classificar como 🔴 CRÍTICO
@@ -243,12 +307,12 @@ examples:
       ── BLOCO VINICIUS ──────────────────────────────────────────
 
       🟡 ATENÇÃO (monitorar):
-      └── [Dr. Roberto Bottura] CPL R$ 120 > meta R$ 80 × 1.3 = R$ 104 — fonte: reportei_fallback
-          ⚠️ meta_ad_account_id ausente — apenas CPL disponível
+      └── [Dr. Roberto Bottura] CPL R$ 120 > meta R$ 80 × 1.3 = R$ 104 · ⚠️ dados parciais (CPM/CTR/freq indisponíveis — sem integração Meta no Reportei)
 
       ✅ SEM ALERTAS:
-      ├── [Dr. Marcelo Melo] OK — Meta Ads
-      └── [Dra. Danielle Fernandes] OK — Reportei fallback
+      ├── [Dr. Marcelo Melo] OK
+      ├── [Dr. Leandro Gontijo] OK                        ← meta_ad_account_id null, Reportei com Meta Ads
+      └── [Dra. Danielle Fernandes] OK · ⚠️ dados parciais (CPM/CTR/freq indisponíveis — sem integração Meta no Reportei)
 
       ── BLOCO GUSTAVO ──────────────────────────────────────────
 
@@ -271,13 +335,14 @@ voice_dna:
     - "dados estatisticamente instáveis"
     - "NOTIFY — gestor decide"
     - "faixa saudável / acima da faixa / acima do pause"
-    - "fonte: reportei_fallback — apenas CPL disponível"
+    - "fonte: reportei_meta — dados Meta completos via Reportei"
+    - "fonte: reportei_sem_meta — apenas CPL disponível"
   anti_patterns:
     - "Recomendar pause ou escala (apenas NOTIFY)"
     - "Alertar sem threshold de referência explícito"
     - "Alertar em campanha com menos de 3 dias ou spend < R$ 20"
     - "Alertar por CPM em campanhas awareness/reach"
-    - "Alertar por CPM/CTR/frequência quando fonte = reportei_fallback"
+    - "Alertar por CPM/CTR/frequência quando fonte = reportei_sem_meta"
     - "Alertar por frequência com menos de 1.000 impressões"
     - "Usar threshold genérico sem indicar que meta específica não está definida"
     - "Pular seção SEM ALERTAS no output"
