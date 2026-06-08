@@ -4,7 +4,7 @@ agent: coletor
 squad: gestor-trafego-stark
 elicit: false
 inputs:
-  - clientes_vinicius: lista filtrada de data/clientes.yaml (vinicius in gestores, ativo: true)
+  - clientes_ativos: lista filtrada de data/clientes.yaml (ativo: true)
   - periodo: calculado automaticamente (segunda a domingo da semana anterior)
   - metricas_coletadas: dict opcional do alerta-monitor (FASE 1) — ADR-04
   - sheet_id: variável de ambiente SHEET_ID
@@ -16,7 +16,7 @@ outputs:
 
 # Task: fetch-metrics — Coleta de Métricas e Preenchimento de Sheets
 
-**FASE 2 do pipeline:** busca métricas no Reportei API v2 e preenche o Google Sheets para os clientes do bloco Vinicius.
+**FASE 2 do pipeline:** busca métricas no Reportei API v2 e preenche o Google Sheets para todos os clientes ativos.
 
 ## Pré-condições
 
@@ -41,9 +41,9 @@ nome_aba = data_inicio.strftime('%d/%m/%Y')
 3. **Se não existir:** interromper com erro claro — nunca criar aba automaticamente:
    > "Aba '[DD/MM/AAAA]' não encontrada na planilha [SHEET_ID]. Criar manualmente e rodar novamente."
 
-## Passo 3 — Filtrar clientes Vinicius
+## Passo 3 — Filtrar clientes ativos
 
-Ler `data/clientes.yaml` → filtrar: `vinicius in gestores AND ativo: true`
+Ler `data/clientes.yaml` → filtrar: `ativo: true`
 
 ## Passo 4 — Reutilizar metricas_coletadas (ADR-04)
 
