@@ -5,25 +5,6 @@
 # sheet_columns: todos os clientes com planilha ativa (coluna na planilha Google Sheets)
 # clickup_status_list_id: apenas clientes Gustavo; null = preencher antes do primeiro uso
 # Especialidades corrigidas em 2026-05-28 via cruzamento com docs "Contexto Clientes - Stark" no Drive
-#
-# lead_sources (OPCIONAL — ADR-08): fontes adicionais de lead além de conversa WhatsApp.
-# Quando ausente: apenas messaging_conversation_started_7d é contabilizado (comportamento legado).
-# Quando presente: coletor soma TODAS as fontes em total_leads; relatório usa total_leads no CPL.
-#
-# Tipos disponíveis:
-#   - tipo: conversa_whatsapp    → sempre incluído automaticamente
-#   - tipo: pixel_evento         → evento de conversão de pixel Meta
-#     slug_reportei: "offsite_conversion.fb_pixel_lead"  # slug exato no Reportei
-#   - tipo: lead_site            → formulário/lead nativo via pixel do site
-#     slug_reportei: "onsite_conversion.lead_grouped"     # slug exato no Reportei
-#
-# Exemplo de configuração em um cliente:
-#   lead_sources:
-#     - tipo: conversa_whatsapp
-#     - tipo: pixel_evento
-#       slug_reportei: "offsite_conversion.fb_pixel_lead"
-#     - tipo: lead_site
-#       slug_reportei: "onsite_conversion.lead_grouped"
 
 _sheet_cols: &sheet_cols
   meta_spend: C
@@ -91,15 +72,15 @@ clientes:
 
   - nome: "Dr. Guilherme Mattar"
     slug: "dr-guilherme-mattar"
-    gestores: [gustavo]
+    gestores: [vinicius]
     ativo: true
     prioridade: 5
     reportei_project_id: 1023153
     especialidade: cirurgia_trans
-    meta_ad_account_id: act_771111750830269
+    meta_ad_account_id: null
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Guilherme"
-    clickup_status_list_id: null
+    sheet_columns: *sheet_cols
 
   - nome: "Dr Luiz Borba"
     slug: "dr-luiz-borba"
@@ -264,6 +245,7 @@ clientes:
     excluir_meta_monitoring: true
     nome_whatsapp: "Dr. Laureano"
     sheet_columns: *sheet_cols
+    clickup_status_list_id: null
     nota: "Exclusivamente Google Ads — ignorar monitoramento Meta completamente (ADR-07)"
 
   - nome: "Dra. Nicolli"
@@ -274,7 +256,7 @@ clientes:
     reportei_project_id: 642925
     nome_reportei: "Dra Nicolli"
     especialidade: medicina_estetica
-    meta_ad_account_id: act_960315725767656
+    meta_ad_account_id: null
     excluir_meta_monitoring: false
     nome_whatsapp: "Dra. Nicolli"
     sheet_columns: *sheet_cols
@@ -292,12 +274,24 @@ clientes:
     prioridade: 1
     reportei_project_id: 696403
     especialidade: cirurgia_plastica        # corrigido: era saude_geral — foco em mama/mastopexia
-    meta_ad_account_id: act_1393299711601107
+    meta_ad_account_id: null
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Fernando"
     clickup_status_list_id: null
     nota: "PRIORIDADE — baixo volume de leads"
 
+  - nome: "Dr. Diego Alencar"
+    slug: "dr-diego-alencar"
+    gestores: [gustavo]
+    ativo: true
+    prioridade: 2
+    reportei_project_id: 1064037
+    especialidade: emagrecimento            # corrigido: era oncologia — especialista em emagrecimento/GLP-1
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Diego"
+    clickup_status_list_id: null
+    nota: "CPL crítico — histórico de alertas"
 
   - nome: "Dr. Marcelo Bezerra"
     slug: "dr-marcelo-bezerra"
@@ -307,7 +301,7 @@ clientes:
     reportei_project_id: 610559
     nome_reportei: "Dr Marcelo Bezerra"
     especialidade: cirurgia_plastica
-    meta_ad_account_id: act_789988945186773
+    meta_ad_account_id: null
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Marcelo"
     clickup_status_list_id: null
@@ -320,12 +314,24 @@ clientes:
     prioridade: 4
     reportei_project_id: 1097249
     especialidade: cirurgia_facial          # corrigido: era tricologia — cirurgião plástico especialista em face/facelift
-    meta_ad_account_id: act_1258064598195035
+    meta_ad_account_id: null
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Higner"
     clickup_status_list_id: null
     nota: "Baixo agendamento, CPM alto"
 
+  - nome: "Dra. Mariângela Santiago"
+    slug: "dra-mariangela-santiago"
+    gestores: [gustavo]
+    ativo: true
+    prioridade: 5
+    reportei_project_id: 1097223
+    especialidade: cirurgia_facial          # corrigido: era medicina_estetica — cirurgiã plástica especializada em face/facelift
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Mariângela"
+    clickup_status_list_id: null
+    nota: "Ausência de conteúdo orgânico"
 
   - nome: "Dr. Caio Fernandes"
     slug: "dr-caio-fernandes"
@@ -334,7 +340,7 @@ clientes:
     prioridade: 6
     reportei_project_id: 1170455
     especialidade: cirurgia_plastica        # corrigido: era saude_geral — cirurgião plástico
-    meta_ad_account_id: act_339122182185621
+    meta_ad_account_id: null
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Caio"
     clickup_status_list_id: "901300668557"
@@ -347,7 +353,7 @@ clientes:
     prioridade: 9
     reportei_project_id: 913731
     especialidade: cirurgia_plastica        # corrigido: era medicina_estetica — cirurgiã plástica (Lipo HD, abdominoplastia)
-    meta_ad_account_id: act_7555194664567088
+    meta_ad_account_id: null
     excluir_meta_monitoring: false
     nome_whatsapp: "Fernanda"
     clickup_status_list_id: null
@@ -360,7 +366,7 @@ clientes:
     prioridade: 10
     reportei_project_id: 672682
     especialidade: ginecologia              # corrigido: era medicina_estetica — ginecologista e obstetra
-    meta_ad_account_id: act_1143540576041734
+    meta_ad_account_id: null
     excluir_meta_monitoring: false
     nome_whatsapp: "Graciela"
     clickup_status_list_id: null
@@ -373,44 +379,22 @@ clientes:
     prioridade: 11
     reportei_project_id: 1025271
     especialidade: cirurgia_bucomaxilofacial  # corrigido: era dermatologia — cirurgiã buco-maxilofacial/ortognática
-    meta_ad_account_id: act_738607819492370
+    meta_ad_account_id: null
     excluir_meta_monitoring: false
     nome_whatsapp: "Dra. Érica"
     clickup_status_list_id: null
     nota: "Bom momento de fechamento"
 
-<<<<<<< HEAD
-=======
   # ─────────────────────────────────────────────────────────────────
   # BLOCO GUSTAVO — novos clientes
   # ─────────────────────────────────────────────────────────────────
 
->>>>>>> main
   - nome: "Dra. Luana Girondi"
     slug: "dra-luana-girondi"
     gestores: [gustavo]
     ativo: true
     prioridade: 12
     reportei_project_id: 989108
-<<<<<<< HEAD
-    especialidade: cirurgia_plastica
-    meta_ad_account_id: act_1473041596448611
-    excluir_meta_monitoring: false
-    nome_whatsapp: "Luana"
-    clickup_status_list_id: null
-
-  - nome: "Dr. Daniel Curi"
-    slug: "dr-daniel-curi"
-    gestores: [gustavo]
-    ativo: true
-    prioridade: 13
-    reportei_project_id: 1256454
-    especialidade: cirurgia_facial
-    meta_ad_account_id: act_1004564995439260
-    excluir_meta_monitoring: false
-    nome_whatsapp: "Dr. Daniel"
-    clickup_status_list_id: null
-=======
     nome_reportei: "Dra Luana Girondi"
     especialidade: null
     meta_ad_account_id: null
@@ -1345,4 +1329,3 @@ clientes:
     meta_ad_account_id: null
     excluir_meta_monitoring: false
     sheet_columns: null
->>>>>>> main
