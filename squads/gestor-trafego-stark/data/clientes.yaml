@@ -2,7 +2,7 @@
 # Fonte: fusão de squads gestor-trafego-vinicius + gestor-trafego-gustavo
 # ADR-01: gestores é array — clientes compartilhados aparecem UMA VEZ com gestores: [vinicius, gustavo]
 # meta_ad_account_id: preencher com act_XXXXX quando disponível; null = fallback Reportei
-# sheet_columns: apenas clientes Vinicius (coluna na planilha Google Sheets)
+# sheet_columns: todos os clientes com planilha ativa (coluna na planilha Google Sheets)
 # clickup_status_list_id: apenas clientes Gustavo; null = preencher antes do primeiro uso
 # Especialidades corrigidas em 2026-05-28 via cruzamento com docs "Contexto Clientes - Stark" no Drive
 
