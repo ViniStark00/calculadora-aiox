@@ -26,8 +26,8 @@ Antes de iniciar as fases:
 4. Se nenhum: listar todos os slugs e pedir confirmação
 
 Determinar `gestor` do cliente:
-- `gestores: [vinicius]` → apenas fases Vinicius (inclui FASE 2)
-- `gestores: [gustavo]` → FASE 2 pulada
+- `gestores: [vinicius]` → rodar pipeline completo (todas as 6 fases)
+- `gestores: [gustavo]` → rodar pipeline completo (todas as 6 fases)
 - `gestores: [vinicius, gustavo]` → perguntar "Para qual gestor rodar a rotina semanal?"
 
 ---
@@ -66,10 +66,7 @@ metricas_coletadas: dict        # keyed por slug — para reuso na FASE 2
 
 ---
 
-## FASE 2 — PLANILHA GOOGLE SHEETS (condicional: só clientes Vinicius)
-
-**Condição:** `vinicius in cliente.gestores`
-**Se cliente só de Gustavo:** PULAR FASE 2 completamente — avançar para FASE 3
+## FASE 2 — PLANILHA GOOGLE SHEETS (obrigatória para todos os gestores)
 
 > **Serializada:** FASE 2 processa um cliente por vez — sem paralelismo.
 
@@ -116,7 +113,7 @@ Quando `*rotina-semanal` processa múltiplos clientes simultaneamente:
 ### Sub-passo 3.2 — Geração da narrativa
 
 **Agente:** `redator`
-- Receber métricas (FASE 2 ou direto do Reportei se FASE 2 pulada)
+- Receber métricas da FASE 2 (Google Sheets já preenchido)
 - Receber `contexto_cliente` (pode ser `disponivel: false`)
 - Classificar CPL por especialidade (thresholds-por-especialidade.yaml)
 - Consultar histórico (data/historico-clientes.yaml)
@@ -222,7 +219,7 @@ Ao concluir todas as fases, exibir:
 ROTINA SEMANAL — [CLIENTE] — [DD/MM] a [DD/MM/AAAA]
 ════════════════════════════════════════════════════
 ✅ FASE 1 — Monitoramento       COMPLETED · N alertas (X🔴 Y🟡 Z✅)
-✅ FASE 2 — Sheets               COMPLETED | SKIPPED (Gustavo-only)
+✅ FASE 2 — Sheets               COMPLETED
 ✅ FASE 3 — Relatório            COMPLETED
 ✅ FASE 4 — Publicação Reportei  COMPLETED · event_id: XXXXX
 ✅ FASE 5 — Status ClickUp       COMPLETED | AWAITING_APPROVAL | SKIPPED

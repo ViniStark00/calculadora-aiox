@@ -46,7 +46,7 @@ Clientes com `gestores: [amanda]` estão ativos mas não são processados pelas 
 
 Fonte de dados: `data/clientes.yaml` — lista única, sem duplicatas.
 
-Gestores com planilha Google Sheets (FASE 2): vinicius (estrutura legada; outros gestores: a definir).
+Gestores com planilha Google Sheets (FASE 2): todos os 8 gestores — planilha única compartilhada. Todos os clientes vão para a mesma aba, independente do gestor.
 Gestores com ClickUp (FASE 5): gustavo (estrutura legada; outros gestores: a definir).
 
 ## Lógica de Fonte de Dados — Monitoramento (alerta-monitor)
