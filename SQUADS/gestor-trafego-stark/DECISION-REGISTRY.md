@@ -568,7 +568,7 @@ Tarefa de coleta de dados (não modifica código). Executa via MCP antes de qual
 
 #### E1 — FASE 2 deve rodar para todos os gestores (bug)
 
-**Status:** ✅ APROVADO — aguardando implementação (Sessão 7)
+**Status:** ✔️ CONCLUÍDO — commits b8ebc5a + ac6c489 — 2026-06-08
 
 **Bug identificado:**
 `tasks/rotina-semanal.md` contém a condição `vinicius in cliente.gestores` que pula a FASE 2 completamente para clientes de outros gestores. O pressuposto era que cada gestor teria sua própria planilha separada. Confirmado por Vinicius que a planilha é **única e compartilhada** — todos os 8 gestores e seus clientes vão para a mesma aba.
@@ -586,6 +586,59 @@ Tarefa de coleta de dados (não modifica código). Executa via MCP antes de qual
 
 ---
 
+---
+
+## Sessão 8 — 2026-06-08
+
+**Contexto:** Continuação do E1. Identificado que `fetch-metrics.md` ainda filtrava só Vinicius. Adicionado modo batch por gestor.
+
+---
+
+#### F1 — fetch-metrics incompleto (E1 parcial)
+
+**Status:** ✔️ CONCLUÍDO (commit b8ebc5a — 2026-06-08)
+
+**Bug identificado:**
+O E1 da sessão anterior corrigiu `rotina-semanal.md` (removeu skip de FASE 2 para não-Vinicius), mas `fetch-metrics.md` — a task que FASE 2 chama internamente — ainda filtrava `vinicius in gestores AND ativo: true`. Todos os clientes de Gustavo, Thiago, Wallison, etc. continuavam sendo ignorados na coleta de métricas.
+
+**Arquivos afetados:**
+- `tasks/fetch-metrics.md` — input e Passo 3
+- `data/clientes.yaml` — comentário de cabeçalho
+
+**O que mudou:**
+- Input `clientes_vinicius` → `clientes_ativos`
+- Passo 3: `vinicius in gestores AND ativo: true` → `ativo: true`
+- Descrição: "bloco Vinicius" → "todos os clientes ativos"
+- `clientes.yaml` comentário: "apenas clientes Vinicius" → "todos os clientes com planilha ativa"
+
+**Decisão:** APROVADO
+**Motivo:** Complemento obrigatório do E1 — sem isso, o fix anterior era ineficaz.
+
+---
+
+#### F2 — Modo batch por gestor no rotina-semanal
+
+**Status:** ✔️ CONCLUÍDO (commit ac6c489 — 2026-06-08)
+
+**Feature adicionada:**
+`*rotina-semanal [nome-do-gestor]` passa a funcionar como **modo batch** — o squad detecta automaticamente que o input é um nome de gestor (vinicius, gustavo, thiago, wallison, andreyves, richard, luiz, mateus), filtra todos os clientes daquele gestor com `ativo: true`, exibe a lista para confirmação e roda o pipeline completo em lotes de 3.
+
+**Contexto:**
+`clientes.yaml` já tinha todos os clientes mapeados por gestor (`gestores: [thiago]`, etc.). Faltava apenas ensinar o `rotina-semanal.md` a reconhecer o gestor como entrada válida.
+
+**Arquivos afetados:**
+- `tasks/rotina-semanal.md` — PRÉ-EXECUÇÃO: novo Modo 1 (batch) + Modo 2 (individual)
+
+**Comportamento:**
+- `*rotina-semanal thiago` → lista 14 clientes do Thiago → confirmação → lotes de 3
+- `*rotina-semanal wallison` → lista 9 clientes do Wallison → confirmação → lotes de 3
+- `*rotina-semanal Dr. George` → modo individual (comportamento anterior preservado)
+
+**Decisão:** APROVADO
+**Motivo:** Dados já estavam mapeados no clientes.yaml. Melhoria natural do E1.
+
+---
+
 ## Histórico de Checkpoints
 
 | CP | Data | Sessão | O que foi feito | Próximo passo |
@@ -599,3 +652,4 @@ Tarefa de coleta de dados (não modifica código). Executa via MCP antes de qual
 | CP-07 | 2026-06-07 | Execução | Sessão 6 em andamento. B2 implementado com escopo expandido (ver decisão B2 acima). Descoberta: Reportei entrega CPM/CTR/freq quando integração Meta Ads ativa. Lógica corrigida para 3 fontes. CLAUDE.md atualizado. Aguardando commit @dev. | @dev commitar B2 → B1 → @devops PR + merge → SYNC FINAL. |
 | CP-08 | 2026-06-07 | CONCLUÍDO | Plano encerrado. B2 (commit 0d1921e) e B1 (commit ae52bbc) entregues. PR #2 aberto e mergeado em gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego. SYNC FINAL executado. Todas as 16 melhorias aprovadas implementadas. | — Plano encerrado. |
 | CP-09 | 2026-06-07 | Pós-entrega | Bug E1 identificado: planilha é única para todos os gestores — FASE 2 está pulando ~80% dos clientes. Registrado como Sessão 7. | Sessão 7: @architect corrige CLAUDE.md + @dev corrige rotina-semanal.md. |
+| CP-10 | 2026-06-08 | Sessão 8 | E1 completado: fetch-metrics.md corrigido (F1, commit b8ebc5a). Modo batch por gestor adicionado ao rotina-semanal (F2, commit ac6c489). Push para repo Gustavo (commit 34a923d). Docs atualizados. | — Nenhum item pendente. |

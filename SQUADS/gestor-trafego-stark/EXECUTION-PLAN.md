@@ -12,15 +12,11 @@
 ## 👉 ESTADO ATUAL — onde parar e retomar
 
 ```
-FASE:         Pós-entrega — bug identificado após conclusão do plano original
-ETAPA:        E1 — FASE 2 multi-gestor (aguardando implementação)
-PRÓXIMO:      SESSÃO 7:
-                1. 👉 @architect → corrigir CLAUDE.md: planilha é única para todos os gestores
-                2. @dev      → corrigir rotina-semanal.md: remover condição que pula FASE 2 para não-Vinicius
-                3. @dev      → commitar: "fix(sheets): E1 — FASE 2 roda para todos os gestores"
-                4. @devops   → push + PR no repo do Gustavo
+FASE:         Pós-entrega — E1 concluído + melhorias adicionais entregues
+ETAPA:        —
+PRÓXIMO:      Nenhum item pendente no momento
 AGENTE ATIVO: —
-BRANCH:       feat/paralelismo-stark-chief (mergeada) — abrir nova branch para E1
+BRANCH:       feat/paralelismo-stark-chief (local) | main no repo do Gustavo ✔️
 ```
 
 ---
@@ -50,27 +46,41 @@ BRANCH:       feat/paralelismo-stark-chief (mergeada em main ✔️)
 
 ---
 
-## SESSÃO 7 — Bug E1: FASE 2 multi-gestor
-
-**Data prevista:** a definir
-**Branch:** `feat/vinicius-e1-fase2-multi-gestor` (criar nova)
+## SESSÃO 7 — Bug E1: FASE 2 multi-gestor ✔️ CONCLUÍDO — 2026-06-08
 
 ### E1 — FASE 2 deve rodar para todos os gestores
 
-**Bug identificado:** A planilha Google Sheets é **única e compartilhada** para todos os 8 gestores. Porém, `tasks/rotina-semanal.md` tem uma condição que pula a FASE 2 completamente para clientes não-Vinicius. Isso faz com que ~80% dos clientes nunca tenham seus dados preenchidos na planilha.
+**Bug identificado:** A planilha Google Sheets é **única e compartilhada** para todos os 8 gestores. Porém, `tasks/rotina-semanal.md` tinha uma condição que pulava a FASE 2 completamente para clientes não-Vinicius.
 
-**Arquivos a corrigir:**
+**O que foi implementado (Sessão 7 + Sessão 8):**
 
-| Arquivo | Agente | O que muda |
-|---------|--------|-----------|
-| `SQUADS/gestor-trafego-stark/CLAUDE.md` | **@architect (Aria)** | Corrigir linha 49: planilha é única para todos os gestores |
-| `tasks/rotina-semanal.md` | **@dev (Dex)** | Remover condição `vinicius in cliente.gestores` que pula FASE 2 |
+| Arquivo | Agente | O que mudou | Commit |
+|---------|--------|------------|--------|
+| `CLAUDE.md` | @architect | Planilha única para todos os gestores | (sessão anterior) |
+| `tasks/rotina-semanal.md` | @dev | Removida condição Vinicius-only na FASE 2 | (sessão anterior) |
+| `tasks/fetch-metrics.md` | @dev | `clientes_vinicius` → `clientes_ativos` (ativo: true) | b8ebc5a |
+| `tasks/rotina-semanal.md` | @dev | Modo batch: digitar nome do gestor processa todos os seus clientes | ac6c489 |
+| `data/clientes.yaml` | @dev | Comentário `sheet_columns` corrigido | b8ebc5a |
 
-**Instrução para @architect:**
-> "Corrija o CLAUDE.md do squad gestor-trafego-stark. Linha 49 diz 'Gestores com planilha Google Sheets (FASE 2): vinicius (estrutura legada; outros gestores: a definir).' — está errada. A planilha é única e compartilhada para todos os 8 gestores. Todos os clientes vão para a mesma aba."
+**Push para GitHub do Gustavo:** commit `34a923d` em `main` — 2026-06-08
 
-**Instrução para @dev:**
-> "Corrija tasks/rotina-semanal.md. Remova a condição que pula FASE 2 para clientes não-Vinicius (linhas 29-31 e 69-72). A planilha é única para todos os gestores — FASE 2 deve rodar para qualquer cliente, independente do gestor."
+---
+
+## SESSÃO 8 — Correção fetch-metrics + modo batch por gestor ✔️ CONCLUÍDO — 2026-06-08
+
+### F1 — fetch-metrics ainda filtrava só clientes do Vinicius
+
+**Bug identificado:** O E1 da sessão anterior corrigiu `rotina-semanal.md` e `CLAUDE.md`, mas `fetch-metrics.md` (a task que FASE 2 chama de verdade) ainda tinha `vinicius in gestores AND ativo: true` — bloqueando Gustavo, Thiago, Wallison e todos os outros gestores.
+
+**F2 — Novo modo batch por gestor**
+
+**Feature adicionada:** `*rotina-semanal [nome-do-gestor]` agora funciona como modo batch — processa todos os clientes daquele gestor em lotes de 3. Exemplo: `*rotina-semanal thiago` → lista todos os clientes do Thiago → pede confirmação → roda o pipeline completo para cada um.
+
+**Commits locais:**
+- `b8ebc5a` — fix: E1 completo — fetch-metrics processa todos os gestores
+- `ac6c489` — feat: modo batch por gestor no rotina-semanal
+
+**Push para GitHub do Gustavo:** commit `34a923d` — 2026-06-08
 
 ---
 
