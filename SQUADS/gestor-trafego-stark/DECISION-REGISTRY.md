@@ -558,6 +558,34 @@ Tarefa de coleta de dados (não modifica código). Executa via MCP antes de qual
 
 ---
 
+---
+
+## Sessão 7 — 2026-06-07 (pós-entrega)
+
+**Contexto:** Bug identificado após conclusão do plano original. Vinicius confirmou que a planilha Google Sheets é única e compartilhada para todos os gestores.
+
+---
+
+#### E1 — FASE 2 deve rodar para todos os gestores (bug)
+
+**Status:** ✅ APROVADO — aguardando implementação (Sessão 7)
+
+**Bug identificado:**
+`tasks/rotina-semanal.md` contém a condição `vinicius in cliente.gestores` que pula a FASE 2 completamente para clientes de outros gestores. O pressuposto era que cada gestor teria sua própria planilha separada. Confirmado por Vinicius que a planilha é **única e compartilhada** — todos os 8 gestores e seus clientes vão para a mesma aba.
+
+**Arquivos afetados:**
+- `tasks/rotina-semanal.md` — remover condição que pula FASE 2 para não-Vinicius
+- `SQUADS/gestor-trafego-stark/CLAUDE.md` — corrigir linha que diz "só Vinicius tem Sheets"
+
+**Agentes responsáveis:**
+- `CLAUDE.md` → **@architect (Aria)** — decisão de design do squad
+- `rotina-semanal.md` → **@dev (Dex)** — implementação da task
+
+**Decisão:** APROVADO
+**Motivo:** A lógica atual está incorreta — ~80% dos clientes nunca têm dados preenchidos na planilha.
+
+---
+
 ## Histórico de Checkpoints
 
 | CP | Data | Sessão | O que foi feito | Próximo passo |
@@ -570,3 +598,4 @@ Tarefa de coleta de dados (não modifica código). Executa via MCP antes de qual
 | CP-06 | 2026-06-07 | Execução | Sessão 5 concluída: clientes.yaml expandido (~70 novos clientes, 8 gestores, nome_reportei em 34 entradas). Commit c742250. | Sessão 6: B2 + B1 + PR + SYNC FINAL. |
 | CP-07 | 2026-06-07 | Execução | Sessão 6 em andamento. B2 implementado com escopo expandido (ver decisão B2 acima). Descoberta: Reportei entrega CPM/CTR/freq quando integração Meta Ads ativa. Lógica corrigida para 3 fontes. CLAUDE.md atualizado. Aguardando commit @dev. | @dev commitar B2 → B1 → @devops PR + merge → SYNC FINAL. |
 | CP-08 | 2026-06-07 | CONCLUÍDO | Plano encerrado. B2 (commit 0d1921e) e B1 (commit ae52bbc) entregues. PR #2 aberto e mergeado em gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego. SYNC FINAL executado. Todas as 16 melhorias aprovadas implementadas. | — Plano encerrado. |
+| CP-09 | 2026-06-07 | Pós-entrega | Bug E1 identificado: planilha é única para todos os gestores — FASE 2 está pulando ~80% dos clientes. Registrado como Sessão 7. | Sessão 7: @architect corrige CLAUDE.md + @dev corrige rotina-semanal.md. |

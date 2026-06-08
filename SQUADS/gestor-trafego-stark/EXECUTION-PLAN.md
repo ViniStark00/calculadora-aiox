@@ -9,13 +9,27 @@
 
 ---
 
-## ✅ PLANO CONCLUÍDO — 2026-06-07
+## 👉 ESTADO ATUAL — onde parar e retomar
+
+```
+FASE:         Pós-entrega — bug identificado após conclusão do plano original
+ETAPA:        E1 — FASE 2 multi-gestor (aguardando implementação)
+PRÓXIMO:      SESSÃO 7:
+                1. 👉 @architect → corrigir CLAUDE.md: planilha é única para todos os gestores
+                2. @dev      → corrigir rotina-semanal.md: remover condição que pula FASE 2 para não-Vinicius
+                3. @dev      → commitar: "fix(sheets): E1 — FASE 2 roda para todos os gestores"
+                4. @devops   → push + PR no repo do Gustavo
+AGENTE ATIVO: —
+BRANCH:       feat/paralelismo-stark-chief (mergeada) — abrir nova branch para E1
+```
+
+---
+
+## ✅ PLANO ORIGINAL CONCLUÍDO — 2026-06-07
 
 ```
 FASE:         CONCLUÍDO ✔️ — todas as 6 sessões executadas
 ETAPA:        SYNC FINAL concluído — squad publicado no repo do Gustavo
-PRÓXIMO:      Nenhum — plano encerrado
-AGENTE ATIVO: —
 BRANCH:       feat/paralelismo-stark-chief (mergeada em main ✔️)
 ```
 
@@ -33,6 +47,30 @@ BRANCH:       feat/paralelismo-stark-chief (mergeada em main ✔️)
 | 6 | B1 — histórico JSONL | ae52bbc |
 
 **Destino final:** squad publicado em `gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego` — PR #2 mergeado em 2026-06-07.
+
+---
+
+## SESSÃO 7 — Bug E1: FASE 2 multi-gestor
+
+**Data prevista:** a definir
+**Branch:** `feat/vinicius-e1-fase2-multi-gestor` (criar nova)
+
+### E1 — FASE 2 deve rodar para todos os gestores
+
+**Bug identificado:** A planilha Google Sheets é **única e compartilhada** para todos os 8 gestores. Porém, `tasks/rotina-semanal.md` tem uma condição que pula a FASE 2 completamente para clientes não-Vinicius. Isso faz com que ~80% dos clientes nunca tenham seus dados preenchidos na planilha.
+
+**Arquivos a corrigir:**
+
+| Arquivo | Agente | O que muda |
+|---------|--------|-----------|
+| `SQUADS/gestor-trafego-stark/CLAUDE.md` | **@architect (Aria)** | Corrigir linha 49: planilha é única para todos os gestores |
+| `tasks/rotina-semanal.md` | **@dev (Dex)** | Remover condição `vinicius in cliente.gestores` que pula FASE 2 |
+
+**Instrução para @architect:**
+> "Corrija o CLAUDE.md do squad gestor-trafego-stark. Linha 49 diz 'Gestores com planilha Google Sheets (FASE 2): vinicius (estrutura legada; outros gestores: a definir).' — está errada. A planilha é única e compartilhada para todos os 8 gestores. Todos os clientes vão para a mesma aba."
+
+**Instrução para @dev:**
+> "Corrija tasks/rotina-semanal.md. Remova a condição que pula FASE 2 para clientes não-Vinicius (linhas 29-31 e 69-72). A planilha é única para todos os gestores — FASE 2 deve rodar para qualquer cliente, independente do gestor."
 
 ---
 
