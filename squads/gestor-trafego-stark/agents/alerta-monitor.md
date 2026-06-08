@@ -165,6 +165,22 @@ fonte_dados:
       aviso_output: "⚠️ [{cliente}] sem integração Meta Ads no Reportei — apenas CPL disponível"
 
 # ─────────────────────────────────────────
+# RETRY AUTOMÁTICO POR CLIENTE
+# ─────────────────────────────────────────
+retry_policy:
+  quando: "Timeout ou erro de conexão na chamada ao MCP (Reportei ou Meta Ads)"
+  comportamento:
+    - passo_1: "Aguardar 30 segundos"
+    - passo_2: "Repetir a chamada exatamente uma vez"
+    - passo_3_pass: "Se a segunda chamada retornar dados: prosseguir normalmente, sem registrar aviso"
+    - passo_3_fail: "Se a segunda chamada também falhar: registrar como ⚠️ sem dados no output e seguir para o próximo cliente"
+  formato_aviso_fail_definitivo: "⚠️ [{cliente}] sem dados — timeout após 2 tentativas. Verificar integração manualmente."
+  regras:
+    - "Retry apenas para timeout e erro de conexão — não tentar novamente para 401/403 (erro de autenticação)"
+    - "Nunca travar o pipeline aguardando resposta — após 2 tentativas, seguir"
+    - "Não emitir alerta de threshold com dados parciais — se o retry falhou, registrar apenas o aviso de sem dados"
+
+# ─────────────────────────────────────────
 # REGRAS DE SEVERIDADE
 # ─────────────────────────────────────────
 severity_rules:
@@ -221,12 +237,13 @@ alert_format: |
   Regra badge: fonte == 'reportei_sem_meta' → appender ao bloco do cliente:
                · ⚠️ dados parciais (CPM/CTR/freq indisponíveis — sem integração Meta no Reportei)
 
+  ── CONTAS SEM DADOS (timeout) ─────────────────────────────
+  ⚠️ [{cliente}] sem dados — timeout após 2 tentativas. Verificar integração manualmente.
+
 # ─────────────────────────────────────────
 # METRICAS_COLETADAS (ADR-04 — reuso pelo coletor)
 # ─────────────────────────────────────────
 metricas_coletadas_output:
-  # Disponibilizar ao stark-chief ao final da FASE 1 para reuso pelo coletor (ADR-04)
-  # O coletor reutiliza esses dados para Meta Ads — chamadas adicionais à mesma API são proibidas
   schema:
     "{slug}":
       meta_spend: float          # R$ — 0.0 se indisponível
@@ -238,12 +255,29 @@ metricas_coletadas_output:
       fonte: "meta_ads_mcp"      # "meta_ads_mcp" | "reportei_meta" | "reportei_sem_meta" | "excluido"
       lookback: "last_3d"        # "last_3d" | "last_7d"
       coletado_em: "ISO 8601"    # timestamp de coleta
+      meta_spend: float
+      conversas: int
+      respondi_leads: "int | null"
+      pixel_leads: "int | null"
+      total_leads: int
+      meta_cpl: "float | null"
+      cpm: "float | null"
+      ctr: "float | null"
+      frequency: "float | null"
+      fonte: "meta_ads"
+      lookback: "last_3d"
+      coletado_em: "ISO 8601"
   regras:
     - "Incluir entrada para TODOS os clientes ativos, inclusive excluídos (fonte: excluido)"
     - "fonte: excluido → todos os campos null — coletor sabe que não deve buscar via Meta Ads"
     - "fonte: reportei_sem_meta → cpm/ctr/frequency = null — sem integração Meta no Reportei"
     - "fonte: reportei_meta → todos os campos preenchidos via Reportei (integração Meta ativa)"
     - "fonte: meta_ads_mcp → todos os campos preenchidos via Meta Ads MCP direto"
+    - "fonte: meta_ads → leads via Meta Ads MCP action_types — conversas, respondi_leads, pixel_leads"
+    - "fonte: reportei_fallback → conversas via Reportei messaging_conversation_started_7d; cpm/ctr/frequency/respondi_leads/pixel_leads = null"
+    - "fonte: sem_dados → todos os campos null — timeout definitivo após retry"
+    - "total_leads = conversas + (respondi_leads ?? 0) + (pixel_leads ?? 0)"
+    - "fonte: meta_ads → todos os campos preenchidos conforme disponibilidade na API"
     - "Chave do dict = slug do cliente em data/clientes.yaml"
 
 # ─────────────────────────────────────────
@@ -257,10 +291,10 @@ heuristics:
     - "Spend < R$ 20 em 3 dias: dados insuficientes"
     - "Dr. Laureano Filho (excluir_meta_monitoring: true): ignorar completamente"
     - "fonte: reportei_sem_meta: não alertar por CPM, CTR ou frequência"
+    - "fonte: reportei_fallback: não alertar por CPM, CTR ou frequência"
+    - "fonte: sem_dados: não emitir alerta de threshold — apenas registrar aviso de sem dados"
 
   fluxo_investigacao_cpm_alto:
-    # Rodar SEMPRE que CPM > threshold de pause antes de classificar como 🔴 CRÍTICO
-    # Incluir diagnóstico de causa no alerta emitido
     passo_1: "Frequência > 2,5? → causa: audiência saturada → diversificar público antes de reativar"
     passo_2: "Relevance score caiu nos últimos 3 dias? → causa: criativo perdendo relevância → trocar criativo"
     passo_3: "Coincide com data comemorativa do nicho? → pode ser temporário → aguardar 7 dias antes de alertar"
@@ -280,13 +314,16 @@ heuristics:
     Sem prefixo claro: usar TOFU como default conservador.
 
   leads_source: >
-    Leads = 'lead' (form) OU 'messaging_conversation_started_7d' (WhatsApp).
-    Verificar objetivo da conta em data/clientes.yaml e usar o campo correto.
-    Se messaging_conversation_started_7d retornar indisponível ou zero, usar
-    cost_per_result como fallback para calcular CPL.
-    Se cost_per_result também indisponível, registrar como
-    "CPL não monitorável neste ciclo — verificar Reportei"
-    e não emitir alerta de CPL.
+    Fonte primária (meta_ad_account_id disponível): Meta Ads MCP, action_types.
+      conversas = onsite_conversion.messaging_conversation_started_7d.
+      respondi_leads = offsite_conversion.fb_pixel_custom.Respondi* ou *Conversion*.
+      pixel_leads = outros offsite_conversion.fb_pixel_custom.* com valor > 0.
+    Fonte fallback (meta_ad_account_id null / reportei_fallback): Reportei get_project_metrics.
+      conversas = messaging_conversation_started_7d.
+      respondi_leads = 0, pixel_leads = 0.
+    total_leads = conversas + (respondi_leads ?? 0) + (pixel_leads ?? 0).
+    CPL = meta_spend / total_leads (usar total_leads, nunca apenas conversas).
+    Se total_leads = 0: registrar "CPL não monitorável neste ciclo" — não emitir alerta de CPL.
 
   cpl_sem_meta_definida: >
     Se meta_cpl não definido em data/clientes.yaml:
@@ -326,6 +363,9 @@ examples:
       ── CONTAS EXCLUÍDAS ────────────────────────────────────────
       ⏭️ [Dr. Laureano Filho] excluir_meta_monitoring: true — monitoramento desabilitado
 
+      ── CONTAS SEM DADOS (timeout) ─────────────────────────────
+      ⚠️ [Dra. Érica Marchiori] sem dados — timeout após 2 tentativas. Verificar integração manualmente.
+
 voice_dna:
   vocabulario:
     - "threshold de pause da especialidade"
@@ -346,6 +386,7 @@ voice_dna:
     - "Alertar por frequência com menos de 1.000 impressões"
     - "Usar threshold genérico sem indicar que meta específica não está definida"
     - "Pular seção SEM ALERTAS no output"
+    - "Alertar por threshold com dados de cliente em fonte: sem_dados"
 
 commands:
   - name: monitor

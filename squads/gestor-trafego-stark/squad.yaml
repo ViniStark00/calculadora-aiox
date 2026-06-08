@@ -26,7 +26,7 @@ components:
     - agents/coletor.md
     - agents/redator.md
     - agents/publicador.md
-    - agents/whatsapp-writer.md
+    - agents/onboarding-manager.md
     - agents/contexto-cliente.md
     - agents/alerta-monitor.md
     - agents/clickup-writer.md
@@ -38,6 +38,7 @@ components:
     - tasks/validate-report.md
     - tasks/publish-timeline.md
     - tasks/save-history.md
+    - tasks/onboarding-gestor.md
     - tasks/monitorar-contas.md
     - tasks/preencher-clickup.md
     - tasks/rotina-diaria.md
@@ -51,7 +52,6 @@ components:
     - checklists/clickup-gate.md
   templates:
     - templates/relatorio-template.md
-    - templates/whatsapp-template.md
     - templates/contexto-cliente-template.md
   data:
     - data/clientes.yaml
@@ -125,7 +125,7 @@ pipeline_flow: >
   stark-chief → alerta-monitor (FASE 1: metricas_coletadas)
   → [SE vinicius] coletor (FASE 2: reutiliza metricas_coletadas) → validator (gate_sheets)
   → redator (FASE 3) → validator (gate_reportei)
-  → [PARALELO] publicador + whatsapp-writer (FASE 4) ∥ clickup-writer → validator (gate_clickup) (FASE 5)
+  → [PARALELO] publicador (FASE 4) ∥ clickup-writer → validator (gate_clickup) (FASE 5)
   → contexto-cliente (atualização) + task-monitor + coletor (save-history) (FASE 6)
   → resumo final
 

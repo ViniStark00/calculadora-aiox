@@ -7,23 +7,23 @@ squad: gestor-trafego-stark
 
 # relatorio-gate — Checklist de Aceite: Relatório Reportei
 
-**Gate aplicado após:** `redator` gera narrativa HTML + `publicador` publica marco na Timeline
+**Gate aplicado após:** `redator` gera narrativa HTML completa — **antes da publicação no Reportei**.
 
 ---
 
 ## Critérios de aceite (5)
 
-- [ ] **1. report_id confirmado** — resposta do MCP `create_timeline_event` contém ID do evento criado
-- [ ] **2. timeline_event_id confirmado** — ID do evento não é null e foi registrado em `data/timeline-log.jsonl`
-- [ ] **3. HTML contém métricas obrigatórias** — texto do marco de timeline contém pelo menos: `spend`, `leads` ou `conversas`, `CPL` (ou `CPL: -` se conversas = 0), `CTR`, `CPM` — nenhum placeholder `[XXX]` não substituído
-- [ ] **4. Período correto** — título ou cabeçalho do relatório e do marco refletem a semana correta (segunda a domingo da semana anterior)
-- [ ] **5. HTML válido** — nenhuma tag HTML aberta sem fechar (`<p>`, `<strong>`, `<br>` — verificar fechamento de todas as tags)
+- [ ] **1. HTML sem placeholders abertos** — nenhum `[XXX]` não substituído. Campos indisponíveis devem estar como `X`, nunca como placeholder literal.
+- [ ] **2. Métricas obrigatórias presentes** — HTML contém pelo menos: `spend`, `leads` ou `conversas`, `CPL` (ou `CPL: -` se total_leads = 0). Ver notas de borda para exceções por tipo de cliente.
+- [ ] **3. Saúde de campanhas presente (Meta)** — para clientes com `meta_spend > 0` e `fonte != reportei_fallback`: HTML contém CTR, CPM, Frequência e CPC. Se algum campo for `X`, critério passa desde que aviso tenha sido emitido no output pelo redator.
+- [ ] **4. Período correto** — cabeçalho do relatório reflete a semana correta (segunda a domingo da semana anterior) no formato `DD/MM a DD/MM`.
+- [ ] **5. HTML válido** — nenhuma tag HTML aberta sem fechar (`<p>`, `<strong>` — verificar fechamento de todas as tags). `<br>` é self-closing em HTML5 — sempre passa.
 
 ---
 
 ## Resultado esperado
 
-**PASS:** todos os 5 critérios atendidos → `publicador` aciona `whatsapp-writer` e pipeline avança para FASE 4∥5
+**PASS:** todos os 5 critérios atendidos → `publicador` aciona `create_timeline_event` e pipeline avança para FASE 4
 
 **FAIL — 1ª vez:** retornar ao `redator` para regeneração do texto
 **FAIL — 2ª vez:** interromper pipeline; aguardar ação do gestor
@@ -34,7 +34,7 @@ squad: gestor-trafego-stark
 
 ```
 ✅ GATE PASS — relatorio-gate — [CLIENTE] (semana DD/MM a DD/MM/AAAA)
-   5/5 critérios atendidos. Publicação confirmada: timeline_event_id = XXXXX.
+   5/5 critérios atendidos. Publicação autorizada.
 ```
 
 ```
@@ -50,7 +50,9 @@ squad: gestor-trafego-stark
 
 | Situação | Comportamento |
 |----------|--------------|
-| `conversas = 0` e CPL = `-` | Critério 3 passa se texto contém `CPL: -` ou `CPL não calculável` |
-| Cliente Google-only (Dr. Laureano Filho) | Critério 3 não exige `CPL/conversas` — exige `conversões`, `CPC`, `cliques` em vez disso |
-| Tag `<br>` sem fechar | Critério 5 PASS — `<br>` é self-closing em HTML5 |
+| `total_leads = 0` e CPL = `-` | Critério 2 passa se texto contém `CPL: -` |
+| Cliente Google-only (Dr. Laureano Filho — cirurgia_ortognatica) | Critério 2: exige `conversões`, `CPC`, `cliques` — não exige CPL por conversa. Critério 3: não se aplica (sem Meta Ads) |
+| Cliente com `fonte: reportei_fallback` (meta_ad_account_id: null) | Critério 3 não se aplica — CTR/CPM/Frequência/CPC não são coletáveis via Reportei para esse cliente |
+| Campo com valor `X` (dado indisponível) | Critério 3 passa se aviso correspondente foi emitido no output pelo redator |
 | Evento já existe para o período | Critério 1 FAIL — perguntar ao gestor antes de republicar |
+| Tag `<br>` sem fechar | Critério 5 PASS — `<br>` é self-closing em HTML5 |

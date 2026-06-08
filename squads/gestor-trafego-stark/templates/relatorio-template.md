@@ -12,48 +12,31 @@
 
 <br>
 
-<p><strong>🚀 Visão Geral do Período</strong></p>
-<p>[PARAGRAFO_NARRATIVO — abrir com "Na semana de [DATA_INICIO] a [DATA_FIM]," + alcance, CPL e investimento. 1 parágrafo único e fluido.]</p>
-<p><strong>Investimento Total Meta:</strong> R$ [META_SPEND]</p>
+<p><strong>💰 Investimento & Canais</strong></p>
 
-<!-- SE total_leads = conversas (apenas WhatsApp): -->
-<p><strong>Custo Médio por Lead (CPL):</strong> R$ [CPL]</p>
+<!-- SE total_leads = conversas (apenas WhatsApp — sem Respondi): -->
+<p><strong>Meta Ads:</strong> R$ [META_SPEND] investidos | conversas: [CONVERSAS] | <strong>CPL: R$ [CPL]</strong> [STATUS_CPL_TEXTO]</p>
 
-<!-- SE total_leads > conversas (Respondi ou outros leads detectados): -->
-<!-- <p><strong>Custo Médio por Lead (CPL):</strong> R$ [CPL] ([TOTAL_LEADS] leads — WhatsApp: [CONVERSAS] · Respondi: [RESPONDI_LEADS] · Pixel: [PIXEL_LEADS])</p> -->
-<!-- (omitir fontes com valor zero ou null na linha de detalhamento) -->
+<!-- SE total_leads > conversas (Respondi detectado) E meta_ad_account_id disponível (CPL por fonte calculável): -->
+<!-- <p><strong>Meta Ads:</strong> R$ [META_SPEND] investidos | [TOTAL_LEADS] leads | <strong>CPL médio: R$ [CPL]</strong> [STATUS_CPL_TEXTO]</p> -->
+<!-- <p>↳ WhatsApp: [CONVERSAS] leads | CPL: R$ [CPL_WPP]</p> -->
+<!-- <p>↳ Respondi: [RESPONDI_LEADS] leads | CPL: R$ [CPL_RESPONDI] <em>(formulário — tende a ser mais qualificado)</em></p> -->
 
-<br>
+<!-- SE total_leads > conversas (Respondi detectado) E meta_ad_account_id null (CPL por fonte não calculável): -->
+<!-- <p><strong>Meta Ads:</strong> R$ [META_SPEND] investidos | [TOTAL_LEADS] leads | <strong>CPL médio: R$ [CPL]</strong> [STATUS_CPL_TEXTO]</p> -->
+<!-- <p>↳ WhatsApp: [CONVERSAS] · Respondi: [RESPONDI_LEADS]</p> -->
 
-<p><strong>🔍 Análise do Funil de Vendas (Meta)</strong></p>
-
-<p><strong>Topo de Funil (TOFU) — Atração e Alcance</strong></p>
-<p>Alcance: ~[ALCANCE] | Impressões: ~[IMPRESSOES] | Frequência: [FREQUENCIA]</p>
-<p>[ANALISE_TOFU — 1–2 frases objetivas sobre alcance, volume e saturação de público.]</p>
+<p><strong>Crescimento do Perfil:</strong> +[SEGUIDORES] novos seguidores</p>
 
 <br>
 
-<p><strong>Meio de Funil (MOFU) — Qualificação e Consideração</strong></p>
-<p>CTR no link: [CTR]% | CPC estimado: R$ [CPC] | CPM: R$ [CPM]</p>
-<p>Taxa clique→conversa: ~[TAXA_CLIQUE_CONVERSA]%</p>
-<p>[ANALISE_MOFU — 1–2 frases sobre qualidade do tráfego, engajamento e eficiência de custo por clique.]</p>
+<p><strong>📈 Saúde das Campanhas (Meta Ads)</strong></p>
+<p><strong>CPM: R$ [CPM]</strong> | <strong>Frequência: [FREQUENCIA]</strong> — [ANALISE_LEILAO]</p>
+<p><strong>CTR: [CTR]%</strong> | <strong>CPC: R$ [CPC]</strong> — [ANALISE_ENGAJAMENTO]</p>
 
 <br>
 
-<p><strong>Fundo de Funil (BOFU) — Conversão Direta</strong></p>
-
-<!-- SE total_leads = conversas (apenas WhatsApp): -->
-<p>[CONVERSAS] conversas | CPL R$ [CPL] | [STATUS_CPL]</p>
-
-<!-- SE total_leads > conversas (Respondi ou outros): -->
-<!-- <p>[TOTAL_LEADS] leads ([CONVERSAS] WhatsApp + [RESPONDI_LEADS] Respondi) | CPL R$ [CPL] | [STATUS_CPL]</p> -->
-<!-- (omitir fontes com valor zero ou null) -->
-
-<p>[ANALISE_BOFU — 1–2 frases sobre volume de leads, CPL vs referência da especialidade e variação histórica se disponível.]</p>
-
-<br>
-
-<p><strong>📝 Próximos Passos & Otimizações</strong></p>
+<p><strong>⚠️ Próximos Passos & Diagnóstico</strong></p>
 <p>→ [ACAO_1]</p>
 <p>→ [ACAO_2]</p>
 
@@ -71,56 +54,33 @@
 
 <br>
 
-<p><strong>🚀 Visão Geral do Período</strong></p>
-<p>[PARAGRAFO_NARRATIVO — abrir com "Na semana de [DATA_INICIO] a [DATA_FIM]," + mencionar ambas as plataformas, alcance, conversas/conversões, CPL/CPC e total investido.]</p>
-<p><strong>Investimento Total:</strong> R$ [TOTAL] (Meta: R$ [META_SPEND] + Google: R$ [GOOGLE_SPEND])</p>
+<p><strong>💰 Investimento & Canais</strong></p>
 
-<!-- SE total_leads = conversas (apenas WhatsApp): -->
-<p><strong>Custo Médio por Lead Meta (CPL):</strong> R$ [CPL]</p>
+<!-- SE total_leads = conversas (apenas WhatsApp — sem Respondi): -->
+<p><strong>Meta Ads:</strong> R$ [META_SPEND] investidos | conversas: [CONVERSAS] | <strong>CPL: R$ [CPL]</strong> [STATUS_CPL_TEXTO]</p>
 
-<!-- SE total_leads > conversas (Respondi ou outros): -->
-<!-- <p><strong>Custo Médio por Lead Meta (CPL):</strong> R$ [CPL] ([TOTAL_LEADS] leads — WhatsApp: [CONVERSAS] · Respondi: [RESPONDI_LEADS] · Pixel: [PIXEL_LEADS])</p> -->
-<!-- (omitir fontes com valor zero ou null) -->
+<!-- SE total_leads > conversas (Respondi detectado) E meta_ad_account_id disponível (CPL por fonte calculável): -->
+<!-- <p><strong>Meta Ads:</strong> R$ [META_SPEND] investidos | [TOTAL_LEADS] leads | <strong>CPL médio: R$ [CPL]</strong> [STATUS_CPL_TEXTO]</p> -->
+<!-- <p>↳ WhatsApp: [CONVERSAS] leads | CPL: R$ [CPL_WPP]</p> -->
+<!-- <p>↳ Respondi: [RESPONDI_LEADS] leads | CPL: R$ [CPL_RESPONDI] <em>(formulário — tende a ser mais qualificado)</em></p> -->
 
-<p><strong>Custo por Conversão Google:</strong> R$ [CPC_CONVERSAO]</p>
+<!-- SE total_leads > conversas (Respondi detectado) E meta_ad_account_id null (CPL por fonte não calculável): -->
+<!-- <p><strong>Meta Ads:</strong> R$ [META_SPEND] investidos | [TOTAL_LEADS] leads | <strong>CPL médio: R$ [CPL]</strong> [STATUS_CPL_TEXTO]</p> -->
+<!-- <p>↳ WhatsApp: [CONVERSAS] · Respondi: [RESPONDI_LEADS]</p> -->
 
-<br>
-
-<p><strong>🔍 Análise do Funil de Vendas (Meta)</strong></p>
-
-<p><strong>Topo de Funil (TOFU) — Atração e Alcance</strong></p>
-<p>Alcance: ~[ALCANCE] | Impressões: ~[IMPRESSOES] | Frequência: [FREQUENCIA]</p>
-<p>[ANALISE_TOFU]</p>
+<p><strong>Google Ads:</strong> R$ [GOOGLE_SPEND] investidos | [CONVERSOES] contatos | <strong>CPL: R$ [CPC_CONVERSAO]</strong> [STATUS_CPC_TEXTO]</p>
+<p><strong>Geral:</strong> R$ [TOTAL] investidos | [TOTAL_LEADS_GERAL] leads | <strong>CPL Médio: R$ [CPL_MEDIO]</strong></p>
+<p><strong>Crescimento do Perfil:</strong> +[SEGUIDORES] novos seguidores</p>
 
 <br>
 
-<p><strong>Meio de Funil (MOFU) — Qualificação e Consideração</strong></p>
-<p>CTR no link: [CTR]% | CPC estimado: R$ [CPC] | CPM: R$ [CPM]</p>
-<p>Taxa clique→conversa: ~[TAXA_CLIQUE_CONVERSA]%</p>
-<p>[ANALISE_MOFU]</p>
+<p><strong>📈 Saúde das Campanhas (Meta Ads)</strong></p>
+<p><strong>CPM: R$ [CPM]</strong> | <strong>Frequência: [FREQUENCIA]</strong> — [ANALISE_LEILAO]</p>
+<p><strong>CTR: [CTR]%</strong> | <strong>CPC: R$ [CPC]</strong> — [ANALISE_ENGAJAMENTO]</p>
 
 <br>
 
-<p><strong>Fundo de Funil (BOFU) — Conversão Direta</strong></p>
-
-<!-- SE total_leads = conversas (apenas WhatsApp): -->
-<p>[CONVERSAS] conversas | CPL R$ [CPL] | [STATUS_CPL]</p>
-
-<!-- SE total_leads > conversas (Respondi ou outros): -->
-<!-- <p>[TOTAL_LEADS] leads ([CONVERSAS] WhatsApp + [RESPONDI_LEADS] Respondi) | CPL R$ [CPL] | [STATUS_CPL]</p> -->
-<!-- (omitir fontes com valor zero ou null) -->
-
-<p>[ANALISE_BOFU]</p>
-
-<br>
-
-<p><strong>🔍 Análise Google Ads</strong></p>
-<p>Cliques: [CLIQUES] | Conversões: [CONVERSOES] | Custo por Conversão: R$ [CPC_CONVERSAO]</p>
-<p>[ANALISE_GOOGLE — 1–2 frases sobre performance das palavras-chave e conversões Google.]</p>
-
-<br>
-
-<p><strong>📝 Próximos Passos & Otimizações</strong></p>
+<p><strong>⚠️ Próximos Passos & Diagnóstico</strong></p>
 <p>→ [ACAO_1]</p>
 <p>→ [ACAO_2]</p>
 
@@ -138,28 +98,18 @@
 
 <br>
 
-<p><strong>🚀 Visão Geral do Período</strong></p>
-<p>[PARAGRAFO_NARRATIVO — abrir com "Na semana de [DATA_INICIO] a [DATA_FIM]," + cliques, conversões, custo por conversão e investimento total.]</p>
-<p><strong>Investimento Total Google:</strong> R$ [GOOGLE_SPEND]</p>
-<p><strong>Custo por Conversão:</strong> R$ [CPC_CONVERSAO]</p>
+<p><strong>💰 Investimento & Canais</strong></p>
+<p><strong>Google Ads:</strong> R$ [GOOGLE_SPEND] investidos | [CONVERSOES] contatos | <strong>CPL: R$ [CPC_CONVERSAO]</strong> [STATUS_CPC_TEXTO]</p>
 
 <br>
 
-<p><strong>🔍 Análise Google Ads</strong></p>
-
-<p><strong>Volume de Tráfego</strong></p>
-<p>Cliques: [CLIQUES] | Impressões: ~[IMPRESSOES] | CTR: [CTR]%</p>
-<p>[ANALISE_VOLUME — 1–2 frases sobre volume de busca, CTR e qualidade do tráfego.]</p>
+<p><strong>📈 Saúde das Campanhas (Google Ads)</strong></p>
+<p><strong>Cliques: [CLIQUES]</strong> | <strong>Impressões: ~[IMPRESSOES]</strong> | <strong>CTR: [CTR]%</strong> — [ANALISE_VOLUME]</p>
+<p><strong>Conversões: [CONVERSOES]</strong> | <strong>Custo por Conversão: R$ [CPC_CONVERSAO]</strong> — [ANALISE_CONVERSOES]</p>
 
 <br>
 
-<p><strong>Conversões</strong></p>
-<p>[CONVERSOES] conversões | Custo por Conversão: R$ [CPC_CONVERSAO] | [STATUS_CPC]</p>
-<p>[ANALISE_CONVERSOES — 1–2 frases sobre volume de conversões, custo vs referência da especialidade e variação histórica se disponível.]</p>
-
-<br>
-
-<p><strong>📝 Próximos Passos & Otimizações</strong></p>
+<p><strong>⚠️ Próximos Passos & Diagnóstico</strong></p>
 <p>→ [ACAO_1]</p>
 <p>→ [ACAO_2]</p>
 
@@ -176,29 +126,30 @@
 |-------------|-------|-------------|-------|
 | `[DATA_INICIO]` | Calculado (segunda-feira) | ✅ | Formato: DD/MM |
 | `[DATA_FIM]` | Calculado (domingo) | ✅ | Formato: DD/MM |
-| `[PARAGRAFO_NARRATIVO]` | Gerado pelo redator | ✅ | Abre com "Na semana de DD/MM a DD/MM," |
 | `[META_SPEND]` | metricas_coletadas | ✅ se META | Formato: R$ X.XXX,XX |
 | `[GOOGLE_SPEND]` | metricas_coletadas | ✅ se Google | Formato: R$ X.XXX,XX |
 | `[TOTAL]` | Calculado (META + Google) | ✅ se ambos | Formato: R$ X.XXX,XX |
-| `[ALCANCE]` | MCP Reportei | ✅ se META | Contas alcançadas |
-| `[IMPRESSOES]` | MCP Reportei | ✅ | Impressões totais |
-| `[FREQUENCIA]` | MCP Reportei | ⚠️ se disponível | Impressões / Alcance |
-| `[CTR]` | MCP Reportei | ✅ | CTR no link (%) |
-| `[CPC]` | MCP Reportei | ✅ se META | Custo por clique |
-| `[CPM]` | MCP Reportei | ✅ se META | Custo por mil impressões |
-| `[TAXA_CLIQUE_CONVERSA]` | Calculado (conversas / cliques × 100) | ⚠️ se disponível | % de cliques que viraram conversa |
+| `[TOTAL_LEADS]` | Calculado (conversas + respondi_leads + pixel_leads) | ✅ se META | Base do CPL médio |
 | `[CONVERSAS]` | metricas_coletadas | ✅ se META | Leads WhatsApp |
-| `[RESPONDI_LEADS]` | Auto-discovery slug `*respondi*` | ⚠️ se detectado | Leads formulário Respondi |
-| `[PIXEL_LEADS]` | Auto-discovery slug `offsite_conversion.*` | ⚠️ se detectado | Leads de pixel Meta |
-| `[TOTAL_LEADS]` | Calculado (conversas + respondi + pixel) | ⚠️ se múltiplas fontes | Base do CPL quando > conversas |
-| `[CPL]` | Calculado (meta_spend / total_leads) | ✅ se META | `R$ X,XX` ou `-` se total_leads = 0 |
-| `[STATUS_CPL]` | Classificação por threshold | ✅ se META | Ex: "dentro da referência", "acima da referência para a especialidade" |
-| `[CLIQUES]` | MCP Reportei | ✅ se Google | Cliques totais |
+| `[RESPONDI_LEADS]` | Auto-discovery | ⚠️ se detectado | Leads formulário Respondi |
+| `[CPL]` | Calculado (meta_spend / total_leads) | ✅ se META | CPL médio; `-` se total_leads = 0 |
+| `[CPL_WPP]` | Calculado (spend_campanhas_mensagens / conversas) | ⚠️ se Respondi + meta_ad_account_id disponível | Omitir se meta_ad_account_id null |
+| `[CPL_RESPONDI]` | Calculado (spend_campanhas_leads / respondi_leads) | ⚠️ se Respondi + meta_ad_account_id disponível | Omitir se meta_ad_account_id null |
+| `[STATUS_CPL_TEXTO]` | Classificação por threshold | ✅ se META | Ex: "*(dentro da referência para a especialidade)*" |
+| `[SEGUIDORES]` | MCP Reportei | ✅ se META | Novos seguidores; `X` se indisponível |
+| `[CPM]` | MCP Reportei | ✅ se META | `X` se indisponível — emitir aviso |
+| `[FREQUENCIA]` | MCP Reportei | ✅ se META | `X` se indisponível — emitir aviso |
+| `[CTR]` | MCP Reportei | ✅ se META | `X` se indisponível — emitir aviso |
+| `[CPC]` | MCP Reportei | ✅ se META | `X` se indisponível — emitir aviso |
+| `[ANALISE_LEILAO]` | Gerado pelo redator | ✅ se META | 1 frase sobre CPM/Frequência |
+| `[ANALISE_ENGAJAMENTO]` | Gerado pelo redator | ✅ se META | 1 frase sobre CTR/CPC |
 | `[CONVERSOES]` | metricas_coletadas | ✅ se Google | Conversões diretas |
 | `[CPC_CONVERSAO]` | MCP Reportei | ✅ se Google | Custo por conversão Google |
-| `[STATUS_CPC]` | Classificação por threshold | ✅ se Google | Ex: "dentro da referência" |
-| `[ANALISE_TOFU]` | Gerado pelo redator | ✅ se META | 1–2 frases objetivas |
-| `[ANALISE_MOFU]` | Gerado pelo redator | ✅ se META | 1–2 frases objetivas |
-| `[ANALISE_BOFU]` | Gerado pelo redator | ✅ se META | 1–2 frases + CPL vs threshold |
-| `[ANALISE_GOOGLE]` | Gerado pelo redator | ✅ se Google | 1–2 frases objetivas |
-| `[ACAO_1]`, `[ACAO_2]` | Gerado pelo redator | ✅ | Ações técnicas concretas (ver regras de escopo) |
+| `[STATUS_CPC_TEXTO]` | Classificação por threshold | ✅ se Google | Ex: "*(dentro da referência)*" |
+| `[CLIQUES]` | MCP Reportei | ✅ se Google | Cliques totais |
+| `[IMPRESSOES]` | MCP Reportei | ✅ se Google | Impressões totais |
+| `[ANALISE_VOLUME]` | Gerado pelo redator | ✅ se Google-only | 1 frase sobre volume e qualidade |
+| `[ANALISE_CONVERSOES]` | Gerado pelo redator | ✅ se Google-only | 1 frase sobre conversões e custo |
+| `[ACAO_1]`, `[ACAO_2]` | Gerado pelo redator | ✅ | Ações técnicas concretas |
+| `[TOTAL_LEADS_GERAL]` | Calculado (TOTAL_LEADS + CONVERSOES) | ✅ se META+Google | Base do CPL Médio |
+| `[CPL_MEDIO]` | Calculado ((meta_spend + google_spend) / TOTAL_LEADS_GERAL) | ✅ se META+Google | `R$ X,XX` |
