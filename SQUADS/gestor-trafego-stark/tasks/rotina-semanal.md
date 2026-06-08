@@ -193,8 +193,9 @@ mensagem_whatsapp: str
 
 **Agente:** `coletor`
 **Task:** `tasks/save-history.md`
-- Persistir métricas da semana em `data/historico-clientes.yaml`
-- Nunca bloqueia; falha emite aviso e continua
+- Persistir métricas da semana em `data/historico-metricas.jsonl` (uma linha JSON por cliente)
+- Idempotente: rodar duas vezes na mesma semana não duplica entradas
+- Nunca bloqueia; se save-history falhar, emitir aviso no resumo final e continuar
 
 ### Sub-passo 6.2 — Atualizar contexto do cliente no Drive
 
