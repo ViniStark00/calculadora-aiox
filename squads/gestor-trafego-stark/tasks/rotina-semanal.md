@@ -41,6 +41,13 @@ Determinar `gestor` do cliente:
 Monitorar TODAS as contas ativas — não apenas o cliente solicitado.
 O monitoramento é sempre global (carteira completa, ambos os gestores).
 
+### Orquestração em lotes (C1)
+O `alerta-monitor` processa clientes em lotes paralelos:
+- Tamanho do lote: `pipeline.lote_paralelo` em `config/settings.yaml` (padrão: 3)
+- Cada lote processa todos os seus clientes EM PARALELO
+- Próximo lote só inicia após o lote atual terminar completamente
+- Rate limit global compartilhado entre clientes do mesmo lote (ver `rate_limit_global` em alerta-monitor)
+
 ### Handoff de saída
 ```yaml
 alertas_ativos: list[alerta]    # 🔴🟡ℹ️ gerados
@@ -64,6 +71,8 @@ metricas_coletadas: dict        # keyed por slug — para reuso na FASE 2
 **Condição:** `vinicius in cliente.gestores`
 **Se cliente só de Gustavo:** PULAR FASE 2 completamente — avançar para FASE 3
 
+> **Serializada:** FASE 2 processa um cliente por vez — sem paralelismo.
+
 **Agente:** `coletor`
 **Tasks:** `tasks/fetch-metrics.md` + `tasks/verify-fill.md`
 
@@ -85,6 +94,13 @@ metricas_coletadas: dict  # reutilizar dados Meta Ads sem nova chamada à API (A
 ---
 
 ## FASE 3 — NARRATIVA DO RELATÓRIO (obrigatória)
+
+### Orquestração em lotes (modo bulk — C1)
+Quando `*rotina-semanal` processa múltiplos clientes simultaneamente:
+- Tamanho do lote: `pipeline.lote_paralelo` em `config/settings.yaml` (padrão: 3)
+- FASE 3 executa em lotes de `lote_paralelo` em paralelo
+- Cada lote aguarda o anterior finalizar antes de prosseguir
+- FASE 2 (Sheets) permanece serializada — não é afetada por este modo
 
 **Agentes:** `contexto-cliente` (não-bloqueante) → `redator` → `validator`
 **Tasks:** `tasks/generate-report.md` + `tasks/validate-report.md`
@@ -177,8 +193,9 @@ mensagem_whatsapp: str
 
 **Agente:** `coletor`
 **Task:** `tasks/save-history.md`
-- Persistir métricas da semana em `data/historico-clientes.yaml`
-- Nunca bloqueia; falha emite aviso e continua
+- Persistir métricas da semana em `data/historico-metricas.jsonl` (uma linha JSON por cliente)
+- Idempotente: rodar duas vezes na mesma semana não duplica entradas
+- Nunca bloqueia; se save-history falhar, emitir aviso no resumo final e continuar
 
 ### Sub-passo 6.2 — Atualizar contexto do cliente no Drive
 
