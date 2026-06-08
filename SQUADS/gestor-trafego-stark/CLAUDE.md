@@ -49,12 +49,18 @@ Fonte de dados: `data/clientes.yaml` — lista única, sem duplicatas.
 Gestores com planilha Google Sheets (FASE 2): vinicius (estrutura legada; outros gestores: a definir).
 Gestores com ClickUp (FASE 5): gustavo (estrutura legada; outros gestores: a definir).
 
-## Lógica de Fallback Meta Ads → Reportei
+## Lógica de Fonte de Dados — Monitoramento (alerta-monitor)
 
-Para monitoramento (alerta-monitor):
-- `meta_ad_account_id` preenchido → Meta Ads MCP (CPL, CPM, CTR, frequência)
-- `meta_ad_account_id: null` → Reportei API (apenas CPL disponível — sem CPM/CTR/freq)
+Três fontes possíveis, detectadas automaticamente em runtime:
+
+| Fonte | Condição | CPM/CTR/freq? |
+|---|---|---|
+| `meta_ads_mcp` | `meta_ad_account_id` preenchido | ✅ Sim — via Meta Ads MCP |
+| `reportei_meta` | `meta_ad_account_id: null` + Reportei tem integração Meta Ads ativa | ✅ Sim — via Reportei |
+| `reportei_sem_meta` | `meta_ad_account_id: null` + Reportei sem integração Meta Ads | ❌ Não — apenas CPL |
+
 - `excluir_meta_monitoring: true` → pular completamente (Dr. Laureano Filho)
+- Badge `⚠️ dados parciais` apenas quando `fonte == 'reportei_sem_meta'`
 
 ## Reuso de Dados FASE 1 → FASE 2
 

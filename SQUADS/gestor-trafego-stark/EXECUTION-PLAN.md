@@ -12,16 +12,17 @@
 ## 👉 ESTADO ATUAL — onde parar e retomar
 
 ```
-FASE:         Execução — SESSÕES 1, 2, 3, 4 e 5 CONCLUÍDAS ✔️
-ETAPA:        Sessão 5 concluída — C3/D1 commitados (c742250) e pushados
-PRÓXIMO:      SESSÃO 6 (ÚLTIMA):
-                1. @architect → B2: badge "dados parciais" em agents/alerta-monitor.md
-                2. @dev      → B1: histórico JSONL em tasks/save-history.md + rotina-semanal.md
-                3. @devops   → gh pr create feat/paralelismo-stark-chief → main
-                4. Você revisa e aprova o PR no GitHub
-                5. @devops   → gh pr merge
-                6. SYNC FINAL (manual): copiar squads/gestor-trafego-stark/ para
-                   gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego → push main
+FASE:         Execução — SESSÕES 1, 2, 3, 4 e 5 CONCLUÍDAS ✔️ · SESSÃO 6 EM ANDAMENTO
+ETAPA:        B2 implementado em agents/alerta-monitor.md — aguardando commit do @dev
+PRÓXIMO:      SESSÃO 6 (continuação):
+                1. ✔️ @architect → B2 implementado (escopo expandido — ver CP-07)
+                2. 👉 @dev      → commitar B2: "feat(monitor): B2 — badge dados parciais e lógica correta de detecção Meta Ads via Reportei"
+                3. @dev      → B1: histórico JSONL em tasks/save-history.md + rotina-semanal.md
+                4. @devops   → push + gh pr create feat/paralelismo-stark-chief → main
+                5. Você revisa e aprova o PR no GitHub
+                6. @devops   → gh pr merge
+                7. SYNC FINAL (manual): branch feat/vinicius-16-melhorias-stark-chief no repo
+                   gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego → PR → Gustavo aprova → merge
 AGENTE ATIVO: —
 BRANCH:       feat/paralelismo-stark-chief
 ```
@@ -179,7 +180,7 @@ BRANCH:       feat/paralelismo-stark-chief
 | C2 | Contador global rate limit Reportei | Confiabilidade | @dev (Dex) | ✅ APROVADO | 4 |
 | C3 | campo nome_reportei no clientes.yaml | Dados | @dev (Dex) | ✅ APROVADO | 5 |
 | D1 | Atualizar clientes.yaml com ~90 clientes ativos | Dados | @dev (Dex) | ✅ APROVADO | 5 |
-| B2 | Badge "dados parciais" no painel de alertas | Monitoramento | @architect (Aria) | ✅ APROVADO | 6 |
+| B2 | Badge "dados parciais" no painel de alertas | Monitoramento | @architect (Aria) | 🔄 EM EXECUÇÃO | 6 |
 | B1 | Histórico persistido JSONL | Monitoramento | @dev (Dex) | ✅ APROVADO | 6 |
 
 > **Ordem obrigatória:** PRÉ → 1 → 2 → 3 → 4 → 5 → 6
@@ -433,14 +434,37 @@ Opção B — um commit único ao final (mais simples):
 O squad foi desenvolvido aqui (ViniStark00/calculadora-aiox) e precisa ser
 copiado de volta para o repositório original após o merge do PR.
 
-Passos manuais (você executa):
-1. Abrir o clone local de:
-   https://github.com/gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego
-2. Substituir a pasta squads/gestor-trafego-stark/ pelo conteúdo atualizado
-3. Commitar com: "feat(gestor-trafego-stark): 16 melhorias — período, planilha, agentes, dados e monitoramento"
-4. Push para main daquele repo
+⚠️ Seguir o fluxo do GUIA-GIT-COLABORADORES.md (criado pelo Gustavo) — nunca
+   editar direto no main, sempre via branch + PR para não sobrescrever mudanças dele.
 
-→ Squad disponível no destino final ✅
+Passos manuais (você executa):
+1. Abrir o terminal na pasta do clone local de:
+   https://github.com/gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego
+
+2. Atualizar o main local:
+   git checkout main
+   git pull origin main
+
+3. Criar branch própria:
+   git checkout -b feat/vinicius-16-melhorias-stark-chief
+
+4. Substituir a pasta squads/gestor-trafego-stark/ pelo conteúdo atualizado
+   (copiar de ViniStark00/calculadora-aiox/squads/gestor-trafego-stark/)
+
+5. Commitar:
+   git add squads/gestor-trafego-stark/
+   git commit -m "feat(gestor-trafego-stark): 16 melhorias — período, planilha, agentes, dados e monitoramento"
+
+6. Push da branch:
+   git push origin feat/vinicius-16-melhorias-stark-chief
+
+7. Abrir PR no GitHub:
+   https://github.com/gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego
+   base: main ← compare: feat/vinicius-16-melhorias-stark-chief
+
+8. Avisar Gustavo para revisar e fazer o merge
+
+→ Squad disponível no destino final após merge ✅
 ```
 
 ---
@@ -643,3 +667,4 @@ FINAL                      gustavoradler-cyber/treinamento-orquestradores-stark-
 | CP-04 | 2026-06-06 | Execução | PRÉ-SESSÃO commitada e pushada (commit 847774d). Squad completo + hooks versionados. SESSÃO 1 (D2) concluída: 100 clientes mapeados Reportei × Planilha, 15 descartados. MANUAL_MAP salvo neste documento. | SESSÃO 2: @dev corrigir A0-a (edge case domingo em calcular_aba) + A0-b (substituir last_7d por datas fixas nos agentes). |
 | CP-05 | 2026-06-06 | Execução | SESSÃO 2 concluída: A0-a (edge case domingo) + A0-b (last_7d → date_from/date_to) corrigidos. Commit 782ab72. SESSÃO 3 concluída: A1 (tab management + isolamento multi-gestor) + A2 (--dry-run) + A3 (validação de schema) + C4 (_to_float, retry 429, ARS) implementados em fill_sheets.py. Commit b7fb46e. | SESSÃO 4: @dev → C1 (lotes de 3 em paralelo nos agentes) + C2 (contador global rate limit Reportei). |
 | CP-06 | 2026-06-07 | Execução | SESSÃO 4 concluída: C1/C2 commitados (6cb8700) e pushados. SESSÃO 5 concluída: D1 — clientes.yaml expandido com 8 gestores (andreyves, richard, luiz, mateus, thiago, wallison + novos gustavo, amanda), ~70 novos clientes, 11 reportei_project_ids preenchidos, 6 gestores atualizados, 3 marcados ativo:false, 8 inativos adicionados. C3 — campo nome_reportei adicionado em 34 entradas com divergência nome×Reportei. CLAUDE.md atualizado para 8 gestores. Commit c742250 pushado. Dr. Orozimbo (783368) confirmado fora da carteira. | SESSÃO 6: @architect → B2 (alerta-monitor.md) + @dev → B1 (histórico JSONL) + @devops → PR + merge + SYNC FINAL. |
+| CP-07 | 2026-06-07 | Execução | SESSÃO 6 em andamento. B2 implementado em agents/alerta-monitor.md com escopo expandido: descoberto que lógica de reportei_fallback estava errada — Reportei entrega CPM/CTR/freq quando integração Meta Ads está ativa (confirmado via teste com Dr. Leandro Gontijo, project_id 627550). Lógica corrigida para 3 fontes: meta_ads_mcp / reportei_meta / reportei_sem_meta. Badge só dispara para reportei_sem_meta. CLAUDE.md atualizado com nova lógica de fallback. Aguardando commit @dev. | @dev commitar B2 → @dev implementar B1 → @devops push + PR + merge → SYNC FINAL. |

@@ -172,29 +172,42 @@ PHASE 6 — WRAP-UP
 
 #### B2 — Indicador de completude de dados no painel de alertas
 
-**Status:** ✅ APROVADO
+**Status:** 🔄 EM EXECUÇÃO (implementado — aguardando commit)
 
 **Problema identificado:**
-Clientes com `meta_ad_account_id: null` usam Reportei como fallback e não têm CPM, CTR nem frequência disponíveis. Porém o painel de alertas atual não sinaliza isso — o gestor vê o bloco do cliente sem saber que está olhando dados parciais. Pode interpretar ausência de alerta de CPM como "CPM ok" quando na verdade é "CPM indisponível".
+Clientes com `meta_ad_account_id: null` usam Reportei como fallback. A lógica original assumia que esses clientes nunca teriam CPM/CTR/freq disponíveis — mas testes com o Reportei (2026-06-07) revelaram que isso é falso: quando o cliente tem integração Meta Ads ativa no Reportei, os dados chegam completos.
+
+**Descoberta durante implementação (CP-07):**
+Testado `get_project_metrics` para Dr. Leandro Gontijo (project_id: 627550, `meta_ad_account_id: null`). Retornou integração "Leandro Gontijo [Principal]" com `spend: 15837.11`, `cpm: 8.009689`, `ctr: 4.711811`, `frequency: 1.361966`. Ou seja: Reportei tem esses dados quando Meta Ads está integrado.
+
+**Escopo expandido (decisão 2026-06-07):**
+Em vez de badge fixo para todos os clientes sem `meta_ad_account_id`, a lógica detecta automaticamente em runtime qual fonte está disponível. Três fontes definidas:
+
+| Fonte | Condição | Dados disponíveis |
+|---|---|---|
+| `meta_ads_mcp` | `meta_ad_account_id` preenchido | Completos via Meta Ads MCP |
+| `reportei_meta` | `meta_ad_account_id: null` + Reportei tem integração Meta Ads | Completos via Reportei |
+| `reportei_sem_meta` | `meta_ad_account_id: null` + Reportei sem integração Meta Ads | Parciais — só CPL |
+
+**Badge:** só aparece quando `fonte == 'reportei_sem_meta'`.
 
 **Arquivos afetados:**
-- `agents/alerta-monitor.md` (seção de formato de output)
+- `agents/alerta-monitor.md` — seção `fonte_dados`, `severity_rules`, `metricas_coletadas_output`, `alert_format`, `heuristics`, `voice_dna`, `examples`
 
 **Como era (antes):**
 ```
 ✅ [Dra. Nicolli] Sem alertas
-```
-_(sem indicação de que CPM/CTR/freq não foram verificados)_
-
-**Como ficará (após aprovação):**
-```
-✅ [Dra. Nicolli] Sem alertas · ⚠️ dados parciais (Reportei fallback — CPM/CTR/freq não disponíveis)
+# badge aparecia para qualquer cliente sem meta_ad_account_id — errado
 ```
 
-**Motivo da sugestão:** Transparência para o gestor. Evita interpretação incorreta de "sem alerta" como "tudo ok" quando o dado simplesmente não existe.
+**Como ficou (após implementação):**
+```
+✅ [Dr. Leandro Gontijo] OK        ← meta_ad_account_id null, Reportei com Meta Ads — sem badge
+✅ [Dra. Nicolli] OK · ⚠️ dados parciais (CPM/CTR/freq indisponíveis — sem integração Meta no Reportei)
+```
 
-**Decisão:** APROVADO
-**Motivo da decisão:** Transparência sobre completude dos dados evita interpretações incorretas.
+**Decisão:** APROVADO com escopo expandido
+**Motivo:** A lógica original estava errada — badge fixo para todos os clientes sem meta_ad_account_id causaria falsos positivos e cegaria alertas de CPM/CTR/freq para clientes com dados disponíveis no Reportei.
 
 ---
 
@@ -553,3 +566,6 @@ Tarefa de coleta de dados (não modifica código). Executa via MCP antes de qual
 | CP-02 | 2026-06-06 | Sessão 1 | 2 bugs de período (A0-a, A0-b). 3 hooks (H1, H2, H3). Conceito de hooks determinísticos confirmado. | Aprovar/reprovar novos itens. |
 | CP-03 | 2026-06-06 | Sessão 1 | Comparação fill_sheets stark vs. relatorio-semanal (C4). Melhorias do relatorio-semanal (C1, C2, C3). Lista de ~90 clientes ativos recebida (D1). Cross-reference Reportei×Planilha planejado (D2). Fim da Sessão 1 — continuar na Sessão 2. | Sessão 2: Vinicius confirma gestor por bloco (D1) + aprova/reprova todos os 14 itens. |
 | CP-04 | 2026-06-06 | Sessão 2 | Todos os 16 itens aprovados. A1 refinada: isolamento por --gestor/--clientes, duplicar aba anterior. Plano detalhado por sessão definido (PRÉ + Sessões 1–6). | Executar PRÉ-SESSÃO (/update-config para hooks H1+H2+H3) e depois Sessão 1 (@dev para D2). Vinicius confirma gestor por bloco antes da Sessão 5. |
+| CP-05 | 2026-06-06 | Execução | Sessões 2, 3 e 4 concluídas. A0-a/A0-b, A1/A2/A3/C4, C1/C2 implementados e pushados. | Sessão 5: D1 + C3 no clientes.yaml. |
+| CP-06 | 2026-06-07 | Execução | Sessão 5 concluída: clientes.yaml expandido (~70 novos clientes, 8 gestores, nome_reportei em 34 entradas). Commit c742250. | Sessão 6: B2 + B1 + PR + SYNC FINAL. |
+| CP-07 | 2026-06-07 | Execução | Sessão 6 em andamento. B2 implementado com escopo expandido (ver decisão B2 acima). Descoberta: Reportei entrega CPM/CTR/freq quando integração Meta Ads ativa. Lógica corrigida para 3 fontes. CLAUDE.md atualizado. Aguardando commit @dev. | @dev commitar B2 → B1 → @devops PR + merge → SYNC FINAL. |
