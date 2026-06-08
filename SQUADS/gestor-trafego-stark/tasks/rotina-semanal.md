@@ -4,21 +4,39 @@ agent: stark-chief
 squad: gestor-trafego-stark
 elicit: false
 inputs:
-  - cliente: nome ou slug do cliente (resolvido pelo stark-chief de data/clientes.yaml)
-  - gestor: vinicius | gustavo | ambos (inferido do campo gestores do cliente)
+  - cliente: nome, slug do cliente OU nome do gestor (resolvido pelo stark-chief de data/clientes.yaml)
+  - gestor: vinicius | gustavo | thiago | wallison | andreyves | richard | luiz | mateus (inferido do input ou do campo gestores do cliente)
 outputs:
   - resumo_final: status completo das 6 fases (COMPLETED | PARTIAL | FAILED por fase)
 ---
 
 # Task: rotina-semanal — Pipeline Completo Semanal (6 Fases)
 
-**Ativação por comando `*rotina-semanal [cliente]`:** pipeline completo com 6 fases ordenadas, handoffs entre agentes e gates de qualidade. Arquivo mais importante do squad.
+**Ativação por comando `*rotina-semanal [cliente ou gestor]`:** pipeline completo com 6 fases ordenadas, handoffs entre agentes e gates de qualidade. Arquivo mais importante do squad.
 
 ---
 
-## PRÉ-EXECUÇÃO: Resolução do cliente
+## PRÉ-EXECUÇÃO: Resolução do input
 
-Antes de iniciar as fases:
+### Modo 1 — Input é nome de gestor (modo batch)
+
+Gestores válidos: `vinicius`, `gustavo`, `thiago`, `wallison`, `andreyves`, `richard`, `luiz`, `mateus`
+
+Se o input bater exatamente com um desses nomes (case-insensitive):
+1. Filtrar `data/clientes.yaml` → todos os clientes onde `[gestor] in gestores AND ativo: true`
+2. Exibir lista ao gestor:
+   ```
+   🗂 Modo batch — [N] clientes encontrados para [gestor]:
+   1. [nome-cliente-1]
+   2. [nome-cliente-2]
+   ...
+   Confirmar? (s/n)
+   ```
+3. Aguardar confirmação antes de iniciar
+4. Rodar o pipeline completo para cada cliente **em lotes** (tamanho: `pipeline.lote_paralelo` em `config/settings.yaml`, padrão: 3)
+5. FASE 2 (Sheets) permanece serializada mesmo em batch — um cliente por vez
+
+### Modo 2 — Input é nome ou slug de cliente (modo individual)
 
 1. **Exact match** por `nome` em `data/clientes.yaml`
 2. **Exact match** por `slug` em `data/clientes.yaml`
@@ -26,9 +44,8 @@ Antes de iniciar as fases:
 4. Se nenhum: listar todos os slugs e pedir confirmação
 
 Determinar `gestor` do cliente:
-- `gestores: [vinicius]` → rodar pipeline completo (todas as 6 fases)
-- `gestores: [gustavo]` → rodar pipeline completo (todas as 6 fases)
-- `gestores: [vinicius, gustavo]` → perguntar "Para qual gestor rodar a rotina semanal?"
+- `gestores: [X]` → rodar pipeline completo (todas as 6 fases)
+- `gestores: [X, Y]` → perguntar "Para qual gestor rodar a rotina semanal?"
 
 ---
 
