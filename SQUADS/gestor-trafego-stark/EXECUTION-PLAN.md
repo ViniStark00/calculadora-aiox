@@ -9,32 +9,30 @@
 
 ---
 
-## 👉 ESTADO ATUAL — onde parar e retomar
+## ✅ PLANO CONCLUÍDO — 2026-06-07
 
 ```
-FASE:         Execução — SESSÕES 1, 2, 3, 4 e 5 CONCLUÍDAS ✔️ · SESSÃO 6 EM ANDAMENTO
-ETAPA:        B2 implementado em agents/alerta-monitor.md — aguardando commit do @dev
-PRÓXIMO:      SESSÃO 6 (continuação):
-                1. ✔️ @architect → B2 implementado (escopo expandido — ver CP-07)
-                2. 👉 @dev      → commitar B2: "feat(monitor): B2 — badge dados parciais e lógica correta de detecção Meta Ads via Reportei"
-                3. @dev      → B1: histórico JSONL em tasks/save-history.md + rotina-semanal.md
-                4. @devops   → push + gh pr create feat/paralelismo-stark-chief → main
-                5. Você revisa e aprova o PR no GitHub
-                6. @devops   → gh pr merge
-                7. SYNC FINAL (manual): branch feat/vinicius-16-melhorias-stark-chief no repo
-                   gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego → PR → Gustavo aprova → merge
+FASE:         CONCLUÍDO ✔️ — todas as 6 sessões executadas
+ETAPA:        SYNC FINAL concluído — squad publicado no repo do Gustavo
+PRÓXIMO:      Nenhum — plano encerrado
 AGENTE ATIVO: —
-BRANCH:       feat/paralelismo-stark-chief
+BRANCH:       feat/paralelismo-stark-chief (mergeada em main ✔️)
 ```
 
-**Para retomar em nova sessão:**
-1. Leia este documento inteiro
-2. Comece pela SESSÃO 6 abaixo — copie cada bloco de instrução para o agente correspondente
-3. Ordem obrigatória: @architect (B2) → @dev (B1) → @devops (PR + merge) → SYNC FINAL manual
+**Resumo do que foi entregue:**
 
-**Calendário:** Junho 7, 2026 (hoje). Semana corrente: seg 02/06 – dom 08/06.
+| Sessão | Itens | Commit |
+|--------|-------|--------|
+| PRÉ | Hooks H1/H2/H3 | 847774d |
+| 1 | D2 — cross-reference Reportei × Planilha | — (sem arquivo) |
+| 2 | A0-a + A0-b — bugs de período | 782ab72 |
+| 3 | A1 + A2 + A3 + C4 — fill_sheets.py | b7fb46e |
+| 4 | C1 + C2 — lotes paralelos + rate limit | 6cb8700 |
+| 5 | C3 + D1 — nome_reportei + clientes.yaml completo | c742250 |
+| 6 | B2 — detecção multi-fonte Meta Ads | 0d1921e |
+| 6 | B1 — histórico JSONL | ae52bbc |
 
-**Destino final do squad:** Após o PR mergeado em `ViniStark00/calculadora-aiox`, copiar a pasta `squads/gestor-trafego-stark/` para o clone local de `gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego` e pushar para main. Ver seção SYNC FINAL na Sessão 6.
+**Destino final:** squad publicado em `gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego` — PR #2 mergeado em 2026-06-07.
 
 ---
 
@@ -607,15 +605,15 @@ SESSÃO 3  @dev             A1 + A2 + A3 + C4 (fill_sheets.py) → commit → pu
 │
 SESSÃO 4  @dev             C1 + C2 (agentes: lotes + rate limit) → commit → push ✔️
 │
-SESSÃO 5  @dev             C3 + D1 (clientes.yaml completo) ← confirmar gestores
+SESSÃO 5  @dev             C3 + D1 (clientes.yaml completo)                        ✔️
 │
-SESSÃO 6  @architect       B2 (badge alerta-monitor.md)        → commit → push
-          @dev             B1 (histórico JSONL)                → commit → push
-          @devops          gh pr create + gh pr merge → BRANCH FECHADA ✅
+SESSÃO 6  @architect       B2 (badge alerta-monitor.md)        → commit → push      ✔️
+          @dev             B1 (histórico JSONL)                → commit → push      ✔️
+          @devops          gh pr create + gh pr merge → BRANCH FECHADA              ✔️
 │
-SYNC      Você (manual)    Copiar squads/gestor-trafego-stark/ para
+SYNC      Você (manual)    feat/vinicius-paralelismo-stark-chief →
 FINAL                      gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego
-                           → commit → push → SQUAD NO DESTINO FINAL ✅
+                           → PR #2 → merge → SQUAD NO DESTINO FINAL                ✔️
 ```
 
 > Antes da Sessão 5: Vinicius confirma qual gestor cuida de cada bloco da lista D1.
@@ -668,3 +666,4 @@ FINAL                      gustavoradler-cyber/treinamento-orquestradores-stark-
 | CP-05 | 2026-06-06 | Execução | SESSÃO 2 concluída: A0-a (edge case domingo) + A0-b (last_7d → date_from/date_to) corrigidos. Commit 782ab72. SESSÃO 3 concluída: A1 (tab management + isolamento multi-gestor) + A2 (--dry-run) + A3 (validação de schema) + C4 (_to_float, retry 429, ARS) implementados em fill_sheets.py. Commit b7fb46e. | SESSÃO 4: @dev → C1 (lotes de 3 em paralelo nos agentes) + C2 (contador global rate limit Reportei). |
 | CP-06 | 2026-06-07 | Execução | SESSÃO 4 concluída: C1/C2 commitados (6cb8700) e pushados. SESSÃO 5 concluída: D1 — clientes.yaml expandido com 8 gestores (andreyves, richard, luiz, mateus, thiago, wallison + novos gustavo, amanda), ~70 novos clientes, 11 reportei_project_ids preenchidos, 6 gestores atualizados, 3 marcados ativo:false, 8 inativos adicionados. C3 — campo nome_reportei adicionado em 34 entradas com divergência nome×Reportei. CLAUDE.md atualizado para 8 gestores. Commit c742250 pushado. Dr. Orozimbo (783368) confirmado fora da carteira. | SESSÃO 6: @architect → B2 (alerta-monitor.md) + @dev → B1 (histórico JSONL) + @devops → PR + merge + SYNC FINAL. |
 | CP-07 | 2026-06-07 | Execução | SESSÃO 6 em andamento. B2 implementado em agents/alerta-monitor.md com escopo expandido: descoberto que lógica de reportei_fallback estava errada — Reportei entrega CPM/CTR/freq quando integração Meta Ads está ativa (confirmado via teste com Dr. Leandro Gontijo, project_id 627550). Lógica corrigida para 3 fontes: meta_ads_mcp / reportei_meta / reportei_sem_meta. Badge só dispara para reportei_sem_meta. CLAUDE.md atualizado com nova lógica de fallback. Aguardando commit @dev. | @dev commitar B2 → @dev implementar B1 → @devops push + PR + merge → SYNC FINAL. |
+| CP-08 | 2026-06-07 | CONCLUÍDO | SESSÃO 6 concluída. B2 commitado (0d1921e) e B1 commitado (ae52bbc). PR #2 aberto e mergeado em gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego. SYNC FINAL executado: main local atualizado. Plano de paralelismo encerrado — todas as 16 melhorias aprovadas entregues. | — Plano encerrado. |

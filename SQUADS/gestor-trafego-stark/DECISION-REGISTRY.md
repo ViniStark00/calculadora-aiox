@@ -137,7 +137,7 @@ Sem validação. Script aceita qualquer valor do JSON e qualquer coluna do YAML.
 
 #### B1 — Histórico persistido obrigatório (save-history como gate)
 
-**Status:** ✅ APROVADO
+**Status:** ✔️ CONCLUÍDO (commit ae52bbc — 2026-06-07)
 
 **Problema identificado:**
 A Fase 6 (save-history) é `non-blocking` — se falhar, nenhum histórico é salvo e nenhum alerta é emitido. Sem histórico entre execuções, o sistema é completamente stateless: impossível detectar tendências (ex: CPL subindo 3 semanas consecutivas). Alertas só reagem ao estado atual, nunca antecipam.
@@ -172,7 +172,7 @@ PHASE 6 — WRAP-UP
 
 #### B2 — Indicador de completude de dados no painel de alertas
 
-**Status:** 🔄 EM EXECUÇÃO (implementado — aguardando commit)
+**Status:** ✔️ CONCLUÍDO (commit 0d1921e — 2026-06-07)
 
 **Problema identificado:**
 Clientes com `meta_ad_account_id: null` usam Reportei como fallback. A lógica original assumia que esses clientes nunca teriam CPM/CTR/freq disponíveis — mas testes com o Reportei (2026-06-07) revelaram que isso é falso: quando o cliente tem integração Meta Ads ativa no Reportei, os dados chegam completos.
@@ -569,3 +569,4 @@ Tarefa de coleta de dados (não modifica código). Executa via MCP antes de qual
 | CP-05 | 2026-06-06 | Execução | Sessões 2, 3 e 4 concluídas. A0-a/A0-b, A1/A2/A3/C4, C1/C2 implementados e pushados. | Sessão 5: D1 + C3 no clientes.yaml. |
 | CP-06 | 2026-06-07 | Execução | Sessão 5 concluída: clientes.yaml expandido (~70 novos clientes, 8 gestores, nome_reportei em 34 entradas). Commit c742250. | Sessão 6: B2 + B1 + PR + SYNC FINAL. |
 | CP-07 | 2026-06-07 | Execução | Sessão 6 em andamento. B2 implementado com escopo expandido (ver decisão B2 acima). Descoberta: Reportei entrega CPM/CTR/freq quando integração Meta Ads ativa. Lógica corrigida para 3 fontes. CLAUDE.md atualizado. Aguardando commit @dev. | @dev commitar B2 → B1 → @devops PR + merge → SYNC FINAL. |
+| CP-08 | 2026-06-07 | CONCLUÍDO | Plano encerrado. B2 (commit 0d1921e) e B1 (commit ae52bbc) entregues. PR #2 aberto e mergeado em gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego. SYNC FINAL executado. Todas as 16 melhorias aprovadas implementadas. | — Plano encerrado. |
