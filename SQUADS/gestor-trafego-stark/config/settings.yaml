@@ -10,9 +10,10 @@ reportei:
 
 planilha:
   # SHEET_ID vem da variável de ambiente SHEET_ID
-  # Abas nomeadas pelo DOMINGO da semana (ex: 17/05/2026 = semana 11-17/05)
-  # Nomes curtos na coluna A (ex: 'IMCP', 'Dra Danielle Gondim')
-  # Nomes de bloco que delimitam os gestores: "Vinicius", "Gustavo"
+  # NOVO SHEET_ID (jun/2026): 16f9MmlyUr3AfhCxfzjupChZjQDPSxw7rXY5ORjd9yXM
+  # Abas nomeadas por mês em português (ex: Junho, Julho...)
+  # Nova estrutura: col A = Gestor, col B = Cliente, col C = "Sem X" ou "Média Mês"
+  # 4 linhas por cliente (Sem 1–4) + linha "Média Mês" por aba mensal
   bloco_vinicius: "Vinicius"
   bloco_gustavo: "Gustavo"
 
