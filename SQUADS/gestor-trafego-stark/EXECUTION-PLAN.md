@@ -13,16 +13,16 @@
 
 ```
 FASE:         SESSÃO 9 — Remapeamento Nova Planilha
-ETAPA:        G0 — @dev deve começar por descoberta de slugs via MCP Reportei
-PRÓXIMO:      Abrir nova sessão → chamar @dev → colar briefing da SESSÃO 9 abaixo
-AGENTE ATIVO: @dev (Dex)
+ETAPA:        GS — push + PR (aguarda @devops) | G0 slugs pendente (próxima sessão)
+PRÓXIMO:      @devops push + PR | depois: G0 descoberta slugs (tofu_spend, bofu_spend, ctr, leads_meta, cadastros_respondi, cpa_google)
+AGENTE ATIVO: @devops (GS) / @dev (G0)
 BRANCH:       feat/paralelismo-stark-chief
-CHECKPOINT:   134e808 — estado pré-remapeamento salvo em 2026-06-10
+CHECKPOINT:   aec1a22 — G1–G5 concluídos em 2026-06-10
 ```
 
 ---
 
-## SESSÃO 9 — Remapeamento Nova Planilha Google Sheets 🔄 EM ANDAMENTO — 2026-06-10
+## SESSÃO 9 — Remapeamento Nova Planilha Google Sheets ✅ G1–G5 CONCLUÍDOS — 2026-06-10
 
 ### Contexto
 
@@ -55,11 +55,11 @@ Colunas G, H, I, K, N, Q, S têm fórmulas — **nunca tocar.**
 | ID | Tarefa | Agente | Status |
 |----|--------|--------|--------|
 | G0 | Descoberta de slugs via MCP Reportei | @dev | ⬜ PENDENTE |
-| G1 | `config/settings.yaml` → novo SHEET_ID | @dev | ⬜ PENDENTE |
-| G2 | `data/clientes.yaml` → nova âncora `_sheet_cols` | @dev | ⬜ PENDENTE |
-| G3 | `scripts/fill_sheets.py` → reescrever funções de navegação e escrita | @dev | ⬜ PENDENTE |
-| G4 | `tasks/fetch-metrics.md` → slugs novos + colunas atualizadas | @dev | ⬜ PENDENTE |
-| G5 | `squads/gestor-trafego-stark/CLAUDE.md` → descrição estrutura de abas | @dev | ⬜ PENDENTE |
+| G1 | `config/settings.yaml` → novo SHEET_ID | @dev | ✅ ea49c6f |
+| G2 | `data/clientes.yaml` → nova âncora `_sheet_cols` | @dev | ✅ 00f2706 |
+| G3 | `scripts/fill_sheets.py` → reescrever funções de navegação e escrita | @dev | ✅ d0822af |
+| G4 | `tasks/fetch-metrics.md` → slugs novos + colunas atualizadas | @dev | ✅ e8354ae |
+| G5 | `squads/gestor-trafego-stark/CLAUDE.md` → descrição estrutura de abas | @dev | ✅ aec1a22 |
 | GS | Push + PR repo Gustavo | @devops | ⬜ PENDENTE |
 
 > Marcar `✅` em cada ID quando concluído. G0 deve ser concluído ANTES de G2–G4.
