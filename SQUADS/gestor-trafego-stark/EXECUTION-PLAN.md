@@ -201,14 +201,74 @@ G5: docs(squad): CLAUDE.md — estrutura nova planilha mensal
 ```
 G0  @dev   Descoberta slugs via MCP Reportei    → sem commit, me mostra resultado
 │   ↓ (Vinicius confirma slugs)
-G1  @dev   config/settings.yaml → SHEET_ID     → commit G1
-G2  @dev   clientes.yaml → _sheet_cols novas   → commit G2
-G3  @dev   fill_sheets.py → 3 funções reescritas → commit G3
-G4  @dev   fetch-metrics.md → atualizado       → commit G4
-G5  @dev   CLAUDE.md → estrutura atualizada    → commit G5
+G1  @dev   config/settings.yaml → SHEET_ID     ✅ ea49c6f
+G2  @dev   clientes.yaml → _sheet_cols novas   ✅ 00f2706
+G3  @dev   fill_sheets.py → 3 funções reescritas ✅ d0822af
+G4  @dev   fetch-metrics.md → atualizado       ✅ e8354ae
+G5  @dev   CLAUDE.md → estrutura atualizada    ✅ aec1a22
 │
-GS  @devops  push + PR repo Gustavo
+GS  @devops  push + PR repo Gustavo             ⬜ PENDENTE
 ```
+
+---
+
+## SESSÃO 10 — G0 + Nova Gestora + Verificações ⬜ PENDENTE
+
+### Agenda
+
+| # | Tarefa | Agente | Dependência |
+|---|--------|--------|-------------|
+| S10-A | Verificações livres do usuário | @dev | — |
+| S10-B | G0 — descoberta dos 6 slugs pendentes | @dev | — |
+| S10-C | Nova gestora — criar bloco em `clientes.yaml` | @dev | usuário passa nome + clientes |
+| GS | Push + PR repo Gustavo | @devops | após S10-B e S10-C |
+
+### BRIEFING PARA @dev — Sessão 10
+
+> **Como usar:** abra nova sessão, chame `@dev` e cole o bloco abaixo.
+
+---
+
+**@dev Sessão 10 — G0 + Nova Gestora + Verificações**
+
+Contexto: squad `gestor-trafego-stark`, branch `feat/paralelismo-stark-chief`.
+G1–G5 (remapeamento nova planilha) foram concluídos na Sessão 9. Preciso de você para:
+
+**S10-A — Verificações (o usuário vai listar as dúvidas)**
+
+Aguarde as perguntas do usuário antes de qualquer implementação.
+
+**S10-B — G0: descoberta de 6 slugs pendentes via MCP Reportei**
+
+Antes de implementar qualquer código, use o MCP Reportei para descobrir os slugs exatos:
+
+```
+Slugs pendentes (marcados "slug: pendente G0" em data/clientes.yaml):
+  - tofu_spend      → campanhas com "[TOFU]" ou "[IMP]" no nome — existe endpoint de campanhas?
+  - bofu_spend      → campanhas leads/cadastros — mesmo endpoint
+  - ctr             → CTR Meta Ads
+  - leads_meta      → Leads META (formulário)
+  - cadastros_respondi → Cadastros Respondi.app (métrica customizada)
+  - cpa_google      → CPA Google
+
+Execute:
+  get_project_metrics(project_id=688377, date_from="2026-06-02", date_to="2026-06-08")
+  → listar TODOS os slugs/refs — mostrar JSON bruto para o usuário confirmar
+
+Verifique também se existe endpoint de campanhas com spend individual por campanha.
+Após G0 confirmado pelo usuário → atualizar os comentários em data/clientes.yaml e fetch-metrics.md.
+```
+
+**S10-C — Nova gestora**
+
+O usuário vai informar:
+- Nome da gestora
+- Lista de clientes (nome, slug, reportei_project_id, meta_ad_account_id)
+
+Adicionar novo bloco em `data/clientes.yaml` seguindo o padrão dos outros gestores.
+Todos os clientes ativos devem usar `sheet_columns: *sheet_cols`.
+
+**Depois de tudo confirmado → chamar @devops para GS (push + PR).**
 
 ---
 
