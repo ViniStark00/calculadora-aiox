@@ -18,6 +18,70 @@
 
 ---
 
+## Sessão 9 — 2026-06-10
+
+**Contexto:** Planilha Google Sheets trocada por versão com estrutura nova (mensal). Sessão de arquitetura com Aria — nenhuma linha de código alterada ainda. Checkpoint `134e808` criado antes de qualquer mudança.
+
+**Agente responsável pelo diagnóstico:** Aria (Architect)
+
+---
+
+#### G-SHEET — Migração para nova planilha mensal
+
+**Status:** 🔄 EM ANDAMENTO — G0 pendente
+
+**O que mudou na planilha:**
+
+| | Planilha Antiga | Planilha Nova |
+|---|---|---|
+| ID | `1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og` | `16f9MmlyUr3AfhCxfzjupChZjQDPSxw7rXY5ORjd9yXM` |
+| Abas | Uma por semana (`DD/MM/AAAA`) | Uma por mês (`Junho`, `Julho`...) |
+| Linhas | Uma por cliente | 4 por cliente (Sem 1–4) + "Média Mês" |
+| Identificação | Coluna A = cliente | Col A = gestor, Col B = cliente, Col C = "Sem X" |
+
+**Colunas a preencher (novas):**
+
+| Col | Métrica | Slug | Confiança |
+|-----|---------|------|-----------|
+| D | TOFU invest | filtro por nome campanha `[TOFU]`/`[IMP]` | 🟡 confirmar endpoint campanhas |
+| E | Meta invest total | `meta` → `spend` | ✅ confirmado |
+| F | Seguidores | `ig:new_followers_count` | ✅ confirmado |
+| J | CTR Meta | a confirmar via MCP | 🟡 provável padrão |
+| L | BOFU invest | filtro por nome campanha `[BOFU]`/`[CAD]` | 🟡 confirmar endpoint campanhas |
+| M | Conversas WhatsApp | `messaging_conversation_started_7d` | ✅ confirmado |
+| O | Leads META | a confirmar via MCP | 🟡 provável padrão |
+| P | Cadastros Respondi | métrica customizada — slug via MCP | 🟡 igual para todos os clientes com integração |
+| R | CPA Google | a confirmar via MCP | 🟡 provável padrão |
+| T | Google invest total | `google_adwords` | ✅ confirmado |
+
+**Colunas com fórmulas — NUNCA tocar:** G, H, I, K, N, Q, S
+
+**Decisões tomadas nesta sessão:**
+
+1. **Todos os gestores entram na nova planilha** — o sistema de blocos (Thiago tem seus clientes, Wallison tem os dele, Vinicius, Gustavo...) se mantém. Não há gestor com `sheet_columns: null`.
+
+2. **TOFU/BOFU são identificáveis pelo nome da campanha** — campanhas têm prefixo `[TOFU]`, `[BOFU]`, `[MOFU]`. Se o Reportei retorna spend por campanha, o agente consegue filtrar por nome (igual a um humano faria). G0 confirma se o endpoint existe.
+
+3. **Slugs incertos → descoberta via MCP primeiro** — antes de qualquer implementação, @dev chama `get_project_metrics(688377, ...)` e lista todos os slugs disponíveis. Vinicius identifica quais são CTR, Leads META, CPA Google e Cadastros Respondi.
+
+4. **Cadastros Respondi = métrica customizada do Reportei** — provavelmente tem slug único (não por cliente). Vinicius não sabe o slug de cabeça → @dev descobre via listagem de métricas.
+
+5. **Slugs não confirmados → escrever `null` + aviso** — campos com slug ainda pendente após G0 não travam a entrega. O script escreve `null` na célula e emite `[PENDENTE] slug não confirmado para Col X`.
+
+6. **Checkpoint antes de qualquer mudança** — commit `134e808` salvo em 2026-06-10. Se algo der errado na implementação, `git checkout 134e808` restaura o estado completo.
+
+**Arquivos afetados (a modificar em G1–G5):**
+- `config/settings.yaml` — novo SHEET_ID
+- `data/clientes.yaml` — nova âncora `_sheet_cols` (10 colunas)
+- `scripts/fill_sheets.py` — `calcular_aba()`, `calcular_sem_numero()`, `localizar_linha()` reescritas
+- `tasks/fetch-metrics.md` — slugs e mapeamento de colunas
+- `squads/gestor-trafego-stark/CLAUDE.md` — descrição estrutura abas
+
+**Decisão:** APROVADO — iniciar por G0 (descoberta), depois G1–G5 em sequência
+**Motivo:** Nova planilha incompatível com estrutura atual — toda a lógica de navegação precisa ser reescrita.
+
+---
+
 ## Sessão 1 — 2026-06-06
 
 **Contexto da sessão:** Diagnóstico inicial do squad. Identificados 5 problemas distribuídos em duas frentes: Planilha (A1–A3) e Monitoramento (B1–B2).
@@ -653,3 +717,4 @@ O E1 da sessão anterior corrigiu `rotina-semanal.md` (removeu skip de FASE 2 pa
 | CP-08 | 2026-06-07 | CONCLUÍDO | Plano encerrado. B2 (commit 0d1921e) e B1 (commit ae52bbc) entregues. PR #2 aberto e mergeado em gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego. SYNC FINAL executado. Todas as 16 melhorias aprovadas implementadas. | — Plano encerrado. |
 | CP-09 | 2026-06-07 | Pós-entrega | Bug E1 identificado: planilha é única para todos os gestores — FASE 2 está pulando ~80% dos clientes. Registrado como Sessão 7. | Sessão 7: @architect corrige CLAUDE.md + @dev corrige rotina-semanal.md. |
 | CP-10 | 2026-06-08 | Sessão 8 | E1 completado: fetch-metrics.md corrigido (F1, commit b8ebc5a). Modo batch por gestor adicionado ao rotina-semanal (F2, commit ac6c489). Push para repo Gustavo (commit 34a923d). Docs atualizados. | — Nenhum item pendente. |
+| CP-11 | 2026-06-10 | Sessão 9 | Arquitetura da migração para nova planilha mensal definida. Checkpoint 134e808 criado. EXECUTION-PLAN e DECISION-REGISTRY atualizados com Sessão 9 e briefing completo para @dev. | G0: @dev descobrir slugs via MCP Reportei → Vinicius confirma → G1–G5 em sequência. |

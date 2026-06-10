@@ -12,11 +12,202 @@
 ## 👉 ESTADO ATUAL — onde parar e retomar
 
 ```
-FASE:         Pós-entrega — E1 concluído + melhorias adicionais entregues
-ETAPA:        —
-PRÓXIMO:      Nenhum item pendente no momento
-AGENTE ATIVO: —
-BRANCH:       feat/paralelismo-stark-chief (local) | main no repo do Gustavo ✔️
+FASE:         SESSÃO 9 — Remapeamento Nova Planilha
+ETAPA:        G0 — @dev deve começar por descoberta de slugs via MCP Reportei
+PRÓXIMO:      Abrir nova sessão → chamar @dev → colar briefing da SESSÃO 9 abaixo
+AGENTE ATIVO: @dev (Dex)
+BRANCH:       feat/paralelismo-stark-chief
+CHECKPOINT:   134e808 — estado pré-remapeamento salvo em 2026-06-10
+```
+
+---
+
+## SESSÃO 9 — Remapeamento Nova Planilha Google Sheets 🔄 EM ANDAMENTO — 2026-06-10
+
+### Contexto
+
+A planilha Google Sheets foi trocada. A nova tem estrutura completamente diferente:
+- **Antes:** uma aba por semana (`DD/MM/AAAA`), uma linha por cliente
+- **Agora:** uma aba por mês (`Junho`, `Julho`...), 4 linhas por cliente (Sem 1–4) + linha "Média Mês"
+- **Identificação:** coluna A = Gestor, coluna B = Cliente, coluna C = "Sem X" ou "Média Mês"
+- **Novo SHEET_ID:** `16f9MmlyUr3AfhCxfzjupChZjQDPSxw7rXY5ORjd9yXM`
+- **Checkpoint pré-mudança:** commit `134e808` (2026-06-10) — restaurar aqui se algo der errado
+
+### Colunas que o script deve preencher (novas)
+
+| Col | Métrica | Slug | Status |
+|-----|---------|------|--------|
+| D | TOFU invest (campanhas "[TOFU]" ou "[IMP]") | endpoint campanhas — confirmar | 🔍 G0 |
+| E | Meta invest total | `meta` → `spend` | ✅ confirmado |
+| F | Seguidores | `ig:new_followers_count` | ✅ confirmado |
+| J | CTR Meta | a confirmar via MCP | 🔍 G0 |
+| L | BOFU invest (campanhas leads/cadastros) | endpoint campanhas — confirmar | 🔍 G0 |
+| M | Conversas WhatsApp | `messaging_conversation_started_7d` | ✅ confirmado |
+| O | Leads META (formulário) | a confirmar via MCP | 🔍 G0 |
+| P | Cadastros Respondi.app | métrica custom — confirmar slug via MCP | 🔍 G0 |
+| R | CPA Google | a confirmar via MCP | 🔍 G0 |
+| T | Google invest total | `google_adwords` | ✅ confirmado |
+
+Colunas G, H, I, K, N, Q, S têm fórmulas — **nunca tocar.**
+
+### Mapa de tarefas × agente × status
+
+| ID | Tarefa | Agente | Status |
+|----|--------|--------|--------|
+| G0 | Descoberta de slugs via MCP Reportei | @dev | ⬜ PENDENTE |
+| G1 | `config/settings.yaml` → novo SHEET_ID | @dev | ⬜ PENDENTE |
+| G2 | `data/clientes.yaml` → nova âncora `_sheet_cols` | @dev | ⬜ PENDENTE |
+| G3 | `scripts/fill_sheets.py` → reescrever funções de navegação e escrita | @dev | ⬜ PENDENTE |
+| G4 | `tasks/fetch-metrics.md` → slugs novos + colunas atualizadas | @dev | ⬜ PENDENTE |
+| G5 | `squads/gestor-trafego-stark/CLAUDE.md` → descrição estrutura de abas | @dev | ⬜ PENDENTE |
+| GS | Push + PR repo Gustavo | @devops | ⬜ PENDENTE |
+
+> Marcar `✅` em cada ID quando concluído. G0 deve ser concluído ANTES de G2–G4.
+
+---
+
+### BRIEFING COMPLETO PARA @dev — Sessão 9
+
+> **Como usar:** abra nova sessão, chame `@dev` e cole o bloco abaixo.
+
+---
+
+**@dev Sessão 9 — Remapeamento Nova Planilha**
+
+Contexto: a planilha Google Sheets do squad gestor-trafego-stark foi trocada. A nova planilha tem estrutura diferente. Preciso que você:
+
+1. Faça a descoberta de slugs (G0) — sem tocar em nenhum arquivo ainda
+2. Me mostre o resultado
+3. Aguarde minha confirmação antes de implementar G1–G5
+
+---
+
+**G0 — Descoberta de slugs (FAZER PRIMEIRO, sem código)**
+
+Use o MCP Reportei para explorar as métricas disponíveis. Execute as chamadas abaixo e me mostre a resposta completa (lista de métricas com slugs/refs):
+
+```
+1. get_project_metrics(project_id=688377, date_from="2026-06-02", date_to="2026-06-08")
+   → listar TODOS os slugs/refs retornados — quero ver o JSON bruto
+   → identificar: CTR Meta, Leads META, CPA Google, Cadastros Respondi
+
+2. Verificar se existe endpoint de campanhas com spend individual por campanha
+   → tentar: get_campaigns ou list_campaigns ou get_campaign_metrics
+   → se existir: listar as campanhas do projeto 688377 para ver os nomes
+   → objetivo: confirmar se filtragem por "[TOFU]" / "[IMP]" no nome é possível
+
+3. Após ver os resultados, me informar:
+   - Slug exato do CTR Meta
+   - Slug exato dos Leads META (formulário)
+   - Slug exato do CPA Google
+   - Slug ou método para Cadastros Respondi (métrica customizada)
+   - Se endpoint de campanhas existe: confirmar que filtragem por nome é viável
+```
+
+**Após G0 confirmado por mim, implementar nesta ordem:**
+
+**G1 — `config/settings.yaml`**
+- Trocar `SHEET_ID` para: `16f9MmlyUr3AfhCxfzjupChZjQDPSxw7rXY5ORjd9yXM`
+
+**G2 — `data/clientes.yaml`**
+- Substituir a âncora `_sheet_cols` atual pelas novas colunas:
+  ```yaml
+  _sheet_cols: &sheet_cols
+    meta_spend_total: E        # Meta invest total
+    tofu_spend: D              # TOFU — campanhas [TOFU] ou [IMP] (pendente G0)
+    bofu_spend: L              # BOFU — campanhas leads/cadastros (pendente G0)
+    seguidores: F              # Seguidores IG
+    ctr: J                     # CTR Meta (slug a confirmar em G0)
+    conversas: M               # Conversas WhatsApp
+    leads_meta: O              # Leads META formulário (slug a confirmar em G0)
+    cadastros_respondi: P      # Cadastros Respondi (slug a confirmar em G0)
+    cpa_google: R              # CPA Google (slug a confirmar em G0)
+    google_spend: T            # Google invest total
+  ```
+- Campos com slug pendente: adicionar comentário `# slug: pendente G0` ao lado
+- **Todos os gestores** (vinicius, gustavo, andreyves, richard, luiz, mateus, thiago, wallison) usam a mesma âncora — remover quaisquer `sheet_columns: null`
+
+**G3 — `scripts/fill_sheets.py`**
+
+Reescrever 3 funções + lógica de escrita:
+
+*Função 1 — `calcular_aba()`*
+```python
+# Antes: retornava "DD/MM/AAAA" (nome da aba semanal)
+# Agora: retorna nome do mês em português (ex: "Junho")
+MESES_PT = {1:"Janeiro",2:"Fevereiro",3:"Março",4:"Abril",5:"Maio",6:"Junho",
+            7:"Julho",8:"Agosto",9:"Setembro",10:"Outubro",11:"Novembro",12:"Dezembro"}
+
+def calcular_aba():
+    hoje = datetime.date.today()
+    dias = (hoje.weekday() + 1) % 7
+    if dias == 0: dias = 7
+    ultimo_domingo = hoje - datetime.timedelta(days=dias)
+    segunda = ultimo_domingo - datetime.timedelta(days=6)
+    return MESES_PT[segundo.month], segundo, ultimo_domingo
+    # retorna: (nome_aba, data_inicio, data_fim)
+```
+
+*Função 2 — `calcular_sem_numero(data_inicio)`*
+```python
+# Nova função — calcula "Sem X" a partir da data de início da semana
+def calcular_sem_numero(data_inicio):
+    import math
+    return f"Sem {math.ceil(data_inicio.day / 7)}"
+    # Ex: dia 2 → "Sem 1", dia 9 → "Sem 2", dia 16 → "Sem 3", dia 23 → "Sem 4"
+```
+
+*Função 3 — `localizar_linha(sheet, nome_cliente, sem_numero)`*
+```python
+# Antes: buscava nome do cliente na coluna A
+# Agora: busca linha onde coluna B = nome_cliente E coluna C = sem_numero
+def localizar_linha(sheet, nome_cliente, sem_numero):
+    dados = sheet.get_all_values()
+    for i, linha in enumerate(dados):
+        if len(linha) >= 3 and linha[1] == nome_cliente and linha[2] == sem_numero:
+            return i + 1  # 1-indexed para gspread
+    return None  # cliente/semana não encontrado
+```
+
+*Lógica de escrita:* usar `localizar_linha()` para encontrar a linha antes de qualquer escrita. Se retornar `None`: registrar aviso e pular cliente (não criar linha).
+
+**G4 — `tasks/fetch-metrics.md`**
+- Passo 1 (`calcular_aba`): atualizar para retornar mês + calcular `sem_numero`
+- Passo 2 (verificar aba): buscar por nome de mês, não data
+- Passo 3 (filtrar clientes): sem mudança
+- Passo 4 (reutilizar métricas): sem mudança
+- Passo 5 (buscar métricas): adicionar slugs novos confirmados em G0; campos pendentes → escrever `null` com aviso `[PENDENTE] slug não confirmado`
+- Passo 6 (preencher planilha): atualizar mapeamento de colunas para as 10 novas colunas
+
+**G5 — `squads/gestor-trafego-stark/CLAUDE.md`**
+- Seção "Gestores com planilha Google Sheets": atualizar estrutura de abas
+- Trocar: "uma aba por semana (`DD/MM/AAAA`)" por: "uma aba por mês (`Junho`, `Julho`...); 4 linhas por cliente (Sem 1–4) + Média Mês"
+- Atualizar slugs conhecidos com os confirmados em G0
+
+**Commits (um por tarefa):**
+```
+G0: sem commit (apenas descoberta)
+G1: chore(config): atualizar SHEET_ID para nova planilha
+G2: feat(dados): remapear sheet_columns — 10 colunas nova planilha
+G3: feat(sheets): adaptar fill_sheets para estrutura mensal
+G4: docs(tasks): fetch-metrics — slugs e colunas nova planilha
+G5: docs(squad): CLAUDE.md — estrutura nova planilha mensal
+```
+
+---
+
+### Sequência visual
+
+```
+G0  @dev   Descoberta slugs via MCP Reportei    → sem commit, me mostra resultado
+│   ↓ (Vinicius confirma slugs)
+G1  @dev   config/settings.yaml → SHEET_ID     → commit G1
+G2  @dev   clientes.yaml → _sheet_cols novas   → commit G2
+G3  @dev   fill_sheets.py → 3 funções reescritas → commit G3
+G4  @dev   fetch-metrics.md → atualizado       → commit G4
+G5  @dev   CLAUDE.md → estrutura atualizada    → commit G5
+│
+GS  @devops  push + PR repo Gustavo
 ```
 
 ---
@@ -715,3 +906,4 @@ FINAL                      gustavoradler-cyber/treinamento-orquestradores-stark-
 | CP-06 | 2026-06-07 | Execução | SESSÃO 4 concluída: C1/C2 commitados (6cb8700) e pushados. SESSÃO 5 concluída: D1 — clientes.yaml expandido com 8 gestores (andreyves, richard, luiz, mateus, thiago, wallison + novos gustavo, amanda), ~70 novos clientes, 11 reportei_project_ids preenchidos, 6 gestores atualizados, 3 marcados ativo:false, 8 inativos adicionados. C3 — campo nome_reportei adicionado em 34 entradas com divergência nome×Reportei. CLAUDE.md atualizado para 8 gestores. Commit c742250 pushado. Dr. Orozimbo (783368) confirmado fora da carteira. | SESSÃO 6: @architect → B2 (alerta-monitor.md) + @dev → B1 (histórico JSONL) + @devops → PR + merge + SYNC FINAL. |
 | CP-07 | 2026-06-07 | Execução | SESSÃO 6 em andamento. B2 implementado em agents/alerta-monitor.md com escopo expandido: descoberto que lógica de reportei_fallback estava errada — Reportei entrega CPM/CTR/freq quando integração Meta Ads está ativa (confirmado via teste com Dr. Leandro Gontijo, project_id 627550). Lógica corrigida para 3 fontes: meta_ads_mcp / reportei_meta / reportei_sem_meta. Badge só dispara para reportei_sem_meta. CLAUDE.md atualizado com nova lógica de fallback. Aguardando commit @dev. | @dev commitar B2 → @dev implementar B1 → @devops push + PR + merge → SYNC FINAL. |
 | CP-08 | 2026-06-07 | CONCLUÍDO | SESSÃO 6 concluída. B2 commitado (0d1921e) e B1 commitado (ae52bbc). PR #2 aberto e mergeado em gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego. SYNC FINAL executado: main local atualizado. Plano de paralelismo encerrado — todas as 16 melhorias aprovadas entregues. | — Plano encerrado. |
+| CP-11 | 2026-06-10 | Sessão 9 | Arquitetura da migração para nova planilha mensal definida por Aria. Checkpoint 134e808 criado. Briefing completo do @dev escrito neste documento. Docs atualizados com Sessão 9. | G0: abrir nova sessão → @dev → descoberta de slugs via MCP Reportei → Vinicius confirma → G1–G5. |
