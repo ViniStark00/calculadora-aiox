@@ -1,0 +1,27 @@
+# historico-clientes.yaml — Histórico semanal de métricas por cliente
+# Squad: gestor-trafego-stark
+# Gerado automaticamente pelo coletor (task: save-history)
+# Formato: mais recente primeiro. Limite: 52 entradas por cliente.
+
+clientes:
+  dr-caio-fernandes:
+    - periodo_inicio: "2026-05-25"
+      periodo_fim: "2026-05-31"
+      meta_spend: 2783.40
+      google_spend: 0.00
+      conversas: 226
+      conversoes: 0
+      seguidores: 235
+      cpl: 12.31
+      total_spend: 2783.40
+
+  fernanda-encinas:
+    - periodo_inicio: "2026-05-25"
+      periodo_fim: "2026-05-31"
+      meta_spend: 1391.57
+      google_spend: 0.00
+      conversas: 15
+      conversoes: 0
+      seguidores: 444
+      cpl: 92.77
+      total_spend: 1391.57

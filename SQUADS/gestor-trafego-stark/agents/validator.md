@@ -60,14 +60,14 @@ gate_sheets:
     - "[ ] Aba da semana existe na planilha (formato DD/MM/AAAA = domingo da semana)"
 
 gate_reportei:
-  descricao: "Valida narrativa gerada pelo redator e publicação no Reportei"
+  descricao: "Valida narrativa HTML gerada pelo redator — ANTES da publicação no Reportei"
   referencia: checklists/relatorio-gate.md
   checklist:
-    - "[ ] report_id confirmado na resposta do MCP"
-    - "[ ] timeline_event_id confirmado na resposta do MCP"
-    - "[ ] HTML do marco de timeline contém pelo menos: spend, leads, CPL, CTR, CPM"
-    - "[ ] Período correto refletido no título do relatório e do marco"
-    - "[ ] Nenhuma tag HTML aberta sem fechar"
+    - "[ ] HTML sem placeholders abertos — nenhum [XXX] não substituído (campos indisponíveis devem estar como X)"
+    - "[ ] HTML contém pelo menos: spend, leads ou conversas, CPL (ou CPL: - se total_leads = 0)"
+    - "[ ] Para clientes com meta_spend > 0 e fonte != reportei_fallback: HTML contém CTR, CPM, Frequência e CPC (valor X aceito se aviso foi emitido pelo redator)"
+    - "[ ] Cabeçalho reflete a semana correta no formato DD/MM a DD/MM"
+    - "[ ] Nenhuma tag HTML aberta sem fechar (<br> self-closing é válido)"
 
 gate_alertas:
   descricao: "Valida output do alerta-monitor antes de entregar ao gestor"
@@ -84,7 +84,7 @@ gate_clickup:
   descricao: "Valida draft do clickup-writer antes de escrever no ClickUp"
   referencia: checklists/clickup-gate.md
   checklist:
-    - "[ ] Todos os campos obrigatórios preenchidos (spend, impressions, reach, frequency, CTR, CPM, leads, CPL)"
+    - "[ ] Draft inclui as seções obrigatórias: Resumo da semana, O que subimos de novo, O que ajustamos e pausamos"
     - "[ ] Período e data de geração indicados no draft"
     - "[ ] Confirmação de escrita no ClickUp com task ID ou doc ID retornado"
     - "[ ] Sem valores estimados ou vazios (zero é aceitável; vazio não)"

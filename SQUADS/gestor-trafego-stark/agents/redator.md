@@ -85,6 +85,80 @@ Calcular variação % da semana atual vs média das 4 semanas:
 | `variacao_cpl > +15%` | "O CPL ficou [X]% acima da média histórica das últimas [N] semanas." |
 | `-10% ≤ variacao_cpl ≤ +15%` | Omitir ou "O CPL manteve-se estável em relação ao histórico recente." |
 
+## Discovery de leads
+
+### Fonte primária: Meta Ads MCP (quando `meta_ad_account_id` disponível)
+
+Se `meta_ad_account_id` não é null:
+- Chamar Meta Ads MCP com `get_insights`, período do relatório, campo `action_types`
+- Esta é a fonte primária de leads — não usar Reportei para leads neste caso
+
+| Padrão de action_type | Campo | Label no relatório |
+|-----------------------|-------|-------------------|
+| `onsite_conversion.messaging_conversation_started_7d` | `conversas` | WhatsApp |
+| `offsite_conversion.fb_pixel_custom.Respondi*` | `respondi_leads` | Respondi |
+| `offsite_conversion.fb_pixel_custom.*Conversion*` | `respondi_leads` | Respondi |
+| `offsite_conversion.fb_pixel_custom.*` (outros, valor > 0) | `pixel_leads` | Pixel |
+
+**Regras:**
+- Verificar Respondi PRIMEIRO — tem prioridade e label próprio no relatório
+- Incluir apenas action_types com valor > 0 no período
+
+### Fonte fallback: Reportei (quando `meta_ad_account_id` null)
+
+Se `meta_ad_account_id` é null (`reportei_fallback`):
+- Buscar via `get_project_metrics` do MCP Reportei
+- Extrair apenas `messaging_conversation_started_7d` → `conversas`
+- `respondi_leads = 0`, `pixel_leads = 0`
+
+### Cálculo de totais e seleção de label
+
+```
+total_leads = conversas + respondi_leads + pixel_leads
+meta_cpl    = meta_spend / total_leads  (se total_leads > 0)
+```
+
+**Seleção de label e breakdown:**
+- `total_leads = conversas` → `[LABEL_LEADS]` = "conversas"; sem linha de breakdown
+- `total_leads > conversas` → `[LABEL_LEADS]` = "leads"; exibir linha `↳ WhatsApp: [CONVERSAS] · Respondi: [RESPONDI_LEADS]` (omitir fontes com valor zero ou null)
+
+## Dados via MCP Reportei — coleta e fallback obrigatório
+
+```
+MCP: mcp__30ebe978-db99-4dee-927c-b72f6abac9d8
+Tools: get_report / get_project_metrics
+```
+
+Campos obrigatórios a coletar:
+
+| Campo | Placeholder | Comportamento se indisponível |
+|-------|-------------|-------------------------------|
+| CPM | `[CPM]` | Substituir por `X` no HTML + **emitir aviso no output** |
+| Frequência | `[FREQUENCIA]` | Substituir por `X` no HTML + **emitir aviso no output** |
+| CTR | `[CTR]` | Substituir por `X` no HTML + **emitir aviso no output** |
+| CPC | `[CPC]` | Substituir por `X` no HTML + **emitir aviso no output** |
+| Seguidores | `[SEGUIDORES]` | Substituir por `X` no HTML + **emitir aviso no output** |
+| Variação vs semana anterior | enriquece narrativa | Prosseguir sem mencionar |
+
+> NUNCA deixar placeholder `[XXX]` não substituído no HTML final — usar `X` como fallback explícito.
+> NUNCA inventar valores. NUNCA inserir texto como "dado não disponível" ou "não foi possível coletar" no HTML publicado.
+
+**Formato do aviso de output (emitir para cada campo indisponível):**
+```
+⚠️ DADO INDISPONÍVEL — [CAMPO] não retornado pelo MCP Reportei para [CLIENTE] (semana [DD/MM] a [DD/MM]).
+   Placeholder substituído por "X" no relatório. Verificar integração ou coletar manualmente.
+```
+
+## Lógica de seleção de template
+
+| Dados disponíveis | Template a usar |
+|-------------------|----------------|
+| `meta_spend > 0` e `google_spend = 0` | META-ONLY |
+| `meta_spend > 0` e `google_spend > 0` | META + GOOGLE |
+| `meta_spend = 0` e `google_spend > 0` | GOOGLE-ONLY |
+
+> O template está em `templates/relatorio-template.md`. Carregar e preencher todos os placeholders antes de entregar ao validator.
+
 ## Regras de voz obrigatórias
 
 **Tom:** Neutro e informativo. Dados objetivos, sem emoção excessiva.

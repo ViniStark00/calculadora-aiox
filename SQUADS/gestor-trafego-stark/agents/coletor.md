@@ -30,9 +30,55 @@ O `alerta-monitor` (FASE 1) disponibiliza um dict `metricas_coletadas` keyed por
 **Regra absoluta:** Independente de `metricas_coletadas`, o coletor SEMPRE busca via Reportei:
 - Google Ads spend (`google_adwords`)
 - Seguidores Instagram (`ig:new_followers_count`)
-- Conversas WhatsApp (`messaging_conversation_started_7d`)
 
-Esses dados não estão disponíveis no Meta Ads MCP.
+Leads (conversas, Respondi, pixel) seguem a lógica abaixo — fonte varia por `meta_ad_account_id`.
+
+## Discovery de leads
+
+### Fonte primária: Meta Ads MCP (quando `meta_ad_account_id` disponível)
+
+Se `meta_ad_account_id` não é null:
+- Chamar Meta Ads MCP com `get_insights`, período da semana, campo `action_types`
+- Esta é a fonte primária de leads — não usar Reportei para leads neste caso
+
+| Padrão de action_type | Campo de saída |
+|-----------------------|---------------|
+| `onsite_conversion.messaging_conversation_started_7d` | `conversas` |
+| `offsite_conversion.fb_pixel_custom.Respondi*` | `respondi_leads` |
+| `offsite_conversion.fb_pixel_custom.*Conversion*` | `respondi_leads` |
+| `offsite_conversion.fb_pixel_custom.*` (outros, valor > 0) | `pixel_leads` |
+
+### Fonte fallback: Reportei (quando `meta_ad_account_id` null)
+
+Se `meta_ad_account_id` é null:
+- Buscar via `get_project_metrics` do MCP Reportei
+- Extrair apenas `messaging_conversation_started_7d` → `conversas`
+- Se `lead_sources` configurado em `data/clientes.yaml` (ADR-08): coletar também `pixel_evento` e `lead_site` pelos slugs definidos no cliente
+
+| Tipo em lead_sources | Slug Reportei | Campo de saída |
+|----------------------|--------------|----------------|
+| `conversa_whatsapp` | `messaging_conversation_started_7d` | `conversas` |
+| `pixel_evento` | valor de `slug_reportei` no cliente | `pixel_leads` |
+| `lead_site` | valor de `slug_reportei` no cliente | `site_leads` |
+
+### Cálculo de totais
+
+```
+total_leads = conversas + (respondi_leads ?? 0) + (pixel_leads ?? 0) + (site_leads ?? 0)
+meta_cpl    = meta_spend / total_leads  se total_leads > 0  else null
+```
+
+Se nenhuma fonte adicional detectada: `total_leads = conversas` (sem mudança de comportamento).
+
+**Regra:** nunca substituir `conversas` por `total_leads` no campo K da planilha Sheets.
+O campo K continua sendo `conversas` (WhatsApp). `total_leads` é usado apenas no relatório Reportei e no CPL.
+
+**Logs obrigatórios quando lead_sources ativo:**
+```
+  [cliente] pixel_leads: N (slug: offsite_conversion.fb_pixel_lead)
+  [cliente] site_leads:  N (slug: onsite_conversion.lead_grouped)
+  [cliente] total_leads: N (conversas: X + pixel: Y + site: Z)
+```
 
 **Output:** documentar no resumo qual fonte foi usada para cada métrica por cliente:
 ```
@@ -44,10 +90,11 @@ Esses dados não estão disponíveis no Meta Ads MCP.
 
 | Plataforma | Fonte | Ferramenta |
 |-----------|-------|-----------|
-| Meta Ads spend, conversas, CPL | `metricas_coletadas` (se disponível) ou Meta Ads MCP | `mcp__c0a7182d-bfb1-44b9-9206-83cca8f17d52` |
+| Meta Ads spend | `metricas_coletadas` (se disponível) ou Meta Ads MCP | `mcp__c0a7182d-bfb1-44b9-9206-83cca8f17d52` |
+| Leads (conversas, Respondi, pixel) — quando `meta_ad_account_id` disponível | Meta Ads MCP (`action_types`) | `mcp__c0a7182d-bfb1-44b9-9206-83cca8f17d52` |
+| Leads (conversas) — quando `meta_ad_account_id` null | Reportei API v2 (`get_project_metrics`) | `mcp__30ebe978-db99-4dee-927c-b72f6abac9d8` |
 | Google Ads spend | Reportei API v2 | `mcp__30ebe978-db99-4dee-927c-b72f6abac9d8` → `get_project_metrics` |
 | Seguidores Instagram | Reportei API v2 | `mcp__30ebe978-db99-4dee-927c-b72f6abac9d8` → `get_project_metrics` |
-| Conversas WhatsApp | Reportei API v2 | `mcp__30ebe978-db99-4dee-927c-b72f6abac9d8` → `get_project_metrics` |
 
 ## Responsabilidades
 
@@ -95,6 +142,9 @@ O coletor tenta coletar todas as métricas. Escreve o que encontrou:
 | Seguidores | Match exato: `ref == 'ig:new_followers_count'` |
 | Conversas | Match exato: `'messaging_conversation_started_7d'` |
 | Rate limit Reportei | `sleep(0.6s)` entre chamadas; aguardar 60s após erro 429; contador global: pausar 540s ao atingir 38 req |
+| Conversas (meta_ad_account_id disponível) | Meta Ads MCP: `onsite_conversion.messaging_conversation_started_7d` |
+| Conversas (meta_ad_account_id null) | Reportei: `messaging_conversation_started_7d` |
+| Rate limit Reportei | `sleep(0.6s)` entre chamadas; aguardar 60s após erro 429 |
 | Dr. Javier | Pular Meta Spend (bloqueado em ARS) — sem erro, só aviso |
 | Paginação | Continuar enquanto `len(results) == per_page` |
 
@@ -160,7 +210,10 @@ Após coleta bem-sucedida (✅), chamar `save-history` (não-bloqueante):
 | `meta_spend` | valor coletado (0.0 se null) |
 | `google_spend` | valor coletado (0.0 se null) |
 | `seguidores` | valor coletado |
-| `conversas` | valor coletado |
+| `conversas` | valor coletado (WhatsApp) |
+| `pixel_leads` | valor coletado (0 se lead_sources sem pixel_evento) |
+| `site_leads` | valor coletado (0 se lead_sources sem lead_site) |
+| `total_leads` | conversas + pixel_leads + site_leads |
 | `conversoes` | valor coletado |
 | `fonte_meta` | `"metricas_coletadas"` ou `"meta_ads_mcp"` ou `"reportei_api"` |
 
@@ -171,12 +224,13 @@ Clientes com erro na coleta (❌) não chamam `save-history`.
 ```
 COLETA CONCLUÍDA — Semana [DD/MM/AAAA] a [DD/MM/AAAA]
 ════════════════════════════════════════════════════
-✅ IMCP                C: R$1.234,56  E: R$567,89  H:12  K:34  O:5  [Meta: FASE1 | Google: Reportei]
-✅ Dra Danielle Gondim C: R$890,00   E: R$234,56  H:8   K:18  O:2  [Meta: Direto | Google: Reportei]
-⚠️ Dr Javier Cucchiaro C: —(ARS)     E: R$450,00  H:5   K:9   O:1
+✅ IMCP                C: R$1.234,56  E: R$567,89  H:12  K:34  TL:44(px:7 site:3)  O:5  [Meta: FASE1 | Google: Reportei]
+✅ Dra Danielle Gondim C: R$890,00   E: R$234,56  H:8   K:18  TL:18  O:2  [Meta: Direto | Google: Reportei]
+⚠️ Dr Javier Cucchiaro C: —(ARS)     E: R$450,00  H:5   K:9   TL:9   O:1
 ❌ [Cliente sem match] ERRO: projeto não encontrado no Reportei
 ════════════════════════════════════════════════════
 Processados: X/Y | Pulados: Z | Erros: W
+TL = total_leads (K = conversas WhatsApp; TL inclui pixel e site quando configurado)
 ```
 
 ## Tratamento de erros
