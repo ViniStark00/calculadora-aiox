@@ -1,11 +1,11 @@
 """
 fill_sheets.py — FASE 2: preenche métricas na planilha Google Sheets
 Squad: gestor-trafego-stark | Agente: coletor
-Uso: python scripts/fill_sheets.py --cliente "nome" --semana "DD/MM/AAAA"
+Uso: python scripts/fill_sheets.py --gestor vinicius [--semana Junho]
 
 Lê configuração de clientes em data/clientes.yaml.
-Recebe métricas via stdin (JSON) ou argumentos.
-Filtra clientes com 'vinicius in gestores' e 'ativo: true'.
+Recebe métricas via stdin (JSON) ou argumento --metricas-json.
+Nova estrutura (jun/2026): abas mensais (Junho, Julho...) — col A=Gestor, col B=Cliente, col C=Sem X
 """
 
 import os
@@ -13,9 +13,13 @@ import sys
 import json
 import yaml
 import datetime
+import math
 import time
 import argparse
 from pathlib import Path
+
+# Forçar UTF-8 no stdout (fix Windows — evita UnicodeEncodeError em nomes com acentos)
+sys.stdout.reconfigure(encoding='utf-8')
 
 # ── Dependências ──────────────────────────────────────────────────────────────
 try:
@@ -35,6 +39,14 @@ SHEET_ID = os.environ.get("SHEET_ID", "")
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
+MESES_PT = {
+    1: "Janeiro", 2: "Fevereiro", 3: "Março", 4: "Abril",
+    5: "Maio", 6: "Junho", 7: "Julho", 8: "Agosto",
+    9: "Setembro", 10: "Outubro", 11: "Novembro", 12: "Dezembro"
+}
+
+COLUNAS_FORMULA = frozenset({'G', 'H', 'I', 'K', 'N', 'P'})
+
 
 def carregar_clientes(gestor=None, slugs=None):
     """Carrega data/clientes.yaml com filtros por gestor ou slugs.
@@ -52,14 +64,28 @@ def carregar_clientes(gestor=None, slugs=None):
 
 
 def calcular_aba():
-    """Calcula nome da aba = segunda-feira da semana anterior (DD/MM/AAAA)."""
+    """Calcula nome da aba mensal e período da semana anterior.
+
+    Retorna: (nome_aba, data_inicio, data_fim)
+      nome_aba   — nome do mês em português da semana anterior (ex: "Junho")
+      data_inicio — segunda-feira da semana anterior
+      data_fim    — domingo da semana anterior
+    """
     hoje = datetime.date.today()
-    dias_ate_domingo = (hoje.weekday() + 1) % 7
-    if dias_ate_domingo == 0:
-        dias_ate_domingo = 7
-    ultimo_domingo = hoje - datetime.timedelta(days=dias_ate_domingo)
+    dias = (hoje.weekday() + 1) % 7
+    if dias == 0:
+        dias = 7
+    ultimo_domingo = hoje - datetime.timedelta(days=dias)
     segunda = ultimo_domingo - datetime.timedelta(days=6)
-    return segunda.strftime("%d/%m/%Y")
+    return MESES_PT[segunda.month], segunda, ultimo_domingo
+
+
+def calcular_sem_numero(data_inicio):
+    """Calcula "Sem X" a partir da data de início da semana.
+
+    Ex: dia 2 → "Sem 1", dia 9 → "Sem 2", dia 16 → "Sem 3", dia 23 → "Sem 4"
+    """
+    return f"Sem {math.ceil(data_inicio.day / 7)}"
 
 
 def autenticar():
@@ -96,19 +122,36 @@ def verificar_ou_criar_aba(sheets, nome_aba):
     return True
 
 
-def ler_col_a(sheets, nome_aba):
-    """Lê coluna A da aba para localizar linhas dos clientes."""
+def localizar_linha(sheets, nome_aba, nome_cliente, sem_numero, gestor=None):
+    """Localiza linha onde col B = nome_cliente E col C = sem_numero.
+
+    Se gestor fornecido, restringe a busca ao bloco desse gestor (col A),
+    evitando falsos positivos quando dois gestores têm clientes com nomes parecidos.
+    """
     result = sheets.spreadsheets().values().get(
         spreadsheetId=SHEET_ID,
-        range=f"'{nome_aba}'!A:A"
+        range=f"'{nome_aba}'!A:C"
     ).execute()
-    return result.get("values", [])
+    dados = result.get("values", [])
 
+    inicio_bloco = 0
+    fim_bloco = len(dados)
 
-def localizar_linha(nome_cliente, col_a):
-    """Localiza linha do cliente na coluna A (busca parcial case-insensitive)."""
-    for i, row in enumerate(col_a):
-        if row and nome_cliente.lower() in row[0].lower():
+    if gestor:
+        gestor_lower = gestor.lower()
+        for i, linha in enumerate(dados):
+            if linha and linha[0].lower() == gestor_lower:
+                inicio_bloco = i
+                break
+        for i in range(inicio_bloco + 1, len(dados)):
+            linha = dados[i]
+            if linha and linha[0] and linha[0].lower() != gestor_lower:
+                fim_bloco = i
+                break
+
+    for i in range(inicio_bloco, fim_bloco):
+        linha = dados[i]
+        if len(linha) >= 3 and linha[1] == nome_cliente and linha[2] == sem_numero:
             return i + 1
     return None
 
@@ -137,6 +180,9 @@ def preencher_cliente(sheets, nome_aba, row_idx, metricas, sheet_columns, slug="
     """Preenche colunas do cliente. Se dry_run=True, apenas imprime sem escrever."""
     updates = []
     for campo, col_letra in sheet_columns.items():
+        if col_letra.upper() in COLUNAS_FORMULA:
+            print(f"   [AVISO] {slug} — coluna {col_letra} ({campo}) é fórmula automática — pulando")
+            continue
         if moeda != "BRL" and "spend" in campo:
             print(f"   [AVISO] {slug} — moeda {moeda}, pulando coluna de spend ({campo})")
             continue
@@ -190,8 +236,8 @@ def validar_metricas(slug, metricas, sheet_columns):
 
 def main():
     parser = argparse.ArgumentParser(description="fill_sheets.py — stark squad")
-    parser.add_argument("--semana", help="Nome da aba DD/MM/AAAA (padrão: calculado automaticamente)")
-    parser.add_argument("--metricas-json", help="JSON com métricas por slug: {slug: {meta_spend: X, ...}}")
+    parser.add_argument("--semana", help="Nome da aba (ex: Junho) — padrão: calculado automaticamente")
+    parser.add_argument("--metricas-json", help="JSON com métricas por slug: {slug: {meta_spend_total: X, ...}}")
     parser.add_argument("--gestor", help="Filtrar por gestor (ex: vinicius, gustavo)")
     parser.add_argument("--clientes", help="Slugs separados por vírgula (ex: imcp,dr-carlos)")
     parser.add_argument("--dry-run", action="store_true", help="Simular escrita sem alterar a planilha")
@@ -201,8 +247,10 @@ def main():
         print("[ERRO] Variável de ambiente SHEET_ID não definida.")
         sys.exit(1)
 
-    nome_aba = args.semana or calcular_aba()
-    print(f"[INFO] Semana: {nome_aba}")
+    nome_aba_calculado, data_inicio, data_fim = calcular_aba()
+    nome_aba = args.semana or nome_aba_calculado
+    sem_numero = calcular_sem_numero(data_inicio)
+    print(f"[INFO] Aba: {nome_aba} | Semana: {data_inicio} a {data_fim} ({sem_numero})")
 
     # Carregar métricas do parâmetro ou stdin
     metricas_por_slug = {}
@@ -223,7 +271,6 @@ def main():
     if not verificar_ou_criar_aba(sheets, nome_aba):
         sys.exit(1)
 
-    col_a = ler_col_a(sheets, nome_aba)
     resultados = []
     todos_ok = True
 
@@ -236,10 +283,10 @@ def main():
         print(f"\n{'='*50}")
         print(f"[CLIENTE] {nome} ({slug})")
 
-        row_idx = localizar_linha(nome, col_a)
+        row_idx = localizar_linha(sheets, nome_aba, nome, sem_numero, gestor=args.gestor or "vinicius")
         if row_idx is None:
-            print(f"[ERRO] '{nome}' não encontrado na coluna A da aba '{nome_aba}'.")
-            resultados.append({"slug": slug, "status": "erro", "motivo": "cliente não encontrado na planilha"})
+            print(f"[ERRO] '{nome}' / '{sem_numero}' não encontrado na aba '{nome_aba}'.")
+            resultados.append({"slug": slug, "status": "erro", "motivo": "cliente/semana não encontrado na planilha"})
             todos_ok = False
             continue
 
@@ -263,7 +310,7 @@ def main():
 
     # Resumo final
     print(f"\n{'='*50}")
-    print(f"RESUMO — ABA {nome_aba}")
+    print(f"RESUMO — ABA {nome_aba} / {sem_numero}")
     print(f"{'='*50}")
     for r in resultados:
         if r["status"] == "processado":
