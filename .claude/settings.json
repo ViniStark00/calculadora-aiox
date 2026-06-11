@@ -13,7 +13,7 @@
           },
           {
             "type": "command",
-            "command": "$d = [Console]::In.ReadToEnd() | ConvertFrom-Json; $c = [string]$d.tool_input.command; if ($c -match 'REPORTEI_TOKEN=[A-Za-z0-9]' -or $c -match 'service_account\\.json' -or $c -match 'eyJ[A-Za-z0-9]{20,}') { Write-Output '{\"continue\":false,\"stopReason\":\"\\u26a0\\ufe0f [H3 BLOQUEADO] Credencial em texto detectada. O script nao deve expor REPORTEI_TOKEN, caminho de service_account.json ou tokens JWT diretamente no comando. Use variaveis de ambiente de settings.local.json.\"}' }",
+            "command": "$d = [Console]::In.ReadToEnd() | ConvertFrom-Json; $c = [string]$d.tool_input.command; if ($c -match 'REPORTEI_TOKEN=[A-Za-z0-9]' -or $c -match '(cat|type|print|echo|curl|--key-file|credentials).*service_account\\.json' -or $c -match 'eyJ[A-Za-z0-9]{20,}') { Write-Output '{\"continue\":false,\"stopReason\":\"\\u26a0\\ufe0f [H3 BLOQUEADO] Credencial em texto detectada. O script nao deve expor REPORTEI_TOKEN, caminho de service_account.json ou tokens JWT diretamente no comando. Use variaveis de ambiente de settings.local.json.\"}' }",
             "shell": "powershell",
             "statusMessage": "H3: verificando credenciais expostas em Bash..."
           },
