@@ -12,12 +12,12 @@
 ## 👉 ESTADO ATUAL — onde parar e retomar
 
 ```
-FASE:         SESSÃO 9 — Remapeamento Nova Planilha
-ETAPA:        GS — push + PR (aguarda @devops) | G0 slugs pendente (próxima sessão)
-PRÓXIMO:      @devops push + PR | depois: G0 descoberta slugs (tofu_spend, bofu_spend, ctr, leads_meta, cadastros_respondi, cpa_google)
-AGENTE ATIVO: @devops (GS) / @dev (G0)
+FASE:         SESSÃO 10 — G0 + Nova Gestora + Verificações
+ETAPA:        S10-A ✅ | S10-C ✅ — clientes.yaml sincronizado com planilha | G0 e GS pendentes
+PRÓXIMO:      S10-B (G0) — descoberta slugs via MCP Reportei | GS — @devops push + PR
+AGENTE ATIVO: @dev (G0) / @devops (GS)
 BRANCH:       feat/paralelismo-stark-chief
-CHECKPOINT:   aec1a22 — G1–G5 concluídos em 2026-06-10
+CHECKPOINT:   S10-C concluído em 2026-06-10 — distribuição clientes sincronizada
 ```
 
 ---
@@ -216,12 +216,20 @@ GS  @devops  push + PR repo Gustavo             ⬜ PENDENTE
 
 ### Agenda
 
-| # | Tarefa | Agente | Dependência |
-|---|--------|--------|-------------|
-| S10-A | Verificações livres do usuário | @dev | — |
-| S10-B | G0 — descoberta dos 6 slugs pendentes | @dev | — |
-| S10-C | Nova gestora — criar bloco em `clientes.yaml` | @dev | usuário passa nome + clientes |
-| GS | Push + PR repo Gustavo | @devops | após S10-B e S10-C |
+| # | Tarefa | Agente | Status |
+|---|--------|--------|--------|
+| S10-A | Verificações — comparação planilha × YAML | @dev | ✅ 2026-06-10 |
+| S10-B | G0 — descoberta dos 6 slugs pendentes | @dev | ⬜ PENDENTE |
+| S10-C | Sincronização clientes.yaml com planilha | @dev | ✅ 2026-06-10 |
+| GS | Push + PR repo Gustavo | @devops | ⬜ PENDENTE |
+
+**S10-C — O que foi feito:**
+- Dr. Humberto movido de `vinicius` → `luiz`
+- Desativados (saíram da carteira): Dr. Laureano Filho, Dr. Carlos Matheus, Dra. Mariângela Santiago
+- Reativado Dr Juan Lopez (= Dr Juan Sanchez no Reportei) para `luiz`
+- Reativado MaxiOral → `Dr. Daniel Rennó` para `wallison` (só Google)
+- Novo cliente: Dra. Ana Cecília → `wallison`, META `1050461709389701`, Reportei pendente
+- Pendente para depois: Stark Marketing (META `676220449475191`, sem Reportei próprio)
 
 ### BRIEFING PARA @dev — Sessão 10
 
@@ -967,3 +975,4 @@ FINAL                      gustavoradler-cyber/treinamento-orquestradores-stark-
 | CP-07 | 2026-06-07 | Execução | SESSÃO 6 em andamento. B2 implementado em agents/alerta-monitor.md com escopo expandido: descoberto que lógica de reportei_fallback estava errada — Reportei entrega CPM/CTR/freq quando integração Meta Ads está ativa (confirmado via teste com Dr. Leandro Gontijo, project_id 627550). Lógica corrigida para 3 fontes: meta_ads_mcp / reportei_meta / reportei_sem_meta. Badge só dispara para reportei_sem_meta. CLAUDE.md atualizado com nova lógica de fallback. Aguardando commit @dev. | @dev commitar B2 → @dev implementar B1 → @devops push + PR + merge → SYNC FINAL. |
 | CP-08 | 2026-06-07 | CONCLUÍDO | SESSÃO 6 concluída. B2 commitado (0d1921e) e B1 commitado (ae52bbc). PR #2 aberto e mergeado em gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego. SYNC FINAL executado: main local atualizado. Plano de paralelismo encerrado — todas as 16 melhorias aprovadas entregues. | — Plano encerrado. |
 | CP-11 | 2026-06-10 | Sessão 9 | Arquitetura da migração para nova planilha mensal definida por Aria. Checkpoint 134e808 criado. Briefing completo do @dev escrito neste documento. Docs atualizados com Sessão 9. | G0: abrir nova sessão → @dev → descoberta de slugs via MCP Reportei → Vinicius confirma → G1–G5. |
+| CP-12 | 2026-06-10 | Sessão 10 — S10-C | clientes.yaml sincronizado com distribuição real da planilha. 7 mudanças: Humberto→luiz, 3 saídas (Laureano, Carlos Matheus, Mariângela), Juan Lopez reativado→luiz, MaxiOral→Daniel Rennó→wallison, nova Dra. Ana Cecília→wallison. | S10-B (G0 slugs) + GS (push + PR). |

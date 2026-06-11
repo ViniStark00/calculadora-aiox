@@ -5,7 +5,7 @@
 
 **Squad:** `gestor-trafego-stark`
 **Gestores:** Vinicius Lima · Gustavo Radler · Andreyves · Richard · Luiz · Mateus · Thiago · Wallison — gestores de tráfego pago, Stark Marketing
-**Clientes:** 28 clientes ativos, nicho saúde/medicina
+**Clientes:** ~91 clientes ativos (88 nas automações + 3 Amanda), nicho saúde/medicina
 **Objetivo:** Automatizar rotinas diárias e semanais dos 8 gestores de tráfego
 
 ## As 4 Rotinas

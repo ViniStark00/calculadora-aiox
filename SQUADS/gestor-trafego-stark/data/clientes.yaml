@@ -102,7 +102,7 @@ clientes:
 
   - nome: "Dr. Humberto"
     slug: "dr-humberto"
-    gestores: [vinicius]
+    gestores: [luiz]
     ativo: true
     prioridade: 7
     reportei_project_id: 1233641
@@ -198,17 +198,19 @@ clientes:
     sheet_columns: *sheet_cols
     nota: "Meta Spend bloqueado em ARS — pular coleta de spend sem erro"
 
-  - nome: "MaxiOral"
-    slug: "maxioral"
-    gestores: [vinicius]
-    ativo: false
-    prioridade: 15
+  - nome: "Dr. Daniel Rennó"
+    slug: "dr-daniel-renno"
+    nome_reportei: "MaxiOral"
+    gestores: [wallison]
+    ativo: true
+    prioridade: 10
     reportei_project_id: 1026194
     especialidade: null
     meta_ad_account_id: null
     excluir_meta_monitoring: false
-    nome_whatsapp: "pessoal"
-    sheet_columns: null
+    nome_whatsapp: "Dr. Daniel"
+    sheet_columns: *sheet_cols
+    nota: "Só Google Ads — sem Meta"
 
   - nome: "Zenicare"
     slug: "zenicare"
@@ -241,17 +243,17 @@ clientes:
 
   - nome: "Dr. Laureano Filho"
     slug: "dr-laureano-filho"
-    gestores: [vinicius]
-    ativo: true
-    prioridade: 1
+    gestores: []
+    ativo: false
+    prioridade: null
     reportei_project_id: 982754
     especialidade: cirurgia_ortognatica
     meta_ad_account_id: "1679155259401164"
     excluir_meta_monitoring: true
     nome_whatsapp: "Dr. Laureano"
-    sheet_columns: *sheet_cols
+    sheet_columns: null
     clickup_status_list_id: null
-    nota: "Exclusivamente Google Ads — ignorar monitoramento Meta completamente (ADR-07)"
+    nota: "Saiu da carteira 2026-06-10. Exclusivamente Google Ads (ADR-07)"
 
   - nome: "Dra. Nicolli"
     slug: "dra-nicolli"
@@ -331,17 +333,17 @@ clientes:
 
   - nome: "Dra. Mariângela Santiago"
     slug: "dra-mariangela-santiago"
-    gestores: [gustavo]
-    ativo: true
-    prioridade: 5
+    gestores: []
+    ativo: false
+    prioridade: null
     reportei_project_id: 1097223
-    especialidade: cirurgia_facial          # corrigido: era medicina_estetica — cirurgiã plástica especializada em face/facelift
+    especialidade: cirurgia_facial
     meta_ad_account_id: "363758481808089"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dra. Mariângela"
-    sheet_columns: *sheet_cols
+    sheet_columns: null
     clickup_status_list_id: null
-    nota: "Ausência de conteúdo orgânico"
+    nota: "Saiu da carteira 2026-06-10"
 
   - nome: "Dr. Caio Fernandes"
     slug: "dr-caio-fernandes"
@@ -448,15 +450,15 @@ clientes:
 
   - nome: "Dr Carlos Matheus"
     slug: "dr-carlos-matheus"
-    gestores: [andreyves]
-    ativo: true
-    prioridade: 2
+    gestores: []
+    ativo: false
+    prioridade: null
     reportei_project_id: 632306
     especialidade: null
     meta_ad_account_id: "1492499071332897"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Carlos"
-    sheet_columns: *sheet_cols
+    sheet_columns: null
 
   - nome: "Dr Luis Fernando Garcia"
     slug: "dr-luis-fernando-garcia"
@@ -1211,6 +1213,19 @@ clientes:
     nome_whatsapp: "Dr. Marcello"
     sheet_columns: *sheet_cols
 
+  - nome: "Dra. Ana Cecília"
+    slug: "dra-ana-cecilia"
+    gestores: [wallison]
+    ativo: true
+    prioridade: 11
+    reportei_project_id: null
+    especialidade: null
+    meta_ad_account_id: "1050461709389701"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Ana Cecília"
+    sheet_columns: *sheet_cols
+    nota: "Sem Reportei ainda — preencher reportei_project_id quando disponível"
+
   # ─────────────────────────────────────────────────────────────────
   # BLOCO AMANDA — 3 clientes ativos, NÃO processados pelas automações
   # ─────────────────────────────────────────────────────────────────
@@ -1280,16 +1295,18 @@ clientes:
     excluir_meta_monitoring: false
     sheet_columns: null
 
-  - nome: "Dr Juan Sanchez"
-    slug: "dr-juan-sanchez"
-    gestores: []
-    ativo: false
-    prioridade: null
+  - nome: "Dr Juan Lopez"
+    slug: "dr-juan-lopez"
+    nome_reportei: "Dr Juan Sanchez"
+    gestores: [luiz]
+    ativo: true
+    prioridade: 12
     reportei_project_id: 564095
     especialidade: null
     meta_ad_account_id: null
     excluir_meta_monitoring: false
-    sheet_columns: null
+    nome_whatsapp: "Dr. Juan"
+    sheet_columns: *sheet_cols
 
   - nome: "Dra Luana Rios"
     slug: "dra-luana-rios"
