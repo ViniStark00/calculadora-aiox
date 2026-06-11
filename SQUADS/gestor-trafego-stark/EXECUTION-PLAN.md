@@ -212,14 +212,14 @@ GS  @devops  push + PR repo Gustavo             ⬜ PENDENTE
 
 ---
 
-## SESSÃO 10 — G0 + Nova Gestora + Verificações ⬜ PENDENTE
+## SESSÃO 10 — G0 + Nova Gestora + Verificações ✅ CONCLUÍDO
 
 ### Agenda
 
 | # | Tarefa | Agente | Status |
 |---|--------|--------|--------|
 | S10-A | Verificações — comparação planilha × YAML | @dev | ✅ 2026-06-10 |
-| S10-B | G0 — descoberta dos 6 slugs pendentes | @dev | ⬜ PENDENTE |
+| S10-B | G0 — descoberta dos 6 slugs pendentes | @dev | ✅ d9756e3 |
 | S10-C | Sincronização clientes.yaml com planilha | @dev | ✅ 2026-06-10 |
 | GS | Push + PR repo Gustavo | @devops | ⬜ PENDENTE |
 
