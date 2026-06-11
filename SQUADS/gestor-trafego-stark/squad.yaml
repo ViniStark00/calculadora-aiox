@@ -1,0 +1,148 @@
+name: gestor-trafego-stark
+version: 1.0.0
+description: >
+  Squad unificado para gestores de tráfego pago Vinicius e Gustavo.
+  Combina monitoramento diário de métricas Meta Ads, relatórios semanais
+  Reportei/Sheets, status reports ClickUp e monitoramento de inbox.
+  Pipeline multi-gestor — 28 clientes, nicho saúde/medicina.
+author: gustavoradler-cybe
+license: MIT
+slashPrefix: "*"
+
+aiox:
+  minVersion: "2.1.0"
+  type: squad
+
+domain:
+  primary: trafego-pago-multi-gestor
+  secondary: [meta-ads, google-ads, relatorio-cliente, clickup, monitoramento-diario]
+  multi_client: true
+  gestores: [vinicius, gustavo]
+
+components:
+  agents:
+    - agents/stark-chief.md
+    - agents/validator.md
+    - agents/coletor.md
+    - agents/redator.md
+    - agents/publicador.md
+    - agents/onboarding-manager.md
+    - agents/contexto-cliente.md
+    - agents/alerta-monitor.md
+    - agents/clickup-writer.md
+    - agents/task-monitor.md
+  tasks:
+    - tasks/fetch-metrics.md
+    - tasks/verify-fill.md
+    - tasks/generate-report.md
+    - tasks/validate-report.md
+    - tasks/publish-timeline.md
+    - tasks/save-history.md
+    - tasks/onboarding-gestor.md
+    - tasks/monitorar-contas.md
+    - tasks/preencher-clickup.md
+    - tasks/rotina-diaria.md
+    - tasks/rotina-semanal.md
+  workflows:
+    - workflows/weekly-pipeline.md
+  checklists:
+    - checklists/sheets-gate.md
+    - checklists/relatorio-gate.md
+    - checklists/alertas-gate.md
+    - checklists/clickup-gate.md
+  templates:
+    - templates/relatorio-template.md
+    - templates/contexto-cliente-template.md
+  data:
+    - data/clientes.yaml
+    - data/thresholds-por-especialidade.yaml
+  tools: []
+  scripts:
+    - scripts/fill_sheets.py
+
+config:
+  extends: extend
+  entrypoint: agents/stark-chief.md
+
+integrations:
+  - name: Reportei MCP
+    id: "mcp__30ebe978-db99-4dee-927c-b72f6abac9d8"
+    tools:
+      - create_timeline_event
+      - get_metrics
+      - get_project
+      - get_project_metrics
+      - get_report
+      - list_projects
+      - list_timeline_events
+
+  - name: Google Drive MCP
+    id: "mcp__92a31705-b51e-422b-abc2-e6cb82a79330"
+    tools:
+      - search_files
+      - read_file_content
+      - create_file
+      - download_file_content
+
+  - name: ClickUp MCP
+    id: "mcp__2d24fa11-1001-4c98-bf3c-7dcc3b7bdfaf"
+    tools:
+      - clickup_filter_tasks
+      - clickup_get_task
+      - clickup_update_task
+      - clickup_create_doc
+      - clickup_get_doc
+
+  - name: Meta Ads MCP
+    id: "mcp__c0a7182d-bfb1-44b9-9206-83cca8f17d52"
+    tools:
+      - get_insights
+      - get_ad_accounts
+      - get_ad_entities
+
+  - name: Reportei API v2
+    type: http-rest
+    base_url: "https://api.reportei.com/v2"
+    auth: bearer-token
+    env: REPORTEI_TOKEN
+
+  - name: Google Sheets API
+    type: service-account
+    env: GOOGLE_SERVICE_ACCOUNT_JSON
+    sheet_id_env: SHEET_ID
+
+heuristics:
+  absolute_vetos:
+    - Nunca executar ação no Meta Ads ou Google Ads — apenas leitura de métricas
+    - Nunca publicar na Timeline do Reportei sem gate_reportei aprovado pelo validator
+    - Nunca preencher a planilha com valores estimados — zeros são válidos, campos vazios não
+    - Nunca recomendar ações sobre atendimento, follow-up ou processo comercial pós-lead
+    - Nunca expor tokens, credenciais ou paths de service_account no output do pipeline
+    - Nunca recomendar pause, escala ou qualquer ação de campanha — output é apenas alertas
+    - Nunca escrever no ClickUp sem aprovação explícita do gestor sobre o draft
+
+pipeline_flow: >
+  stark-chief → alerta-monitor (FASE 1: metricas_coletadas)
+  → [SE vinicius] coletor (FASE 2: reutiliza metricas_coletadas) → validator (gate_sheets)
+  → redator (FASE 3) → validator (gate_reportei)
+  → [PARALELO] publicador (FASE 4) ∥ clickup-writer → validator (gate_clickup) (FASE 5)
+  → contexto-cliente (atualização) + task-monitor + coletor (save-history) (FASE 6)
+  → resumo final
+
+dependencies:
+  node: []
+  python: [reportei-api, gspread, google-auth]
+  squads: []
+
+tags:
+  - trafego-pago
+  - multi-gestor
+  - google-sheets
+  - reportei
+  - meta-ads
+  - google-ads
+  - clickup
+  - monitoramento-diario
+  - relatorio-semanal
+  - multi-cliente
+  - automacao

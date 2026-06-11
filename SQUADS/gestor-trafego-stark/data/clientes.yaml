@@ -1,0 +1,1364 @@
+# clientes.yaml — Lista unificada de clientes gestor-trafego-stark
+# Fonte: fusão de squads gestor-trafego-vinicius + gestor-trafego-gustavo
+# ADR-01: gestores é array — clientes compartilhados aparecem UMA VEZ com gestores: [vinicius, gustavo]
+# meta_ad_account_id: preenchido via MCP na Sessão 9 (2026-06-10); null = fallback Reportei
+# sheet_columns: todos os clientes ativos dos 8 gestores usam *sheet_cols (FASE 2 multi-gestor)
+# clickup_status_list_id: apenas clientes Gustavo; null = preencher antes do primeiro uso
+# Especialidades corrigidas em 2026-05-28 via cruzamento com docs "Contexto Clientes - Stark" no Drive
+
+_sheet_cols: &sheet_cols
+  meta_spend_total: E   # Meta invest total
+  tofu_spend: D         # Meta MCP: sum(amount_spent) campanhas [TOFU]/[IMP]
+  bofu_spend: L         # Meta MCP: sum(amount_spent) campanhas [BoFu]/[BOFU]
+  seguidores: F         # Reportei instagram_business: new_followers_count
+  ctr: J                # Reportei facebook_ads: ctr
+  conversas: M          # Reportei facebook_ads: actions_onsite_conversion.messaging_conversation_started_7d
+  leads_meta: O         # Reportei facebook_ads: actions_lead
+  cadastros_respondi: P # Meta MCP: sum(results) campanhas [RESPONDI] (custom conversion Respondi.app)
+  cpa_google: R         # Reportei google_adwords: cost_per_conversion
+  google_spend: T       # Reportei google_adwords: cost_micros (já em R$, sem divisão)
+
+clientes:
+
+  # ─────────────────────────────────────────────────────────────────
+  # BLOCO VINICIUS — 17 clientes exclusivos
+  # ─────────────────────────────────────────────────────────────────
+
+  - nome: "IMCP - Instituto Mineiro de Cirurgia Plastica"
+    slug: "imcp"
+    gestores: [vinicius]
+    ativo: true
+    prioridade: 1
+    reportei_project_id: 688377
+    nome_reportei: "IMCP - Instituto Mineiro de Cirurgia Plástica"
+    especialidade: cirurgia_plastica
+    meta_ad_account_id: "1461512244666133"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "pessoal"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra Danielle Gondim"
+    slug: "dra-danielle-gondim"
+    gestores: [vinicius]
+    ativo: false
+    prioridade: 2
+    reportei_project_id: 839737
+    especialidade: cirurgia_facial
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Danielle"
+    sheet_columns: null
+
+  - nome: "Dr. Leandro Gontijio"
+    slug: "dr-leandro-gontijio"
+    gestores: [vinicius]
+    ativo: true
+    prioridade: 3
+    reportei_project_id: 627550
+    nome_reportei: "Dr Leandro Gontijo"
+    especialidade: cirurgia_corporal
+    meta_ad_account_id: "178997036529031"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Leandro"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Lucas Consentino"
+    slug: "dr-lucas-consentino"
+    gestores: [vinicius]
+    ativo: true
+    prioridade: 4
+    reportei_project_id: 564106
+    nome_reportei: "Dr Lucas Consentino"
+    especialidade: cirurgia_corporal
+    meta_ad_account_id: "286117336572106"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Lucas"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Guilherme Mattar"
+    slug: "dr-guilherme-mattar"
+    gestores: [vinicius]
+    ativo: true
+    prioridade: 5
+    reportei_project_id: 1023153
+    especialidade: cirurgia_trans
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Guilherme"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Luiz Borba"
+    slug: "dr-luiz-borba"
+    gestores: [vinicius]
+    ativo: true
+    prioridade: 6
+    reportei_project_id: 749199
+    nome_reportei: "Dr. Luiz Borba"
+    especialidade: mommy_makeover
+    meta_ad_account_id: "898357921690217"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Luiz"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Humberto"
+    slug: "dr-humberto"
+    gestores: [luiz]
+    ativo: true
+    prioridade: 7
+    reportei_project_id: 1233641
+    especialidade: mommy_makeover
+    meta_ad_account_id: "1739382086556203"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Humberto"
+    sheet_columns: *sheet_cols
+
+  - nome: "Diego Gonzalez Salvador"
+    slug: "diego-gonzalez-salvador"
+    gestores: [vinicius]
+    ativo: true
+    prioridade: 8
+    reportei_project_id: 1157908
+    nome_reportei: "Diego Gonzalez"
+    especialidade: mommy_makeover
+    meta_ad_account_id: "1265244524292292"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Diego"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Joel Abdala"
+    slug: "dr-joel-abdala"
+    gestores: [vinicius]
+    ativo: true
+    prioridade: 9
+    reportei_project_id: 1218018
+    especialidade: cirurgia_facial
+    meta_ad_account_id: "3158402540893322"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Joel"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Matheus Ocampo"
+    slug: "dr-matheus-ocampo"
+    gestores: [vinicius]
+    ativo: true
+    prioridade: 10
+    reportei_project_id: 1233644
+    especialidade: cirurgia_corporal
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Matheus"
+    sheet_columns: *sheet_cols
+
+  - nome: "Destra Desenvolvimentos"
+    slug: "destra-desenvolvimentos"
+    gestores: [vinicius]
+    ativo: true
+    prioridade: 11
+    reportei_project_id: 1028218
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Destra"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Alvaro Rodrigues"
+    slug: "dr-alvaro-rodrigues"
+    gestores: [richard]
+    ativo: true
+    prioridade: 12
+    reportei_project_id: 715143
+    especialidade: null
+    meta_ad_account_id: "944599683794865"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Alvaro"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Enzo Carvalho"
+    slug: "dr-enzo-carvalho"
+    gestores: [thiago]
+    ativo: true
+    prioridade: 13
+    reportei_project_id: 1195572
+    especialidade: null
+    meta_ad_account_id: "1392942269242123"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Enzo"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Javier Cucchiaro"
+    slug: "dr-javier-cucchiaro"
+    gestores: [thiago]
+    ativo: true
+    prioridade: 14
+    reportei_project_id: 1218270
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Javier"
+    sheet_columns: *sheet_cols
+    nota: "Meta Spend bloqueado em ARS — pular coleta de spend sem erro"
+
+  - nome: "Dr. Daniel Rennó"
+    slug: "dr-daniel-renno"
+    nome_reportei: "MaxiOral"
+    gestores: [wallison]
+    ativo: true
+    prioridade: 10
+    reportei_project_id: 1026194
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Daniel"
+    sheet_columns: *sheet_cols
+    nota: "Só Google Ads — sem Meta"
+
+  - nome: "Zenicare"
+    slug: "zenicare"
+    gestores: [vinicius]
+    ativo: false
+    prioridade: 16
+    reportei_project_id: null
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "pessoal"
+    sheet_columns: null
+
+  - nome: "IGO"
+    slug: "igo"
+    gestores: [wallison]
+    ativo: true
+    prioridade: 17
+    reportei_project_id: 1230428
+    especialidade: null
+    meta_ad_account_id: "2194127843998346"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "pessoal"
+    sheet_columns: *sheet_cols
+
+  # ─────────────────────────────────────────────────────────────────
+  # CLIENTES COMPARTILHADOS — gestores: [vinicius, gustavo]
+  # ADR-01: aparecem UMA VEZ com array de gestores
+  # ─────────────────────────────────────────────────────────────────
+
+  - nome: "Dr. Laureano Filho"
+    slug: "dr-laureano-filho"
+    gestores: []
+    ativo: false
+    prioridade: null
+    reportei_project_id: 982754
+    especialidade: cirurgia_ortognatica
+    meta_ad_account_id: "1679155259401164"
+    excluir_meta_monitoring: true
+    nome_whatsapp: "Dr. Laureano"
+    sheet_columns: null
+    clickup_status_list_id: null
+    nota: "Saiu da carteira 2026-06-10. Exclusivamente Google Ads (ADR-07)"
+
+  - nome: "Dra. Nicolli"
+    slug: "dra-nicolli"
+    gestores: [gustavo]
+    ativo: true
+    prioridade: 2
+    reportei_project_id: 642925
+    nome_reportei: "Dra Nicolli"
+    especialidade: medicina_estetica
+    meta_ad_account_id: "960315725767656"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Nicolli"
+    sheet_columns: *sheet_cols
+    clickup_status_list_id: null
+
+  # ─────────────────────────────────────────────────────────────────
+  # BLOCO GUSTAVO — 9 clientes exclusivos
+  # clickup_status_list_id: preencher antes do primeiro uso (*status-report-clickup)
+  # ─────────────────────────────────────────────────────────────────
+
+  - nome: "Dr. Fernando Bezerra"
+    slug: "dr-fernando-bezerra"
+    gestores: [gustavo]
+    ativo: true
+    prioridade: 1
+    reportei_project_id: 696403
+    especialidade: cirurgia_plastica        # corrigido: era saude_geral — foco em mama/mastopexia
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Fernando Bezerra"
+    sheet_columns: *sheet_cols
+    clickup_status_list_id: null
+    nota: "PRIORIDADE — baixo volume de leads"
+
+  - nome: "Dr. Diego Alencar"
+    slug: "dr-diego-alencar"
+    gestores: [gustavo]
+    ativo: true
+    prioridade: 2
+    reportei_project_id: 1064037
+    especialidade: emagrecimento            # corrigido: era oncologia — especialista em emagrecimento/GLP-1
+    meta_ad_account_id: "24418319674534288"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Diego Alencar"
+    sheet_columns: *sheet_cols
+    clickup_status_list_id: null
+    nota: "CPL crítico — histórico de alertas"
+
+  - nome: "Dr. Marcelo Bezerra"
+    slug: "dr-marcelo-bezerra"
+    gestores: [gustavo]
+    ativo: true
+    prioridade: 3
+    reportei_project_id: 610559
+    nome_reportei: "Dr Marcelo Bezerra"
+    especialidade: cirurgia_plastica
+    meta_ad_account_id: "789988945186773"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Marcelo"
+    sheet_columns: *sheet_cols
+    clickup_status_list_id: null
+    nota: "Baixo volume de agendamentos — atenção"
+
+  - nome: "Dr. Higner Forastieri"
+    slug: "dr-higner-forastieri"
+    gestores: [gustavo]
+    ativo: true
+    prioridade: 4
+    reportei_project_id: 1097249
+    especialidade: cirurgia_facial          # corrigido: era tricologia — cirurgião plástico especialista em face/facelift
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Higner"
+    sheet_columns: *sheet_cols
+    clickup_status_list_id: null
+    nota: "Baixo agendamento, CPM alto"
+
+  - nome: "Dra. Mariângela Santiago"
+    slug: "dra-mariangela-santiago"
+    gestores: []
+    ativo: false
+    prioridade: null
+    reportei_project_id: 1097223
+    especialidade: cirurgia_facial
+    meta_ad_account_id: "363758481808089"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Mariângela"
+    sheet_columns: null
+    clickup_status_list_id: null
+    nota: "Saiu da carteira 2026-06-10"
+
+  - nome: "Dr. Caio Fernandes"
+    slug: "dr-caio-fernandes"
+    gestores: [gustavo]
+    ativo: true
+    prioridade: 6
+    reportei_project_id: 1170455
+    especialidade: cirurgia_plastica        # corrigido: era saude_geral — cirurgião plástico
+    meta_ad_account_id: "339122182185621"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Caio"
+    sheet_columns: *sheet_cols
+    clickup_status_list_id: "901300668557"
+    nota: "Alto alcance — monitorar follows"
+
+  - nome: "Fernanda Encinas"
+    slug: "fernanda-encinas"
+    gestores: [gustavo]
+    ativo: true
+    prioridade: 9
+    reportei_project_id: 913731
+    especialidade: cirurgia_plastica        # corrigido: era medicina_estetica — cirurgiã plástica (Lipo HD, abdominoplastia)
+    meta_ad_account_id: "7555194664567088"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Fernanda"
+    sheet_columns: *sheet_cols
+    clickup_status_list_id: null
+    nota: "Alto volume de conversas"
+
+  - nome: "Graciela Machado"
+    slug: "graciela-machado"
+    gestores: [gustavo]
+    ativo: true
+    prioridade: 10
+    reportei_project_id: 672682
+    especialidade: ginecologia              # corrigido: era medicina_estetica — ginecologista e obstetra
+    meta_ad_account_id: "1143540576041734"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Graciela"
+    sheet_columns: *sheet_cols
+    clickup_status_list_id: null
+    nota: "Bom momento comercial"
+
+  - nome: "Dra. Érica Marchiori"
+    slug: "dra-erica-marchiori"
+    gestores: [gustavo]
+    ativo: true
+    prioridade: 11
+    reportei_project_id: 1025271
+    especialidade: cirurgia_bucomaxilofacial  # corrigido: era dermatologia — cirurgiã buco-maxilofacial/ortognática
+    meta_ad_account_id: "738607819492370"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Érica"
+    sheet_columns: *sheet_cols
+    clickup_status_list_id: null
+    nota: "Bom momento de fechamento"
+
+  # ─────────────────────────────────────────────────────────────────
+  # BLOCO GUSTAVO — novos clientes
+  # ─────────────────────────────────────────────────────────────────
+
+  - nome: "Dra. Luana Girondi"
+    slug: "dra-luana-girondi"
+    gestores: [gustavo]
+    ativo: true
+    prioridade: 12
+    reportei_project_id: 989108
+    nome_reportei: "Dra Luana Girondi"
+    especialidade: null
+    meta_ad_account_id: "1473041596448611"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Luana"
+    sheet_columns: *sheet_cols
+    clickup_status_list_id: null
+
+  - nome: "ConciergeIA"
+    slug: "conciergeia"
+    gestores: [gustavo]
+    ativo: true
+    prioridade: 13
+    reportei_project_id: 1070641
+    especialidade: null
+    meta_ad_account_id: "821686023509191"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "ConciergeIA"
+    sheet_columns: *sheet_cols
+    clickup_status_list_id: null
+
+  # ─────────────────────────────────────────────────────────────────
+  # BLOCO ANDREYVES — 8 clientes
+  # ─────────────────────────────────────────────────────────────────
+
+  - nome: "Dra. Taissa Recalde"
+    slug: "dra-taissa-recalde"
+    gestores: [andreyves]
+    ativo: true
+    prioridade: 1
+    reportei_project_id: 846955
+    especialidade: null
+    meta_ad_account_id: "424856948767873"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Taissa"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Carlos Matheus"
+    slug: "dr-carlos-matheus"
+    gestores: []
+    ativo: false
+    prioridade: null
+    reportei_project_id: 632306
+    especialidade: null
+    meta_ad_account_id: "1492499071332897"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Carlos"
+    sheet_columns: null
+
+  - nome: "Dr Luis Fernando Garcia"
+    slug: "dr-luis-fernando-garcia"
+    gestores: [andreyves]
+    ativo: true
+    prioridade: 3
+    reportei_project_id: 787347
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Luis Fernando"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra. Marina Rossato"
+    slug: "dra-marina-rossato"
+    gestores: [andreyves]
+    ativo: true
+    prioridade: 4
+    reportei_project_id: 693058
+    especialidade: null
+    meta_ad_account_id: "2263016970697466"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Marina"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Fernando Froes"
+    slug: "dr-fernando-froes"
+    gestores: [andreyves]
+    ativo: true
+    prioridade: 5
+    reportei_project_id: 448115
+    especialidade: null
+    meta_ad_account_id: "788260558890663"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Fernando Froes"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Luciano Esteves"
+    slug: "dr-luciano-esteves"
+    gestores: [andreyves]
+    ativo: true
+    prioridade: 6
+    reportei_project_id: 1217001
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Luciano"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra. Lívia Dantas"
+    slug: "dra-livia-dantas"
+    gestores: [andreyves]
+    ativo: true
+    prioridade: 7
+    reportei_project_id: 1243423
+    nome_reportei: "Dra. Livia Dantas"
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Lívia"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra. Ivy Magri"
+    slug: "dra-ivy-magri"
+    gestores: [andreyves]
+    ativo: true
+    prioridade: 8
+    reportei_project_id: 1243422
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Ivy"
+    sheet_columns: *sheet_cols
+
+  # ─────────────────────────────────────────────────────────────────
+  # BLOCO RICHARD — 8 clientes
+  # ─────────────────────────────────────────────────────────────────
+
+  - nome: "Dr. Rafael Varella"
+    slug: "dr-rafael-varella"
+    gestores: [richard]
+    ativo: true
+    prioridade: 1
+    reportei_project_id: 573035
+    nome_reportei: "Dr Rafael Varella"
+    especialidade: null
+    meta_ad_account_id: "484291373131718"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Rafael"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Vinicius Camargo"
+    slug: "dr-vinicius-camargo"
+    gestores: [richard]
+    ativo: true
+    prioridade: 2
+    reportei_project_id: 564117
+    nome_reportei: "Dr Vinicius Camargo"
+    especialidade: null
+    meta_ad_account_id: "7433424773375536"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Vinicius"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Eduardo Raulino"
+    slug: "dr-eduardo-raulino"
+    gestores: [richard]
+    ativo: true
+    prioridade: 3
+    reportei_project_id: 1041425
+    especialidade: null
+    meta_ad_account_id: "357899637268471"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Eduardo"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Thiago Souza"
+    slug: "dr-thiago-souza"
+    gestores: [richard]
+    ativo: true
+    prioridade: 4
+    reportei_project_id: 596243
+    nome_reportei: "Dr Thiago Souza"
+    especialidade: null
+    meta_ad_account_id: "3404154286535890"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Thiago"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Rodolfo Soares"
+    slug: "dr-rodolfo-soares"
+    gestores: [richard]
+    ativo: true
+    prioridade: 5
+    reportei_project_id: 564110
+    especialidade: null
+    meta_ad_account_id: "686379118058209"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Rodolfo"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Gilberto Filho"
+    slug: "dr-gilberto-filho"
+    gestores: [richard]
+    ativo: true
+    prioridade: 6
+    reportei_project_id: 1126940
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Gilberto"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Fernando Suguita"
+    slug: "dr-fernando-suguita"
+    gestores: [richard]
+    ativo: true
+    prioridade: 7
+    reportei_project_id: 504343
+    especialidade: null
+    meta_ad_account_id: "815697730080203"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Fernando Suguita"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra Nicolle Andrade"
+    slug: "dra-nicolle-andrade"
+    gestores: [richard]
+    ativo: true
+    prioridade: 8
+    reportei_project_id: 1235657
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Nicolle"
+    sheet_columns: *sheet_cols
+
+  # ─────────────────────────────────────────────────────────────────
+  # BLOCO LUIZ — 11 clientes
+  # ─────────────────────────────────────────────────────────────────
+
+  - nome: "Dr Fernando Franco"
+    slug: "dr-fernando-franco"
+    gestores: [luiz]
+    ativo: true
+    prioridade: 1
+    reportei_project_id: 715663
+    nome_reportei: "Dr. Fernando Franco"
+    especialidade: null
+    meta_ad_account_id: "1754657008280428"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Fernando Franco"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. George Regis"
+    slug: "dr-george-regis"
+    gestores: [luiz]
+    ativo: true
+    prioridade: 2
+    reportei_project_id: 678927
+    especialidade: null
+    meta_ad_account_id: "538273408114873"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. George"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Daniel Morais"
+    slug: "dr-daniel-morais"
+    gestores: [luiz]
+    ativo: true
+    prioridade: 3
+    reportei_project_id: 564114
+    nome_reportei: "Dr. Daniel Morais"
+    especialidade: null
+    meta_ad_account_id: "301820428567299"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Daniel"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Edson Prata"
+    slug: "dr-edson-prata"
+    gestores: [luiz]
+    ativo: true
+    prioridade: 4
+    reportei_project_id: 1077381
+    nome_reportei: "Edson Prata"
+    especialidade: null
+    meta_ad_account_id: "797360173003038"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Edson"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Rafael Mello"
+    slug: "dr-rafael-mello"
+    gestores: [luiz]
+    ativo: true
+    prioridade: 5
+    reportei_project_id: 1101514
+    especialidade: null
+    meta_ad_account_id: "3828830900672936"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Rafael Mello"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra. Andrea Yuan"
+    slug: "dra-andrea-yuan"
+    gestores: [luiz]
+    ativo: true
+    prioridade: 6
+    reportei_project_id: 1105489
+    especialidade: null
+    meta_ad_account_id: "1583342422694518"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Andrea"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Luiz Fernando"
+    slug: "dr-luiz-fernando"
+    gestores: [luiz]
+    ativo: true
+    prioridade: 7
+    reportei_project_id: 677267
+    especialidade: null
+    meta_ad_account_id: "1193594571808023"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Luiz Fernando"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra. Jussara"
+    slug: "dra-jussara"
+    gestores: [luiz]
+    ativo: true
+    prioridade: 8
+    reportei_project_id: 1206122
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Jussara"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra. Ana Paula"
+    slug: "dra-ana-paula"
+    gestores: [luiz]
+    ativo: true
+    prioridade: 9
+    reportei_project_id: 1251738
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Ana Paula"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Alessandro Miron"
+    slug: "dr-alessandro-miron"
+    gestores: [luiz]
+    ativo: true
+    prioridade: 10
+    reportei_project_id: 1147744
+    nome_reportei: "Dr. Alessandro Miron"
+    especialidade: null
+    meta_ad_account_id: "1788330645903619"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Alessandro"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Adriano Cicarelli"
+    slug: "dr-adriano-cicarelli"
+    gestores: [luiz]
+    ativo: true
+    prioridade: 11
+    reportei_project_id: 1072253
+    nome_reportei: "Dr. Adriano Cicarelli"
+    especialidade: null
+    meta_ad_account_id: "2562856437403174"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Adriano"
+    sheet_columns: *sheet_cols
+
+  # ─────────────────────────────────────────────────────────────────
+  # BLOCO MATEUS — 11 clientes
+  # ─────────────────────────────────────────────────────────────────
+
+  - nome: "Dr Charles Berres"
+    slug: "dr-charles-berres"
+    gestores: [mateus]
+    ativo: true
+    prioridade: 1
+    reportei_project_id: 747289
+    nome_reportei: "Dr Charles berres"
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Charles"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Francisco Tribulato"
+    slug: "dr-francisco-tribulato"
+    gestores: [mateus]
+    ativo: true
+    prioridade: 2
+    reportei_project_id: 564103
+    especialidade: null
+    meta_ad_account_id: "1470884100092677"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Francisco"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Eduardo Nakagawa"
+    slug: "dr-eduardo-nakagawa"
+    gestores: [mateus]
+    ativo: true
+    prioridade: 3
+    reportei_project_id: 988324
+    especialidade: null
+    meta_ad_account_id: "589841787521939"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Eduardo"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Cleber Vieira"
+    slug: "dr-cleber-vieira"
+    gestores: [mateus]
+    ativo: true
+    prioridade: 4
+    reportei_project_id: 820195
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Cleber"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra Luiza Coutinho"
+    slug: "dra-luiza-coutinho"
+    gestores: [mateus]
+    ativo: true
+    prioridade: 5
+    reportei_project_id: 1106868
+    especialidade: null
+    meta_ad_account_id: "1857589644706263"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Luiza"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra Fernanda Marcio"
+    slug: "dra-fernanda-marcio"
+    gestores: [mateus]
+    ativo: true
+    prioridade: 6
+    reportei_project_id: 1005589
+    nome_reportei: "Dr Fernanda Marcio"
+    especialidade: null
+    meta_ad_account_id: "1272662560933120"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Fernanda"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Thiago Faria"
+    slug: "dr-thiago-faria"
+    gestores: [mateus]
+    ativo: true
+    prioridade: 7
+    reportei_project_id: 583409
+    nome_reportei: "Dr Thiago Faria"
+    especialidade: null
+    meta_ad_account_id: "434231545242750"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Thiago Faria"
+    sheet_columns: *sheet_cols
+
+  - nome: "Fernanda Comora"
+    slug: "fernanda-comora"
+    gestores: [mateus]
+    ativo: true
+    prioridade: 8
+    reportei_project_id: 1181206
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Fernanda Comora"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra Priscila Lotierzo"
+    slug: "dra-priscila-lotierzo"
+    gestores: [mateus]
+    ativo: true
+    prioridade: 9
+    reportei_project_id: 715136
+    nome_reportei: "Dra. Priscilla Lotierzo"
+    especialidade: null
+    meta_ad_account_id: "1027258382336211"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Priscila"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra Lenise Franco"
+    slug: "dra-lenise-franco"
+    gestores: [mateus]
+    ativo: true
+    prioridade: 10
+    reportei_project_id: 842867
+    especialidade: null
+    meta_ad_account_id: "1145127787005742"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Lenise"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra Juliana Jordao"
+    slug: "dra-juliana-jordao"
+    gestores: [mateus]
+    ativo: true
+    prioridade: 11
+    reportei_project_id: 1219304
+    nome_reportei: "Dra Juliana Jordão"
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Juliana"
+    sheet_columns: *sheet_cols
+
+  # ─────────────────────────────────────────────────────────────────
+  # BLOCO THIAGO — 14 clientes
+  # (dr-enzo-carvalho e dr-javier-cucchiaro já estão no bloco Vinicius com gestores: [thiago])
+  # ─────────────────────────────────────────────────────────────────
+
+  - nome: "Dra Amandia Marchetti"
+    slug: "dra-amandia-marchetti"
+    gestores: [thiago]
+    ativo: true
+    prioridade: 1
+    reportei_project_id: 875147
+    nome_reportei: "Dra. Amandia Marchetti"
+    especialidade: null
+    meta_ad_account_id: "993940642325589"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Amandia"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra. Samille"
+    slug: "dra-samille"
+    gestores: [thiago]
+    ativo: true
+    prioridade: 2
+    reportei_project_id: 799544
+    especialidade: null
+    meta_ad_account_id: "1939461613184935"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Samille"
+    sheet_columns: *sheet_cols
+
+  - nome: "Ranieri"
+    slug: "ranieri"
+    gestores: [thiago]
+    ativo: true
+    prioridade: 3
+    reportei_project_id: 751396
+    nome_reportei: "Dr. Raniéri"
+    especialidade: null
+    meta_ad_account_id: "545733444782731"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Ranieri"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Victor Augusto"
+    slug: "dr-victor-augusto"
+    gestores: [thiago]
+    ativo: true
+    prioridade: 4
+    reportei_project_id: 583406
+    especialidade: null
+    meta_ad_account_id: "1112866145943895"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Victor"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Matheus Manica"
+    slug: "dr-matheus-manica"
+    gestores: [thiago]
+    ativo: true
+    prioridade: 5
+    reportei_project_id: 556442
+    especialidade: null
+    meta_ad_account_id: "456604184407723"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Matheus Manica"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra. Janete Clivea"
+    slug: "dra-janete-clivea"
+    gestores: [thiago]
+    ativo: true
+    prioridade: 6
+    reportei_project_id: 1077142
+    nome_reportei: "Dra. Janete Clívea"
+    especialidade: null
+    meta_ad_account_id: "1812118452523510"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Janete"
+    sheet_columns: *sheet_cols
+
+  - nome: "Clinica Empoderatti"
+    slug: "clinica-empoderatti"
+    gestores: [thiago]
+    ativo: true
+    prioridade: 7
+    reportei_project_id: 1077157
+    nome_reportei: "Clínica Empoderatti"
+    especialidade: null
+    meta_ad_account_id: "540269124283919"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Empoderatti"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Daniel Valente"
+    slug: "dr-daniel-valente"
+    gestores: [thiago]
+    ativo: true
+    prioridade: 8
+    reportei_project_id: 1112452
+    especialidade: null
+    meta_ad_account_id: "2270988066682761"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Daniel Valente"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Anderson Kuboniwa"
+    slug: "dr-anderson-kuboniwa"
+    gestores: [thiago]
+    ativo: true
+    prioridade: 9
+    reportei_project_id: 752930
+    especialidade: null
+    meta_ad_account_id: "894147752225662"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Anderson"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Marcus Calazans"
+    slug: "dr-marcus-calazans"
+    gestores: [thiago]
+    ativo: true
+    prioridade: 10
+    reportei_project_id: 1109573
+    especialidade: null
+    meta_ad_account_id: "1201753350476177"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Marcus"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra. Viviane Borba"
+    slug: "dra-viviane-borba"
+    gestores: [thiago]
+    ativo: true
+    prioridade: 11
+    reportei_project_id: 1042021
+    nome_reportei: "Dra Viviane Borba"
+    especialidade: null
+    meta_ad_account_id: "2211236819047943"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Viviane"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Carlos Costa"
+    slug: "dr-carlos-costa"
+    gestores: [thiago]
+    ativo: true
+    prioridade: 12
+    reportei_project_id: 1038469
+    nome_reportei: "Dr Carlos Costa"
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Carlos Costa"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Ênio Almeida"
+    slug: "dr-enio-almeida"
+    gestores: [thiago]
+    ativo: true
+    prioridade: 13
+    reportei_project_id: 1256423
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Ênio"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Thiago Lins"
+    slug: "dr-thiago-lins"
+    gestores: [thiago]
+    ativo: true
+    prioridade: 14
+    reportei_project_id: 1256126
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Thiago Lins"
+    sheet_columns: *sheet_cols
+
+  # ─────────────────────────────────────────────────────────────────
+  # BLOCO WALLISON — 9 clientes
+  # (igo já está no bloco Vinicius com gestores: [wallison])
+  # ─────────────────────────────────────────────────────────────────
+
+  - nome: "Dr Ricardo Martins"
+    slug: "dr-ricardo-martins"
+    gestores: [wallison]
+    ativo: true
+    prioridade: 1
+    reportei_project_id: 663715
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Ricardo"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr João Felippe"
+    slug: "dr-joao-felippe"
+    gestores: [wallison]
+    ativo: true
+    prioridade: 2
+    reportei_project_id: 886784
+    nome_reportei: "Dr. João Felippe"
+    especialidade: null
+    meta_ad_account_id: "672437036151935"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. João"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr Marcelo Azevedo"
+    slug: "dr-marcelo-azevedo"
+    gestores: [wallison]
+    ativo: true
+    prioridade: 3
+    reportei_project_id: 765898
+    nome_reportei: "Dr. Marcelo Azevedo"
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Marcelo Azevedo"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Túlio Martins"
+    slug: "dr-tulio-martins"
+    gestores: [wallison]
+    ativo: true
+    prioridade: 4
+    reportei_project_id: 1095244
+    especialidade: null
+    meta_ad_account_id: "1384799518828931"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Túlio"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra. Anne Groth"
+    slug: "dra-anne-groth"
+    gestores: [wallison]
+    ativo: true
+    prioridade: 5
+    reportei_project_id: 1152353
+    especialidade: null
+    meta_ad_account_id: "1572291483969921"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Anne"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Thiago Iria"
+    slug: "dr-thiago-iria"
+    gestores: [wallison]
+    ativo: true
+    prioridade: 6
+    reportei_project_id: 1122992
+    especialidade: null
+    meta_ad_account_id: "2298771446967596"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Thiago Iria"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Cadu Gazinelli"
+    slug: "dr-cadu-gazinelli"
+    gestores: [wallison]
+    ativo: true
+    prioridade: 7
+    reportei_project_id: 656833
+    nome_reportei: "Dr Cadu Gazinelli"
+    especialidade: null
+    meta_ad_account_id: "1584807132709311"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Cadu"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. David Zuluaga"
+    slug: "dr-david-zuluaga"
+    gestores: [wallison]
+    ativo: true
+    prioridade: 8
+    reportei_project_id: 1089979
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. David"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dr. Marcello Santos"
+    slug: "dr-marcello-santos"
+    gestores: [wallison]
+    ativo: true
+    prioridade: 9
+    reportei_project_id: 1222966
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Marcello"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra. Ana Cecília"
+    slug: "dra-ana-cecilia"
+    gestores: [wallison]
+    ativo: true
+    prioridade: 11
+    reportei_project_id: null
+    especialidade: null
+    meta_ad_account_id: "1050461709389701"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dra. Ana Cecília"
+    sheet_columns: *sheet_cols
+    nota: "Sem Reportei ainda — preencher reportei_project_id quando disponível"
+
+  # ─────────────────────────────────────────────────────────────────
+  # BLOCO AMANDA — 3 clientes ativos, NÃO processados pelas automações
+  # ─────────────────────────────────────────────────────────────────
+
+  - nome: "Dr Thiago Bandeira"
+    slug: "dr-thiago-bandeira"
+    gestores: [amanda]
+    ativo: true
+    prioridade: 1
+    reportei_project_id: 526806
+    especialidade: null
+    meta_ad_account_id: "5121950121207400"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Thiago Bandeira"
+    sheet_columns: null
+
+  - nome: "Felipe Máximo"
+    slug: "felipe-maximo"
+    gestores: [amanda]
+    ativo: true
+    prioridade: 2
+    reportei_project_id: 469860
+    nome_reportei: "Dr Felipe Máximo"
+    especialidade: null
+    meta_ad_account_id: "614145217153647"
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Felipe"
+    sheet_columns: null
+
+  - nome: "Dr Fabrício Camargo"
+    slug: "dr-fabricio-camargo"
+    gestores: [amanda]
+    ativo: true
+    prioridade: 3
+    reportei_project_id: 621692
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Fabrício"
+    sheet_columns: null
+
+  # ─────────────────────────────────────────────────────────────────
+  # CLIENTES INATIVOS — registrados mas não processados pelas automações
+  # ─────────────────────────────────────────────────────────────────
+
+  - nome: "Dr. Alexandre Calandrini"
+    slug: "dr-alexandre-calandrini"
+    gestores: []
+    ativo: false
+    prioridade: null
+    reportei_project_id: 545105
+    nome_reportei: "Dr Alexandre Calandrini"
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    sheet_columns: null
+
+  - nome: "Dra Cecilia Ruiz"
+    slug: "dra-cecilia-ruiz"
+    gestores: []
+    ativo: false
+    prioridade: null
+    reportei_project_id: 564092
+    nome_reportei: "Dra Cecília"
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    sheet_columns: null
+
+  - nome: "Dr Juan Lopez"
+    slug: "dr-juan-lopez"
+    nome_reportei: "Dr Juan Sanchez"
+    gestores: [luiz]
+    ativo: true
+    prioridade: 12
+    reportei_project_id: 564095
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    nome_whatsapp: "Dr. Juan"
+    sheet_columns: *sheet_cols
+
+  - nome: "Dra Luana Rios"
+    slug: "dra-luana-rios"
+    gestores: []
+    ativo: false
+    prioridade: null
+    reportei_project_id: 608098
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    sheet_columns: null
+
+  - nome: "Felipe Salles"
+    slug: "felipe-salles"
+    gestores: []
+    ativo: false
+    prioridade: null
+    reportei_project_id: 1198792
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    sheet_columns: null
+
+  - nome: "Dr. Leandro Angel"
+    slug: "dr-leandro-angel"
+    gestores: []
+    ativo: false
+    prioridade: null
+    reportei_project_id: 1148012
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    sheet_columns: null
+
+  - nome: "Dr Rodrigo Gomide"
+    slug: "dr-rodrigo-gomide"
+    gestores: []
+    ativo: false
+    prioridade: null
+    reportei_project_id: 1258235
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    sheet_columns: null
+
+  - nome: "Dr. Daniel Curi"
+    slug: "dr-daniel-curi"
+    gestores: []
+    ativo: false
+    prioridade: null
+    reportei_project_id: 1256454
+    especialidade: null
+    meta_ad_account_id: null
+    excluir_meta_monitoring: false
+    sheet_columns: null

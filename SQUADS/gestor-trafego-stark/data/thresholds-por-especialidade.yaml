@@ -1,0 +1,566 @@
+# thresholds-por-especialidade.yaml — Benchmarks por especialidade médica
+# Squad: gestor-trafego-stark
+# Origem: fusão de gestor-trafego-vinicius + gestor-trafego-gustavo (ADR-06)
+# ADR-06: quando valores conflitam entre squads, adotar o mais conservador (mais restritivo).
+# Este arquivo PODE ser commitado — não contém dados de produção.
+#
+# Níveis: saudavel | atencao | critico
+# Regra de interpretação:
+#   saudavel → tom neutro ou positivo
+#   atencao  → tom neutro com observação
+#   critico  → tom neutro com alerta (nunca usar palavras proibidas do CLAUDE.md)
+#
+# IMPORTANTE: os termos "saudavel", "atencao", "critico" são internos ao agente.
+# Nunca expor esses termos no relatório — usar apenas a conclusão em linguagem natural.
+#
+# NOTA CPL — distinção importante:
+#   CPL aqui = custo por conversa WhatsApp no gerenciador de anúncios (Meta Ads)
+#              NÃO é CAC (custo de aquisição de cliente/paciente)
+#   Valores calibrados com dados reais da carteira Stark (Mar-Abr 2026)
+#   Revisão: 2026-05-28 — substituídos benchmarks genéricos por dados reais por especialidade
+#
+#   Exceção: cirurgia_ortognatica usa Google Ads (custo por conversão, não por conversa)
+#
+# ESPECIALIDADES ATIVAS (clientes com conta em produção):
+#   cirurgia_plastica, cirurgia_facial, cirurgia_corporal, mommy_makeover,
+#   cirurgia_trans, cirurgia_ortognatica, cirurgia_bucomaxilofacial,
+#   medicina_estetica, emagrecimento, ginecologia
+#
+# ESPECIALIDADES REMOVIDAS (sem clientes ativos após revisão 2026-05-28):
+#   saude_geral → clientes migrados para cirurgia_plastica
+#   oncologia   → cliente Diego Alencar migrado para emagrecimento
+#   tricologia  → cliente Higner Forastieri migrado para cirurgia_facial
+#   dermatologia → sem clientes ativos (mantida no kill_switch por compatibilidade futura)
+
+especialidades:
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # CIRURGIA PLÁSTICA GERAL
+  # Dados reais Mar-Abr 2026: Fernanda R$13,58 (destaque), Caio R$18,29,
+  # Marcelo R$21,65, Fernando R$22,63 (atenção prioritária)
+  # ──────────────────────────────────────────────────────────────────────────
+
+  cirurgia_plastica:
+    cpl:
+      saudavel:
+        max: 15.00
+        descricao: "CPL dentro da faixa eficiente para cirurgia plástica"
+      atencao:
+        min: 15.00
+        max: 25.00
+        descricao: "CPL acima da referência — monitorar segmentação e qualidade dos criativos"
+      critico:
+        min: 25.00
+        descricao: "CPL elevado para a especialidade — revisar segmentação e criativos com prioridade"
+    cpm:
+      saudavel:
+        max: 30.00
+      atencao:
+        min: 30.00
+        max: 60.00
+      critico:
+        min: 60.00
+    ctr:
+      saudavel:
+        min: 1.5
+      atencao:
+        min: 0.8
+        max: 1.5
+      critico:
+        max: 0.8
+    frequencia:
+      saudavel:
+        max: 3.0
+      atencao:
+        min: 3.0
+        max: 5.0
+      critico:
+        min: 5.0
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # CIRURGIA FACIAL
+  # Dados reais Mar-Abr 2026: Mariângela R$17,57 bimestre / R$13,18 semana eficiente,
+  # Higner R$25,24 (CPL pressionado por CPM estruturalmente alto, não CTR ruim)
+  # ──────────────────────────────────────────────────────────────────────────
+
+  cirurgia_facial:
+    cpl:
+      saudavel:
+        max: 18.00
+        descricao: "CPL dentro da faixa eficiente para cirurgia facial"
+      atencao:
+        min: 18.00
+        max: 32.00
+        descricao: "CPL acima da referência — verificar se origem é CPM elevado ou CTR baixo"
+      critico:
+        min: 32.00
+        descricao: "CPL elevado — revisar segmentação de público e renovar criativos"
+    cpm:
+      saudavel:
+        max: 25.00
+      atencao:
+        min: 25.00
+        max: 45.00
+      critico:
+        min: 45.00
+    ctr:
+      saudavel:
+        min: 1.5
+      atencao:
+        min: 0.8
+        max: 1.5
+      critico:
+        max: 0.8
+    frequencia:
+      saudavel:
+        max: 3.0
+      atencao:
+        min: 3.0
+        max: 5.0
+      critico:
+        min: 5.0
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # CIRURGIA CORPORAL
+  # Lipoaspiração, contorno corporal — sem clientes com CPL documentado no período
+  # Mantido com valores próximos a cirurgia_plastica
+  # ──────────────────────────────────────────────────────────────────────────
+
+  cirurgia_corporal:
+    cpl:
+      saudavel:
+        max: 15.00
+        descricao: "CPL dentro da faixa eficiente para cirurgia corporal"
+      atencao:
+        min: 15.00
+        max: 25.00
+        descricao: "CPL acima da referência — monitorar evolução e volume investido"
+      critico:
+        min: 25.00
+        descricao: "CPL elevado — revisar segmentação e criativos"
+    cpm:
+      saudavel:
+        max: 28.00
+      atencao:
+        min: 28.00
+        max: 55.00
+      critico:
+        min: 55.00
+    ctr:
+      saudavel:
+        min: 1.5
+      atencao:
+        min: 0.8
+        max: 1.5
+      critico:
+        max: 0.8
+    frequencia:
+      saudavel:
+        max: 3.0
+      atencao:
+        min: 3.0
+        max: 5.0
+      critico:
+        min: 5.0
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # MOMMY MAKEOVER
+  # Procedimentos combinados pós-gestação — público nichado
+  # ──────────────────────────────────────────────────────────────────────────
+
+  mommy_makeover:
+    cpl:
+      saudavel:
+        max: 15.00
+        descricao: "CPL dentro da faixa eficiente para mommy makeover"
+      atencao:
+        min: 15.00
+        max: 25.00
+        descricao: "CPL acima da referência — monitorar evolução"
+      critico:
+        min: 25.00
+        descricao: "CPL elevado — revisar segmentação e criativos"
+    cpm:
+      saudavel:
+        max: 35.00
+      atencao:
+        min: 35.00
+        max: 70.00
+      critico:
+        min: 70.00
+    ctr:
+      saudavel:
+        min: 1.2
+      atencao:
+        min: 0.6
+        max: 1.2
+      critico:
+        max: 0.6
+    frequencia:
+      saudavel:
+        max: 3.5
+      atencao:
+        min: 3.5
+        max: 6.0
+      critico:
+        min: 6.0
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # CIRURGIA TRANS
+  # Mastectomia afirmativa — nicho específico, menor concorrência no leilão
+  # ──────────────────────────────────────────────────────────────────────────
+
+  cirurgia_trans:
+    cpl:
+      saudavel:
+        max: 15.00
+        descricao: "CPL dentro da faixa esperada para cirurgia trans"
+      atencao:
+        min: 15.00
+        max: 25.00
+        descricao: "CPL acima da referência — monitorar segmentação e volume"
+      critico:
+        min: 25.00
+        descricao: "CPL elevado — revisar criativos e qualidade do público"
+    cpm:
+      saudavel:
+        max: 22.00
+      atencao:
+        min: 22.00
+        max: 45.00
+      critico:
+        min: 45.00
+    ctr:
+      saudavel:
+        min: 1.5
+      atencao:
+        min: 0.8
+        max: 1.5
+      critico:
+        max: 0.8
+    frequencia:
+      saudavel:
+        max: 3.0
+      atencao:
+        min: 3.0
+        max: 5.0
+      critico:
+        min: 5.0
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # MEDICINA ESTÉTICA
+  # Procedimentos minimamente invasivos (botox, preenchimento)
+  # Sem CPL documentado para Nicolli (integração parcial em abr/2026)
+  # Ajuste conservador para cima do valor original (era R$8)
+  # ──────────────────────────────────────────────────────────────────────────
+
+  medicina_estetica:
+    cpl:
+      saudavel:
+        max: 10.00
+        descricao: "CPL dentro da faixa esperada para medicina estética"
+      atencao:
+        min: 10.00
+        max: 20.00
+        descricao: "CPL acima da referência — monitorar evolução"
+      critico:
+        min: 20.00
+        descricao: "CPL elevado para o ticket médio da especialidade — revisar segmentação"
+    cpm:
+      saudavel:
+        max: 18.00
+      atencao:
+        min: 18.00
+        max: 38.00
+      critico:
+        min: 38.00
+    ctr:
+      saudavel:
+        min: 2.5
+      atencao:
+        min: 1.2
+        max: 2.5
+      critico:
+        max: 1.2
+    frequencia:
+      saudavel:
+        max: 3.0
+      atencao:
+        min: 3.0
+        max: 6.0
+      critico:
+        min: 6.0
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # EMAGRECIMENTO
+  # Dados reais Mar-Abr 2026: Diego R$48,38 (período crítico, reestruturação)
+  # Melhor praça (Maranhão): ~R$17/conversa
+  # Era classificado como oncologia — corrigido em 2026-05-28
+  # ──────────────────────────────────────────────────────────────────────────
+
+  emagrecimento:
+    cpl:
+      saudavel:
+        max: 25.00
+        descricao: "CPL dentro da faixa eficiente para emagrecimento/GLP-1"
+      atencao:
+        min: 25.00
+        max: 45.00
+        descricao: "CPL acima da referência — verificar qualidade dos leads e segmentação geográfica"
+      critico:
+        min: 45.00
+        descricao: "CPL elevado — revisar qualificação de leads, segmentação e criativos com prioridade"
+    cpm:
+      saudavel:
+        max: 30.00
+      atencao:
+        min: 30.00
+        max: 60.00
+      critico:
+        min: 60.00
+    ctr:
+      saudavel:
+        min: 1.2
+      atencao:
+        min: 0.6
+        max: 1.2
+      critico:
+        max: 0.6
+    frequencia:
+      saudavel:
+        max: 3.0
+      atencao:
+        min: 3.0
+        max: 5.0
+      critico:
+        min: 5.0
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # GINECOLOGIA
+  # Dados reais Mar-Abr 2026: Graciela R$31,94 (período equilibrado — frequência 1,86)
+  # R$32 em período BOM indica que saudável começa abaixo disso
+  # ──────────────────────────────────────────────────────────────────────────
+
+  ginecologia:
+    cpl:
+      saudavel:
+        max: 28.00
+        descricao: "CPL dentro da faixa eficiente para ginecologia"
+      atencao:
+        min: 28.00
+        max: 50.00
+        descricao: "CPL acima da referência — monitorar evolução e mix de procedimentos anunciados"
+      critico:
+        min: 50.00
+        descricao: "CPL elevado para a especialidade — revisar segmentação e criativos"
+    cpm:
+      saudavel:
+        max: 22.00
+      atencao:
+        min: 22.00
+        max: 45.00
+      critico:
+        min: 45.00
+    ctr:
+      saudavel:
+        min: 2.0
+      atencao:
+        min: 1.0
+        max: 2.0
+      critico:
+        max: 1.0
+    frequencia:
+      saudavel:
+        max: 3.0
+      atencao:
+        min: 3.0
+        max: 6.0
+      critico:
+        min: 6.0
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # CIRURGIA BUCO-MAXILOFACIAL
+  # Dados reais Mar-Abr 2026: Érica R$24,06 (período de reorganização)
+  # Alto ticket, ciclo de venda longo — CPL naturalmente mais alto que plástica geral
+  # ──────────────────────────────────────────────────────────────────────────
+
+  cirurgia_bucomaxilofacial:
+    cpl:
+      saudavel:
+        max: 20.00
+        descricao: "CPL dentro da faixa eficiente para cirurgia buco-maxilofacial"
+      atencao:
+        min: 20.00
+        max: 38.00
+        descricao: "CPL acima da referência — verificar qualidade dos leads e filtro de convênios"
+      critico:
+        min: 38.00
+        descricao: "CPL elevado — revisar segmentação, filtro de convênio e qualidade de criativos"
+    cpm:
+      saudavel:
+        max: 25.00
+      atencao:
+        min: 25.00
+        max: 50.00
+      critico:
+        min: 50.00
+    ctr:
+      saudavel:
+        min: 1.5
+      atencao:
+        min: 0.8
+        max: 1.5
+      critico:
+        max: 0.8
+    frequencia:
+      saudavel:
+        max: 3.0
+      atencao:
+        min: 3.0
+        max: 5.0
+      critico:
+        min: 5.0
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # CIRURGIA ORTOGNÁTICA — GOOGLE ADS
+  # CPL aqui = custo por conversão (não por conversa WhatsApp)
+  # CTR benchmark diferente: Google Search médico = 3–8%
+  # Dados insuficientes para revisão — mantidos valores originais
+  # ──────────────────────────────────────────────────────────────────────────
+
+  cirurgia_ortognatica:
+    cpl:
+      saudavel:
+        max: 23.00
+        descricao: "Custo por conversão dentro do alvo (Google Ads) — referência R$20–23"
+      atencao:
+        min: 23.00
+        max: 30.00
+        descricao: "Custo por conversão acima do alvo — monitorar palavras-chave e correspondência"
+      critico:
+        min: 30.00
+        descricao: "Custo por conversão elevado — revisar termos de pesquisa, lances e landing page"
+    cpm:
+      saudavel:
+        max: 12.00
+      atencao:
+        min: 12.00
+        max: 25.00
+      critico:
+        min: 25.00
+    ctr:
+      saudavel:
+        min: 4.0
+      atencao:
+        min: 2.0
+        max: 4.0
+      critico:
+        max: 2.0
+    frequencia:
+      saudavel:
+        max: 2.0
+      atencao:
+        min: 2.0
+        max: 3.5
+      critico:
+        min: 3.5
+
+# ──────────────────────────────────────────────────────────────────────────
+# B1 — KILL-SWITCH POR ESPECIALIDADE
+#
+# Gasto de 3 dias consecutivos sem nenhuma conversa → alerta CRÍTICO.
+# Aplica-se APENAS a campanhas com 7+ dias de veiculação.
+# Severidade: CRÍTICO — notificar gestor, NUNCA pausar automaticamente.
+# N/A = cirurgia_ortognatica (Google Ads — métrica diferente, sem kill-switch)
+# ──────────────────────────────────────────────────────────────────────────
+
+kill_switch:
+  regra: "conversas = 0 em lookback de 3 dias consecutivos, com 7+ dias de veiculação"
+  severidade: "CRITICO"
+  acao: "notificar gestor — NUNCA pausar automaticamente"
+  por_especialidade:
+    cirurgia_plastica:
+      gasto_3_dias_sem_conversa: 45.00
+    cirurgia_facial:
+      gasto_3_dias_sem_conversa: 54.00
+    cirurgia_corporal:
+      gasto_3_dias_sem_conversa: 45.00
+    mommy_makeover:
+      gasto_3_dias_sem_conversa: 45.00
+    cirurgia_trans:
+      gasto_3_dias_sem_conversa: 45.00
+    medicina_estetica:
+      gasto_3_dias_sem_conversa: 30.00
+    emagrecimento:
+      gasto_3_dias_sem_conversa: 75.00
+    ginecologia:
+      gasto_3_dias_sem_conversa: 84.00
+    cirurgia_bucomaxilofacial:
+      gasto_3_dias_sem_conversa: 60.00
+    cirurgia_ortognatica:
+      gasto_3_dias_sem_conversa: null
+      nota: "N/A — Google Ads usa métrica de conversão diferente"
+    dermatologia:
+      gasto_3_dias_sem_conversa: 50.00
+      nota: "Sem clientes ativos em 2026-05-28 — mantido para compatibilidade futura"
+
+# ──────────────────────────────────────────────────────────────────────────
+# B2 — FREQUÊNCIA POR TIPO DE CAMPANHA
+#
+# Substitui o threshold genérico de frequência por thresholds diferenciados.
+# Janela: last_7d. Mínimo 1.000 impressões.
+# ──────────────────────────────────────────────────────────────────────────
+
+frequencia_por_tipo_campanha:
+  janela: "last_7d"
+  minimo_impressoes: 1000
+  nota: "Abaixo de 1.000 impressões a frequência é estatisticamente instável — não alertar"
+  tipos:
+    TOFU:
+      descricao: "Prospecting — topo de funil"
+      prefixos: [TOFU, IMP]
+      alerta: 2.5
+      pause: 3.0
+    MOFU:
+      descricao: "Engajamento — meio de funil"
+      prefixos: [MOFU, TRAF]
+      alerta: 3.0
+      pause: 3.5
+    BOFU:
+      descricao: "Conversão — fundo de funil"
+      prefixos: [BOFU, CONV]
+      alerta: 4.0
+      pause: 4.5
+    AWARENESS:
+      descricao: "Awareness e alcance"
+      prefixos: [AW, REACH]
+      alerta: 2.2
+      pause: 2.8
+    DEFAULT:
+      descricao: "Tipo não identificável pelo prefixo — usar TOFU como conservador"
+      alerta: 2.5
+      pause: 3.0
+
+# ──────────────────────────────────────────────────────────────────────────
+# B3 — QUANDO NÃO ALERTAR
+#
+# Regras de supressão para evitar falso-positivos.
+# ──────────────────────────────────────────────────────────────────────────
+
+quando_nao_alertar:
+  regras:
+    - id: campanha_nova
+      condicao: "Campanha com menos de 7 dias de veiculação"
+      motivo: "Dados insuficientes para avaliação estatística"
+    - id: spend_baixo
+      condicao: "Spend < R$20 no lookback de 3 dias"
+      motivo: "Volume muito baixo — qualquer variação é ruído, não sinal"
+    - id: impressoes_baixas
+      condicao: "Impressões < 1.000"
+      motivo: "Frequência e CTR estatisticamente instáveis abaixo deste volume"
+    - id: awareness_cpm
+      condicao: "Campanhas com prefixo AW ou REACH com CPM elevado"
+      motivo: "CPM alto é esperado em campanhas de awareness — não é alerta"
+    - id: laureano_meta
+      condicao: "Cliente Dr. Laureano Filho — excluir_meta_monitoring: true"
+      motivo: "Dr. Laureano opera exclusivamente Google Ads — ignorar monitoramento Meta completamente"

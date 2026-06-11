@@ -1,0 +1,35 @@
+{
+  "language": "english",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$d = [Console]::In.ReadToEnd() | ConvertFrom-Json; $c = [string]$d.tool_input.command; if ($c -match 'fill_sheets\\.py' -and $c -notmatch '--semana') { Write-Output '{\"continue\":false,\"stopReason\":\"[HOOK BLOQUEADO] fill_sheets.py chamado sem --semana. Periodo correto: --semana DD/MM/AAAA\"}' }",
+            "shell": "powershell",
+            "statusMessage": "H1: verificando parametro --semana em fill_sheets.py..."
+          },
+          {
+            "type": "command",
+            "command": "$d = [Console]::In.ReadToEnd() | ConvertFrom-Json; $c = [string]$d.tool_input.command; if ($c -match 'REPORTEI_TOKEN=' -or $c -match 'service_account' -or $c -match 'eyJ[A-Za-z0-9]') { Write-Output '{\"continue\":false,\"stopReason\":\"[HOOK BLOQUEADO] Credencial detectada em texto claro. Use variaveis de ambiente de settings.local.json.\"}' }",
+            "shell": "powershell",
+            "statusMessage": "H3: verificando credenciais expostas em Bash..."
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__30ebe978-db99-4dee-927c-b72f6abac9d8__get_metrics|mcp__30ebe978-db99-4dee-927c-b72f6abac9d8__get_project_metrics",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$d = [Console]::In.ReadToEnd(); if ($d -match 'last_7d') { Write-Output '{\"continue\":false,\"stopReason\":\"[HOOK BLOQUEADO] Parametro last_7d proibido no Reportei. Use date_from/date_to com segunda a domingo da semana anterior.\"}' }",
+            "shell": "powershell",
+            "statusMessage": "H2: verificando last_7d no Reportei..."
+          }
+        ]
+      }
+    ]
+  }
+}
