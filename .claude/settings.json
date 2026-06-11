@@ -7,15 +7,27 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$d = [Console]::In.ReadToEnd() | ConvertFrom-Json; $c = [string]$d.tool_input.command; if ($c -match 'fill_sheets\\.py' -and $c -notmatch '--semana') { Write-Output '{\"continue\":false,\"stopReason\":\"[HOOK BLOQUEADO] fill_sheets.py chamado sem --semana. Periodo correto: --semana DD/MM/AAAA\"}' }",
+            "command": "$d = [Console]::In.ReadToEnd() | ConvertFrom-Json; $c = [string]$d.tool_input.command; if ($c -match 'python[0-9.]*\\s+.*fill_sheets\\.py' -and $c -notmatch '--semana') { Write-Output '{\"continue\":false,\"stopReason\":\"[H1 BLOQUEADO] fill_sheets.py chamado sem --semana. Periodo correto: --semana DD/MM/AAAA\"}' }",
             "shell": "powershell",
             "statusMessage": "H1: verificando parametro --semana em fill_sheets.py..."
           },
           {
             "type": "command",
-            "command": "$d = [Console]::In.ReadToEnd() | ConvertFrom-Json; $c = [string]$d.tool_input.command; if ($c -match 'REPORTEI_TOKEN=' -or $c -match 'service_account' -or $c -match 'eyJ[A-Za-z0-9]') { Write-Output '{\"continue\":false,\"stopReason\":\"[HOOK BLOQUEADO] Credencial detectada em texto claro. Use variaveis de ambiente de settings.local.json.\"}' }",
+            "command": "$d = [Console]::In.ReadToEnd() | ConvertFrom-Json; $c = [string]$d.tool_input.command; if ($c -match 'REPORTEI_TOKEN=[A-Za-z0-9]' -or $c -match '(cat|type|print|echo|curl|--key-file|credentials).*service_account\\.json' -or $c -match 'eyJ[A-Za-z0-9]{20,}') { Write-Output '{\"continue\":false,\"stopReason\":\"\\u26a0\\ufe0f [H3 BLOQUEADO] Credencial em texto detectada. O script nao deve expor REPORTEI_TOKEN, caminho de service_account.json ou tokens JWT diretamente no comando. Use variaveis de ambiente de settings.local.json.\"}' }",
             "shell": "powershell",
             "statusMessage": "H3: verificando credenciais expostas em Bash..."
+          },
+          {
+            "type": "command",
+            "command": "$d = [Console]::In.ReadToEnd() | ConvertFrom-Json; $c = [string]$d.tool_input.command; if ($c -match '1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og') { Write-Output '{\"continue\":false,\"stopReason\":\"[H4 BLOQUEADO] SHEET_ID antigo detectado. Use o ID correto: 16f9MmlyUr3AfhCxfzjupChZjQDPSxw7rXY5ORjd9yXM\"}' }",
+            "shell": "powershell",
+            "statusMessage": "H4: verificando SHEET_ID..."
+          },
+          {
+            "type": "command",
+            "command": "$d = [Console]::In.ReadToEnd() | ConvertFrom-Json; $c = [string]$d.tool_input.command; if ($c -match 'fill_sheets' -and $c -match 'col_[GHIKNP]') { Write-Output '{\"continue\":false,\"stopReason\":\"[H5 BLOQUEADO] Tentativa de escrever em coluna com formula automatica. Colunas protegidas: G, H, I, K, N, P.\"}' }",
+            "shell": "powershell",
+            "statusMessage": "H5: verificando colunas protegidas..."
           }
         ]
       },

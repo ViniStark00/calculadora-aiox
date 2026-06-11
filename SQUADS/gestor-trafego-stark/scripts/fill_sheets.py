@@ -18,6 +18,9 @@ import time
 import argparse
 from pathlib import Path
 
+# Forçar UTF-8 no stdout (fix Windows — evita UnicodeEncodeError em nomes com acentos)
+sys.stdout.reconfigure(encoding='utf-8')
+
 # ── Dependências ──────────────────────────────────────────────────────────────
 try:
     from google.oauth2.service_account import Credentials
@@ -41,6 +44,8 @@ MESES_PT = {
     5: "Maio", 6: "Junho", 7: "Julho", 8: "Agosto",
     9: "Setembro", 10: "Outubro", 11: "Novembro", 12: "Dezembro"
 }
+
+COLUNAS_FORMULA = frozenset({'G', 'H', 'I', 'K', 'N', 'P'})
 
 
 def carregar_clientes(gestor=None, slugs=None):
@@ -117,18 +122,35 @@ def verificar_ou_criar_aba(sheets, nome_aba):
     return True
 
 
-def localizar_linha(sheets, nome_aba, nome_cliente, sem_numero):
+def localizar_linha(sheets, nome_aba, nome_cliente, sem_numero, gestor=None):
     """Localiza linha onde col B = nome_cliente E col C = sem_numero.
 
-    Nova estrutura (jun/2026): col A=Gestor, col B=Cliente, col C=Sem X/Média Mês.
-    Retorna índice 1-based ou None se não encontrado.
+    Se gestor fornecido, restringe a busca ao bloco desse gestor (col A),
+    evitando falsos positivos quando dois gestores têm clientes com nomes parecidos.
     """
     result = sheets.spreadsheets().values().get(
         spreadsheetId=SHEET_ID,
         range=f"'{nome_aba}'!A:C"
     ).execute()
     dados = result.get("values", [])
-    for i, linha in enumerate(dados):
+
+    inicio_bloco = 0
+    fim_bloco = len(dados)
+
+    if gestor:
+        gestor_lower = gestor.lower()
+        for i, linha in enumerate(dados):
+            if linha and linha[0].lower() == gestor_lower:
+                inicio_bloco = i
+                break
+        for i in range(inicio_bloco + 1, len(dados)):
+            linha = dados[i]
+            if linha and linha[0] and linha[0].lower() != gestor_lower:
+                fim_bloco = i
+                break
+
+    for i in range(inicio_bloco, fim_bloco):
+        linha = dados[i]
         if len(linha) >= 3 and linha[1] == nome_cliente and linha[2] == sem_numero:
             return i + 1
     return None
@@ -158,6 +180,9 @@ def preencher_cliente(sheets, nome_aba, row_idx, metricas, sheet_columns, slug="
     """Preenche colunas do cliente. Se dry_run=True, apenas imprime sem escrever."""
     updates = []
     for campo, col_letra in sheet_columns.items():
+        if col_letra.upper() in COLUNAS_FORMULA:
+            print(f"   [AVISO] {slug} — coluna {col_letra} ({campo}) é fórmula automática — pulando")
+            continue
         if moeda != "BRL" and "spend" in campo:
             print(f"   [AVISO] {slug} — moeda {moeda}, pulando coluna de spend ({campo})")
             continue
@@ -258,7 +283,7 @@ def main():
         print(f"\n{'='*50}")
         print(f"[CLIENTE] {nome} ({slug})")
 
-        row_idx = localizar_linha(sheets, nome_aba, nome, sem_numero)
+        row_idx = localizar_linha(sheets, nome_aba, nome, sem_numero, gestor=args.gestor or "vinicius")
         if row_idx is None:
             print(f"[ERRO] '{nome}' / '{sem_numero}' não encontrado na aba '{nome_aba}'.")
             resultados.append({"slug": slug, "status": "erro", "motivo": "cliente/semana não encontrado na planilha"})
