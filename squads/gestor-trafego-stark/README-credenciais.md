@@ -33,23 +33,42 @@ Abra o Claude Code na pasta do repositório clonado.
 
 O `service_account.json` é a chave que permite ao script escrever na planilha Google Sheets.
 
-### Passo a passo
+> 💡 **Dica: deixe o Claude Code te guiar**
+> Se tiver dúvida em qualquer etapa abaixo, abra o Claude Code neste repositório e cole:
+> ```
+> Me ajuda a configurar o service_account.json do Google Cloud para usar o squad gestor-trafego-stark.
+> Já clonei o repositório e preciso: criar o projeto no Google Cloud, ativar a Google Sheets API,
+> criar a conta de serviço, baixar o JSON e compartilhar a planilha.
+> Me guia passo a passo.
+> ```
+> O Claude vai te conduzir por cada etapa interativamente, inclusive abrindo as telas certas.
 
-**Parte 1 — Criar a conta de serviço no Google Cloud**
+---
 
-1. Acesse [console.cloud.google.com](https://console.cloud.google.com)
-2. Crie um projeto novo (ex: `stark-sheets`) ou use um existente
-3. No menu lateral: **APIs e Serviços → Biblioteca**
-4. Busque **Google Sheets API** e clique em **Ativar**
-5. No menu lateral: **IAM e Admin → Contas de serviço**
-6. Clique em **Criar conta de serviço**
-7. Nome: `stark-sheets` → clique em **Criar e continuar** → **Concluído**
-8. Clique na conta criada → aba **Chaves** → **Adicionar chave → Criar nova chave → JSON**
-9. O arquivo `service_account.json` será baixado automaticamente
+### Passo a passo manual
 
-**Parte 2 — Colocar o arquivo no lugar certo**
+**Parte 1 — Criar projeto e ativar a API**
 
-Mova o arquivo baixado para:
+1. Acesse [console.cloud.google.com](https://console.cloud.google.com) e faça login com sua conta Google
+2. Clique em **Selecionar projeto** (topo da página) → **Novo projeto**
+3. Nome: `stark-sheets` → **Criar**
+4. Com o projeto selecionado, vá em **APIs e Serviços → Biblioteca**
+5. Busque `Google Sheets API` → clique nela → **Ativar**
+
+**Parte 2 — Criar a conta de serviço e baixar a chave**
+
+6. No menu lateral: **IAM e Admin → Contas de serviço**
+7. Clique em **Criar conta de serviço**
+8. Nome: `stark-sheets` → **Criar e continuar**
+9. Em "Conceder a esta conta de serviço acesso ao projeto": pule clicando em **Continuar**
+10. Clique em **Concluído**
+11. Na lista, clique na conta criada → aba **Chaves**
+12. **Adicionar chave → Criar nova chave → JSON → Criar**
+13. O arquivo `service_account.json` é baixado automaticamente
+
+**Parte 3 — Colocar o arquivo no lugar certo**
+
+14. Mova o arquivo baixado para:
 ```
 treinamento-orquestradores-stark-gestoresdetrafego/
   squads/
@@ -57,37 +76,28 @@ treinamento-orquestradores-stark-gestoresdetrafego/
       service_account.json   ← aqui
 ```
 
-**Parte 3 — Compartilhar a planilha com a conta de serviço**
+**Parte 4 — Compartilhar a planilha**
 
-1. Abra o `service_account.json` em qualquer editor de texto
-2. Copie o valor do campo `client_email` (parece um e-mail: `stark-sheets@projeto.iam.gserviceaccount.com`)
-3. Abra a planilha Google Sheets da Stark
-4. Clique em **Compartilhar** (botão azul no canto superior direito)
-5. Cole o e-mail copiado e dê permissão de **Editor**
-6. Clique em **Enviar**
+15. Abra o `service_account.json` em qualquer editor de texto (Bloco de Notas serve)
+16. Copie o valor do campo `"client_email"` — parece um e-mail como:
+    `stark-sheets@stark-sheets-123456.iam.gserviceaccount.com`
+17. Abra a planilha Google Sheets da Stark (o link da planilha da sua equipe)
+18. Clique em **Compartilhar** (botão verde/azul no canto superior direito)
+19. Cole o e-mail copiado, selecione permissão **Editor** e clique em **Enviar**
 
 ---
 
 ## Verificar se está tudo funcionando
 
+Abra o terminal na pasta do repositório e rode:
+
 ```bash
 python squads/gestor-trafego-stark/scripts/fill_sheets.py --dry-run --semana Junho
 ```
 
-Se aparecer `[INFO] Aba: Junho` sem erros — está configurado corretamente.
-
----
-
-## Resumo rápido (para quem já tem experiência)
-
-```
-1. pip install google-auth-httplib2 google-api-python-client pyyaml
-2. Criar service account no Google Cloud Console
-3. Ativar Google Sheets API no projeto
-4. Baixar chave JSON → salvar em squads/gestor-trafego-stark/service_account.json
-5. Compartilhar a planilha com o client_email do JSON (permissão Editor)
-6. Pronto — REPORTEI_TOKEN e SHEET_ID já estão configurados no repo
-```
+✅ Correto: aparece `[INFO] Aba: Junho` e lista os clientes
+❌ Erro comum: `service_account.json não encontrado` → arquivo está no lugar errado
+❌ Erro comum: `403 Permission denied` → planilha não foi compartilhada com o client_email
 
 ---
 
