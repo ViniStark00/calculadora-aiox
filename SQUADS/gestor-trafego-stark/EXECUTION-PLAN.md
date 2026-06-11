@@ -12,12 +12,12 @@
 ## 👉 ESTADO ATUAL — onde parar e retomar
 
 ```
-FASE:         SESSÃO 10 — G0 + Nova Gestora + Verificações
-ETAPA:        S10-A ✅ | S10-C ✅ — clientes.yaml sincronizado com planilha | G0 e GS pendentes
-PRÓXIMO:      S10-B (G0) — descoberta slugs via MCP Reportei | GS — @devops push + PR
-AGENTE ATIVO: @dev (G0) / @devops (GS)
+FASE:         SESSÃO 10 — G0 + Nova Gestora + Verificações ✅ CONCLUÍDO
+ETAPA:        S10-A ✅ | S10-B ✅ | S10-C ✅ — tudo concluído | Falta só GS
+PRÓXIMO:      GS — @devops push + PR feat/paralelismo-stark-chief → main
+AGENTE ATIVO: @devops (GS)
 BRANCH:       feat/paralelismo-stark-chief
-CHECKPOINT:   S10-C concluído em 2026-06-10 — distribuição clientes sincronizada
+CHECKPOINT:   S10-B concluído em 2026-06-10 — 6 slugs confirmados (d9756e3)
 ```
 
 ---
@@ -231,53 +231,24 @@ GS  @devops  push + PR repo Gustavo             ⬜ PENDENTE
 - Novo cliente: Dra. Ana Cecília → `wallison`, META `1050461709389701`, Reportei pendente
 - Pendente para depois: Stark Marketing (META `676220449475191`, sem Reportei próprio)
 
-### BRIEFING PARA PRÓXIMA SESSÃO — S10-B (G0) + GS
+### BRIEFING PARA PRÓXIMA SESSÃO — GS (única tarefa pendente)
 
-> ✅ S10-A e S10-C concluídos (commit `7581e48` — 2026-06-10)
-> **Falta:** S10-B (G0 slugs) → depois GS (push + PR)
-
----
-
-#### PASSO 1 — Chamar `@dev` e colar:
-
-**@dev — S10-B: G0 — descoberta de 6 slugs pendentes**
-
-Contexto: squad `gestor-trafego-stark`, branch `feat/paralelismo-stark-chief`.
-S10-A e S10-C concluídos (commit `7581e48`). Só falta o G0.
-
-Use o MCP Reportei e execute:
-
-```
-get_project_metrics(project_id=688377, date_from="2026-06-02", date_to="2026-06-08")
-→ listar TODOS os slugs/refs — mostrar JSON bruto para eu confirmar
-→ identificar exatamente:
-   - ctr               → CTR Meta Ads
-   - leads_meta        → Leads META (formulário)
-   - cpa_google        → CPA Google
-   - cadastros_respondi → Cadastros Respondi.app (métrica customizada)
-```
-
-Verificar também se existe endpoint de campanhas com spend individual:
-```
-→ objetivo: confirmar filtragem por "[TOFU]" / "[IMP]" no nome da campanha
-→ confirmar tofu_spend e bofu_spend
-```
-
-Após eu confirmar os slugs → atualizar os comentários `# slug: pendente G0` em:
-- `squads/gestor-trafego-stark/data/clientes.yaml` → âncora `_sheet_cols`
-- `squads/gestor-trafego-stark/tasks/fetch-metrics.md` → passo 5
-
-Commit: `feat(dados): G0 — confirmar slugs pendentes CTR/leads/CPA/Respondi`
+> ✅ Sessão 10 completa: S10-A + S10-B + S10-C concluídos (último commit: `5cff5f0`)
+> **Falta apenas:** GS — push + PR via `@devops`
 
 ---
 
-#### PASSO 2 — Depois que @dev terminar, chamar `@devops` e colar:
+#### Chamar `@devops` e colar:
 
 **@devops — GS: push + PR**
 
-Push da branch `feat/paralelismo-stark-chief` e abrir PR com:
-- Título: `feat(gestor-trafego-stark): Sessão 9+10 — nova planilha mensal + sync clientes`
-- Descrição: remapeamento para planilha mensal (G1–G5) + sincronização de 91 clientes (S10-C) + slugs confirmados (G0)
+Branch: `feat/paralelismo-stark-chief` — fazer push e abrir PR para `main` com:
+
+- **Título:** `feat(gestor-trafego-stark): Sessão 9+10 — nova planilha mensal + sync clientes`
+- **Descrição:**
+  - G1–G5 (Sessão 9): remapeamento completo para nova planilha mensal (abas por mês, 4 linhas por cliente)
+  - S10-C: sincronização de 91 clientes — 7 mudanças de carteira (Humberto→luiz, 3 saídas, 1 reativação, 1 novo)
+  - S10-B (G0): 6 slugs pendentes confirmados — CTR/leads/CPA via Reportei + TOFU/BOFU/Respondi via Meta MCP
 
 ---
 
@@ -977,3 +948,4 @@ FINAL                      gustavoradler-cyber/treinamento-orquestradores-stark-
 | CP-08 | 2026-06-07 | CONCLUÍDO | SESSÃO 6 concluída. B2 commitado (0d1921e) e B1 commitado (ae52bbc). PR #2 aberto e mergeado em gustavoradler-cyber/treinamento-orquestradores-stark-gestoresdetrafego. SYNC FINAL executado: main local atualizado. Plano de paralelismo encerrado — todas as 16 melhorias aprovadas entregues. | — Plano encerrado. |
 | CP-11 | 2026-06-10 | Sessão 9 | Arquitetura da migração para nova planilha mensal definida por Aria. Checkpoint 134e808 criado. Briefing completo do @dev escrito neste documento. Docs atualizados com Sessão 9. | G0: abrir nova sessão → @dev → descoberta de slugs via MCP Reportei → Vinicius confirma → G1–G5. |
 | CP-12 | 2026-06-10 | Sessão 10 — S10-C | clientes.yaml sincronizado com distribuição real da planilha. 7 mudanças: Humberto→luiz, 3 saídas (Laureano, Carlos Matheus, Mariângela), Juan Lopez reativado→luiz, MaxiOral→Daniel Rennó→wallison, nova Dra. Ana Cecília→wallison. | S10-B (G0 slugs) + GS (push + PR). |
+| CP-13 | 2026-06-10 | Sessão 10 — S10-B | G0 concluído (d9756e3). 6 slugs confirmados: ctr/actions_lead/cost_per_conversion via Reportei; sum(amount_spent)[TOFU]/[BoFu] e sum(results)[RESPONDI] via Meta MCP. clientes.yaml + fetch-metrics.md atualizados. Decisão: cadastros_respondi por nome de campanha [RESPONDI] (não por ID de conversão). | GS — @devops push + PR. |
