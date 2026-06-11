@@ -231,52 +231,53 @@ GS  @devops  push + PR repo Gustavo             ⬜ PENDENTE
 - Novo cliente: Dra. Ana Cecília → `wallison`, META `1050461709389701`, Reportei pendente
 - Pendente para depois: Stark Marketing (META `676220449475191`, sem Reportei próprio)
 
-### BRIEFING PARA @dev — Sessão 10
+### BRIEFING PARA PRÓXIMA SESSÃO — S10-B (G0) + GS
 
-> **Como usar:** abra nova sessão, chame `@dev` e cole o bloco abaixo.
+> ✅ S10-A e S10-C concluídos (commit `7581e48` — 2026-06-10)
+> **Falta:** S10-B (G0 slugs) → depois GS (push + PR)
 
 ---
 
-**@dev Sessão 10 — G0 + Nova Gestora + Verificações**
+#### PASSO 1 — Chamar `@dev` e colar:
+
+**@dev — S10-B: G0 — descoberta de 6 slugs pendentes**
 
 Contexto: squad `gestor-trafego-stark`, branch `feat/paralelismo-stark-chief`.
-G1–G5 (remapeamento nova planilha) foram concluídos na Sessão 9. Preciso de você para:
+S10-A e S10-C concluídos (commit `7581e48`). Só falta o G0.
 
-**S10-A — Verificações (o usuário vai listar as dúvidas)**
-
-Aguarde as perguntas do usuário antes de qualquer implementação.
-
-**S10-B — G0: descoberta de 6 slugs pendentes via MCP Reportei**
-
-Antes de implementar qualquer código, use o MCP Reportei para descobrir os slugs exatos:
+Use o MCP Reportei e execute:
 
 ```
-Slugs pendentes (marcados "slug: pendente G0" em data/clientes.yaml):
-  - tofu_spend      → campanhas com "[TOFU]" ou "[IMP]" no nome — existe endpoint de campanhas?
-  - bofu_spend      → campanhas leads/cadastros — mesmo endpoint
-  - ctr             → CTR Meta Ads
-  - leads_meta      → Leads META (formulário)
-  - cadastros_respondi → Cadastros Respondi.app (métrica customizada)
-  - cpa_google      → CPA Google
-
-Execute:
-  get_project_metrics(project_id=688377, date_from="2026-06-02", date_to="2026-06-08")
-  → listar TODOS os slugs/refs — mostrar JSON bruto para o usuário confirmar
-
-Verifique também se existe endpoint de campanhas com spend individual por campanha.
-Após G0 confirmado pelo usuário → atualizar os comentários em data/clientes.yaml e fetch-metrics.md.
+get_project_metrics(project_id=688377, date_from="2026-06-02", date_to="2026-06-08")
+→ listar TODOS os slugs/refs — mostrar JSON bruto para eu confirmar
+→ identificar exatamente:
+   - ctr               → CTR Meta Ads
+   - leads_meta        → Leads META (formulário)
+   - cpa_google        → CPA Google
+   - cadastros_respondi → Cadastros Respondi.app (métrica customizada)
 ```
 
-**S10-C — Nova gestora**
+Verificar também se existe endpoint de campanhas com spend individual:
+```
+→ objetivo: confirmar filtragem por "[TOFU]" / "[IMP]" no nome da campanha
+→ confirmar tofu_spend e bofu_spend
+```
 
-O usuário vai informar:
-- Nome da gestora
-- Lista de clientes (nome, slug, reportei_project_id, meta_ad_account_id)
+Após eu confirmar os slugs → atualizar os comentários `# slug: pendente G0` em:
+- `squads/gestor-trafego-stark/data/clientes.yaml` → âncora `_sheet_cols`
+- `squads/gestor-trafego-stark/tasks/fetch-metrics.md` → passo 5
 
-Adicionar novo bloco em `data/clientes.yaml` seguindo o padrão dos outros gestores.
-Todos os clientes ativos devem usar `sheet_columns: *sheet_cols`.
+Commit: `feat(dados): G0 — confirmar slugs pendentes CTR/leads/CPA/Respondi`
 
-**Depois de tudo confirmado → chamar @devops para GS (push + PR).**
+---
+
+#### PASSO 2 — Depois que @dev terminar, chamar `@devops` e colar:
+
+**@devops — GS: push + PR**
+
+Push da branch `feat/paralelismo-stark-chief` e abrir PR com:
+- Título: `feat(gestor-trafego-stark): Sessão 9+10 — nova planilha mensal + sync clientes`
+- Descrição: remapeamento para planilha mensal (G1–G5) + sincronização de 91 clientes (S10-C) + slugs confirmados (G0)
 
 ---
 
