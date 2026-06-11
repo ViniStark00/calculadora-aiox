@@ -73,9 +73,8 @@ Extrair por integração e campo:
 | Métrica YAML | Integração Reportei | Campo |
 |---|---|---|
 | `meta_spend_total` | `facebook_ads` | `spend` |
-| `ctr` | `facebook_ads` | `ctr` |
 | `leads_meta` | `facebook_ads` | `actions_lead` |
-| `conversas` | `facebook_ads` | `actions_onsite_conversion.messaging_conversation_started_7d` |
+| `conversas_whats` | `facebook_ads` | `actions_onsite_conversion.messaging_conversation_started_7d` |
 | `seguidores` | `instagram_business` | `new_followers_count` (direta, SEM ÷ 1.000.000) |
 | `google_spend` | `google_adwords` | `cost_micros` (já em R$, sem divisão) |
 | `cpa_google` | `google_adwords` | `cost_per_conversion` |
@@ -100,8 +99,7 @@ Extrair:
 | Métrica YAML | Filtro no nome da campanha | Campo Meta MCP |
 |---|---|---|
 | `tofu_spend` | `[TOFU]` ou `[IMP]` | `amount_spent` (parse BRL: "R$1.137,56 BRL" → float) |
-| `bofu_spend` | `[BoFu]` ou `[BOFU]` | `amount_spent` |
-| `cadastros_respondi` | `[RESPONDI]` | `results[].values[].value` (custom conversion Respondi.app) |
+| `leads_respondi` | `[RESPONDI]` | `results[].values[].value` (custom conversion Respondi.app) |
 
 ```python
 def parse_brl(s):
@@ -110,9 +108,7 @@ def parse_brl(s):
 
 tofu_spend = sum(parse_brl(c['amount_spent']) for c in campanhas
                  if any(k in c['name'] for k in ['[TOFU]', '[IMP]']))
-bofu_spend = sum(parse_brl(c['amount_spent']) for c in campanhas
-                 if any(k in c['name'].upper() for k in ['[BOFU]']))
-cadastros_respondi = sum(
+leads_respondi = sum(
     v['value']
     for c in campanhas if '[RESPONDI]' in c['name'].upper()
     for r in (c.get('results', {}).get('value') or [])
@@ -120,7 +116,7 @@ cadastros_respondi = sum(
 )
 ```
 
-Se `meta_ad_account_id` for `null`: registrar `tofu_spend=0`, `bofu_spend=0`, `cadastros_respondi=0` com aviso.
+Se `meta_ad_account_id` for `null`: registrar `tofu_spend=0`, `leads_respondi=0` com aviso.
 
 ## Passo 6 — Preencher planilha
 
@@ -129,19 +125,17 @@ Para cada cliente processado com sucesso, escrever nas colunas de `sheet_columns
 Mapeamento atual (âncora `*sheet_cols` — nova planilha jun/2026):
 
 ```yaml
-meta_spend_total:    E   # Meta invest total
-tofu_spend:          D   # TOFU [TOFU]/[IMP] — slug pendente G0
-bofu_spend:          L   # BOFU leads/cadastros — slug pendente G0
-seguidores:          F   # Seguidores IG
-ctr:                 J   # CTR Meta — slug pendente G0
-conversas:           M   # Conversas WhatsApp
-leads_meta:          O   # Leads META formulário — slug pendente G0
-cadastros_respondi:  P   # Cadastros Respondi — slug pendente G0
-cpa_google:          R   # CPA Google — slug pendente G0
-google_spend:        T   # Google invest total
+tofu_spend:          D   # Invest. TOFU [TOFU]/[IMP]
+meta_spend_total:    E   # Invest. total Meta
+seguidores:          F   # Saldo Seguidores IG
+conversas_whats:     J   # Conversas WhatsApp
+leads_meta:          L   # LEADS Meta formulário
+leads_respondi:      M   # Leads Respondi
+cpa_google:          O   # CPA Google
+google_spend:        Q   # Invest. Total Google
 ```
 
-Colunas G/H/I/K/N/Q/S contêm fórmulas na planilha — **nunca escrever nessas colunas**.
+Colunas G/H/I/K/N/P contêm fórmulas na planilha — **nunca escrever nessas colunas**.
 
 ## Passo 7 — Retornar status
 
