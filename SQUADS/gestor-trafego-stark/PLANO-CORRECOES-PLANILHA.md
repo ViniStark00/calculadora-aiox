@@ -9,10 +9,12 @@
 ## 👉 ESTADO ATUAL
 
 ```
-FASE ATUAL:   1 — Criar branch + corrigir configuração (PENDENTE)
-BRANCH:       fix/planilha-correcoes-junho (ainda não criado)
-ÚLTIMO COMMIT: —
+FASE ATUAL:   2 — Corrigir código fill_sheets.py + fetch-metrics.md (PENDENTE)
+BRANCH:       fix/planilha-correcoes-junho
+ÚLTIMO COMMIT: 9787649 — fix(config): SHEET_ID local corrigido + plano criado (E1)
 PRÓXIMO AGENTE: @dev
+STASH PENDENTE: timeline-log sessao 10/06 no branch feat/paralelismo-stark-chief
+                → @devops resolve quando fizer PR daquele branch
 ```
 
 > Atualize este bloco manualmente ao concluir cada fase.
