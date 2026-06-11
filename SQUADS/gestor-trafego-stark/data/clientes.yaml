@@ -8,15 +8,15 @@
 
 _sheet_cols: &sheet_cols
   meta_spend_total: E   # Meta invest total
-  tofu_spend: D         # TOFU campanhas [TOFU] ou [IMP] — slug: pendente G0
-  bofu_spend: L         # BOFU campanhas leads/cadastros — slug: pendente G0
-  seguidores: F         # Seguidores IG
-  ctr: J                # CTR Meta — slug: pendente G0
-  conversas: M          # Conversas WhatsApp
-  leads_meta: O         # Leads META formulário — slug: pendente G0
-  cadastros_respondi: P # Cadastros Respondi — slug: pendente G0
-  cpa_google: R         # CPA Google — slug: pendente G0
-  google_spend: T       # Google invest total
+  tofu_spend: D         # Meta MCP: sum(amount_spent) campanhas [TOFU]/[IMP]
+  bofu_spend: L         # Meta MCP: sum(amount_spent) campanhas [BoFu]/[BOFU]
+  seguidores: F         # Reportei instagram_business: new_followers_count
+  ctr: J                # Reportei facebook_ads: ctr
+  conversas: M          # Reportei facebook_ads: actions_onsite_conversion.messaging_conversation_started_7d
+  leads_meta: O         # Reportei facebook_ads: actions_lead
+  cadastros_respondi: P # Meta MCP: sum(results) campanhas [RESPONDI] (custom conversion Respondi.app)
+  cpa_google: R         # Reportei google_adwords: cost_per_conversion
+  google_spend: T       # Reportei google_adwords: cost_micros (já em R$, sem divisão)
 
 clientes:
 

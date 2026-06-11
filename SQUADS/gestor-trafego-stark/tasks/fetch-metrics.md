@@ -60,22 +60,67 @@ Para cada cliente:
 - **SEMPRE** buscar `google_spend` e `seguidores` via Reportei (não disponíveis via Meta Ads MCP)
 - Se `fonte: excluido` ou `metricas_coletadas` ausente: buscar tudo do zero via Reportei
 
-## Passo 5 — Buscar métricas via Reportei API
+## Passo 5 — Buscar métricas via Reportei API e Meta Ads MCP
 
-Para cada cliente sem dados reutilizáveis ou para `google_spend`/`seguidores`:
+### 5A — Reportei API (para cada cliente com reportei_project_id)
 
 ```
 GET /v2/projects/{reportei_project_id}/metrics?start={data_inicio}&end={data_fim}
 ```
 
-Extrair valores:
-- `meta_spend` → plataforma `meta` ou `facebook_ads`
-- `google_spend` → plataforma `google_adwords` (NÃO `google_ads`)
-- `seguidores` → `ref == 'ig:new_followers_count'` (direta, SEM ÷ 1.000.000)
-- `conversas` → `ref == 'messaging_conversation_started_7d'`
-- `conversoes` → tipo `conversions`
+Extrair por integração e campo:
+
+| Métrica YAML | Integração Reportei | Campo |
+|---|---|---|
+| `meta_spend_total` | `facebook_ads` | `spend` |
+| `ctr` | `facebook_ads` | `ctr` |
+| `leads_meta` | `facebook_ads` | `actions_lead` |
+| `conversas` | `facebook_ads` | `actions_onsite_conversion.messaging_conversation_started_7d` |
+| `seguidores` | `instagram_business` | `new_followers_count` (direta, SEM ÷ 1.000.000) |
+| `google_spend` | `google_adwords` | `cost_micros` (já em R$, sem divisão) |
+| `cpa_google` | `google_adwords` | `cost_per_conversion` |
 
 `sleep(0.6)` entre chamadas. Se erro 429: aguardar 60s + retry 1x.
+
+### 5B — Meta Ads MCP (campanhas com spend individual)
+
+Para clientes com `meta_ad_account_id` preenchido, buscar via `ads_get_ad_entities`:
+
+```python
+campanhas = ads_get_ad_entities(
+    ad_account_id=cliente['meta_ad_account_id'],
+    level='campaign',
+    fields=['id', 'name', 'spend', 'results'],
+    time_range={'since': data_inicio, 'until': data_fim}
+)
+```
+
+Extrair:
+
+| Métrica YAML | Filtro no nome da campanha | Campo Meta MCP |
+|---|---|---|
+| `tofu_spend` | `[TOFU]` ou `[IMP]` | `amount_spent` (parse BRL: "R$1.137,56 BRL" → float) |
+| `bofu_spend` | `[BoFu]` ou `[BOFU]` | `amount_spent` |
+| `cadastros_respondi` | `[RESPONDI]` | `results[].values[].value` (custom conversion Respondi.app) |
+
+```python
+def parse_brl(s):
+    # "R$1.137,56 BRL" → 1137.56
+    return float(s.replace('R$','').replace('\xa0BRL','').replace('.','').replace(',','.'))
+
+tofu_spend = sum(parse_brl(c['amount_spent']) for c in campanhas
+                 if any(k in c['name'] for k in ['[TOFU]', '[IMP]']))
+bofu_spend = sum(parse_brl(c['amount_spent']) for c in campanhas
+                 if any(k in c['name'].upper() for k in ['[BOFU]']))
+cadastros_respondi = sum(
+    v['value']
+    for c in campanhas if '[RESPONDI]' in c['name'].upper()
+    for r in (c.get('results', {}).get('value') or [])
+    for v in (r.get('values') or [])
+)
+```
+
+Se `meta_ad_account_id` for `null`: registrar `tofu_spend=0`, `bofu_spend=0`, `cadastros_respondi=0` com aviso.
 
 ## Passo 6 — Preencher planilha
 
