@@ -1,74 +1,101 @@
 # Configuração de Credenciais — gestor-trafego-stark
 
-## O que já está configurado
-
-| Variável | Status |
-|----------|--------|
-| `REPORTEI_TOKEN` | ✅ Em `squads/gestor-trafego-stark/.claude/settings.local.json` |
-| `SHEET_ID` | ✅ Em `squads/gestor-trafego-stark/.claude/settings.local.json` |
-| `GOOGLE_SERVICE_ACCOUNT_JSON` | ⚠️ Você precisa configurar (veja abaixo) |
+> Este guia ensina como configurar tudo do zero para usar o squad.
+> Para cada etapa existe uma versão manual E um prompt pronto para pedir ao Claude Code fazer por você.
 
 ---
 
-## Pré-requisitos — instale antes de começar
+## O que já está configurado no repositório
 
-### 1. Python 3.10+
-Baixe em [python.org/downloads](https://www.python.org/downloads/).
-Durante a instalação, marque **"Add Python to PATH"**.
+| Variável | Status | Onde fica |
+|----------|--------|-----------|
+| `REPORTEI_TOKEN` | ✅ Pronto | `squads/gestor-trafego-stark/.claude/settings.local.json` |
+| `SHEET_ID` | ✅ Pronto | `squads/gestor-trafego-stark/.claude/settings.local.json` |
+| Hooks de proteção (H1–H5) | ✅ Prontos | `.claude/settings.json` na raiz |
+| `GOOGLE_SERVICE_ACCOUNT_JSON` | ⚠️ Você configura | `squads/gestor-trafego-stark/service_account.json` |
 
-Verifique: `python --version`
+---
 
-### 2. Bibliotecas Python necessárias
+## ETAPA 1 — Instalar o Python
+
+### Manual
+1. Acesse [python.org/downloads](https://www.python.org/downloads/) e baixe a versão mais recente
+2. Durante a instalação, **marque obrigatoriamente** a opção **"Add Python to PATH"**
+3. Confirme: abra o terminal e rode `python --version`
+
+### Com Claude Code
+Abra o Claude Code neste repositório e cole:
+```
+Verifique se o Python está instalado e na versão 3.10 ou superior.
+Se não estiver, me diga exatamente como instalar no Windows marcando
+"Add Python to PATH". Depois confirme que está funcionando.
+```
+
+---
+
+## ETAPA 2 — Instalar as bibliotecas Python
+
+### Manual
 ```bash
 pip install google-auth-httplib2 google-api-python-client pyyaml
 ```
 
-### 3. Claude Code (Claude Desktop)
-Baixe em [claude.ai/download](https://claude.ai/download).
-Abra o Claude Code na pasta do repositório clonado.
+### Com Claude Code
+```
+Instale as bibliotecas Python necessárias para o squad gestor-trafego-stark:
+google-auth-httplib2, google-api-python-client e pyyaml.
+Confirme que cada uma foi instalada com sucesso.
+```
 
 ---
 
-## Configurar o Google Service Account
+## ETAPA 3 — Criar o projeto no Google Cloud e ativar a API
 
-O `service_account.json` é a chave que permite ao script escrever na planilha Google Sheets.
-
-> 💡 **Dica: deixe o Claude Code te guiar**
-> Se tiver dúvida em qualquer etapa abaixo, abra o Claude Code neste repositório e cole:
-> ```
-> Me ajuda a configurar o service_account.json do Google Cloud para usar o squad gestor-trafego-stark.
-> Já clonei o repositório e preciso: criar o projeto no Google Cloud, ativar a Google Sheets API,
-> criar a conta de serviço, baixar o JSON e compartilhar a planilha.
-> Me guia passo a passo.
-> ```
-> O Claude vai te conduzir por cada etapa interativamente, inclusive abrindo as telas certas.
-
----
-
-### Passo a passo manual
-
-**Parte 1 — Criar projeto e ativar a API**
-
-1. Acesse [console.cloud.google.com](https://console.cloud.google.com) e faça login com sua conta Google
+### Manual
+1. Acesse [console.cloud.google.com](https://console.cloud.google.com) com sua conta Google
 2. Clique em **Selecionar projeto** (topo da página) → **Novo projeto**
 3. Nome: `stark-sheets` → **Criar**
-4. Com o projeto selecionado, vá em **APIs e Serviços → Biblioteca**
-5. Busque `Google Sheets API` → clique nela → **Ativar**
+4. Aguarde a criação e certifique-se de que o projeto `stark-sheets` está selecionado no topo
+5. No menu lateral: **APIs e Serviços → Biblioteca**
+6. Na barra de busca, digite `Google Sheets API`
+7. Clique no resultado **Google Sheets API** → **Ativar**
+8. Aguarde a ativação (pode levar alguns segundos)
 
-**Parte 2 — Criar a conta de serviço e baixar a chave**
+### Com Claude Code
+```
+Me guia para criar um projeto chamado "stark-sheets" no Google Cloud Console
+e ativar a Google Sheets API nele. Vou fazendo cada passo enquanto você me instrui.
+Me avise quando precisar que eu confirme algo na tela.
+```
 
-6. No menu lateral: **IAM e Admin → Contas de serviço**
-7. Clique em **Criar conta de serviço**
-8. Nome: `stark-sheets` → **Criar e continuar**
-9. Em "Conceder a esta conta de serviço acesso ao projeto": pule clicando em **Continuar**
-10. Clique em **Concluído**
-11. Na lista, clique na conta criada → aba **Chaves**
-12. **Adicionar chave → Criar nova chave → JSON → Criar**
-13. O arquivo `service_account.json` é baixado automaticamente
+---
 
-**Parte 3 — Colocar o arquivo no lugar certo**
+## ETAPA 4 — Criar a conta de serviço e baixar a chave JSON
 
-14. Mova o arquivo baixado para:
+### Manual
+1. No menu lateral do Google Cloud: **IAM e Admin → Contas de serviço**
+2. Clique em **Criar conta de serviço**
+3. Nome: `stark-sheets` | ID: preenchido automaticamente → **Criar e continuar**
+4. Na etapa "Conceder acesso ao projeto": **não precisa preencher** → clique em **Continuar**
+5. Na etapa "Conceder acesso aos usuários": **não precisa preencher** → clique em **Concluído**
+6. Na lista de contas, clique na que você acabou de criar (`stark-sheets@...`)
+7. Aba **Chaves** → **Adicionar chave** → **Criar nova chave**
+8. Selecione **JSON** → **Criar**
+9. O arquivo `service_account.json` é baixado automaticamente para sua pasta de Downloads
+
+### Com Claude Code
+```
+Me guia passo a passo para criar uma conta de serviço chamada "stark-sheets"
+no projeto Google Cloud que acabei de criar, e baixar a chave no formato JSON.
+Me avise em qual etapa posso pular campos e em qual devo prestar atenção.
+```
+
+---
+
+## ETAPA 5 — Colocar o arquivo no lugar certo
+
+### Manual
+Mova o `service_account.json` da sua pasta Downloads para:
 ```
 treinamento-orquestradores-stark-gestoresdetrafego/
   squads/
@@ -76,28 +103,81 @@ treinamento-orquestradores-stark-gestoresdetrafego/
       service_account.json   ← aqui
 ```
 
-**Parte 4 — Compartilhar a planilha**
-
-15. Abra o `service_account.json` em qualquer editor de texto (Bloco de Notas serve)
-16. Copie o valor do campo `"client_email"` — parece um e-mail como:
-    `stark-sheets@stark-sheets-123456.iam.gserviceaccount.com`
-17. Abra a planilha Google Sheets da Stark (o link da planilha da sua equipe)
-18. Clique em **Compartilhar** (botão verde/azul no canto superior direito)
-19. Cole o e-mail copiado, selecione permissão **Editor** e clique em **Enviar**
+### Com Claude Code
+```
+Acabei de baixar o service_account.json para minha pasta Downloads.
+Me ajuda a mover ele para squads/gestor-trafego-stark/service_account.json
+dentro deste repositório.
+```
 
 ---
 
-## Verificar se está tudo funcionando
+## ETAPA 6 — Compartilhar a planilha com a conta de serviço
 
-Abra o terminal na pasta do repositório e rode:
+Esta etapa é obrigatória — sem ela o script não consegue escrever na planilha.
 
+### Manual
+1. Abra o arquivo `service_account.json` no Bloco de Notas ou qualquer editor
+2. Encontre o campo `"client_email"` — o valor será algo como:
+   `stark-sheets@stark-sheets-123456.iam.gserviceaccount.com`
+3. Copie esse e-mail
+4. Abra a planilha Google Sheets da Stark no navegador
+5. Clique em **Compartilhar** (botão verde/azul no canto superior direito)
+6. Cole o e-mail no campo de compartilhamento
+7. Mude a permissão para **Editor**
+8. Desmarque "Notificar pessoas" (opcional)
+9. Clique em **Compartilhar**
+
+### Com Claude Code
+```
+Abra o arquivo squads/gestor-trafego-stark/service_account.json,
+extraia o campo "client_email" e me mostre o e-mail que preciso usar
+para compartilhar a planilha Google Sheets com permissão de Editor.
+```
+
+---
+
+## ETAPA 7 — Verificar se tudo está funcionando
+
+### Manual
+Abra o terminal na raiz do repositório e rode:
 ```bash
 python squads/gestor-trafego-stark/scripts/fill_sheets.py --dry-run --semana Junho
 ```
 
-✅ Correto: aparece `[INFO] Aba: Junho` e lista os clientes
-❌ Erro comum: `service_account.json não encontrado` → arquivo está no lugar errado
-❌ Erro comum: `403 Permission denied` → planilha não foi compartilhada com o client_email
+**Resultado esperado:**
+```
+[INFO] Aba: Junho | Semana: ... (Sem X)
+[OK] Aba 'Junho' encontrada.
+[CLIENTE] Nome do cliente (slug)
+[DRY-RUN] slug → linha X → D=valor
+```
+
+### Com Claude Code
+```
+Rode o fill_sheets.py em modo dry-run para a aba Junho e me diga
+se está tudo configurado corretamente. Se der erro, me explique
+o que está errado e como corrigir.
+```
+
+---
+
+## Erros comuns e como resolver
+
+| Erro | Causa | Solução |
+|------|-------|---------|
+| `service_account.json não encontrado` | Arquivo no lugar errado | Mova para `squads/gestor-trafego-stark/service_account.json` |
+| `403 Permission denied` | Planilha não compartilhada | Compartilhe a planilha com o `client_email` do JSON (Etapa 6) |
+| `google-auth não instalado` | Bibliotecas faltando | Rode `pip install google-auth-httplib2 google-api-python-client` |
+| `ModuleNotFoundError: yaml` | Biblioteca faltando | Rode `pip install pyyaml` |
+| `[ERRO] SHEET_ID não definido` | settings.local.json ausente | Verifique se o arquivo `.claude/settings.local.json` existe |
+| `Aba 'Junho' não encontrada` | Aba errada ou mês errado | Use `--semana` com o nome exato da aba na planilha |
+
+### Com Claude Code (resolver qualquer erro)
+```
+Rodei o fill_sheets.py e recebi este erro: [COLE O ERRO AQUI]
+Me ajuda a identificar a causa e corrigir.
+```
 
 ---
 
