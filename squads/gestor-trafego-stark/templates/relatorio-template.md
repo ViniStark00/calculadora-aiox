@@ -3,6 +3,9 @@
 > Texto em markdown enviado como `content` aparece como bloco corrido sem formatação no Reportei.
 > Usar `<p>`, `<strong>`, `<br>` — nunca `**`, `---` ou `\n\n`.
 
+> ⚠️ NÃO incluir link no `content` do marco. O relatório é vinculado via `report_id` em `create_timeline_event`.
+> O link `🔗 Confira os dados...` foi removido de todos os templates. Não reintroduzir.
+
 ---
 
 ## TEMPLATE META-ONLY — HTML (clientes apenas com Meta Ads)
@@ -39,10 +42,6 @@
 <p><strong>⚠️ Próximos Passos & Diagnóstico</strong></p>
 <p>→ [ACAO_1]</p>
 <p>→ [ACAO_2]</p>
-
-<br>
-
-<p>🔗 Confira os dados do relatório no link abaixo:</p>
 ```
 
 ---
@@ -83,10 +82,6 @@
 <p><strong>⚠️ Próximos Passos & Diagnóstico</strong></p>
 <p>→ [ACAO_1]</p>
 <p>→ [ACAO_2]</p>
-
-<br>
-
-<p>🔗 Confira os dados do relatório no link abaixo:</p>
 ```
 
 ---
@@ -112,10 +107,6 @@
 <p><strong>⚠️ Próximos Passos & Diagnóstico</strong></p>
 <p>→ [ACAO_1]</p>
 <p>→ [ACAO_2]</p>
-
-<br>
-
-<p>🔗 Confira os dados do relatório no link abaixo:</p>
 ```
 
 ---
