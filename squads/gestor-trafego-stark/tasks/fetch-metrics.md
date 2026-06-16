@@ -93,17 +93,19 @@ Para clientes com `meta_ad_account_id` preenchido, buscar via `ads_get_ad_entiti
 campanhas = ads_get_ad_entities(
     ad_account_id=cliente['meta_ad_account_id'],
     level='campaign',
-    fields=['id', 'name', 'spend', 'actions_lead'],
+    fields=['id', 'name', 'spend', 'lead'],
     time_range={'since': data_inicio, 'until': data_fim}
 )
 ```
+
+> **Nota:** `lead` é o campo correto em `level='campaign'`. `actions_lead` retorna VALIDATION error nesse nível.
 
 Extrair:
 
 | Métrica YAML | Filtro no nome da campanha | Campo Meta MCP |
 |---|---|---|
 | `tofu_spend` | `[TOFU]` ou `[IMP]` | `amount_spent` (parse BRL: "R$1.137,56 BRL" → float) |
-| `leads_respondi` | `RESPONDI` (case-insensitive) | `actions_lead` |
+| `leads_respondi` | `RESPONDI` (case-insensitive) | `lead` |
 
 ```python
 def parse_brl(s):
@@ -113,7 +115,7 @@ def parse_brl(s):
 tofu_spend = sum(parse_brl(c['amount_spent']) for c in campanhas
                  if any(k in c['name'] for k in ['[TOFU]', '[IMP]']))
 leads_respondi = sum(
-    _to_float(c.get('actions_lead') or 0)
+    _to_float(c.get('lead') or 0)
     for c in campanhas if 'RESPONDI' in c['name'].upper()
 )
 ```
@@ -122,22 +124,67 @@ Se `meta_ad_account_id` for `null`: registrar `tofu_spend=0`, `leads_respondi=0`
 
 ## Passo 6 — Preencher planilha
 
-Para cada cliente processado com sucesso, escrever nas colunas de `sheet_columns` em `data/clientes.yaml`.
+> **MECANISMO EXCLUSIVO:** usar `scripts/fill_sheets.py` via **Bash tool**.
+> **PROIBIDO:** MCP Google Drive, MCP Google Sheets, `check_junho.py`, `fill_junho_sem2.py` ou qualquer outro script.
+> O `fill_sheets.py` já localiza as linhas internamente — não é necessário procurar linhas antes.
 
-Mapeamento atual (âncora `*sheet_cols` — nova planilha jun/2026):
+### 6A — Salvar métricas em arquivo JSON temporário
+
+Montar um dict `metricas_por_slug` com as métricas de todos os clientes processados:
+
+```python
+{
+  "slug-cliente-1": {
+    "tofu_spend": 1137.56,
+    "meta_spend_total": 2500.00,
+    "seguidores": 45,
+    "conversas_whats": 12,
+    "leads_meta": 8,
+    "leads_respondi": 3,
+    "cpa_google": 45.50,
+    "google_spend": 910.00
+  },
+  "slug-cliente-2": { ... }
+}
+```
+
+Salvar em arquivo temporário (evita problemas de encoding no PowerShell):
+
+```python
+import json, tempfile
+metricas_tmp = tempfile.mktemp(suffix=".json")
+with open(metricas_tmp, "w", encoding="utf-8") as f:
+    json.dump(metricas_por_slug, f, ensure_ascii=False)
+```
+
+### 6B — Executar fill_sheets.py via Bash tool
+
+```bash
+python squads/gestor-trafego-stark/scripts/fill_sheets.py \
+  --metricas-arquivo <metricas_tmp> \
+  [--semana Junho]   # opcional — padrão: calculado automaticamente
+```
+
+O script:
+- Autentica via `GOOGLE_SERVICE_ACCOUNT_JSON` (variável de ambiente — nunca buscar o arquivo no disco)
+- Localiza as linhas de cada cliente automaticamente
+- Escreve nas colunas de `sheet_columns` de `data/clientes.yaml`
+- Imprime `[STATUS_JSON]` ao final com resultado por slug
+
+### Mapeamento de colunas (referência — configurado em `data/clientes.yaml`)
 
 ```yaml
 tofu_spend:          D   # Invest. TOFU [TOFU]/[IMP]
 meta_spend_total:    E   # Invest. total Meta
 seguidores:          F   # Saldo Seguidores IG
-conversas_whats:     J   # Conversas WhatsApp
-leads_meta:          L   # LEADS Meta formulário
+conversas_whats:     K   # Conversas WhatsApp
+leads_meta:          M   # LEADS Meta formulário
 leads_respondi:      N   # Leads Respondi
-cpa_google:          O   # CPA Google
-google_spend:        Q   # Invest. Total Google
+cpa_google:          P   # CPA Google
+google_spend:        R   # Invest. Total Google
 ```
 
-Colunas G/H/I/J/L/O/Q contêm fórmulas na planilha — **nunca escrever nessas colunas**.
+Colunas G/H/I/J/L/O/Q contêm fórmulas na planilha — **nunca escrever nessas colunas** (o script já bloqueia automaticamente).
 
 ## Passo 7 — Retornar status
 
