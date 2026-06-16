@@ -81,10 +81,11 @@ clientes:
     prioridade: 5
     reportei_project_id: 1023153
     especialidade: cirurgia_trans
-    meta_ad_account_id: null
+    meta_ad_account_id: "771111750830269"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Guilherme"
     sheet_columns: *sheet_cols
+    nota: "Nome da conta Meta é 'CA 01 - Dr. Guilherme Guardia' — verificar se é conta correta"
 
   - nome: "Dr Luiz Borba"
     slug: "dr-luiz-borba"
@@ -145,7 +146,7 @@ clientes:
     prioridade: 10
     reportei_project_id: 1233644
     especialidade: cirurgia_corporal
-    meta_ad_account_id: null
+    meta_ad_account_id: "957114350280182"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Matheus"
     sheet_columns: *sheet_cols
@@ -289,7 +290,7 @@ clientes:
     prioridade: 1
     reportei_project_id: 696403
     especialidade: cirurgia_plastica        # corrigido: era saude_geral — foco em mama/mastopexia
-    meta_ad_account_id: null
+    meta_ad_account_id: "1393299711601107"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Fernando Bezerra"
     sheet_columns: *sheet_cols
@@ -332,7 +333,7 @@ clientes:
     prioridade: 4
     reportei_project_id: 1097249
     especialidade: cirurgia_facial          # corrigido: era tricologia — cirurgião plástico especialista em face/facelift
-    meta_ad_account_id: null
+    meta_ad_account_id: "1258064598195035"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Higner"
     sheet_columns: *sheet_cols
@@ -479,7 +480,7 @@ clientes:
     prioridade: 3
     reportei_project_id: 787347
     especialidade: null
-    meta_ad_account_id: null
+    meta_ad_account_id: "756046727747272"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Luis Fernando"
     sheet_columns: *sheet_cols
@@ -542,7 +543,7 @@ clientes:
     prioridade: 8
     reportei_project_id: 1243422
     especialidade: null
-    meta_ad_account_id: null
+    meta_ad_account_id: "693549136866553"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dra. Ivy"
     sheet_columns: *sheet_cols
@@ -622,7 +623,7 @@ clientes:
     prioridade: 6
     reportei_project_id: 1126940
     especialidade: null
-    meta_ad_account_id: null
+    meta_ad_account_id: "1993946837741601"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Gilberto"
     sheet_columns: *sheet_cols
@@ -647,7 +648,7 @@ clientes:
     prioridade: 8
     reportei_project_id: 1235657
     especialidade: null
-    meta_ad_account_id: null
+    meta_ad_account_id: "27109022078700171"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dra. Nicolle"
     sheet_columns: *sheet_cols
@@ -753,7 +754,7 @@ clientes:
     prioridade: 8
     reportei_project_id: 1206122
     especialidade: null
-    meta_ad_account_id: null
+    meta_ad_account_id: "987404831130193"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dra. Jussara"
     sheet_columns: *sheet_cols
@@ -765,7 +766,7 @@ clientes:
     prioridade: 9
     reportei_project_id: 1251738
     especialidade: null
-    meta_ad_account_id: null
+    meta_ad_account_id: "576471988369561"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dra. Ana Paula"
     sheet_columns: *sheet_cols
@@ -808,7 +809,7 @@ clientes:
     reportei_project_id: 747289
     nome_reportei: "Dr Charles berres"
     especialidade: null
-    meta_ad_account_id: null
+    meta_ad_account_id: "581146484106855"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Charles"
     sheet_columns: *sheet_cols
@@ -844,7 +845,7 @@ clientes:
     prioridade: 4
     reportei_project_id: 820195
     especialidade: null
-    meta_ad_account_id: null
+    meta_ad_account_id: "2322934167849181"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Cleber"
     sheet_columns: *sheet_cols
@@ -897,7 +898,7 @@ clientes:
     prioridade: 8
     reportei_project_id: 1181206
     especialidade: null
-    meta_ad_account_id: null
+    meta_ad_account_id: "1445000570565943"
     excluir_meta_monitoring: false
     nome_whatsapp: "Fernanda Comora"
     sheet_columns: *sheet_cols
@@ -937,7 +938,7 @@ clientes:
     reportei_project_id: 1219304
     nome_reportei: "Dra Juliana Jordão"
     especialidade: null
-    meta_ad_account_id: null
+    meta_ad_account_id: "2298012140403015"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dra. Juliana"
     sheet_columns: *sheet_cols
@@ -1099,7 +1100,7 @@ clientes:
     reportei_project_id: 1038469
     nome_reportei: "Dr Carlos Costa"
     especialidade: null
-    meta_ad_account_id: null
+    meta_ad_account_id: "1671681419654386"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Carlos Costa"
     sheet_columns: *sheet_cols
@@ -1111,7 +1112,7 @@ clientes:
     prioridade: 13
     reportei_project_id: 1256423
     especialidade: null
-    meta_ad_account_id: null
+    meta_ad_account_id: "1958870294488770"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Ênio"
     sheet_columns: *sheet_cols
@@ -1123,7 +1124,7 @@ clientes:
     prioridade: 14
     reportei_project_id: 1256126
     especialidade: null
-    meta_ad_account_id: null
+    meta_ad_account_id: "183342976749352"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Thiago Lins"
     sheet_columns: *sheet_cols
@@ -1141,7 +1142,7 @@ clientes:
     prioridade: 1
     reportei_project_id: 663715
     especialidade: null
-    meta_ad_account_id: null
+    meta_ad_account_id: "1167207364507805"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Ricardo"
     sheet_columns: *sheet_cols
@@ -1167,7 +1168,7 @@ clientes:
     reportei_project_id: 765898
     nome_reportei: "Dr. Marcelo Azevedo"
     especialidade: null
-    meta_ad_account_id: null
+    meta_ad_account_id: "925219955124965"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Marcelo Azevedo"
     sheet_columns: *sheet_cols
@@ -1241,7 +1242,7 @@ clientes:
     prioridade: 9
     reportei_project_id: 1222966
     especialidade: null
-    meta_ad_account_id: null
+    meta_ad_account_id: "881663964665805"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Marcello"
     sheet_columns: *sheet_cols
