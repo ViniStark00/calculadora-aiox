@@ -89,7 +89,7 @@ Para clientes com `meta_ad_account_id` preenchido, buscar via `ads_get_ad_entiti
 campanhas = ads_get_ad_entities(
     ad_account_id=cliente['meta_ad_account_id'],
     level='campaign',
-    fields=['id', 'name', 'spend', 'results'],
+    fields=['id', 'name', 'spend', 'actions_lead'],
     time_range={'since': data_inicio, 'until': data_fim}
 )
 ```
@@ -99,7 +99,7 @@ Extrair:
 | Métrica YAML | Filtro no nome da campanha | Campo Meta MCP |
 |---|---|---|
 | `tofu_spend` | `[TOFU]` ou `[IMP]` | `amount_spent` (parse BRL: "R$1.137,56 BRL" → float) |
-| `leads_respondi` | `[RESPONDI]` | `results[].values[].value` (custom conversion Respondi.app) |
+| `leads_respondi` | `RESPONDI` (case-insensitive) | `actions_lead` |
 
 ```python
 def parse_brl(s):
@@ -109,10 +109,8 @@ def parse_brl(s):
 tofu_spend = sum(parse_brl(c['amount_spent']) for c in campanhas
                  if any(k in c['name'] for k in ['[TOFU]', '[IMP]']))
 leads_respondi = sum(
-    v['value']
-    for c in campanhas if '[RESPONDI]' in c['name'].upper()
-    for r in (c.get('results', {}).get('value') or [])
-    for v in (r.get('values') or [])
+    _to_float(c.get('actions_lead') or 0)
+    for c in campanhas if 'RESPONDI' in c['name'].upper()
 )
 ```
 
@@ -130,12 +128,12 @@ meta_spend_total:    E   # Invest. total Meta
 seguidores:          F   # Saldo Seguidores IG
 conversas_whats:     J   # Conversas WhatsApp
 leads_meta:          L   # LEADS Meta formulário
-leads_respondi:      M   # Leads Respondi
+leads_respondi:      N   # Leads Respondi
 cpa_google:          O   # CPA Google
 google_spend:        Q   # Invest. Total Google
 ```
 
-Colunas G/H/I/K/N/P contêm fórmulas na planilha — **nunca escrever nessas colunas**.
+Colunas G/H/I/J/L/O/Q contêm fórmulas na planilha — **nunca escrever nessas colunas**.
 
 ## Passo 7 — Retornar status
 
