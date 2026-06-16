@@ -45,7 +45,11 @@ MESES_PT = {
     9: "Setembro", 10: "Outubro", 11: "Novembro", 12: "Dezembro"
 }
 
-COLUNAS_FORMULA = frozenset({'G', 'H', 'I', 'K', 'N', 'P'})
+# Colunas que contêm fórmulas automáticas — NUNCA escrever (J=taxa_conv, I=CPL_meta, etc.)
+COLUNAS_FORMULA = frozenset({'G', 'H', 'I', 'J', 'L', 'O', 'Q'})
+
+# Allowlist explícita — qualquer coluna fora daqui causa erro imediato (não silencioso)
+COLUNAS_PERMITIDAS = frozenset({'D', 'E', 'F', 'K', 'M', 'N', 'P', 'R'})
 
 
 def carregar_clientes(gestor=None, slugs=None):
@@ -125,8 +129,11 @@ def verificar_ou_criar_aba(sheets, nome_aba):
 def localizar_linha(sheets, nome_aba, nome_cliente, sem_numero, gestor=None):
     """Localiza linha onde col B = nome_cliente E col C = sem_numero.
 
-    Se gestor fornecido, restringe a busca ao bloco desse gestor (col A),
-    evitando falsos positivos quando dois gestores têm clientes com nomes parecidos.
+    A planilha só preenche col B na linha Sem 1 de cada cliente — as linhas de
+    Sem 2, 3, 4 têm col B vazia. Por isso: encontra a linha Sem 1 pelo nome
+    e calcula o offset para o sem_numero desejado.
+
+    Se gestor fornecido, restringe a busca ao bloco desse gestor (col A).
     """
     result = sheets.spreadsheets().values().get(
         spreadsheetId=SHEET_ID,
@@ -149,10 +156,19 @@ def localizar_linha(sheets, nome_aba, nome_cliente, sem_numero, gestor=None):
                 fim_bloco = i
                 break
 
+    SEM_OFFSET = {"Sem 1": 0, "Sem 2": 1, "Sem 3": 2, "Sem 4": 3, "Média Mês": 4}
+
     for i in range(inicio_bloco, fim_bloco):
         linha = dados[i]
-        if len(linha) >= 3 and linha[1] == nome_cliente and linha[2] == sem_numero:
-            return i + 1
+        if len(linha) >= 2 and linha[1] == nome_cliente:
+            # Linha do cliente encontrada (sempre Sem 1) — calcular offset
+            base_sem = linha[2] if len(linha) >= 3 else "Sem 1"
+            offset = SEM_OFFSET.get(sem_numero, 0) - SEM_OFFSET.get(base_sem, 0)
+            target_idx = i + offset
+            if 0 <= target_idx < fim_bloco:
+                target = dados[target_idx]
+                if len(target) >= 3 and target[2] == sem_numero:
+                    return target_idx + 1
     return None
 
 
@@ -180,7 +196,14 @@ def preencher_cliente(sheets, nome_aba, row_idx, metricas, sheet_columns, slug="
     """Preenche colunas do cliente. Se dry_run=True, apenas imprime sem escrever."""
     updates = []
     for campo, col_letra in sheet_columns.items():
-        if col_letra.upper() in COLUNAS_FORMULA:
+        col_upper = col_letra.upper()
+        if col_upper not in COLUNAS_PERMITIDAS:
+            raise ValueError(
+                f"[BLOQUEADO] {slug} — coluna '{col_letra}' ({campo}) não está na allowlist "
+                f"COLUNAS_PERMITIDAS={sorted(COLUNAS_PERMITIDAS)}. "
+                "Corrija o mapeamento em clientes.yaml antes de prosseguir."
+            )
+        if col_upper in COLUNAS_FORMULA:
             print(f"   [AVISO] {slug} — coluna {col_letra} ({campo}) é fórmula automática — pulando")
             continue
         if moeda != "BRL" and "spend" in campo:
@@ -188,6 +211,10 @@ def preencher_cliente(sheets, nome_aba, row_idx, metricas, sheet_columns, slug="
             continue
         valor = _to_float(metricas.get(campo))
         if valor is None:
+            motivos = metricas.get("_motivos", {})
+            motivo = motivos.get(campo, "não informado pelo coletor")
+            print(f"   [WARN] {slug} — {campo} ({col_letra}) vazio")
+            print(f"          Motivo: {motivo}")
             continue
         if dry_run:
             print(f"[DRY-RUN] {slug} → linha {row_idx} → {col_letra}={valor}")
@@ -238,6 +265,7 @@ def main():
     parser = argparse.ArgumentParser(description="fill_sheets.py — stark squad")
     parser.add_argument("--semana", help="Nome da aba (ex: Junho) — padrão: calculado automaticamente")
     parser.add_argument("--metricas-json", help="JSON com métricas por slug: {slug: {meta_spend_total: X, ...}}")
+    parser.add_argument("--metricas-arquivo", help="Caminho para arquivo JSON com métricas por slug (evita problemas de encoding no PowerShell)")
     parser.add_argument("--gestor", help="Filtrar por gestor (ex: vinicius, gustavo)")
     parser.add_argument("--clientes", help="Slugs separados por vírgula (ex: imcp,dr-carlos)")
     parser.add_argument("--dry-run", action="store_true", help="Simular escrita sem alterar a planilha")
@@ -252,10 +280,13 @@ def main():
     sem_numero = calcular_sem_numero(data_inicio)
     print(f"[INFO] Aba: {nome_aba} | Semana: {data_inicio} a {data_fim} ({sem_numero})")
 
-    # Carregar métricas do parâmetro ou stdin
+    # Carregar métricas do parâmetro, arquivo ou stdin
     metricas_por_slug = {}
     if args.metricas_json:
         metricas_por_slug = json.loads(args.metricas_json)
+    elif args.metricas_arquivo:
+        with open(args.metricas_arquivo, encoding="utf-8") as f:
+            metricas_por_slug = json.load(f)
     elif not sys.stdin.isatty():
         metricas_por_slug = json.load(sys.stdin)
 
@@ -275,13 +306,17 @@ def main():
     todos_ok = True
 
     for cliente in clientes:
-        nome = cliente["nome"]
+        nome_yaml = cliente["nome"]
+        nome = cliente.get("nome_planilha") or nome_yaml  # nome exato na col B da planilha
         slug = cliente["slug"]
         sheet_columns = cliente.get("sheet_columns", {})
         metricas = metricas_por_slug.get(slug, {})
 
         print(f"\n{'='*50}")
-        print(f"[CLIENTE] {nome} ({slug})")
+        if nome != nome_yaml:
+            print(f"[CLIENTE] {nome_yaml} ({slug}) → planilha: '{nome}'")
+        else:
+            print(f"[CLIENTE] {nome_yaml} ({slug})")
 
         row_idx = localizar_linha(sheets, nome_aba, nome, sem_numero, gestor=args.gestor or "vinicius")
         if row_idx is None:
