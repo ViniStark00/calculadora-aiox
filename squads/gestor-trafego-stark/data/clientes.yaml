@@ -85,7 +85,6 @@ clientes:
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Guilherme"
     sheet_columns: *sheet_cols
-    nota: "Nome da conta Meta é 'CA 01 - Dr. Guilherme Guardia' — verificar se é conta correta"
 
   - nome: "Dr Luiz Borba"
     slug: "dr-luiz-borba"
@@ -1234,6 +1233,7 @@ clientes:
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. David"
     sheet_columns: *sheet_cols
+    nota: "Só Google Ads — sem Meta"
 
   - nome: "Dr. Marcello Santos"
     slug: "dr-marcello-santos"
