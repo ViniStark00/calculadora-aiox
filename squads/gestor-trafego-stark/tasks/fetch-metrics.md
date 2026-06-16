@@ -18,9 +18,13 @@ outputs:
 
 **FASE 2 do pipeline:** busca métricas no Reportei API v2 e preenche o Google Sheets para todos os clientes ativos.
 
+> **PROIBIDO:** Usar browser, Chrome, Playwright ou qualquer ferramenta web para coletar dados.
+> Toda coleta usa **somente** MCPs: Reportei (`mcp__30ebe978...`) e Meta Ads (`mcp__c0a7182d...`).
+> Sheets é escrito via Google Sheets API (service account). Nenhuma URL é aberta manualmente.
+
 ## Pré-condições
 
-- Variáveis de ambiente `REPORTEI_TOKEN`, `SHEET_ID` e `GOOGLE_SERVICE_ACCOUNT_JSON` configuradas
+- Variáveis de ambiente `REPORTEI_TOKEN`, `SHEET_ID` e `GOOGLE_SERVICE_ACCOUNT_JSON` configuradas — **ler direto das variáveis, nunca buscar os arquivos no disco**
 - Aba do mês (`Junho`, `Julho`...) já criada na planilha manualmente (não criar automaticamente)
 - `data/clientes.yaml` acessível
 

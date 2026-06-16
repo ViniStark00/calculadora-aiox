@@ -15,6 +15,20 @@ depends_on:
 
 Coleta métricas via Reportei API v2 e preenche Google Sheets. Na rotina-semanal, recebe `metricas_coletadas` da FASE 1 (alerta-monitor) e reutiliza dados Meta Ads coletados sem nova chamada à API.
 
+## RESTRIÇÕES ABSOLUTAS DE COLETA
+
+> **NUNCA** abrir navegador, Chrome, browser ou qualquer ferramenta web para coletar dados.
+> **NUNCA** usar `mcp__Claude_in_Chrome`, `mcp__Claude_Preview`, Playwright ou qualquer MCP de browser.
+> **NUNCA** navegar para reportei.com.br, meta.com, business.facebook.com ou qualquer URL.
+>
+> Toda coleta de dados usa **exclusivamente**:
+> - **Reportei:** MCP `mcp__30ebe978-db99-4dee-927c-b72f6abac9d8` (get_project_metrics, get_metrics)
+> - **Meta Ads:** MCP `mcp__c0a7182d-bfb1-44b9-9206-83cca8f17d52` (ads_get_ad_entities, ads_get_ad_accounts)
+> - **Google Sheets:** Google Sheets API via service account (variável `GOOGLE_SERVICE_ACCOUNT_JSON`)
+>
+> Se algum MCP estiver indisponível: registrar erro e continuar com os demais. **Nunca usar browser como fallback.**
+> **NUNCA** buscar `service_account.json` no disco. O caminho já está em `GOOGLE_SERVICE_ACCOUNT_JSON` — ler direto da variável de ambiente.
+
 ## Reuso de dados da FASE 1 (extensão crítica — ADR-04)
 
 O `alerta-monitor` (FASE 1) disponibiliza um dict `metricas_coletadas` keyed por slug do cliente.
