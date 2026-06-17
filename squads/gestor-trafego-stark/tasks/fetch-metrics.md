@@ -64,6 +64,25 @@ Para cada cliente:
 - **SEMPRE** buscar `google_spend` e `seguidores` via Reportei (não disponíveis via Meta Ads MCP)
 - Se `fonte: excluido` ou `metricas_coletadas` ausente: buscar tudo do zero via Reportei
 
+## Passo 4.5 — Inicializar arquivo de métricas incremental
+
+Antes de iniciar o loop de clientes, criar o arquivo de destino com dict vazio:
+
+```python
+import json, tempfile, os
+
+metricas_por_slug = {}
+metricas_tmp = os.path.join(
+    tempfile.gettempdir(),
+    f"metricas_stark_{nome_aba}_{sem_numero.replace(' ', '_')}.json"
+)
+with open(metricas_tmp, "w", encoding="utf-8") as f:
+    json.dump({}, f)
+print(f"[CHECKPOINT] Arquivo inicializado: {metricas_tmp}")
+```
+
+> **Por que antes do loop:** se a janela de contexto encher durante a coleta, os dados já salvos não se perdem. O `fill_sheets.py` pode ser chamado com dados parciais.
+
 ## Passo 5 — Buscar métricas via Reportei API e Meta Ads MCP
 
 ### 5A — Reportei API (para cada cliente com reportei_project_id)
@@ -122,39 +141,48 @@ leads_respondi = sum(
 
 Se `meta_ad_account_id` for `null`: registrar `tofu_spend=0`, `leads_respondi=0` com aviso.
 
+### 5C — Salvar checkpoint após cada cliente
+
+Após processar **cada cliente** (sucesso ou aviso), adicionar ao dict e gravar imediatamente no arquivo:
+
+```python
+metricas_por_slug[slug] = {
+    "tofu_spend":      tofu_spend,
+    "meta_spend_total": meta_spend_total,
+    "seguidores":      seguidores,
+    "conversas_whats": conversas_whats,
+    "leads_meta":      leads_meta,
+    "leads_respondi":  leads_respondi,
+    "cpa_google":      cpa_google,
+    "google_spend":    google_spend,
+}
+with open(metricas_tmp, "w", encoding="utf-8") as f:
+    json.dump(metricas_por_slug, f, ensure_ascii=False, indent=2)
+print(f"[CHECKPOINT] {slug} salvo ({len(metricas_por_slug)} clientes no disco)")
+```
+
+> Gravar após cada cliente garante que compactações de contexto não apagam dados já coletados.
+
 ## Passo 6 — Preencher planilha
 
 > **MECANISMO EXCLUSIVO:** usar `scripts/fill_sheets.py` via **Bash tool**.
 > **PROIBIDO:** MCP Google Drive, MCP Google Sheets, `check_junho.py`, `fill_junho_sem2.py` ou qualquer outro script.
 > O `fill_sheets.py` já localiza as linhas internamente — não é necessário procurar linhas antes.
 
-### 6A — Salvar métricas em arquivo JSON temporário
+### 6A — Verificar arquivo de métricas
 
-Montar um dict `metricas_por_slug` com as métricas de todos os clientes processados:
+O arquivo `metricas_tmp` já foi criado no Passo 4.5 e atualizado incrementalmente após cada cliente no Passo 5C.
 
-```python
-{
-  "slug-cliente-1": {
-    "tofu_spend": 1137.56,
-    "meta_spend_total": 2500.00,
-    "seguidores": 45,
-    "conversas_whats": 12,
-    "leads_meta": 8,
-    "leads_respondi": 3,
-    "cpa_google": 45.50,
-    "google_spend": 910.00
-  },
-  "slug-cliente-2": { ... }
-}
-```
-
-Salvar em arquivo temporário (evita problemas de encoding no PowerShell):
+Confirmar que está completo:
 
 ```python
-import json, tempfile
-metricas_tmp = tempfile.mktemp(suffix=".json")
-with open(metricas_tmp, "w", encoding="utf-8") as f:
-    json.dump(metricas_por_slug, f, ensure_ascii=False)
+with open(metricas_tmp, encoding="utf-8") as f:
+    dados = json.load(f)
+print(f"[OK] {len(dados)} clientes no arquivo: {metricas_tmp}")
+# Se dados incompletos (ex: contexto compactou durante coleta):
+# — os dados já coletados foram preservados
+# — fill_sheets.py só processa slugs presentes no JSON
+# — clientes ausentes ficam sem preenchimento (sem erro)
 ```
 
 ### 6B — Executar fill_sheets.py via Bash tool
