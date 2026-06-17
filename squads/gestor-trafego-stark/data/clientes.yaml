@@ -1275,7 +1275,7 @@ clientes:
     meta_ad_account_id: "5121950121207400"
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Thiago Bandeira"
-    sheet_columns: null
+    sheet_columns: *sheet_cols
 
   - nome: "Felipe Máximo"
     slug: "felipe-maximo"
@@ -1288,10 +1288,11 @@ clientes:
     meta_ad_account_id: "614145217153647"
     excluir_meta_monitoring: false
     nome_whatsapp: "Felipe"
-    sheet_columns: null
+    sheet_columns: *sheet_cols
 
   - nome: "Dr Fabrício Camargo"
     slug: "dr-fabricio-camargo"
+    nome_planilha: "Dr Fabrício"
     gestores: [amanda]
     ativo: true
     prioridade: 3
@@ -1300,7 +1301,7 @@ clientes:
     meta_ad_account_id: null
     excluir_meta_monitoring: false
     nome_whatsapp: "Dr. Fabrício"
-    sheet_columns: null
+    sheet_columns: *sheet_cols
 
   # ─────────────────────────────────────────────────────────────────
   # CLIENTES INATIVOS — registrados mas não processados pelas automações

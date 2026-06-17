@@ -4,9 +4,9 @@
 ## Identidade
 
 **Squad:** `gestor-trafego-stark`
-**Gestores:** Vinicius Lima · Gustavo Radler · Andreyves · Richard · Luiz · Mateus · Thiago · Wallison — gestores de tráfego pago, Stark Marketing
+**Gestores:** Vinicius Lima · Gustavo Radler · Andreyves · Richard · Luiz · Mateus · Thiago · Wallison · Amanda Neves — gestores de tráfego pago, Stark Marketing
 **Clientes:** 28 clientes ativos, nicho saúde/medicina
-**Objetivo:** Automatizar rotinas diárias e semanais dos 8 gestores de tráfego
+**Objetivo:** Automatizar rotinas diárias e semanais dos 9 gestores de tráfego
 
 ## As 4 Rotinas
 
@@ -41,8 +41,7 @@
 
 ## Contexto Multi-Gestor
 
-O squad opera com 8 gestores ativos: vinicius, gustavo, andreyves, richard, luiz, mateus, thiago, wallison.
-Clientes com `gestores: [amanda]` estão ativos mas não são processados pelas automações do squad.
+O squad opera com 9 gestores ativos: vinicius, gustavo, andreyves, richard, luiz, mateus, thiago, wallison, amanda.
 
 Fonte de dados: `data/clientes.yaml` — lista única, sem duplicatas.
 

@@ -5,7 +5,7 @@ squad: gestor-trafego-stark
 elicit: false
 inputs:
   - cliente: nome, slug do cliente OU nome do gestor (resolvido pelo stark-chief de data/clientes.yaml)
-  - gestor: vinicius | gustavo | thiago | wallison | andreyves | richard | luiz | mateus (inferido do input ou do campo gestores do cliente)
+  - gestor: vinicius | gustavo | thiago | wallison | andreyves | richard | luiz | mateus | amanda (inferido do input ou do campo gestores do cliente)
 outputs:
   - resumo_final: status completo das 6 fases (COMPLETED | PARTIAL | FAILED por fase)
 ---
@@ -20,7 +20,7 @@ outputs:
 
 ### Modo 1 — Input é nome de gestor (modo batch)
 
-Gestores válidos: `vinicius`, `gustavo`, `thiago`, `wallison`, `andreyves`, `richard`, `luiz`, `mateus`
+Gestores válidos: `vinicius`, `gustavo`, `thiago`, `wallison`, `andreyves`, `richard`, `luiz`, `mateus`, `amanda`
 
 Se o input bater exatamente com um desses nomes (case-insensitive):
 1. Filtrar `data/clientes.yaml` → todos os clientes onde `[gestor] in gestores AND ativo: true`

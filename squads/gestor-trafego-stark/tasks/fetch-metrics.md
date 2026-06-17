@@ -162,8 +162,13 @@ with open(metricas_tmp, "w", encoding="utf-8") as f:
 ```bash
 python squads/gestor-trafego-stark/scripts/fill_sheets.py \
   --metricas-arquivo <metricas_tmp> \
+  --gestor <gestor_do_cliente> \
   [--semana Junho]   # opcional — padrão: calculado automaticamente
 ```
+
+> **IMPORTANTE:** sempre passar `--gestor <gestor>` (ex: `vinicius`, `gustavo`, `amanda`).
+> O gestor é o primeiro item do array `gestores` do cliente em `data/clientes.yaml`.
+> Sem este parâmetro o script busca no bloco errado da planilha e retorna erro "cliente não encontrado".
 
 O script:
 - Autentica via `GOOGLE_SERVICE_ACCOUNT_JSON` (variável de ambiente — nunca buscar o arquivo no disco)

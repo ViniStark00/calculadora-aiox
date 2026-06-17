@@ -285,7 +285,7 @@ def main():
     if args.metricas_json:
         metricas_por_slug = json.loads(args.metricas_json)
     elif args.metricas_arquivo:
-        with open(args.metricas_arquivo, encoding="utf-8") as f:
+        with open(args.metricas_arquivo, encoding="utf-8-sig") as f:
             metricas_por_slug = json.load(f)
     elif not sys.stdin.isatty():
         metricas_por_slug = json.load(sys.stdin)

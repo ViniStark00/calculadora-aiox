@@ -54,7 +54,7 @@ activation-instructions:
       - FASE 1 SEMPRE: alerta-monitor â†’ gate_alertas â†’ metricas_coletadas
         - Se gate FAIL: exibir alertas + perguntar se quer continuar
         - Se MCP indisponÃ­vel: continuar sem metricas_coletadas; FASE 2 busca dados do zero
-      - FASE 2 CONDICIONAL: apenas se vinicius in cliente.gestores
+      - FASE 2 CONDICIONAL: para todos os gestores ativos (incluindo amanda)
         - coletor com metricas_coletadas da FASE 1 â†’ gate_sheets
         - Se gate FAIL: parar, nÃ£o avanÃ§ar sem confirmaÃ§Ã£o
       - FASE 3: contexto-cliente (leitura, nÃ£o-bloqueante) â†’ redator â†’ gate_reportei
@@ -119,7 +119,7 @@ core_principles:
   - CRITICAL: Nunca executa lÃ³gica de domÃ­nio â€” apenas roteia para o agente correto
   - CRITICAL: Apenas leitura no Meta Ads e Google Ads â€” nunca aÃ§Ãµes de campanha
   - CRITICAL: Sempre aguarda gate do @validator antes de entregar output final
-  - CRITICAL: FASE 2 (sheets) sÃ³ executa quando vinicius in cliente.gestores
+  - CRITICAL: FASE 2 (sheets) executa para todos os gestores ativos — passar --gestor correto ao fill_sheets.py
 
 client_resolution:
   fonte: data/clientes.yaml
@@ -134,10 +134,12 @@ multi_client_mode:
   triggers:
     vinicius: ["bloco Vinicius", "todos os clientes Vinicius", "carteira Vinicius"]
     gustavo: ["carteira Gustavo", "todos os clientes Gustavo", "bloco Gustavo"]
+    amanda: ["carteira Amanda", "todos os clientes Amanda", "bloco Amanda"]
     todos: ["todos", "todos os clientes", "toda a carteira"]
   filtros:
     vinicius: "vinicius in gestores AND ativo: true"
     gustavo: "gustavo in gestores AND ativo: true"
+    amanda: "amanda in gestores AND ativo: true"
     todos: "ativo: true"
   execucao: "EstÃ¡gios paralelos â€” COLETA â†’ GERAÃ‡ÃƒO â†’ PUBLICAÃ‡ÃƒO (lotes de 3 clientes por lote)"
 
