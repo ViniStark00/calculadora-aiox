@@ -66,24 +66,44 @@ Para cada cliente:
 
 ## Passo 4.5 — Inicializar arquivo de métricas incremental
 
-Antes de iniciar o loop de clientes, criar o arquivo de destino com dict vazio:
+Antes de iniciar o loop de clientes, verificar se já existe checkpoint do mesmo período (retomada após compactação):
 
 ```python
-import json, tempfile, os
+import json, tempfile, os, glob
 
-metricas_por_slug = {}
-metricas_tmp = os.path.join(
-    tempfile.gettempdir(),
-    f"metricas_stark_{nome_aba}_{sem_numero.replace(' ', '_')}.json"
-)
-with open(metricas_tmp, "w", encoding="utf-8") as f:
-    json.dump({}, f)
-print(f"[CHECKPOINT] Arquivo inicializado: {metricas_tmp}")
+nome_arquivo = f"metricas_stark_{nome_aba}_{sem_numero.replace(' ', '_')}.json"
+metricas_tmp = os.path.join(tempfile.gettempdir(), nome_arquivo)
+
+existentes = glob.glob(os.path.join(tempfile.gettempdir(), nome_arquivo))
+
+if existentes:
+    metricas_tmp = existentes[0]
+    with open(metricas_tmp, encoding="utf-8") as f:
+        metricas_por_slug = json.load(f)
+    print(f"[RETOMADA] Checkpoint encontrado: {metricas_tmp} ({len(metricas_por_slug)} clientes já coletados)")
+else:
+    metricas_por_slug = {}
+    with open(metricas_tmp, "w", encoding="utf-8") as f:
+        json.dump({}, f)
+    print(f"[CHECKPOINT] Arquivo inicializado: {metricas_tmp}")
 ```
 
-> **Por que antes do loop:** se a janela de contexto encher durante a coleta, os dados já salvos não se perdem. O `fill_sheets.py` pode ser chamado com dados parciais.
+No loop de clientes, pular slugs já presentes no dict:
+
+```python
+if slug in metricas_por_slug:
+    print(f"[PULADO] {slug} já coletado — retomada após compactação")
+    continue
+```
+
+> **Por que antes do loop:** se a janela de contexto compactar durante a coleta, os dados já salvos não se perdem e a execução retoma exatamente de onde parou.
 
 ## Passo 5 — Buscar métricas via Reportei API e Meta Ads MCP
+
+> **PROIBIDO:** processar múltiplos clientes em paralelo irrestrito.
+> Processar em **lotes de 3 clientes** (máximo). Dentro do lote, as chamadas podem ser paralelas.
+> Após cada cliente individual responder, salvar checkpoint imediatamente (Passo 5C) antes de avançar.
+> Razão: 10 respostas simultâneas enchem o contexto e invalidam o mecanismo incremental.
 
 ### 5A — Reportei API (para cada cliente com reportei_project_id)
 
@@ -186,6 +206,8 @@ print(f"[OK] {len(dados)} clientes no arquivo: {metricas_tmp}")
 ```
 
 ### 6B — Executar fill_sheets.py via Bash tool
+
+> **Windows:** usar `python` (não `python3`) no Bash tool. Se `python3` retornar "not found", trocar para `python` ou usar PowerShell tool.
 
 ```bash
 python squads/gestor-trafego-stark/scripts/fill_sheets.py \

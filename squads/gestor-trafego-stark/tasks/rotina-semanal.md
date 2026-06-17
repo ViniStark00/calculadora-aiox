@@ -85,20 +85,42 @@ metricas_coletadas: dict        # keyed por slug — para reuso na FASE 2
 
 ## FASE 2 — PLANILHA GOOGLE SHEETS (obrigatória para todos os gestores)
 
-> **Serializada:** FASE 2 processa um cliente por vez — sem paralelismo.
+> **Paralelizada via Workflow:** FASE 2 agora usa o Workflow tool com subagentes paralelos em lotes de 3.
+> Substituiu o coletor agent serial — todos os gestores são processados em uma única execução.
 
-**Agente:** `coletor`
-**Tasks:** `tasks/fetch-metrics.md` + `tasks/verify-fill.md`
+**Mecanismo:** Workflow tool → `squads/gestor-trafego-stark/workflows/collect-metrics.js`
 
 ### Handoff recebido da FASE 1
 ```yaml
 metricas_coletadas: dict  # reutilizar dados Meta Ads sem nova chamada à API (ADR-04)
+# Nota: collect-metrics.js realiza a coleta diretamente via MCP — metricas_coletadas é informativo
 ```
 
 ### Ação
-1. Receber `metricas_coletadas` — usar `meta_spend` e `conversas` de clientes com `fonte: meta_ads`
-2. SEMPRE buscar `google_spend` e `seguidores` via Reportei (não disponíveis no metricas_coletadas)
-3. Preencher Google Sheets via `fill_sheets.py` com colunas de `sheet_columns` de cada cliente
+Invocar o Workflow tool com o script `collect-metrics.js`:
+
+```javascript
+Workflow({
+  scriptPath: 'squads/gestor-trafego-stark/workflows/collect-metrics.js',
+  args: {
+    // Período opcional — se omitido, o workflow calcula automaticamente
+    // data_inicio: "YYYY-MM-DD",
+    // data_fim:    "YYYY-MM-DD",
+    // nome_aba:    "Junho",
+    // sem_numero:  "Sem 2"
+  }
+})
+```
+
+O Workflow:
+1. Calcula o período (segunda a domingo da semana anterior) — ou usa args se fornecido
+2. Verifica checkpoint incremental no tempdir (retomada após compactação)
+3. Divide todos os clientes ativos em lotes de 3
+4. Executa os lotes em paralelo via pipeline() — cada lote é um subagente com contexto fresh
+5. Cada subagente: chama Reportei MCP (5A) + Meta Ads MCP (5B) + salva checkpoint (5C)
+6. Ao final: executa `fill_sheets.py` uma vez por gestor via Bash
+
+Aguardar resultado do Workflow antes de avançar para FASE 3.
 
 ### Gate: gate_sheets
 **Acionado por:** validator
