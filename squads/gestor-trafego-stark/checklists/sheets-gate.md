@@ -14,7 +14,7 @@ squad: gestor-trafego-stark
 ## Critérios de aceite (7)
 
 - [ ] **1. Exit code 0** — `fill_sheets.py` retornou exit code 0 sem erros fatais
-- [ ] **2. Cobertura de clientes** — número de linhas preenchidas bate com count de clientes ativos com `vinicius in gestores` em `data/clientes.yaml`
+- [ ] **2. Cobertura de clientes** — número de linhas preenchidas bate com o total de clientes em `status_por_cliente` (output da execução atual)
 - [ ] **3. Período correto** — data preenchida corresponde à segunda a domingo da semana anterior (não semana corrente)
 - [ ] **4. Campos obrigatórios não-vazios** — nenhum campo obrigatório ficou vazio (string vazia `""`); zeros (`0`, `0.0`) são valores válidos
 - [ ] **5. Colunas corretas por cliente** — colunas preenchidas correspondem ao `sheet_columns` de cada cliente em `data/clientes.yaml`
@@ -34,12 +34,12 @@ squad: gestor-trafego-stark
 ## Formato de saída do validator
 
 ```
-✅ GATE PASS — sheets-gate — Bloco Vinicius (semana DD/MM/AAAA)
+✅ GATE PASS — sheets-gate — {gestor} — {clientes processados} (semana DD/MM/AAAA)
    7/7 critérios atendidos. Pipeline avança para FASE 3.
 ```
 
 ```
-❌ GATE FAIL — sheets-gate — Bloco Vinicius (semana DD/MM/AAAA)
+❌ GATE FAIL — sheets-gate — {gestor} — {clientes processados} (semana DD/MM/AAAA)
    Itens com problema:
    1. [Critério N] — [descrição do problema]
    Retornar ao @coletor para correção.

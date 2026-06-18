@@ -112,7 +112,8 @@ O campo K continua sendo `conversas` (WhatsApp). `total_leads` é usado apenas n
 
 ## Responsabilidades
 
-- Receber lista de clientes com `gestores: vinicius in gestores` de `data/clientes.yaml`
+- Receber lista de clientes de `data/clientes.yaml` filtrada por `gestor_solicitante in gestores AND ativo: true`
+  — se `cliente_solicitado` fornecido: filtrar diretamente pelo(s) cliente(s) pedido(s), ignorar filtro por gestor
 - Calcular período: segunda a domingo da semana anterior
 - Coletar métricas em duas camadas:
   1. Reportei: `GET /v2/projects/{reportei_project_id}` direto para clientes com ID confirmado
@@ -147,7 +148,7 @@ O coletor tenta coletar todas as métricas. Escreve o que encontrou:
 | Regra | Detalhe |
 |-------|---------|
 | Fonte de clientes | `data/clientes.yaml` (não `config/clientes-config.yaml`) |
-| Filtro | `vinicius in gestores AND ativo: true` |
+| Filtro | `gestor_solicitante in gestores AND ativo: true` — ou por `cliente_solicitado` se fornecido |
 | Aba do Sheets | Deve existir com nome `DD/MM/AAAA` — ERRO CLARO se não encontrada |
 | Período | `last_sunday - 6` até `last_sunday` (7 dias completos) |
 | Parâmetros Reportei | Usar `date_from`/`date_to` — NUNCA `lookback: last_7d` |

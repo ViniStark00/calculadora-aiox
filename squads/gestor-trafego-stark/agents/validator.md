@@ -52,7 +52,7 @@ gate_sheets:
   referencia: checklists/sheets-gate.md
   checklist:
     - "[ ] fill_sheets.py retornou exit code 0"
-    - "[ ] Número de linhas preenchidas bate com count de clientes ativos com vinicius in gestores em data/clientes.yaml"
+    - "[ ] Número de linhas preenchidas bate com o total de clientes em status_por_cliente (output da execução atual)"
     - "[ ] Período correto: segunda a domingo da semana anterior"
     - "[ ] Nenhum campo obrigatório vazio (zeros são válidos; strings vazias não)"
     - "[ ] Colunas obrigatórias preenchidas para cada cliente conforme sheet_columns em data/clientes.yaml"

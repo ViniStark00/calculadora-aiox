@@ -5,6 +5,7 @@ squad: gestor-trafego-stark
 elicit: false
 inputs:
   - clientes_ativos: lista filtrada de data/clientes.yaml (ativo: true)
+  - cliente_solicitado: opcional — slug ou nome do(s) cliente(s) pedido(s) pelo gestor; se ausente, processa todos os ativos
   - periodo: calculado automaticamente (segunda a domingo da semana anterior; aba = mês em pt-BR)
   - metricas_coletadas: dict opcional do alerta-monitor (FASE 1) — ADR-04
   - sheet_id: variável de ambiente SHEET_ID
@@ -54,7 +55,13 @@ sem_numero = f"Sem {math.ceil(data_inicio.day / 7)}" # ex: "Sem 2"
 
 ## Passo 3 — Filtrar clientes ativos
 
-Ler `data/clientes.yaml` → filtrar: `ativo: true`
+```
+Se cliente_solicitado fornecido:
+  Ler data/clientes.yaml → filtrar por slug ou nome_cliente matching cliente_solicitado + ativo: true
+  (aceita lista: ex. "IMCP, Dra Danielle" → processa os dois)
+Senão (rotina-semanal completa ou pedido sem cliente específico):
+  Ler data/clientes.yaml → filtrar: ativo: true
+```
 
 ## Passo 4 — Reutilizar metricas_coletadas (ADR-04)
 

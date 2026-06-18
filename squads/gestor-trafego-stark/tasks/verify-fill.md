@@ -13,7 +13,7 @@ outputs:
 
 # Task: verify-fill — Verificação de Preenchimento do Sheets
 
-**Pós-FASE 2:** valida se todos os clientes do bloco Vinicius foram processados e os valores são coerentes antes de avançar para FASE 3.
+**Pós-FASE 2:** valida se todos os clientes presentes em `status_por_cliente` foram processados e os valores são coerentes antes de avançar para FASE 3.
 
 ## Pré-condições
 
@@ -23,8 +23,8 @@ outputs:
 ## Checklist de verificação
 
 ### Check 1 — Cobertura de clientes
-- [ ] Todos os clientes ativos com `vinicius in gestores` em `data/clientes.yaml` foram tentados?
-- Se algum foi silenciosamente ignorado → **REPROVAR**
+- [ ] Todos os clientes presentes em `status_por_cliente` foram tentados (nenhum ignorado silenciosamente)?
+- Se algum entry de `status_por_cliente` tiver status ausente → **REPROVAR**
 
 ### Check 2 — Células preenchidas por coluna
 - Cada coluna corresponde ao `sheet_columns` do cliente em `data/clientes.yaml`
