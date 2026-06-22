@@ -93,13 +93,43 @@ def calcular_sem_numero(data_inicio):
 
 
 def autenticar():
-    """Autentica via service account."""
+    """Autentica via service account usando requests como transport (evita bug httplib2/Windows)."""
     if not os.path.exists(SERVICE_ACCOUNT_FILE):
         print(f"[ERRO] Service account não encontrado: {SERVICE_ACCOUNT_FILE}")
         print("   Defina GOOGLE_SERVICE_ACCOUNT_JSON ou coloque o arquivo no diretório atual.")
         sys.exit(1)
     creds = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
-    return build("sheets", "v4", credentials=creds)
+    # Refresh via requests (não httplib2) para evitar WinError 10060
+    import requests as _req
+    import google.auth.transport.requests as _gtr
+    _req_session = _req.Session()
+    auth_request = _gtr.Request(session=_req_session)
+    creds.refresh(auth_request)
+    # Criar um Http-like adapter sobre requests para o googleapiclient
+    from googleapiclient.discovery import build as _build
+    from googleapiclient.http import HttpRequest
+    import googleapiclient.http
+
+    class _RequestsHttp:
+        """Wrapper requests->httplib2-like para contornar bug httplib2 Windows."""
+        def __init__(self, session, creds):
+            self._session = session
+            self._creds = creds
+
+        def request(self, uri, method="GET", body=None, headers=None, **kwargs):
+            if headers is None:
+                headers = {}
+            self._creds.apply(headers)
+            resp = self._session.request(method, uri, data=body, headers=headers, timeout=120)
+            # Simular interface httplib2: retornar (response_dict, content_bytes)
+            class _Resp:
+                def __init__(self, r):
+                    self.status = r.status_code
+                    self.__dict__.update({k.lower(): v for k, v in r.headers.items()})
+            return _Resp(resp), resp.content
+
+    http = _RequestsHttp(_req_session, creds)
+    return _build("sheets", "v4", http=http, cache_discovery=False)
 
 
 def verificar_ou_criar_aba(sheets, nome_aba):
